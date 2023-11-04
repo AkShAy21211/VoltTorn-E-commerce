@@ -1,0 +1,46 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    color: #333; /* Default text color */
+    background-color: #f0f0f0; /* Default background color */
+}
+
+.register-outer{
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+
+    border-radius: 20px;
+
+}
+
+
+
+.register-image{
+
+   position: relative;
+   top: 150px;
+   width: 350px;
+   height: 300px;
+   margin-bottom: 180px;
+    
+   
+}
+.pass-box{
+    position: relative;
+}
+
+.fa{
+    position: absolute;
+    right: 10px;
+    margin-top: -35px;
+    cursor: pointer;
+}
