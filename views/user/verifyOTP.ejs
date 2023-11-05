@@ -1,10 +1,33 @@
+<%- include('../layout/header.ejs') %>
+<link rel="stylesheet" href="/css/verifyOTP.css">
 
-  <h1>Email OTP Verification</h1>
-  <form action="/verify" method="post">
-    <label for="email">Email:</label>
-    <input type="email" name="email" required><br>
-    <label for="otp">Enter OTP:</label>
-    <input type="text" name="otp" required><br>
-    <button type="submit">Verify OTP</button>
-  </form>
+<main class="otp-box">
+  <div class="d-flex justify-content-center align-items-center continer">
+    <div class="card py-5 px-3">
+      <h5 class="m-0">Email OTP  verification</h5>
+      <span class="text-success"
+        ><b>Enter the code we just sent on your email</b> </span>
+        <% if (typeof message !== 'undefined') { %>
+          <p><%= message %></p>
+      <% } else if (typeof error !== 'undefined') { %>
+          <p class="text-danger"><%= error %></p>
+      <% } %>
+      
+     
+      <form action="" method="post">
+        <div class="d-flex flex-row mt-5">
+          <input type="number" name="otp" class="form-control " autofocus="" />
+          <button class="btn btn-primary" type="submit">Submit</button>
+        </div>
+      </form>
+     
+      <div class="text-center mt-5">
+        <span class="d-block mobile-text" id="countdown"></span>
+        <span class="d-block mobile-text" id="resend"></span>
+      </div>
+    </div>
+  </div>
+</main>
+<script src="js/OTPCountdown.js"></script>
 
+<%- include('../layout/footer.ejs') %>

@@ -2,6 +2,18 @@ const express  = require("express");
 const userRoute  = express();
 const userController = require("../controllers/userController");
 const userModel = require("../models/userModel");
+const session = require("express-session");
+
+const config = require("../config/config");
+userRoute.use(session({
+
+    secret:config.sessionSecret,
+    resave:false,
+    saveUninitialized:true,
+    cookie:{secure:true}
+}));
+
+const auth = require("../middlewares/auth");
 
 userRoute.set('view engine','ejs');
 userRoute.set('views','./views/user')
@@ -11,26 +23,34 @@ userRoute.use(bodyParser.json())
 userRoute.use(bodyParser.urlencoded({extended:true}))
 
 
-const multer = require("multer");
-const path = require("path");
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, path.join(__dirname,'../public/userImages'))
-    },
-    filename: function (req, file, cb) {
-      const name = Date.now() + '-' + Math.round(Math.random() * 1E9)
-      cb(null, file.fieldname + '-' + uniqueSuffix)
-    }
-  })
-  
-  const upload = multer({ storage: storage })
-
-
 userRoute.use(express.static('public'))
-
-userRoute.get('/register',userController.loadRegister);
+//REGISTER USER ROUTE
+userRoute.get('/register',auth.is_Logout,userController.loadRegister);
 userRoute.post('/register',userController.insertUser);
+
+//USER VERIFICATION THROUGH EMAIL TO COMPLETE
 userRoute.get('/verify',userController.loadVerify);
+userRoute.post('/verify',userController.verifyOTP);
+
+
+//SIGN IN USER
+
+userRoute.get('/',auth.is_Logout,userController.loadLogin);
+userRoute.get('/login',auth.is_Logout,userController.loadLogin);
+
+userRoute.post('/',userController.loadLoginVerify);
+userRoute.post('/login',userController.loadLoginVerify);
+userRoute.get('/home',userController.loadHome);
+
+
+//USER LOGOUT
+
+userRoute.get('/logout',auth.is_Login,userController.userLogout)
+
+
+
+
+
 
 
 

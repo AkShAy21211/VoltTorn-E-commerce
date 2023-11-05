@@ -3,19 +3,24 @@
     padding: 0;
     box-sizing: border-box;
 }
-body{
 
-    height: 100vh;
-}
 .header-outer{
     display: flex;
     justify-content: center;
-    
+    background-color: #333;
+    text-align: center;
+    position: static;
+    top: 0;
+    left: 0;
+    right: 0;
+
 }
 
 .header{
-    background-color: rgba(1, 99, 224, 0.85);
+    background-color: white;
     box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.371);
+    position: absolute;
+    top: 0;
    
 
 }

@@ -4,9 +4,19 @@
     box-sizing: border-box;
 }
 
-footer>p{
+#footer-credit{
 
     text-align: center;
     margin-top: 40px;
     font-size: 10px;
+}
+.footer-outer{
+
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    position: static;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }

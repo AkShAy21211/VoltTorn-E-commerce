@@ -2,11 +2,19 @@
 const mongoose = require('mongoose');
 
 const useryOTPverification = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
+
+  email:{
+    type:String,
+    required:true,
+    unique:true
+
   },
+ 
+ user_id:{
+  type:mongoose.Schema.Types.ObjectId,
+  ref:'User'
+
+ },
   otpCode: {
     type: String,
     required: true,
@@ -18,4 +26,4 @@ const useryOTPverification = new mongoose.Schema({
 });
 
 
-module.exports = mongoose.model('UserOTPVerify',useryOTPverification)
+module.exports = mongoose.model('UserOTPRecord',useryOTPverification)
