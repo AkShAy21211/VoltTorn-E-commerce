@@ -80,6 +80,7 @@ const insertUser = async (req, res) => {
       password: hashPassword,
       is_verified: false,
       is_admin: 0,
+      status:true,
     });
 
     const confirmPassword = req.body.password === req.body.confirmPassword;
@@ -130,12 +131,15 @@ const verifyOTP = async (req, res) => {
     } else {
       if (userData && OTPData.otpCode === otp) {
         const updateUser = await userModel.updateOne({ is_verified: true });
-        await OTPData.deleteOne({ otpCode: otp });
+        await userOTPVeryModel.deleteOne({otpCode:otp });
 
         res.redirect('/login')
       }
     }
-  } catch (error) {}
+  } catch (error) {
+
+    console.log(error.message);
+  }
 };
 
 //USER LOGIN
@@ -174,7 +178,9 @@ const loadLoginVerify = async (req, res) => {
 
 const loadHome = async (req, res) => {
   try {
-    res.render("home");
+    const sessionData = req.session || {};
+
+    res.render("home",{sessionData});
   } catch (error) {
     console.log(error.message);
   }
@@ -201,5 +207,6 @@ module.exports = {
   loadLogin,
   loadLoginVerify,
   loadHome,
-  userLogout
+  userLogout,
+ 
 };

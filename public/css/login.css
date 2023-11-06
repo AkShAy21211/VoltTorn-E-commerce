@@ -33,3 +33,7 @@
     margin-top: -35px;
     cursor: pointer;
 }
+.new-user-box{
+    display: flex;
+    justify-content: space-evenly;
+}

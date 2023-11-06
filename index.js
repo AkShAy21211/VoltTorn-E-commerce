@@ -11,6 +11,10 @@ const userRoute = require("./routes/userRoute");
 app.use('/',userRoute);
 
 
+//FOR ADMIN ROUTE
+
+const adminRoute = require("./routes/adminRoute");
+app.use('/admin',adminRoute)
 
 
 app.listen(PORT,()=>{

@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     },
     last_name:{
         type:String,
-        required:true
+        required:false,
     },
     email:{
         type:String,
@@ -31,11 +31,16 @@ const userSchema = new mongoose.Schema({
         type:Number,
         required:true,
     },
+    status:{
+        type:Boolean,
+        default:true,
+
+    },
     is_verified:{
         type:Boolean,
         default:false
     },
-    createdAt:{
+    createdAt:{                    
         type:Date,
         default:Date.now,
       

@@ -1,0 +1,44 @@
+<%- include('../layout/adminHeader.ejs') %>
+<%- include('../layout/adminSideBar.ejs') %>
+
+
+
+<div class="container-fluid mt-4">
+  <div class="row d-flex justify-content-end  ">
+    <div class=" col-md-10 col-lg-10 ">
+      <h1  class="text-bg-info  rounded" style=" width: 230px; text-align: center;  font-family:Arial, Helvetica, sans-serif;">Customer List</h1>
+  <div class="table-responsive">
+    <table class="table table-bordered ">
+      <thead  >
+        <tr>
+          <th> Name</th>
+          <th>Email</th>
+          <th>Mobile</th>
+          <th>Image</th>
+          <th>Status</th>
+          <th style="text-align: center;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% customers.forEach(customer => { %>
+          <tr>
+            <td><%= customer.first_name +' '+ customer.last_name%></td>
+            <td><%= customer.email %></td>
+            <td><%= customer.mobile %></td>
+            <td><img src="<%= customer.image %>" alt="Customer Image" width="50"></td>
+            <td><%= customer.status %></td>
+            <td style="text-align: center; "><input class="btn btn-primary" style="background-color: rgb(37, 129, 195);" type="button" value="Block"> <input class="btn btn-danger" type="button" value="Delete"></td>
+            
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<%- include('../layout/adminFooter.ejs') %>
