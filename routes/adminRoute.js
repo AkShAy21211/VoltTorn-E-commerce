@@ -33,6 +33,9 @@ adminRoute.get('/logout',adminAuth.is_Login,adminController.loadLogout);
 
 adminRoute.get('/customers',adminAuth.is_Login,adminController.loadCustomers)
 
+adminRoute.get('/delete-user',adminController.deleteUser);
+adminRoute.get('/block-user',adminController.blockeUser);
+
 
 adminRoute.get("*", function (req, res) {
   res.redirect("/admin");

@@ -5,6 +5,8 @@ const userModel = require("../models/userModel");
 const session = require("express-session");
 const config = require("../config/config");
 
+
+
 userRoute.use(session({
     secret:config.sessionSecret,
     resave:false,

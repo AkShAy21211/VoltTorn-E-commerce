@@ -115,10 +115,11 @@ const loadVerify = async (req, res) => {
 //VERIFY OTP
 const verifyOTP = async (req, res) => {
   try {
-    const { _id, email } = req.query;
+    const id = req.query._id;
+    const email = req.query.email;
     const otp = req.body.otp;
 
-    const userData = await userModel.findOne({ _id, email });
+    const userData = await userModel.findOne({ _id:id,email:email});
     const OTPData = await userOTPVeryModel.findOne({
       email: email,
       otpCode: otp,
@@ -130,7 +131,7 @@ const verifyOTP = async (req, res) => {
       });
     } else {
       if (userData && OTPData.otpCode === otp) {
-        const updateUser = await userModel.updateOne({ is_verified: true });
+        await userModel.updateOne({_id:id },{$set:{is_verified:true}});
         await userOTPVeryModel.deleteOne({otpCode:otp });
 
         res.redirect('/login')
@@ -159,11 +160,21 @@ const loadLoginVerify = async (req, res) => {
     if (userData) {
       const passwordMatch = await bcrypt.compare(password, userData.password);
       if (passwordMatch) {
-        if (userData.is_verified === false) {
-          res.render("login", { message: "Please verify your email" });
+        if (userData.is_verified === true) {
+          if(userData.status === false){
+              res.render("login", { message: "You have been blocked by the admin" });
+
+          }else{
+             req.session.user_id = userData._id;
+             res.redirect("/home");
+          }
         } else {
-          req.session.user_id = userData._id;
-          res.redirect("/home");
+         
+       
+
+
+        res.render("login", { message: "Please verify your email" });
+
         }
       } else {
         res.render("login", { message: "Email and password is incorrect" });

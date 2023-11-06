@@ -89,6 +89,41 @@ const loadCustomers = async(req,res)=>{
 }
 
 
+//DELETE USRES
+
+const deleteUser = async(req,res)=>{
+  try{
+
+    const id = req.query.id;
+
+     await userModel.deleteOne({_id:id});
+     res.redirect('/admin/customers')
+
+
+    
+  }catch(error){
+    console.log(error.message);
+  }
+}
+
+//BLOCK USERS
+
+
+const blockeUser = async(req,res)=>{
+
+  try{
+
+    const id = req.query.id;
+    const blockUser = await userModel.updateOne({_id:id},{$set:{status:false}});
+    res.redirect('/admin/customers')
+
+   
+
+  }catch(error){
+    console.log(error.message);
+  }
+}
+
 
 
 module.exports = {
@@ -98,5 +133,6 @@ module.exports = {
     loadHomeome,
     loadLogout,
     loadCustomers,
-    
+    deleteUser,
+    blockeUser,
 }

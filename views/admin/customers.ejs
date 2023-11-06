@@ -27,7 +27,7 @@
             <td><%= customer.mobile %></td>
             <td><img src="<%= customer.image %>" alt="Customer Image" width="50"></td>
             <td><%= customer.status %></td>
-            <td style="text-align: center; "><input class="btn btn-primary" style="background-color: rgb(37, 129, 195);" type="button" value="Block"> <input class="btn btn-danger" type="button" value="Delete"></td>
+            <td style="text-align: center; "><a href="/admin/block-user?id=<%=customer._id  %>" class="btn btn-primary" style="background-color: rgb(37, 129, 195);" type="button" >Block</a> <a href="/admin/delete-user?id=<%=customer._id  %>" class="btn btn-danger" type="button">Delete</a></td>
             
           </tr>
         <% }); %>
