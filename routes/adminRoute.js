@@ -2,9 +2,28 @@ const express = require("express");
 const adminRoute = express();
 const userController = require("../controllers/userController");
 const adminController = require("../controllers/adminController");
+const customerController = require("../controllers/customerController");
+const categoryController = require("../controllers/categoryController");
+const productController = require("../controllers/productColtroller");
+
+const path = require("path");
+const multer = require("multer");
+const storage = multer.diskStorage({
+  destination:function(req,file,cb){
+
+    cb(null,path.join(__dirname,'/public/images/productImages'));
+
+  },
+  filename:function(){
+
+    const name = Date.now()+'-'+file.originalname;
+    cb(null,name)
+
+  }
+})
+
 const userModel = require("../models/userModel");
 const session = require("express-session");
-
 const config = require("../config/config");
 adminRoute.use(
   session({
@@ -14,6 +33,8 @@ adminRoute.use(
     cookie: { secure: true },
   })
 );
+const uplode = multer({storage:storage});
+
 
 const adminAuth = require("../middlewares/adminauth");
 adminRoute.set("view engine", "ejs");
@@ -34,15 +55,22 @@ adminRoute.get('/dashboard',adminController.loadHomeome);
 adminRoute.get('/logout',adminAuth.is_Login,adminController.loadLogout);
 
 //ADMIN CUSTOMER ROUTE
-adminRoute.get('/customers',adminAuth.is_Login,adminController.loadCustomers)
-adminRoute.get('/delete-user',adminController.deleteUser);
-adminRoute.get('/block-unblock-user',adminController.blockUnblockUser);
+adminRoute.get('/customers',adminAuth.is_Login,customerController.loadCustomers)
+adminRoute.get('/delete-user',customerController.deleteUser);
+adminRoute.get('/block-unblock-user',customerController.blockUnblockUser);
 
 //ADMIN CATEGORY ROUTE
-adminRoute.get('/category',adminController.loadCategory);
-adminRoute.post('/category/add',adminController.addNewCategory);
+adminRoute.get('/category',categoryController.loadCategory);
+adminRoute.post('/category/add',categoryController.addNewCategory);//ADMIN ADD CATEGORY ROUTE
+adminRoute.get('/category/edit/:id',categoryController.editCategoryLoad);
+adminRoute.post('/category/edit/:id',categoryController.editCategory);//ADMIN EDIT CATEGORY ROUTE
+adminRoute.get('/category/delete/:id',categoryController.deleteCategory);//ADMIN DELETE CATEGORY ROUTE
 
 
+//ADMIN PRODUCT ROUTE
+
+adminRoute.get('/products',productController.loadProduct);
+adminRoute.get('/products/add',productController.addProductLoad);
 
 
 adminRoute.get("*", function (req, res) {
