@@ -1,0 +1,214 @@
+<%- include('../layout/adminHeader.ejs') %>
+    <%- include('../layout/adminSideBar.ejs') %>
+
+        <style>
+            .form-box {
+
+                width: 1500px;
+                padding-right: 200px;
+                margin-top: 30px;
+            }
+
+            .img-hover-zoom {
+                overflow: hidden;
+            }
+
+            .img-hover-zoom img {
+                transition: transform 0.5s ease-in-out;
+                transform: scale(1);
+            }
+
+            .img-hover-zoom:hover img {
+                transform: scale(1.2);
+            }
+        </style>
+
+
+        <div class="container form-box mt-4 ">
+
+            <div class="row d-flex justify-content-end  ">
+                <div class=" col-md-10 col-lg-10 ">
+
+
+                    <div class="d-flex justify-content-between">
+                        <h2>Edit Product </h2>
+
+
+
+                    </div>
+
+                        <%ProductData.forEach(product=> {%>
+                            <form method="post" action="/admin/products/edit/<%=product._id %>" enctype="multipart/form-data">
+
+
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="name">Name</label>
+                                        <input type="text" value="<%=product.name  %>" class="form-control" id="name"
+                                            name="name" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="price">Price</label>
+                                        <input type="text" value=" <%=product.price  %>" class="form-control" id="price"
+                                            name="price" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group ">
+                                <label for="description" class=" ml-3">Description</label>
+                                <textarea class="form-control w-75 ml-3" id="description" name="description"
+                                    required><%=product.description  %></textarea>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="category">Category</label>
+                                        <select class="select form-control" id="category" name="category">
+                                            <option value="select">
+                                                <%=product.category %>
+                                            </option>
+                                            <option value="Laptops">Laptops</option>
+                                            <option value="Mobiles">Mobiles</option>
+                                            <option value="Mobiles">HeadPhones</option>
+                                            <option value="Mobiles">Smartwatches</option>
+                                            <!-- Add more options here -->
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="brand">Brand</label>
+                                        <select class="select form-control" id="brand" name="brand">
+                                            <option value="">
+                                                <%=product.brand%>
+                                            </option>
+                                            <option value="Apple">Apple</option>
+                                            <option value="Samsung">Samsung</option>
+                                            <option value="Redmi">Redmi</option>
+                                            <option value="Oppo">Oppo</option>
+                                            <option value="vivo">Vivo</option>
+                                            <option value="Boat">Boat</option>
+                                            <option value="Asus">Asus</option>
+                                            <option value="Dell">Dell</option>
+                                            <option value="Asus">Asus</option>
+                                            <option value="Lenovo">Lenovo</option>
+                                            <option value="Hp">Hp</option>
+
+
+
+                                            <!-- Add more options here -->
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="discount">Discount</label>
+                                        <input type="number" value="<%=product.discount%>" class="form-control"
+                                            id="discount" name="discount" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="status">Status</label>
+                                        <select class="select form-control" id="status" name="status">
+                                            <option value="true">
+                                                <%=product.status%>
+                                            </option>
+
+                                            <option value="false">false</option>
+                                            <!-- Add more options here -->
+                                        </select>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="stockQuantity">Stock Quantity</label>
+                                        <input type="number" value="<%=product.stock  %>" class="form-control"
+                                            id="stockQuantity" name="stock" required>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="images">
+                                        <img src="" alt="">
+
+                                    </div>
+
+                                    <div class="col  ">
+                                        <div class="form-group gap-5    "
+                                            style="display: flex; flex-wrap: wrap;   width: 700px; margin-left:-10px">
+
+                                            <div style="width: 200px; height: 200px;"
+                                                class="img-hover-zoom shadow  border-dark">
+                                                <img width="200px" height="200px"
+                                                    src="/images/productImages/<%=product.image[1]  %>" alt="">
+                                            </div>
+
+                                            <div class="img-hover-zoom">
+                                                <img width="200px" height="200px"
+                                                    class="img-hover-zoom shadow  border-dark"
+                                                    src="/images/productImages/<%=product.image[0]  %>" alt="">
+                                            </div>
+
+                                            <div class="img-hover-zoom">
+
+                                                <img width="200px" height="200px"
+                                                    class="img-hover-zoom shadow  border-dark"
+                                                    src="/images/productImages/<%=product.image[2]  %>" alt="">
+                                            </div>
+
+                                            <div class="img-hover-zoom">
+
+                                                <img width="200px" height="200px"
+                                                    class="img-hover-zoom shadow  border-dark"
+                                                    src="/images/productImages/<%=product.image[2]  %>" alt="">
+                                            </div>
+
+
+
+
+                                        </div>
+                                        <div class="form-group gap-5  d-flex justify-content-between "
+                                            style=" display: flex; justify-content: space-between; width: 710px; margin-left:-10px">
+                                            <input type="file" class="form-control" name="image1">
+                                            <input type="file" class="form-control" name="image2">
+
+
+
+                                        </div>
+                                        <div class="form-group gap-5  d-flex justify-content-between "
+                                            style=" display: flex; justify-content: space-between; width: 710px; margin-left:-10px">
+                                            <input type="file" class="form-control" name="image3">
+                                            <input type="file" class="form-control" name="image4">
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success mb-3">Edit Product</button>
+            <% }); %>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+<%- include('../layout/adminFooter.ejs') %>

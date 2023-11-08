@@ -1,39 +1,144 @@
 <%- include('../layout/adminHeader.ejs') %>
-  <%- include('../layout/adminSideBar.ejs') %>
+    <%- include('../layout/adminSideBar.ejs') %>
 
-    <div class="container mt-4 mb-5 pb-2 shadow">
-        <h2>Add Product</h2>
+    <style>
 
-        <form method="POST" action="/admin/add-product" enctype="multipart/form-data">
-            <label for="name">Product Name</label>
-            <div class="form-group d-flex">
-                <input type="text" class="form-control" id="name" name="name" required>
-            </div>
-            <div class="form-group">
-                <label for="description">Product Description</label>
-                <textarea class="form-control" id="description" name="description" required></textarea>
-            </div>
-            <div class="form-group">
-                <label for="price">Price</label>
-                <input type="number" class="form-control" id="price" name="price" required>
-            </div>
-            <div class="form-group">
-                <label for="category">Category</label>
-                <input type="text" class="form-control" id="category" name="category" required>
-            </div>
-            <div class="form-group">
-                <label for="brand">Brand</label>
-                <input type="text" class="form-control" id="brand" name="brand">
-            </div>
-            <div class="form-group">
-                <label for="image">Product Image</label>
-                <input type="file" class="form-control-file" id="image" name="image">
-            </div>
-            <div class="form-group">
-                <label for="stock">Stock Quantity</label>
-                <input type="number" class="form-control" id="stock" name="stock" required>
-            </div>
-            <button type="submit" class="btn btn-success">Add Product</button>
-        </form>
-    </div>
-  <%- include('../layout/adminSideBar.ejs') %>
+        .form-box{
+
+            width: 1500px;
+            padding-right: 200px;
+            margin-top: 30px;
+        }
+    </style>
+
+
+        <div class="container form-box mt-4 ">
+
+            <div class="row d-flex justify-content-end  ">
+                <div class=" col-md-10 col-lg-10 ">
+
+
+                    <div class="d-flex justify-content-between">
+                        <h2>Add Product </h2>
+
+
+
+                    </div>
+                    <form method="post" action="/admin/products/add" enctype="multipart/form-data">
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" required>
+                                </div>
+                            </div>
+        
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="price">Price</label>
+                                    <input type="text" class="form-control" id="price" name="price" required>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class="form-group ">
+                            <label for="description" class=" ml-3">Description</label>
+                            <textarea class="form-control w-75 ml-3" id="description" name="description" required></textarea>
+                        </div>
+        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="category">Category</label>
+                                    <select class="select form-control"  id="category" name="category">
+                                        <option value="">Select</option>
+                                        <option value="Laptops">Laptops</option>
+                                        <option value="Mobiles">Mobiles</option>
+                                        <option value="Mobiles">HeadPhones</option>
+                                        <option value="Mobiles">Smartwatches</option>
+                                        <!-- Add more options here -->
+                                    </select>
+                                </div>
+                            </div>
+        
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="brand">Brand</label>
+                                    <select class="select form-control" id="brand" name="brand">
+                                        <option value="Select">Select</option>
+                                        <option value="Apple">Apple</option>
+                                        <option value="Samsung">Samsung</option>
+                                        <option value="Redmi">Redmi</option>
+                                        <option value="Oppo">Oppo</option>
+                                        <option value="vivo">Vivo</option>
+                                        <option value="Boat">Boat</option>
+                                        <option value="Asus">Asus</option>
+                                        <option value="Dell">Dell</option>
+                                        <option value="Asus">Asus</option>
+                                        <option value="Lenovo">Lenovo</option>
+                                        <option value="Hp">Hp</option>
+
+
+
+                                        <!-- Add more options here -->
+                                    </select>
+                                </div>
+                            </div>
+        
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="discount">Discount</label>
+                                    <input type="number"  class="form-control" id="discount" name="discount" required>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="status">Status</label>
+                                    <select class="select form-control" id="status" name="status">
+                                        <option value="true">true</option>
+                                        <option value="false">false</option>
+                                        <!-- Add more options here -->
+                                    </select>
+                                </div>
+                            </div>
+        
+                            
+        
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="stockQuantity">Stock Quantity</label>
+                                    <input type="number" class="form-control" id="stockQuantity" name="stock" required>
+                                </div>
+                            </div>
+                            
+                        <div class="row">
+                            
+        
+                            <div class="col  " >
+                                <div class="form-group gap-5  d-flex justify-content-between "style=" display: flex; justify-content: space-between; width: 710px; margin-left:-10px">
+                                    <input type="file" class="form-control"  name="image1" required>
+                                    <input type="file" class="form-control"  name="image2" required>
+
+
+                                </div>
+                                <div class="form-group gap-5  d-flex justify-content-between "style=" display: flex; justify-content: space-between; width: 710px; margin-left:-10px">
+                                    <input type="file" class="form-control"  name="image3" >
+                                    <input type="file" class="form-control"  name="image4" >
+
+
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+        
+                        <button type="submit" class="btn btn-success">Add Product</button>
+                    </form>
+
+                </div>
+
+
+                <%- include('../layout/adminFooter.ejs') %>

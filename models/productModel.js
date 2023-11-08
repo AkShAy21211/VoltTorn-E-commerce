@@ -6,7 +6,10 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    description: String,
+    description:{
+        type:String,
+        required:true,
+    },
     price: {
         type: Number,
         required: true,
@@ -17,10 +20,17 @@ const productSchema = new mongoose.Schema({
     },
     brand: {
         type: String,
+        required:true
     },
-    image: {
-        type: String,
+    discount:{
+        type:Number,
+        required:false
     },
+    status:{
+        type:Boolean,
+        required:true,
+    },
+  
     stock: {
         type: Number,
         required: true,
@@ -28,9 +38,15 @@ const productSchema = new mongoose.Schema({
     created_at: {
         type: Date,
         default: Date.now,
-    },updated: {
+    },
+    updated_at: {
         type: Date,
         default: Date.now,
+    },
+      
+    image: {
+        type: Array,
+        required:true,
     },
     // Array field for storing reviews and ratings
     reviews: [
@@ -52,7 +68,7 @@ const productSchema = new mongoose.Schema({
                 type: Date,
                 default: Date.now,
             },
-            updated: {
+            updated_at: {
                 type: Date,
                 default: Date.now,
             },

@@ -1,53 +1,103 @@
 <%- include('../layout/adminHeader.ejs') %>
   <%- include('../layout/adminSideBar.ejs') %>
 
-  <style>
-    .table tbody tr:hover {
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-      transform: scale(1.0);
-      transition: 0.2s;
-    }
-    .description-column {
-          max-width: 200px; /* Adjust the maximum width as needed */
-          white-space: wrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+    <style>
+      .table tbody tr:hover {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        transform: scale(1.0);
+        transition: 0.2s;
       }
-</style>
+
+      .description-column {
+        max-width: 500px;
+        /* Adjust the maximum width as needed */
+        white-space: wrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    </style>
 
 
-<div class="container-fluid mt-4">
+    <div class="container-fluid mt-4">
 
-<div class="row d-flex justify-content-end  ">
-  <div class=" col-md-10 col-lg-10 ">
+      <div class="row d-flex justify-content-end  ">
+        <div class=" col-md-10 col-lg-10 ">
 
 
-  <div class="d-flex justify-content-between">
-      <h2>Product Categories</h2>
+          <div class="d-flex justify-content-between">
+            <h2>Product Lists</h2>
 
-      <form method="" action="/admin/Products/add">     
-         <button class="btn btn-success mb-2 "  data-toggle="modal" data-target="#addCategoryModal">Add Products</button>
-</form>
+            <form method="" action="/admin/Products/add">
+              <button class="btn btn-success mb-2 " data-toggle="modal" data-target="#addCategoryModal">Add
+                Products</button>
+            </form>
 
-  </div>
-     
-      <table class="table ">
-        <thead class="table-dark">
-            <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Category</th>
-                <th>Brand</th>
-                <th>Stock</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-          <tbody class="align-center">
-             
-          </tbody>
-      </table>
-  </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table ">
+              <thead class="table-dark">
+                <tr class="text-center">
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Price</th>
+                  <th>Category</th>
+                  <th>Brand</th>
+                  <th>Discount</th>
+                  <th>Status</th>
+                  <th>Stock</th>
+                  <th>images</th>
+                  <th>Action</th>
 
-  
-    <%- include('../layout/adminFooter.ejs') %>
+
+                </tr>
+              </thead>
+              <tbody>
+                <% ProductData.forEach(product=> { %>
+                  <tr>
+
+                    <td style="font-weight: bold;">
+                      <%= product.name%>
+                    </td>
+                    <td class="description-column">
+                      <%= product.description %>
+                    </td>
+                    <td>
+                      <%= product.price %>
+                    </td>
+                    <td>
+                      <%= product.category %>
+                    </td>
+                    <td>
+                      <%= product.brand %>
+                    </td>
+                    <td>
+                      <%= product.discount %>
+                    </td>
+                    <td>
+                      <%= product.status %>
+                    </td>
+                    <td>
+                      <%= product.stock %>
+                    </td>
+                    <td>
+                      <% for (let i=0; i < product.image.length; i++) { %>
+                        <img style="margin-bottom: 5px;" width="50px" height="50px"
+                          src="/images/productImages/<%= product.image[i] %>" alt="Product Image <%= i + 1 %>">
+                        <% } %>
+                    </td>
+                    </td>
+                    <td style="text-align: center; ">
+                      <a href="/admin/products/edit/<%=product._id %>" class="btn btn-primary"
+                        style="background-color: rgb(37, 129, 195);margin-bottom: 10px;" type="button">Edit</a> 
+                        <a href="/admin/products/delete/<%=product._id  %>" class="btn btn-danger" type="button">Delete</a>
+                    </td>
+
+                  </tr>
+                  <% }); %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+
+        <%- include('../layout/adminFooter.ejs') %>
