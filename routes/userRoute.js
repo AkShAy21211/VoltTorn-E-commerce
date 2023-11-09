@@ -4,7 +4,7 @@ const userController = require("../controllers/userController");
 const userModel = require("../models/userModel");
 const session = require("express-session");
 const config = require("../config/config");
-
+const homeController = require("../controllers/homePageController");
 
 
 userRoute.use(session({
@@ -37,9 +37,12 @@ userRoute.post('/verify',userController.verifyOTP);
 userRoute.get('/login',userController.loadLogin);
 userRoute.post('/login',userController.loadLoginVerify);
 
-userRoute.get('/',userController.loadHome)
-userRoute.get('/home',userController.loadHome);
+userRoute.get('/',homeController.loadHome)
+userRoute.get('/home',homeController.loadHome);
 
+//user single product detail route
+
+userRoute.get('/home/product/details/:id',homeController.productDetail);
 
 //USER LOGOUT
 

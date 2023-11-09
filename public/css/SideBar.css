@@ -13,9 +13,9 @@
     margin-left: -150px;
     left: 70px;
     width: 140px;
-    background-color:#343a40;
-    color: white;
     position: fixed;
+    
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.571);
     height: 100%;
     z-index: 10000;
     transition: all .4s ease 0s;
@@ -80,14 +80,15 @@
 }
 
 .sidebar-nav li a:hover {
-  color: #fff;
+  color: black;
   background: rgba(255,255,255,0.2);
   text-decoration: none;
 }
 
 .sidebar-nav li a:active,
 .sidebar-nav li a:focus {
-  text-decoration: none;
+  text-decoration:solid;
+  color: green;
 }
 
 .sidebar-nav > .sidebar-brand {

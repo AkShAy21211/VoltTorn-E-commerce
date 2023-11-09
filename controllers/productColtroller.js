@@ -1,10 +1,11 @@
+const categoryModel = require("../models/categoryModel");
 const productModel = require("../models/productModel");
 
 const loadProduct = async (req, res) => {
   try {
-    const ProductData = await productModel.find({});
+    const ProductData = await productModel.find({}).populate('category');
     if (ProductData) {
-      res.render("products", { ProductData });
+      res.render("products", { ProductData});
     }
   } catch (error) {
     console.log(error.meesage);
@@ -13,7 +14,10 @@ const loadProduct = async (req, res) => {
 
 const addProductLoad = async (req, res) => {
   try {
-    res.render("addproducts");
+    const category = await categoryModel.find({});
+    console.log(category);
+
+    res.render("addproducts",{category});
   } catch (error) {
     console.log(error.meesage);
   }
@@ -21,6 +25,9 @@ const addProductLoad = async (req, res) => {
 
 const addProduct = async (req, res) => {
   try {
+    const category = req.body.category;
+    const categoryData = await categoryModel.findOne({category:category});
+
     const images = [];
     for (let i = 1; i <= 4; i++) {
       const fieldName = `image${i}`;
@@ -34,7 +41,7 @@ const addProduct = async (req, res) => {
       name: req.body.name,
       description: req.body.description,
       price: parseFloat(req.body.price),
-      category: req.body.category,
+      category: categoryData._id,
       brand: req.body.brand,
       discount: parseInt(req.body.discount),
       status: req.body.status,
@@ -56,7 +63,7 @@ const addProduct = async (req, res) => {
 const editProductLoad = async (req, res) => {
   try {
     const id = req.params.id;
-    const ProductData = await productModel.find({ _id: id });
+    const ProductData = await productModel.find({ _id: id }).populate('category');
     if (ProductData) {
       res.render("editProducts", { ProductData });
     }
@@ -70,11 +77,11 @@ const editProductLoad = async (req, res) => {
 const editProduct = async (req, res) => {
 
 
-
   try {
     const id = req.params.id;
-    const ProductData = await productModel.findOne({ _id: id });
-
+    const category = req.body.category;
+    console.log(id);
+    const ProductData = await productModel.findOne({ _id: id }).populate('category');
     const images = [];
     for (let i = 1; i <= 4; i++) {
       const fieldName = `image${i}`;
@@ -88,14 +95,14 @@ const editProduct = async (req, res) => {
         name: req.body.name,
         description: req.body.description,
         price: parseFloat(req.body.price),
-        category: req.body.category,
+        category: ProductData.category._id,
         brand: req.body.brand,
         discount: parseInt(req.body.discount),
         status: req.body.status,
         stock: parseInt(req.body.stock),
         image: images,
       },
-      {  new: true } // Use { new: true } to return the updated document
+      {upsert:true,  new: true } // Use { new: true } to return the updated document
     );
     console.log(productUpdated)
     if (images.length > 0) {

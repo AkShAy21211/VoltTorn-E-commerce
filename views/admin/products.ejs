@@ -25,7 +25,8 @@
 
 
           <div class="d-flex justify-content-between">
-            <h2>Product Lists</h2>
+            <h1 class="text-bg-info  rounded"
+            style="font-size: 30px; width: 230px; text-align: center;  font-family:Arial, Helvetica, sans-serif;">Product List</h1>
 
             <form method="" action="/admin/Products/add">
               <button class="btn btn-success mb-2 " data-toggle="modal" data-target="#addCategoryModal">Add
@@ -34,70 +35,101 @@
 
           </div>
           <div class="table-responsive">
-            <table class="table ">
-              <thead class="table-dark">
-                <tr class="text-center">
-                  <th>Name</th>
-                  <th>Description</th>
-                  <th>Price</th>
-                  <th>Category</th>
-                  <th>Brand</th>
-                  <th>Discount</th>
-                  <th>Status</th>
-                  <th>Stock</th>
-                  <th>images</th>
-                  <th>Action</th>
+
+            <div class="overflow-auto p-3 bg-light" style="max-width: 1200px; max-height: 600px;">
 
 
-                </tr>
-              </thead>
-              <tbody>
-                <% ProductData.forEach(product=> { %>
+
+              <table class="table">
+                <tbody>
+                  <% ProductData.forEach((product,index)=> { %>
+
+              
+                    <tr class="table-info" style="display: flex;  width: 200px;">
+                      <th >#PRODUCT </th>
+                     
+                        <h1><td><%=index + 1 %></td></h1>
+                        <td >
+                          <div style="display: flex; justify-content: end; width: 985px;">
+                            <a  href="/admin/products/edit/<%=product._id %>" class="me-2 btn btn-outline-primary"
+                               type="button">Edit</a>
+                            <a href="/admin/products/delete/<%=product._id  %>" class="btn btn-outline-danger "
+                              type="button">Delete</a>
+                          </div>
+                        
+                        </td>
+                   
+                    </tr>
+                    
                   <tr>
+                    <th> Name</th>
+                    <td style="font-weight: bold;"><%=product.name%></td>
+                  
+                  </tr  >
+                  <tr>
+                    <th> Description</th>
 
-                    <td style="font-weight: bold;">
-                      <%= product.name%>
-                    </td>
-                    <td class="description-column">
-                      <%= product.description %>
-                    </td>
-                    <td>
-                      <%= product.price %>
-                    </td>
-                    <td>
-                      <%= product.category %>
-                    </td>
-                    <td>
-                      <%= product.brand %>
-                    </td>
-                    <td>
-                      <%= product.discount %>
-                    </td>
-                    <td>
-                      <%= product.status %>
-                    </td>
-                    <td>
-                      <%= product.stock %>
-                    </td>
+                    <td><%=product.description  %></td>
+                  
+                  </tr>
+                  <tr>
+                    <th> Price</th>
+
+                    <td><%=product.price  %></td>
+                  </tr>
+                  <tr>
+                    <th> Category</th>
+
+                    <td><%-product.category.category  %></td>
+                  
+                  </tr>
+                  <tr>
+                    <th> Brand</th>
+
+                    <td><%=product.brand%></td>
+                  
+                  </tr>
+                  <tr>
+                    <th> Discount</th>
+
+                    <td><%=product.discount  %></td>
+                  
+                  </tr>
+                  <tr>
+                    <th> Status</th>
+
+                    <td><%=product.status  %></td>
+                  
+                  </tr>
+                  <tr>
+                    <th> Stock</th>
+
+                    <td><%=product.stock  %></td>
+                  
+                  </tr>
+                  <tr>
+                    <th> Images</th>
+
                     <td>
                       <% for (let i=0; i < product.image.length; i++) { %>
-                        <img style="margin-bottom: 5px;" width="50px" height="50px"
+                        <img style="margin-bottom: 5px;" width="100px" height="100px"
                           src="/images/productImages/<%= product.image[i] %>" alt="Product Image <%= i + 1 %>">
                         <% } %>
                     </td>
-                    </td>
-                    <td style="text-align: center; ">
-                      <a href="/admin/products/edit/<%=product._id %>" class="btn btn-primary"
-                        style="background-color: rgb(37, 129, 195);margin-bottom: 10px;" type="button">Edit</a> 
-                        <a href="/admin/products/delete/<%=product._id  %>" class="btn btn-danger" type="button">Delete</a>
-                    </td>
-
+                  
                   </tr>
+                
                   <% }); %>
-              </tbody>
-            </table>
+ 
+                </tbody>
+              </table>
+
+            </div>
           </div>
         </div>
 
 
         <%- include('../layout/adminFooter.ejs') %>
+
+
+      

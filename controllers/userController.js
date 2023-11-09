@@ -187,15 +187,6 @@ const loadLoginVerify = async (req, res) => {
   }
 };
 
-const loadHome = async (req, res) => {
-  try {
-    const sessionData = req.session || {};
-
-    res.render("home",{sessionData});
-  } catch (error) {
-    console.log(error.message);
-  }
-};
 
 //USER LOGOUT 
 
@@ -217,7 +208,6 @@ module.exports = {
   verifyOTP,
   loadLogin,
   loadLoginVerify,
-  loadHome,
   userLogout,
  
 };

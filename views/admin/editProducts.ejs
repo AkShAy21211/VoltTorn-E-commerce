@@ -2,13 +2,7 @@
     <%- include('../layout/adminSideBar.ejs') %>
 
         <style>
-            .form-box {
-
-                width: 1500px;
-                padding-right: 200px;
-                margin-top: 30px;
-            }
-
+      
             .img-hover-zoom {
                 overflow: hidden;
             }
@@ -26,7 +20,7 @@
 
         <div class="container form-box mt-4 ">
 
-            <div class="row d-flex justify-content-end  ">
+            <div class="row d-flex justify-content-center  ">
                 <div class=" col-md-10 col-lg-10 ">
 
 
@@ -36,6 +30,7 @@
 
 
                     </div>
+                    <div class="overflow-auto p-3 bg-light" style="max-width: 1200px; max-height: 600px;">
 
                         <%ProductData.forEach(product=> {%>
                             <form method="post" action="/admin/products/edit/<%=product._id %>" enctype="multipart/form-data">
@@ -46,7 +41,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="name">Name</label>
-                                        <input type="text" value="<%=product.name  %>" class="form-control" id="name"
+                                        <input type="text" value="<%=product.name%>"  class="form-control" id="name"
                                             name="name" required>
                                     </div>
                                 </div>
@@ -54,7 +49,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="price">Price</label>
-                                        <input type="text" value=" <%=product.price  %>" class="form-control" id="price"
+                                        <input type="text" value="<%=product.price%>"  class="form-control" id="price"
                                             name="price" required>
                                     </div>
                                 </div>
@@ -71,13 +66,15 @@
                                     <div class="form-group">
                                         <label for="category">Category</label>
                                         <select class="select form-control" id="category" name="category">
-                                            <option value="select">
-                                                <%=product.category %>
-                                            </option>
+                                            <% ProductData.forEach(product => { %>       
+                                                  <option value=""><%= product.category.category%></td></option>
+                                             
+                                         
+                                              <% }); %>
+                                            <option value="Mobiles"> Mobiles </option>
                                             <option value="Laptops">Laptops</option>
-                                            <option value="Mobiles">Mobiles</option>
-                                            <option value="Mobiles">HeadPhones</option>
-                                            <option value="Mobiles">Smartwatches</option>
+                                            <option value="Headphones">Mobiles</option>
+                                            <option value="SmartWatches">HeadPhones</option>
                                             <!-- Add more options here -->
                                         </select>
                                     </div>
@@ -87,8 +84,7 @@
                                     <div class="form-group">
                                         <label for="brand">Brand</label>
                                         <select class="select form-control" id="brand" name="brand">
-                                            <option value="">
-                                                <%=product.brand%>
+                                            <option value=""><%=product.brand  %>
                                             </option>
                                             <option value="Apple">Apple</option>
                                             <option value="Samsung">Samsung</option>
@@ -96,6 +92,7 @@
                                             <option value="Oppo">Oppo</option>
                                             <option value="vivo">Vivo</option>
                                             <option value="Boat">Boat</option>
+                                            <option value="Zebronics">Zebronics</option>
                                             <option value="Asus">Asus</option>
                                             <option value="Dell">Dell</option>
                                             <option value="Asus">Asus</option>
@@ -207,6 +204,8 @@
             <% }); %>
 
                     </form>
+
+                    </div>
                 </div>
 
             </div>

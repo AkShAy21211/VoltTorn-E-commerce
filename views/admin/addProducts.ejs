@@ -24,6 +24,9 @@
 
 
                     </div>
+
+                <div class="overflow-auto p-3 bg-light" style="max-width: 1500px; max-height: 600px;">
+          
                     <form method="post" action="/admin/products/add" enctype="multipart/form-data">
                         
                         <div class="row">
@@ -46,21 +49,18 @@
                             <label for="description" class=" ml-3">Description</label>
                             <textarea class="form-control w-75 ml-3" id="description" name="description" required></textarea>
                         </div>
-        
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="category">Category</label>
-                                    <select class="select form-control"  id="category" name="category">
-                                        <option value="">Select</option>
-                                        <option value="Laptops">Laptops</option>
-                                        <option value="Mobiles">Mobiles</option>
-                                        <option value="Mobiles">HeadPhones</option>
-                                        <option value="Mobiles">Smartwatches</option>
-                                        <!-- Add more options here -->
-                                    </select>
-                                </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="category">Category</label>
+                                <select class="select form-control" id="category" name="category" required>
+                                    <option value="">Select</option>
+                                    <% category.forEach(categoryes => { %>
+                                        <option value="<%= categoryes.category %>"><%= categoryes.category %></option>
+                                    <% }); %>
+                                </select>
                             </div>
+                        </div>
         
                             <div class="col-md-4">
                                 <div class="form-group">
@@ -73,6 +73,7 @@
                                         <option value="Oppo">Oppo</option>
                                         <option value="vivo">Vivo</option>
                                         <option value="Boat">Boat</option>
+                                        <option value="Boat">ZEBRONICS</option>
                                         <option value="Asus">Asus</option>
                                         <option value="Dell">Dell</option>
                                         <option value="Asus">Asus</option>
@@ -93,7 +94,7 @@
                                 </div>
                             </div>
                         </div>
-        
+                    </div>
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
@@ -137,7 +138,7 @@
         
                         <button type="submit" class="btn btn-success">Add Product</button>
                     </form>
-
+                </div>
                 </div>
 
 
