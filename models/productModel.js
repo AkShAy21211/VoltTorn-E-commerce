@@ -77,40 +77,4 @@ const productSchema = new mongoose.Schema({
 });
 
 
-
-const phoneSchema = new mongoose.Schema({
-  model: {
-    number: { type: String, required: true },
-    name: { type: String, required: true },
-    color: { type: String, required: true },
-  },
-  general: {
-    inTheBox: [{ type: String, required: true }],
-    hybridSimSlot: { type: Boolean, default: false },
-    touchscreen: { type: Boolean, default: false },
-    otgCompatible: { type: Boolean, default: false },
-  },
-  displayFeatures: {
-    size: { type: String, required: true },
-    resolution: { type: String, required: true },
-    resolutionType: { type: String, required: true },
-  },
-  // ... (continue for other sections like os & processor features, memory & storage features, etc.)
-  dimensions: {
-    width: { type: String, required: true },
-    height: { type: String, required: true },
-    depth: { type: String, required: true },
-    weight: { type: String, required: true },
-  },
-  warranty: {
-    summary: { type: String, required: true },
-    domesticWarranty: { type: String, required: true },
-  },
-  // ... (add more sections as needed)
-});
-
-const Phone = mongoose.model("Phone", phoneSchema);
-
-module.exports = Phone;
-
 module.exports = mongoose.model("Product", productSchema);

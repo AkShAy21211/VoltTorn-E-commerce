@@ -18,6 +18,7 @@ userRoute.set('view engine','ejs');
 userRoute.set('views','./views/user')
 
 const bodyParser = require("body-parser");
+const { Admin } = require("mongodb");
 userRoute.use(bodyParser.json())
 userRoute.use(bodyParser.urlencoded({extended:true}))
 
@@ -30,7 +31,6 @@ userRoute.post('/register',userController.insertUser);
 //USER VERIFICATION THROUGH EMAIL TO COMPLETE
 userRoute.get('/verify',userController.loadVerify);
 userRoute.post('/verify',userController.verifyOTP);
-
 
 //SIGN IN USER
 
