@@ -16,28 +16,28 @@ const loginVerifyAdmin = async (req, res) => {
     const password = req.body.password;
 
     const adminData = await userModel.findOne({ email: email });
+
     if (adminData) {
-      const adminPasswordMatch = await bcrypt.compare(
-        password,
-        adminData.password
-      );
+      const adminPasswordMatch = await bcrypt.compare(password, adminData.password);
+
       if (adminPasswordMatch) {
         if (adminData.is_admin === 0) {
-          res.render("login", { message: "Email and password is incorrect" });
+          res.render("login", { message: "Email and password are incorrect" });
         } else {
-          req.session.user_id = adminData._id;
+          req.session.admin_id = adminData._id; // Set admin session variable
           res.redirect("/admin/dashboard");
         }
       } else {
-        res.render("login", { message: "Email and password is incorrect" });
+        res.render("login", { message: "Email and password are incorrect" });
       }
     } else {
-      res.render("login", { message: "Email and password is incorrect" });
+      res.render("login", { message: "Email and password are incorrect" });
     }
   } catch (error) {
     console.log(error.message);
   }
 };
+
 
 const loadHomeome = async (req, res) => {
   try {
@@ -49,7 +49,7 @@ const loadHomeome = async (req, res) => {
 
 const loadLogout = async (req, res) => {
   try {
-    req.session.destroy();
+    delete req.session.admin_id;
     res.redirect("/admin");
   } catch (error) {
     console.log(error.message);

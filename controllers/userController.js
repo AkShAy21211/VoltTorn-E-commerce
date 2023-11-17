@@ -105,9 +105,22 @@ const insertUser = async (req, res) => {
 };
 const loadVerify = async (req, res) => {
   try {
+    const email = req.query.email;
+
+    // Check if the user is already verified
+    const userData = await userModel.findOne({ email: email, is_verified: true });
+
+    if (userData) {
+      // User is already verified, redirect to a different page
+      return res.redirect('/');
+    }
+
+    // User is not yet verified, render the verifyOTP page
     res.render("verifyOTP");
   } catch (error) {
     console.log(error.message);
+    // Handle the error
+    res.render("verifyOTP", { error: "An error occurred." });
   }
 };
 
@@ -133,7 +146,7 @@ const verifyOTP = async (req, res) => {
     if (userData && OTPData.otpCode === otp) {
       await userModel.updateOne({ _id: id }, { $set: { is_verified: true } });
       await userOTPVeryModel.deleteOne({ otpCode: otp });
-      return res.redirect('/login');
+      return res.redirect('/');
     }
 
   } catch (error) {
@@ -155,7 +168,6 @@ const loadLogin = async (req, res) => {
   }
 };
 
-
 const loadLoginVerify = async (req, res) => {
   try {
     const email = req.body.email;
@@ -170,7 +182,7 @@ const loadLoginVerify = async (req, res) => {
           if (userData.status === false) {
             return res.render("login", { message: "You have been blocked by the admin" });
           } else {
-            req.session.user_id = userData._id;
+            req.session.user_id = userData._id; // Set user session variable
             return res.redirect("/home");
           }
         } else {
@@ -194,7 +206,7 @@ const loadLoginVerify = async (req, res) => {
 const userLogout = async(req,res)=>{
   try{
 
-    req.session.destroy();
+    delete req.session.user_id;
     res.redirect('/login');
 
   }catch(error){

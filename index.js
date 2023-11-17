@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 mongoose.connect('mongodb://127.0.0.1:27017/VOLTTRON')
 const express = require("express");
 const app = express();
-const PORT = 3001;
+const PORT = 3000;
 const morgan = require("morgan");
 
 app.use(morgan("dev"));

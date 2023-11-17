@@ -42,7 +42,7 @@
       <div class="row">
         <h3 class="p-3">Top Products</h3>
         <% ProductData.forEach(product => { %>
-        <div class="col-md-6 col-lg-3 mb-lg mb-md-6 mb-sm-4 md-xs-3 col-12">
+        <div class="col-md-6 col-lg-3 mb-lg mb-md-6 mb-sm-4 md-xs-3 col-12 mt-3">
           <!-- Use col-lg-3 to include four cards in one row -->
           <a href="/home/product/details/<%=product._id%>" class="text-decoration-none text-dark" >
           <div class="card h-100 border shadow rounded">
@@ -68,7 +68,7 @@
               <div class="d-flex justify-content-between">
                 <p class="fw-bold">
                   <a href="#!" class="text-muted">
-                    <%= product.category.category %>
+                    <%-product.category.category %>
                   </a>
                 </p>
                 <p class="small text-danger"><s>Rs<%= product.price %></s></p>
@@ -83,13 +83,7 @@
                   Available: <span class="fw-bold text-danger">Out Of Stock</span>
                 </p>
                 <% } %>
-                <div class="ms-auto text-warning">
-                  <% for (let i=0; i < product.rating; i++) { %>
-                  <i class="fa fa-star"></i>
-                  <% } %> <% for (let i=0; i < 5 - product.rating; i++) { %>
-                  <i class="far fa-star"></i>
-                  <% } %>
-                </div>
+               
               </div>
             </div>
           </div>

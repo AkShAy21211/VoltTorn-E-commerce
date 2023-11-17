@@ -1,83 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    
-    <link rel="stylesheet" href="/css/footer.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/header.css">
-    <link rel="stylesheet" href="/css/register.css">
-    <link rel="stylesheet" href="/css/login.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <meta charset="UTF-8">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-<link rel="stylesheet"
-          href=
-"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="/css/footer.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/register.css">
+  <link rel="stylesheet" href="/css/login.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<!-- Add this to your HTML head section -->
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<!-- Include the ElevateZoom CSS file -->
+<link rel="stylesheet" href="path/to/elevatezoom/jquery.elevatezoom.css" />
 
 
-    
+
+
 </head>
+
 <body>
- 
-    <header  class="p-4  header-outer">
-        <div class="container-fluid header  ">
-          <div class="d-flex flex-wrap p-3 align-items-center justify-content-center justify-content-lg-start">
-            <a class="navbar-brand" href="#">
-              <!-- <img src="/images/logo.png" style="margin-top: 15px;" alt="..." height="50" width="50px"> -->
-            </a>
-          </img>
-    
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-              <li><a href="/home" class="nav-link px-2 ">Home</a></li>
-            
-      
-              <li><div class="dropdown">
-                <button class="btn dropdown-toggle " type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Category
-                </button>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Mobiles</a></li>
-                  <li><a class="dropdown-item" href="#">Laptops</a></li>
-                  <li><a class="dropdown-item" href="#">HeadSets</a></li>
-                  <li><a class="dropdown-item" href="#">SmartWatch</a></li>
-                  <li><a class="dropdown-item" href="#">All</a></li>
+
+  <header class="p-4  header-outer">
+    <div class="container-fluid header  ">
+      <div class="d-flex flex-wrap p-3 align-items-center justify-content-center justify-content-lg-start">
+        <a class="navbar-brand" href="#">
+          <!-- <img src="/images/logo.png" style="margin-top: 15px;" alt="..." height="50" width="50px"> -->
+        </a>
+        </img>
+
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <li><a href="/home" class="nav-link px-2 ">Home</a></li>
 
 
-                </ul>
-              </div></li>
-            </ul>
-
-            <!-- Example split primary button -->
-
-    
-            <form class="col-5 col-lg-4 mb-3 mb-lg-0 me-lg-3 f" role="search">
-              <div class="d-flex gap-2  "><input type="search" name="search" class="form-control w-100" placeholder="Search..." aria-label="Search">
-              <input class="btn btn-primary " type="submit" value="Search" name="" id=""></div>
-              
-            </form>
-            <div class="text-end">
-             <a class="text-black" href=""><i class="bi bi-bag"></i></a> 
-              
-            </div>
-            <div class="text-end">
+          <li>
+            <div class="dropdown">
               <button class="btn dropdown-toggle " type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Account
+                Category
               </button>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/login">Sign In</a></li>
-                <li><a class="dropdown-item" href="/register">Sign Up</a></li>
-                <li><a class="dropdown-item" href="#">Cart</a></li>
-                <li><a class="dropdown-item" href="#">Profile</a></li>
-                <% if ( locals.sessionData && locals.sessionData.user_id) { %>
-                  <a class="dropdown-item" href="/logout">Logout</a>
-              <% } %>
+                <li><a class="dropdown-item" href="#">Mobiles</a></li>
+                <li><a class="dropdown-item" href="#">Laptops</a></li>
+                <li><a class="dropdown-item" href="#">HeadSets</a></li>
+                <li><a class="dropdown-item" href="#">SmartWatch</a></li>
+                <li><a class="dropdown-item" href="#">All</a></li>
 
 
               </ul>
             </div>
+          </li>
+        </ul>
+
+        <!-- Example split primary button -->
+
+
+        <form class="col-5 col-lg-4 mb-3 mb-lg-0 me-lg-3 f" role="search">
+          <div class="d-flex gap-2  "><input type="search" name="search" class="form-control w-100"
+              placeholder="Search..." aria-label="Search">
+            <input class="btn btn-primary " type="submit" value="Search" name="" id="">
           </div>
+
+        </form>
+        <div class="text-end">
+          <a class="text-black" href=""><i class="bi bi-bag"></i></a>
+
         </div>
-      </header>
+        <div class="text-end ml-2">
+          <button class="btn dropdown-toggle " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Account
+          </button>
+          <ul class="dropdown-menu">
+            <% if ( locals.sessionData && locals.sessionData.user_id) { %>
+              <li><a class="dropdown-item" href=""></a></li>
+              <% }else{%>
+                <li><a class="dropdown-item" href="/login">Sign In</a></li>
+                <li><a class="dropdown-item" href="/register">Sign Up</a></li>
+                <%} %>
+                  
+                  <li><a class="dropdown-item" href="#">Cart</a></li>
+                  <li><a class="dropdown-item" href="#">Profile</a></li>
+                  <% if ( locals.sessionData && locals.sessionData.user_id) { %>
+                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                    <% } %>
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>

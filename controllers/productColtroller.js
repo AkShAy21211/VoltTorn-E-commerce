@@ -59,15 +59,15 @@ const addProduct = async (req, res) => {
 };
 
 //ADMIN EDIT-PRODUCT EDIT ROUTE METHOOD
-
 const editProductLoad = async (req, res) => {
   try {
     const id = req.params.id;
-    const ProductData = await productModel.find({ _id: id }).populate('category');
+    const ProductData = await productModel.findById(id).populate('category');
+
     if (ProductData) {
-      res.render("editProducts", { ProductData });
+      const categories = await categoryModel.find({}); // Fetch all categories
+      res.render("editProducts", { ProductData, categories });
     }
-  
   } catch (error) {
     console.log(error.message);
   }
@@ -75,53 +75,68 @@ const editProductLoad = async (req, res) => {
 
 //ADMIN EDIT-PRODUCT EDIT ROUTE METHOOD
 const editProduct = async (req, res) => {
-
-
   try {
     const id = req.params.id;
     const category = req.body.category;
+    let categoryData;
+
+    // Check if category is provided before querying the database
+    if (category) {
+      categoryData = await categoryModel.findOne({ category: category });
+      if (!categoryData) {
+        // Handle the case where the category is not found
+        console.log("Category not found");
+        return res.status(404).send("Category not found");
+      }
+    }
+
     console.log(id);
     const ProductData = await productModel.findOne({ _id: id }).populate('category');
     const images = [];
+
     for (let i = 1; i <= 4; i++) {
       const fieldName = `image${i}`;
       if (req.files[fieldName]) {
         images.push(req.files[fieldName][0].filename);
       }
     }
-    const productUpdated = await productModel.findOneAndUpdate(
-      { _id: id },
-      {
-        name: req.body.name,
-        description: req.body.description,
-        price: parseFloat(req.body.price),
-        category: ProductData.category._id,
-        brand: req.body.brand,
-        discount: parseInt(req.body.discount),
-        status: req.body.status,
-        stock: parseInt(req.body.stock),
-        image: images,
-      },
-      {upsert:true,  new: true } // Use { new: true } to return the updated document
-    );
-    console.log(productUpdated)
-    if (images.length > 0) {
-      productUpdated.image = images;
-    } else if (ProductData.image) {
-      productUpdated.image = ProductData.image; // Keep the previous images
+
+    const productUpdatedData = {
+      name: req.body.name,
+      description: req.body.description,
+      price: parseFloat(req.body.price),
+      brand: req.body.brand,
+      discount: parseInt(req.body.discount),
+      status: req.body.status,
+      stock: parseInt(req.body.stock),
+    };
+
+    // Add category to the update object if it exists
+    if (categoryData) {
+      productUpdatedData.category = categoryData._id;
     }
 
-    const productImageUpdated = await productModel.findOneAndUpdate(
+    // Check if any images are provided before updating
+    if (images.length > 0) {
+      productUpdatedData.image = images;
+    } else if (ProductData.image) {
+      productUpdatedData.image = ProductData.image;
+    }
+
+    const productUpdated = await productModel.findOneAndUpdate(
       { _id: id },
-      productUpdated,
-      { upsert: true,new:true }
+      productUpdatedData,
+      { upsert: true, new: true }
     );
 
+    console.log(productUpdated);
     res.redirect("/admin/products");
   } catch (error) {
     console.log(error);
+    res.status(500).send("Internal Server Error");
   }
 };
+
 
 const deleteProduct = async(req,res)=>{
 

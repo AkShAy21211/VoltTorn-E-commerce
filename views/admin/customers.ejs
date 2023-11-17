@@ -52,9 +52,14 @@
             <td><img src="<%= customer.image %>" alt="Customer Image" width="50"></td>
             <td style="font-weight:bold;"><%= customer.status %>
                     </td>
-                    <td style="text-align: center; "><a href="/admin/block-unblock-user?id=<%=customer._id  %>"
-                        class="btn btn-primary" style="background-color: rgb(37, 129, 195);" type="button">Block <strong>/</strong> UnBlock</a> <a
-                        href="/admin/delete-user?id=<%=customer._id  %>" class="btn btn-danger" type="button">Delete</a>
+                    <td style="text-align: center; ">
+                      <a href="/admin/block-unblock-user?id=<%=customer._id  %>"
+                        class="btn btn-primary" style="background-color: rgb(37, 129, 195);" type="button">
+                        <%= customer.status.toString() === 'true' ? "Block" : "UnBlock" %>
+
+                     </a>
+                     
+                        <a href="/admin/delete-user?id=<%=customer._id  %>" class="btn btn-danger" type="button">Delete</a>
                     </td>
 
                   </tr>
