@@ -52,30 +52,27 @@ adminRoute.use(express.static("public"));
 //ADMIN LOGIN
 adminRoute.get("/", adminAuth.is_Logout, adminController.loadLogin);
 adminRoute.post("/", adminController.loginVerifyAdmin);
-adminRoute.get("/dashboard", adminController.loadHomeome);
+adminRoute.get("/dashboard",adminAuth.is_Login, adminController.loadHomeome);
 
 //ADMIN LOGOUT
 adminRoute.get("/logout", adminAuth.is_Login, adminController.loadLogout);
 
 //ADMIN CUSTOMER ROUTE
-adminRoute.get(
-  "/customers",
-  adminAuth.is_Login,
-  customerController.loadCustomers
+adminRoute.get( "/customers", adminAuth.is_Login,customerController.loadCustomers
 );
-adminRoute.get("/delete-user", customerController.deleteUser);
-adminRoute.get("/block-unblock-user", customerController.blockUnblockUser);
+adminRoute.get("/delete-user",adminAuth.is_Login, customerController.deleteUser);
+adminRoute.get("/block-unblock-user",adminAuth.is_Login, customerController.blockUnblockUser);
 
 //ADMIN CATEGORY ROUTE
-adminRoute.get("/category", categoryController.loadCategory);
+adminRoute.get("/category",adminAuth.is_Login, categoryController.loadCategory);
 adminRoute.post("/category/add", categoryController.addNewCategory); //ADMIN ADD CATEGORY ROUTE
-adminRoute.get("/category/edit/:id", categoryController.editCategoryLoad);
+adminRoute.get("/category/edit/:id",adminAuth.is_Login, categoryController.editCategoryLoad);
 adminRoute.post("/category/edit/:id", categoryController.editCategory); //ADMIN EDIT CATEGORY ROUTE
-adminRoute.get("/category/delete/:id", categoryController.deleteCategory); //ADMIN DELETE CATEGORY ROUTE
+adminRoute.get("/category/delete/:id", adminAuth.is_Login,categoryController.deleteCategory); //ADMIN DELETE CATEGORY ROUTE
 
 //ADMIN PRODUCT ROUTE
-adminRoute.get("/products", productController.loadProduct);
-adminRoute.get("/products/add", productController.addProductLoad);
+adminRoute.get("/products",adminAuth.is_Login, productController.loadProduct);
+adminRoute.get("/products/add",adminAuth.is_Login, productController.addProductLoad);
 adminRoute.post(
   "/products/add",
   uplode.fields([
@@ -89,7 +86,7 @@ adminRoute.post(
 
 //ADMIN PRODUCT EDIT ROUTE
 
-adminRoute.get("/products/edit/:id", productController.editProductLoad);
+adminRoute.get("/products/edit/:id",adminAuth.is_Login, productController.editProductLoad);
 adminRoute.post(
   "/products/edit/:id",
   uplode.fields([
@@ -100,7 +97,7 @@ adminRoute.post(
   ]),
   productController.editProduct
 );
-adminRoute.get("/products/delete/:id", productController.deleteProduct);
+adminRoute.get("/products/delete/:id",adminAuth.is_Login, productController.deleteProduct);
 
 
 

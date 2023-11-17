@@ -18,7 +18,7 @@
             <img width="150" height="150" class="rounded-2 border"
               src="/images/productImages/<%=ProductData.image[2]  %>" />
 
-            <img width="150" height="150" class="rounded-2 border-solid mt-3 mt-lg-0 mt-xl-0 mt-md-0 "
+            <img width="150" height="150" class="rounded-2 border-solid mt-lg-0 mt-xl-0 mt-md-0 "
               src="/images/productImages/<%=ProductData.image[3]  %>" />
 
 
@@ -29,7 +29,7 @@
 
         <main class="col-lg-6">
           <div class="ps-lg-3">
-            <h4 class="title text-dark">
+            <h4 class="title text-dark mt-5 mt-xl-0 mt-md-0">
               <%=ProductData.name %>
             </h4>
             <div class="d-flex flex-row my-3">
@@ -54,19 +54,27 @@
             </div>
 
             <div class="mb-3 d-flex ">
-              <span class="h4">Rs: <%= Number(ProductData.price).toLocaleString() %></span>
+              <span class="h4"> Rs:<%= Number(ProductData.price - (ProductData.price * (ProductData.discount/100))).toLocaleString() %>
               <span style=" margin-left: 30px;" class="h5 fw-light  text-danger"><s>
-                  <%= ProductData.price %>
+                 <%=ProductData.price  %>
                 </s></span>
               <!-- Number(ProductData.price) converts the price to a number (in case it's a string), 
             and then toLocaleString() is used to format the number with commas for thousands.          -->
             </div>
 
-            <p>
-              <%=ProductData.description %>
-            </p>
+            <ul>
+              <% 
+                var descriptionPoints = ProductData.description.split(/\.\s+/);
+                descriptionPoints.forEach(function(point) {
+              %>
+                  <li><%= point %></li>
+              <%
+                });
+              %>
+            </ul>
+            
 
-            <div class="row">
+          <%#  <div class="row">
               <dt class="col-3">Type:</dt>
               <dd class="col-9">Regular</dd>
 
@@ -79,12 +87,12 @@
               <dt class="col-3">Brand</dt>
               <dd class="col-9">Reebook</dd>
             </div>
-
+%>
             <hr />
 
             <div class="row mb-4">
               <label class="mb-2 d-block">Quantity</label>
-              <!-- col.// -->
+            
               <div class="col-md-4 col-6 mb-3 d-flex">
 
                 <div class="input-group mb-3" style="width: 170px">

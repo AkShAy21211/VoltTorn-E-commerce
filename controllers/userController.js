@@ -1,5 +1,5 @@
 const userModel = require("../models/userModel");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const userOTPVeryModel = require("../models/userVerifyOTPModel");
 
@@ -67,7 +67,6 @@ const loadRegister = async (req, res) => {
 };
 
 //POST REQUEST FOR LOAD USER REGISTRATION TO INSERT NEW USER
-
 const insertUser = async (req, res) => {
   try {
     const hashPassword = await securePassword(req.body.password);
@@ -80,30 +79,30 @@ const insertUser = async (req, res) => {
       password: hashPassword,
       is_verified: false,
       is_admin: 0,
-      status:true,
+      status: true,
     });
 
     const confirmPassword = req.body.password === req.body.confirmPassword;
     if (!confirmPassword) {
-      const password =
-        "Your registration has been failed please check your password" ||
+      const passwordMessage =
+        "Your registration has failed. Please check your password" ||
         "Your registration has been completed";
-      res.render("registration", {
-        password,
+      return res.render("registration", {
+        password: passwordMessage,
       });
-    } else {
-      const userData = await User.save();
-      setTimeout(() => {
-        res.redirect(`/verify?_id=${userData._id}&email=${userData.email}`);
-      }, 1000);
-      // Redirect to the OTP verification page with _id and email as URL parameters
-      generateAndSendOTP(userData.email);
     }
+
+    const userData = await User.save();
+    generateAndSendOTP(userData.email);
+    // Redirect to the OTP verification page with _id and email as URL parameters
+    return res.redirect(`/verify?_id=${userData._id}&email=${userData.email}`);
   } catch (error) {
-    console.log(error.message);
+    console.error("Error inserting user:", error.message);
+    return res.render("registration", {
+      password: "Error during registration. Please try again.",
+    });
   }
 };
-
 const loadVerify = async (req, res) => {
   try {
     res.render("verifyOTP");
@@ -119,29 +118,32 @@ const verifyOTP = async (req, res) => {
     const email = req.query.email;
     const otp = req.body.otp;
 
-    const userData = await userModel.findOne({ _id:id,email:email});
+    const userData = await userModel.findOne({ _id: id, email: email });
     const OTPData = await userOTPVeryModel.findOne({
       email: email,
       otpCode: otp,
     });
 
     if (!userData || !otp) {
-      res.render("verifyOTP", {
+      return res.render("verifyOTP", {
         error: "Invalid OTP or user already verified",
       });
-    } else {
-      if (userData && OTPData.otpCode === otp) {
-        await userModel.updateOne({_id:id },{$set:{is_verified:true}});
-        await userOTPVeryModel.deleteOne({otpCode:otp });
-
-        res.redirect('/login')
-      }
     }
-  } catch (error) {
 
-    console.log(error.message);
+    if (userData && OTPData.otpCode === otp) {
+      await userModel.updateOne({ _id: id }, { $set: { is_verified: true } });
+      await userOTPVeryModel.deleteOne({ otpCode: otp });
+      return res.redirect('/login');
+    }
+
+  } catch (error) {
+    console.error("Error verifying OTP:", error.message);
+    return res.render("verifyOTP", {
+      error: "An error occurred during OTP verification. Please try again.",
+    });
   }
 };
+
 
 //USER LOGIN
 
@@ -152,38 +154,37 @@ const loadLogin = async (req, res) => {
     console.log(error.message);
   }
 };
+
+
 const loadLoginVerify = async (req, res) => {
   try {
     const email = req.body.email;
     const password = req.body.password;
     const userData = await userModel.findOne({ email: email });
+
     if (userData) {
       const passwordMatch = await bcrypt.compare(password, userData.password);
+
       if (passwordMatch) {
         if (userData.is_verified === true) {
-          if(userData.status === false){
-              res.render("login", { message: "You have been blocked by the admin" });
-
-          }else{
-             req.session.user_id = userData._id;
-             res.redirect("/home");
+          if (userData.status === false) {
+            return res.render("login", { message: "You have been blocked by the admin" });
+          } else {
+            req.session.user_id = userData._id;
+            return res.redirect("/home");
           }
         } else {
-         
-       
-
-
-        res.render("login", { message: "Please verify your email" });
-
+          return res.render("login", { message: "Please verify your email" });
         }
       } else {
-        res.render("login", { message: "Email and password is incorrect" });
+        return res.render("login", { message: "Email and password are incorrect" });
       }
     } else {
-      res.render("login", { message: "Email and password is incorrect" });
+      return res.render("login", { message: "Email and password are incorrect" });
     }
   } catch (error) {
-    console.log(error.message);
+    console.error("Error during login:", error.message);
+    return res.render("login", { message: "An error occurred during login. Please try again." });
   }
 };
 
@@ -194,7 +195,7 @@ const userLogout = async(req,res)=>{
   try{
 
     req.session.destroy();
-    res.redirect('/');
+    res.redirect('/login');
 
   }catch(error){
     console.log(error.message);

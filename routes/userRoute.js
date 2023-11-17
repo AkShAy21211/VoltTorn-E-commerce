@@ -10,7 +10,7 @@ const homeController = require("../controllers/homePageController");
 userRoute.use(session({
     secret:config.sessionSecret,
     resave:false,
-    saveUninitialized:false
+    saveUninitialized:true
 }))
 
 const auth = require("../middlewares/auth");
@@ -25,16 +25,16 @@ userRoute.use(bodyParser.urlencoded({extended:true}))
 
 userRoute.use(express.static('public'))
 //REGISTER USER ROUTE
-userRoute.get('/register',userController.loadRegister);
+userRoute.get('/register',auth.is_Logout,userController.loadRegister);
 userRoute.post('/register',userController.insertUser);
 
 //USER VERIFICATION THROUGH EMAIL TO COMPLETE
-userRoute.get('/verify',userController.loadVerify);
+userRoute.get('/verify',auth.is_Logout,userController.loadVerify);
 userRoute.post('/verify',userController.verifyOTP);
 
 //SIGN IN USER
 
-userRoute.get('/login',userController.loadLogin);
+userRoute.get('/login',auth.is_Logout,userController.loadLogin);
 userRoute.post('/login',userController.loadLoginVerify);
 
 userRoute.get('/',homeController.loadHome)
@@ -46,7 +46,7 @@ userRoute.get('/home/product/details/:id',homeController.productDetail);
 
 //USER LOGOUT
 
-userRoute.get('/logout',userController.userLogout)
+userRoute.get('/logout',auth.is_Login,userController.userLogout)
 
 
 
