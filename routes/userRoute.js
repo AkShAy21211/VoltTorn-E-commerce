@@ -2,16 +2,9 @@ const express  = require("express");
 const userRoute  = express();
 const userController = require("../controllers/userController");
 const userModel = require("../models/userModel");
-const session = require("express-session");
-const config = require("../config/config");
 const homeController = require("../controllers/homePageController");
 
 
-userRoute.use(session({
-    secret:config.sessionSecret,
-    resave:false,
-    saveUninitialized:true
-}))
 
 const auth = require("../middlewares/auth");
 userRoute.set('view engine','ejs');
@@ -25,7 +18,7 @@ userRoute.use(bodyParser.urlencoded({extended:true}))
 
 userRoute.use(express.static('public'))
 //REGISTER USER ROUTE
-userRoute.get('/register',auth.is_Logout,userController.loadRegister);
+userRoute.get('/register',userController.loadRegister);
 userRoute.post('/register',userController.insertUser);
 
 //USER VERIFICATION THROUGH EMAIL TO COMPLETE

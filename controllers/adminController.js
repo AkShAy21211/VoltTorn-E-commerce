@@ -2,6 +2,7 @@ const userModel = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 
+
 const loadLogin = async (req, res) => {
   try {
     res.render("login");
@@ -24,7 +25,10 @@ const loginVerifyAdmin = async (req, res) => {
         if (adminData.is_admin === 0) {
           res.render("login", { message: "Email and password are incorrect" });
         } else {
-          req.session.admin_id = adminData._id; // Set admin session variable
+          req.session.admin = {
+            isAdminAuthenticated:true,
+            username:adminData.first_name+" "+adminData.last_name,
+          } // Set admin session variable
           res.redirect("/admin/dashboard");
         }
       } else {
@@ -49,7 +53,7 @@ const loadHomeome = async (req, res) => {
 
 const loadLogout = async (req, res) => {
   try {
-    delete req.session.admin_id;
+    req.session.destroy();
     res.redirect("/admin");
   } catch (error) {
     console.log(error.message);

@@ -132,8 +132,7 @@ const editProduct = async (req, res) => {
     console.log(productUpdated);
     res.redirect("/admin/products");
   } catch (error) {
-    console.log(error);
-    res.status(500).send("Internal Server Error");
+    console.error(error);
   }
 };
 

@@ -28,16 +28,6 @@ const storage = multer.diskStorage({
 const uplode = multer({ storage: storage });
 
 const userModel = require("../models/userModel");
-const session = require("express-session");
-const config = require("../config/config");
-adminRoute.use(
-  session({
-    secret: config.sessionSecret,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: true },
-  })
-);
 
 const adminAuth = require("../middlewares/adminauth");
 adminRoute.set("view engine", "ejs");

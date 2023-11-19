@@ -44,7 +44,8 @@
                         <table class="table ">
                             <thead class="text-center table-dark">
                                 <tr>
-                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Sub Category</th>
                                     <th>Description</th>
                                     <th>Actions</th>
                                 </tr>
@@ -56,14 +57,19 @@
                                             <%= category.category %>
                                         </td>
                                         <td class="description-column">
+                                            <%= category.sub_Category %>
+                                        </td>
+                                        <td class="description-column">
                                             <%= category.description %>
                                         </td>
+                                       
                                         <td>
                                             <a href="/admin/category/edit/<%= category._id %>"
                                                 class="btn btn-warning">Edit</a>
-                                            <a href="/admin/category/delete/<%= category._id %>"
+                                            <a href="javascript:void(0);" onclick="confirmDelete('<%= category._id %>','/admin/category/delete/','You will not be able to recover this category!')"
                                                 class="btn btn-danger">Delete</a>
                                         </td>
+
                                     </tr>
                                     <% }); %>
                             </tbody>
@@ -93,35 +99,96 @@
 
 
                 <!-- Add Category Modal -->
-                <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog"
-                    aria-labelledby="addCategoryModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form method="POST" action="/admin/category/add">
-                                    <div class="form-group">
-                                        <label for="name">Name</label>
-                                        <input type="text" class="form-control" id="name" name="name" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="description">Description</label>
-                                        <textarea class="form-control" id="description" name="description"
-                                            required></textarea>
-                                    </div>
-                                    <button type="submit" class="btn btn-success ">Add Category</button>
-                                </form>
-                            </div>
+                <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="POST" action="/admin/category/add" onsubmit="return validateCategoryForm()">
+                                <div class="form-group">
+                                    <label for="name">Category Name</label>
+                                    <select class="select form-control" id="name" name="name" required >
+                                        <option value="">Select</option>
+                                        <option value="Apple">Laptops</option>
+                                        <option value="Apple">Mobiles</option>
+                                        <option value="Apple">Headphones</option>
+                                        <option value="Apple">SmartWatches</option>
+                                
+
+                                        <!-- Add more options here -->
+                                    </select>
+                                    <div id="nameWarning" class="text-danger"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="SubCategory">Sub-Category Name</label>
+                                    <select class="select form-control" id="SubCategory" name="SubCategory" required>
+                                        <option value="">Select</option>
+                                        <option value="Apple">Gaming</option>
+                                        <option value="Apple">Ultrabooks</option>
+                                        <option value="Apple">Fitness Trackers  </option>
+                                        <option value="Apple">Fashionable Smartwatches</option>
+                                        <option value="Apple">Flagship Phones</option>
+                                        <option value="Apple">Budget-friendly Phones</option>
+                                        <option value="Apple">Over-Ear Headphones </option>
+                                        <option value="Apple">True Wireless Earbuds</option>
+
+                                        </select>
+                                    <div id="SubCategoryWarning" class="text-danger"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="description">Description</label>
+                                    <textarea class="form-control" id="description" name="description" required></textarea>
+                                    <div id="descriptionWarning" class="text-danger"></div>
+                                </div>
+                                <button type="submit" class="btn btn-success">Add Category</button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
+            </div>
         </div>
         </div>
-
+        <script>
+            function validateCategoryForm() {
+                var name = document.getElementById('name').value;
+                var description = document.getElementById('description').value;
+                var sub_Category = document.getElementById('SubCategory').value;
+                
+                // Reset all warnings
+                document.getElementById('nameWarning').innerText = '';
+                document.getElementById('descriptionWarning').innerText = '';
+                document.getElementById('SubCategoryWarning').innerText = '';
+        
+                // Validate name with no white spaces
+                if (!name.trim()) {
+                    document.getElementById('nameWarning').innerText = 'Name should not be empty.';
+                    return false;
+                }
+        
+                // Validate sub_Category with no white spaces
+                if (!sub_Category.trim()) {
+                    document.getElementById('SubCategoryWarning').innerText = 'Sub Category should not be empty.';
+                    return false;
+                }
+        
+                // Validate description with more than 10 words
+                var wordCount = description.trim().split(/\s+/).length;
+                if (wordCount < 10) {
+                    document.getElementById('descriptionWarning').innerText = 'Description should contain at least 10 words.';
+                    return false;
+                }
+        
+                // Form is valid
+                return true;
+            }
+        </script>
+        
+ <script src="/js/alertPopUp.js"></script>
         <%- include('../layout/adminFooter.ejs') %>

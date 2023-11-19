@@ -80,7 +80,7 @@
             Account
           </button>
           <ul class="dropdown-menu">
-            <% if ( locals.sessionData && locals.sessionData.user_id) { %>
+            <% if (locals.userSessionData && locals.userSessionData.isUserAuthenticated) { %>
               <li><a class="dropdown-item" href=""></a></li>
               <% }else{%>
                 <li><a class="dropdown-item" href="/login">Sign In</a></li>
@@ -89,11 +89,9 @@
                   
                   <li><a class="dropdown-item" href="#">Cart</a></li>
                   <li><a class="dropdown-item" href="#">Profile</a></li>
-                  <% if ( locals.sessionData && locals.sessionData.user_id) { %>
+                  <% if (locals.userSessionData && locals.userSessionData.isUserAuthenticated) { %>
                     <li><a class="dropdown-item" href="/logout">Logout</a></li>
                     <% } %>
-
-
           </ul>
         </div>
       </div>

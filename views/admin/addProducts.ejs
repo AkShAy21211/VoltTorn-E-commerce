@@ -1,152 +1,163 @@
 <%- include('../layout/adminHeader.ejs') %>
-    <%- include('../layout/adminSideBar.ejs') %>
+<%- include('../layout/adminSideBar.ejs') %>
 
-    <style>
+<style>
+    .form-box {
+        width: 1550px;
+        padding-right: 200px;
+        margin-top: 30px;
+    }
+</style>
 
-        .form-box{
+<div class="container form-box mt-4 ">
 
-            width: 1550px;
-            padding-right: 200px;
-            margin-top: 30px;
-        }
-    </style>
+    <div class="row d-flex justify-content-end ">
+        <div class=" col-md-10 col-lg-11 ">
 
+            <div class="d-flex justify-content-between">
+                <h2>Add Product </h2>
+            </div>
 
-        <div class="container form-box mt-4 ">
+                <div class="overflow-auto p-3 bg-light" style="max-width: 1300px; max-height: 550px;">
 
-            <div class="row d-flex justify-content-end  ">
-                <div class=" col-md-10 col-lg-11 ">
+                    <form id="ProductForm" name="ProductForm" method="post" action="/admin/products/add" enctype="multipart/form-data">
 
-
-                    <div class="d-flex justify-content-between">
-                        <h2>Add Product </h2>
-
-
-
-                    </div>
-
-                <div class="overflow-auto p-3 bg-light" style="max-width: 1600px; max-height: 550px;">
-                    <div class="overflow-auto p-3 bg-light" style="max-width: 1300px; max-height: 600px;">
-
-                    <form method="post" action="/admin/products/add" enctype="multipart/form-data">
-                        
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="name">Name</label>
-                                    <input type="text" class="form-control" id="name" name="name" required>
+                                    <input type="text" class="form-control" id="name" name="name" >
+                                    <div id="nameWarning" class="text-danger"></div>
                                 </div>
                             </div>
-        
+
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="price">Price</label>
-                                    <input type="text" class="form-control" id="price" name="price" required>
+                                    <input type="text" class="form-control" id="price" name="price" >
+                                    <div id="priceWarning" class="text-danger"></div>
                                 </div>
                             </div>
                         </div>
-        
-                        <div class="form-group ">
-                            <label for="description" class=" ml-3">Description</label>
-                            <textarea class="form-control w-75 ml-3" id="description" name="description" required></textarea>
+
+                        <div class="form-group">
+                            <label for="description" class="ml-3">Description</label>
+                            <textarea class="form-control w-75 ml-3" id="description" name="description" ></textarea>
+                            <div id="descriptionWarning" class="text-danger"></div>
                         </div>
+
                         <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="category">Category</label>
-                                <select class="select form-control" id="category" name="category" required>
-                                    <option value="">Select</option>
-                                    <% category.forEach(categoryes => { %>
-                                        <option value="<%= categoryes.category %>"><%= categoryes.category %></option>
-                                    <% }); %>
-                                </select>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="category">Category</label>
+                                    <select class="select form-control" id="category" name="category" >
+                                        <option value="">Select</option>
+                                        <% category.forEach(categoryes => { %>
+                                            <option value="<%= categoryes.category %>"><%= categoryes.category %></option>
+                                        <% }); %>
+                                    </select>
+                                    <div id="categoryWarning" class="text-danger"></div>
+                                </div>
                             </div>
-                        </div>
-        
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="subCategory">Sub Category</label>
+                                     <select class="select form-control" id="subCategory" name="subCategory" >
+                                        <option value="">Select</option>
+                                        <% category.forEach(categoryes => { %>
+                                            <option value="<%= categoryes.sub_Category %>"><%= categoryes.sub_Category %></option>
+                                        <% }); %>
+                                    </select>
+                                        <div id="subCategoryWarning" class="text-danger"></div>
+
+                                </div>
+                            </div>
+
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="brand">Brand</label>
                                     <select class="select form-control" id="brand" name="brand">
-                                        <option value="Select">Select</option>
+                                        <option value="">Select</option>
                                         <option value="Apple">Apple</option>
-                                        <option value="Samsung">Samsung</option>
-                                        <option value="Redmi">Redmi</option>
-                                        <option value="Oppo">Oppo</option>
-                                        <option value="vivo">Vivo</option>
-                                        <option value="Boat">Boat</option>
-                                        <option value="Boat">ZEBRONICS</option>
-                                        <option value="Asus">Asus</option>
-                                        <option value="Dell">Dell</option>
-                                        <option value="Asus">Asus</option>
-                                        <option value="Lenovo">Lenovo</option>
-                                        <option value="Hp">Hp</option>
-
+                                        <option value="Apple">Samsung</option>
+                                        <option value="Apple">Oppo</option>
+                                        <option value="Apple">Asus</option>
+                                        <option value="Apple">Dell</option>
+                                        <option value="Apple">Hp</option>
+                                        <option value="Apple">Zebronics</option>
+                                        <option value="Apple">Bolt fire</option>
+                                        <option value="Apple">Boat</option>
 
 
                                         <!-- Add more options here -->
                                     </select>
+                                    <div id="brandWarning" class="text-danger"></div>
                                 </div>
                             </div>
-        
+
+                            
+                        </div>
+
+                        <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="discount">Discount</label>
-                                    <input type="number"  class="form-control" id="discount" name="discount" required>
+                                    <input type="number" class="form-control" id="discount" name="discount" >
+                                    <div id="discountWarning" class="text-danger"></div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                        <div class="row">
+
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="status">Status</label>
                                     <select class="select form-control" id="status" name="status">
+                                        <option value="">Select</option>
                                         <option value="true">true</option>
                                         <option value="false">false</option>
-                                        <!-- Add more options here -->
                                     </select>
+                                    <div id="statusWarning" class="text-danger"></div>
                                 </div>
                             </div>
-        
-                            
-        
+
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="stockQuantity">Stock Quantity</label>
-                                    <input type="number" class="form-control" id="stockQuantity" name="stock" required>
+                                    <input type="number" class="form-control" id="stockQuantity" name="stock" >
+                                    <div id="stockWarning" class="text-danger"></div>
                                 </div>
                             </div>
-                            
+                        </div>
+
                         <div class="row">
-                            
-        
-                            <div class="col  " >
-                                <div class="form-group gap-5  d-flex justify-content-between "style=" display: flex; justify-content: space-between; width: 710px; margin-left:-10px">
-                                    <input type="file" class="form-control"  name="image1" required>
-                                    <input type="file" class="form-control"  name="image2" required>
+                            <div class="col">
+                                <div id="img1Warning" class="text-danger"></div>
 
-
-                                </div>
-                                <div class="form-group gap-5  d-flex justify-content-between "style=" display: flex; justify-content: space-between; width: 710px; margin-left:-10px">
-                                    <input type="file" class="form-control"  name="image3" >
-                                    <input type="file" class="form-control"  name="image4" >
+                                <div class="form-group gap-5 d-flex justify-content-between" style=" display: flex; justify-content: space-between; width: 710px; margin-left:-10px">
+                                    <input type="file" class="form-control" name="image1" >
+                                    <input type="file" class="form-control" name="image2" >
+                                   
 
 
                                 </div>
                                 
+                                <div class="form-group gap-5 d-flex justify-content-between" style=" display: flex; justify-content: space-between; width: 710px; margin-left:-10px">
+                                    <input type="file" class="form-control" name="image3">
+                                    <input type="file" class="form-control" name="image4">
+                                  
+                                   
+
+
+                                </div>
                             </div>
-                            
                         </div>
-                        </div>
-        
-                        <button type="submit" class="btn btn-success">Add Product</button>
+
+                        <button type="submit"  onclick="return validateForm()" class="btn btn-success">Add Product</button>
                     </form>
-                    </div>
                 </div>
-                </div>
-
-
-                <%- include('../layout/adminFooter.ejs') %>
-
-
-
+            
+        </div>
+    </div>
+</div>
+<script src="/js/productFormVaildation.js"></script>
+<%- include('../layout/adminFooter.ejs') %>

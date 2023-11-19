@@ -162,6 +162,7 @@ const verifyOTP = async (req, res) => {
 
 const loadLogin = async (req, res) => {
   try {
+
     res.render("login");
   } catch (error) {
     console.log(error.message);
@@ -182,7 +183,13 @@ const loadLoginVerify = async (req, res) => {
           if (userData.status === false) {
             return res.render("login", { message: "You have been blocked by the admin" });
           } else {
-            req.session.user_id = userData._id; // Set user session variable
+            req.session.user = {
+
+              isUserAuthenticated:true,
+              username:userData.first_name+" "+userData.last_name,
+             
+            }
+
             return res.redirect("/home");
           }
         } else {
@@ -206,7 +213,7 @@ const loadLoginVerify = async (req, res) => {
 const userLogout = async(req,res)=>{
   try{
 
-    delete req.session.user_id;
+    req.session.destroy();
     res.redirect('/login');
 
   }catch(error){

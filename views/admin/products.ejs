@@ -53,10 +53,10 @@
                           <div style="display: flex; justify-content: end; width: 985px;">
                             <a  href="/admin/products/edit/<%=product._id %>" class="me-2 btn btn-outline-primary"
                                type="button">Edit</a>
-                            <a href="/admin/products/delete/<%=product._id  %>" class="btn btn-outline-danger "
+                            <a href="javascript:void(0);" onclick="confirmDelete('<%=product._id%>','/admin/products/delete/','You will not be able to recover this product!')" class="btn btn-outline-danger "
                               type="button">Delete</a>
                           </div>
-                        
+                      
                         </td>
                    
                     </tr>
@@ -81,6 +81,12 @@
                     <th> Category</th>
 
                     <td><%= product.category?.category %></td>
+                  
+                  </tr>
+                  <tr>
+                    <th>Sub Category</th>
+
+                    <td><%= product.category?.sub_Category %></td>
                   
                   </tr>
                   <tr>
@@ -128,6 +134,7 @@
           </div>
         </div>
 
+        <script src="/js/alertPopUp.js"></script>
 
         <%- include('../layout/adminFooter.ejs') %>
 

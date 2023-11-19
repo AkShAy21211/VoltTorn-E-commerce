@@ -68,3 +68,5 @@ function leaveLens(){
 }
 
 magnify(productImage, magnifiedImage);
+var uploader = new ImageUploader('.image-uploader');
+uploader.init();

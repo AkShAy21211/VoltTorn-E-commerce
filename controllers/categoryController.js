@@ -20,10 +20,12 @@ const addNewCategory = async (req, res) => {
   try {
     const name = req.body.name;
     const description = req.body.description;
+    const subCategory = req.body.SubCategory;
 
     const Category = new categoryModel({
       category: name,
       description: description,
+      sub_Category:subCategory,
     });
 
     const CategoryData = await Category.save();
@@ -52,11 +54,12 @@ const editCategory = async (req, res) => {
   try {
     const id = req.params.id;
     const name = req.body.name;
+    const subCategory = req.body.SubCategory;
     const description = req.body.description;
 
     const updateResult = await categoryModel.findOneAndUpdate(
       { _id: id },
-      { category: name, description: description },
+      { category: name, description: description,sub_Category:subCategory },
       { new: true }
       //  ensures that the updated document is returned
     );

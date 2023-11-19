@@ -61,7 +61,7 @@
               <p class="card-text">
                 Price: <b>Rs:<%= Number(product.price - (product.price * (product.discount/100))).toLocaleString() %></b>
               </p>
-              <p class="card-text">Discount: %-<%= product.discount %></p>
+              <p class="card-text text-success"> %<%= product.discount %> off</p>
             </div>
           </a>
             <div class="card-footer">

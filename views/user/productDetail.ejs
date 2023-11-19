@@ -1,4 +1,8 @@
 <%- include('../layout/header.ejs') %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/image-uploader/2.0.7/image-uploader.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/image-uploader/2.0.7/image-uploader.min.js"></script>
+<link rel="stylesheet" href="/css/review.css">
+
 <style>
   
   div.product-image{
@@ -42,13 +46,13 @@
   .magnified-image.active{
    opacity: 1;
    transform: scale(1);
+   image-rendering: crisp-edges;
 
 
   }
 </style>
 
 
-<link rel="stylesheet" href="/css/review.css">
   <section class="py-5">
     <div class="container mt-md-4 mt-sm-5 pt-sm-5 pt-5 mt-4 pt-md-4">
 
@@ -79,7 +83,7 @@
 
         <main class="col-lg-6" style="position: relative;">
 
-          <div  class="magnified-image"></div>
+          <div  class="magnified-image image-uploader"></div>
 
           <div class="ps-lg-3">
             
@@ -88,15 +92,7 @@
               <%=ProductData.name %>
             </h4>
             <div class="d-flex flex-row my-3">
-              <div class="text-warning mb-1 me-2">
-                <!-- <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i> -->
-                <i class="fas fa-star-half-alt"></i>
-                <span class="ms-1"> 4.5 </span>
-              </div>
-              <span class="text-muted"><i class="fas fa-shopping-basket fa-sm mx-1"></i>154 orders</span>
+             
               <%if(ProductData.stock !==0){%>
                 <span class="text-success fw-bold ms-2">
                   In Stock
@@ -107,17 +103,16 @@
                   </span>
                   <%}%>
             </div>
-
-            <div class="mb-3 d-flex ">
-              <span class="h4"> Rs:<%= Number(ProductData.price - (ProductData.price * (ProductData.discount/100))).toLocaleString() %>
-              <span style=" margin-left: 30px;" class="h5 fw-light  text-danger"><s>
-                 <%=ProductData.price  %>
-                </s></span>
-              <!-- Number(ProductData.price) converts the price to a number (in case it's a string), 
-            and then toLocaleString() is used to format the number with commas for thousands.          -->
-            
-            </div>
-
+            <div class="mb-3 d-flex">
+              <span class="h4 me-3">
+                  Rs:<%= Number(ProductData.price - (ProductData.price * (ProductData.discount/100))).toLocaleString() %>
+              </span>
+              <span class="h5 fw-light text-danger me-3">
+                  <s><%= ProductData.price %></s>
+              </span>
+              <p class="card-text text-success mb-0"> %<%= ProductData.discount %> off</p>
+          </div>
+          
             <ul>
               <% 
                 var descriptionPoints = ProductData.description.split(/\.\s+/);

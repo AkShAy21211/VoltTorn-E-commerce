@@ -1,6 +1,8 @@
 <%- include('../layout/adminHeader.ejs') %>
   <%- include('../layout/adminSideBar.ejs') %>
 
+  <!-- Your existing HTML code -->
+  
     <style>
       .table tbody tr:hover {
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -53,13 +55,13 @@
             <td style="font-weight:bold;"><%= customer.status %>
                     </td>
                     <td style="text-align: center; ">
-                      <a href="/admin/block-unblock-user?id=<%=customer._id  %>"
-                        class="btn btn-primary" style="background-color: rgb(37, 129, 195);" type="button">
-                        <%= customer.status.toString() === 'true' ? "Block" : "UnBlock" %>
-
-                     </a>
+                      <a href="javascript:void(0);" class="btn btn-primary" style="background-color: rgb(37, 129, 195);"
+                      onclick="confirmBlockUnblock('<%= customer._id %>', '<%= customer.status.toString() %>')">
+                       <%= customer.status.toString() === 'true' ? "Block" : "Unblock" %>
+                   </a>
+                   
                      
-                        <a href="/admin/delete-user?id=<%=customer._id  %>" class="btn btn-danger" type="button">Delete</a>
+                     <a href="javascript:void(0);" class="btn btn-danger" onclick="confirmDelete('<%= customer._id %>','/admin/delete-user?id=','You will not be able to recover this user!')">Delete</a>
                     </td>
 
                   </tr>
@@ -79,6 +81,6 @@
     </div>
 
 
-
+ <script src="/js/alertPopUp.js"></script>
 
     <%- include('../layout/adminFooter.ejs') %>
