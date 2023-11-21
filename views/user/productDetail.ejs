@@ -1,191 +1,173 @@
 <%- include('../layout/header.ejs') %>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/image-uploader/2.0.7/image-uploader.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/image-uploader/2.0.7/image-uploader.min.js"></script>
-<link rel="stylesheet" href="/css/review.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/image-uploader/2.0.7/image-uploader.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/image-uploader/2.0.7/image-uploader.min.js"></script>
 
-<style>
-  
-  div.product-image{
-    position: relative;
-    width: 40%;
+  <style>
+    div.product-image {
+      position: relative;
+      width: 40%;
+      background-size: cover;
 
-  }
-
+    }
 
 
-  div.product-image img{
-    width: 100%;
-    height: auto;
-  }
-  .magnifier-lens{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 150px;
-    height: 100px;
-    background-color: #ff980030;
-    border: .1px solid var(--orange);
-    opacity: 0;
-  }
-  .magnifier-lens.active{
-   
-    opacity: 1;
 
-  }
-  .magnified-image{
-    position: absolute;
-    width: 100%;
-    height: 80vh;
-    border: 2px solid  #ff9800;
-    transform: scale(0.5);
-    opacity: 0;
-    transition: opacity .5s, transform.5s;
+    div.product-image img {
+      width: 100%;
+      height: auto;
+    }
+
+    .magnifier-lens {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 150px;
+      height: 100px;
+      background-color: #ff980030;
+      border: .1px solid var(--orange);
+      opacity: 0;
+    }
+
+    .magnifier-lens.active {
+
+      opacity: 1;
+
+    }
+
+    .magnified-image {
+  position: absolute;
+  z-index: 2; /* or any value higher than other elements */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80vh;
+  border: 2px solid #ff9800;
+  transform: scale(0.5);
+  opacity: 0;
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+    .magnified-image.active {
+      opacity: 1;
+      transform: scale(1);
+      image-rendering: crisp-edges;
 
 
-  }
-  .magnified-image.active{
-   opacity: 1;
-   transform: scale(1);
-   image-rendering: crisp-edges;
+    }
 
 
-  }
-</style>
+  </style>
 
+<main class="py-5">
+  <div class="container mt-md-4 mt-sm-5 pt-sm-5 pt-5 mt-4 pt-md-4">
+    <div class="row gx-5">
+      <aside class="col-lg-6">
+        <div class="mb-3 rounded-4 border d-flex justify-content-center">
+          <img id="largeImage" style="width: 100%; height: auto; max-height: 80vh; margin: auto"
+            class="rounded-4 fit border product-image" src="/images/productImages/<%=ProductData.image[0]  %>"
+            data-image="/images/productImages/<%=ProductData.image[0]  %>" />
+          <div class="magnifier-lens"></div>
+        </div>
+        
+        <div class="d-flex justify-content-evenly mb-3 h-50 flex-wrap">
+          <img width="150" height="150" class="rounded-2 border"
+            src="/images/productImages/<%=ProductData.image[1]  %>"
+            data-image="/images/productImages/<%=ProductData.image[1]  %>" />
+          <img width="150" height="150" class="rounded-2 border"
+            src="/images/productImages/<%=ProductData.image[2]  %>"
+            data-image="/images/productImages/<%=ProductData.image[2]  %>" />
+          <img width="150" height="150" class="rounded-2 border"
+            src="/images/productImages/<%=ProductData.image[3]  %>"
+            data-image="/images/productImages/<%=ProductData.image[3]  %>" />
+        </div>
+      </aside>
 
-  <section class="py-5">
-    <div class="container mt-md-4 mt-sm-5 pt-sm-5 pt-5 mt-4 pt-md-4">
+      <div class="col-lg-6" style="position: relative;">
+        <div class="magnified-image image-uploader"></div>
 
-      <div class="row gx-5">
-        <aside class="col-lg-6">
-          <div class="border rounded-4 mb-3 d-flex justify-content-center">
+        <div class="ps-lg-3">
+          <h4 class="title text-dark mt-5 mt-xl-0 mt-md-0">
+            <%=ProductData.name %>
+          </h4>
 
-            <img id="largeImage" style="width: 100%; height: 80vh; margin: auto" class="rounded-4 fit border product-image"
-            src="/images/productImages/<%=ProductData.image[0]  %>" data-image="/images/productImages/<%=ProductData.image[0]  %>"/>
-            <div class="magnifier-lens"></div>
+          <div class="d-flex flex-row my-3">
+            <%if(ProductData.stock !==0){%>
+              <span class="text-success fw-bold ms-2">
+                In Stock
+              </span>
+            <% }else{%>
+              <span class="text-danger fw-bold ms-2">
+                Out Of Stock
+              </span>
+            <%}%>
           </div>
 
-
-
-          <div class="d-flex justify-content-evenly mb-3   h-50 flex-wrap">
-            <img width="150" height="150" class="rounded-2 border"
-                 src="/images/productImages/<%=ProductData.image[1]  %>" data-image="/images/productImages/<%=ProductData.image[1]  %>" />
-  
-            <img width="150" height="150" class="rounded-2 border"
-                 src="/images/productImages/<%=ProductData.image[2]  %>" data-image="/images/productImages/<%=ProductData.image[2]  %>" />
-  
-            <img width="150" height="150" class="rounded-2 border"
-                 src="/images/productImages/<%=ProductData.image[3]  %>" data-image="/images/productImages/<%=ProductData.image[3]  %>" />
+          <div class="mb-3 d-flex">
+            <span class="h4 me-3">
+              Rs:<%= Number(ProductData.price - (ProductData.price * (ProductData.discount/100))).toLocaleString() %>
+            </span>
+            <span class="h5 fw-light text-danger me-3">
+              <s>
+                <%= ProductData.price %>
+              </s>
+            </span>
+            <p class="card-text text-success mb-0"> %<%= ProductData.discount %> off</p>
           </div>
 
-
-        </aside>
-
-        <main class="col-lg-6" style="position: relative;">
-
-          <div  class="magnified-image image-uploader"></div>
-
-          <div class="ps-lg-3">
-            
-            <h4 class="title text-dark mt-5 mt-xl-0 mt-md-0">
-              
-              <%=ProductData.name %>
-            </h4>
-            <div class="d-flex flex-row my-3">
-             
-              <%if(ProductData.stock !==0){%>
-                <span class="text-success fw-bold ms-2">
-                  In Stock
-                </span>
-                <% }else{%>
-                  <span class="text-danger fw-bold ms-2">
-                    Out Of Stock
-                  </span>
-                  <%}%>
+        </div>
+           <div class="row mb-4 mt-1 justify-content-center ml-1">
+            <div class="col-12 col-md-8 col-xl-8 col-xxl-8 d-flex justify-content-between flex-wrap w-100  text-center flex-md-nowrap flex-xxl-nowrap">
+              <button style="width: 500px; height: 60px;" class="btn btn-primary me-2 mb-2">Add To Cart</button>
+              <button style="width: 500px; height: 60px;" class="btn btn-warning mb-2">Buy Now</button>
             </div>
-            <div class="mb-3 d-flex">
-              <span class="h4 me-3">
-                  Rs:<%= Number(ProductData.price - (ProductData.price * (ProductData.discount/100))).toLocaleString() %>
-              </span>
-              <span class="h5 fw-light text-danger me-3">
-                  <s><%= ProductData.price %></s>
-              </span>
-              <p class="card-text text-success mb-0"> %<%= ProductData.discount %> off</p>
           </div>
           
-            <ul>
-              <% 
-                var descriptionPoints = ProductData.description.split(/\.\s+/);
-                descriptionPoints.forEach(function(point) {
-              %>
-                  <li><%= point %></li>
-              <%
-                });
-              %>
-            </ul>
-            
-               <hr />
-
-            <div class="row mb-4">
-              <label class="mb-2 d-block">Quantity</label>
-            
-              <div class="col-md-4 col-6 mb-3 d-flex">
-
-                <div class="input-group mb-3" style="width: 170px">
-                  <button class="btn btn-white border border-secondary px-3" type="button" id="button-addon1"
-                    data-mdb-ripple-color="dark">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                  <input type="text" class="form-control text-center border border-secondary" placeholder="14"
-                    aria-label="Example text with button addon" aria-describedby="button-addon1" />
-                  <button class="btn btn-white border border-secondary px-3" type="button" id="button-addon2"
-                    data-mdb-ripple-color="dark">
-                    <i class="fas fa-plus"></i>
-                  </button>
-                </div>
-
-              </div>
-
-            </div>
-            <button class="btn btn-primary">Add To Cart</button>
-            <button class="btn btn-warning ml-2">Buy Now</button>
-
-          </div>
-
-        </main>
+<ul>
+  <p class="font-weight-bold">About this item</p>
+  <% var descriptionPoints=ProductData.description.split(/\.\s+/); descriptionPoints.forEach(function(point) { %>
+    <li>
+      <%= point %>
+    </li>
+  <% }); %>
+</ul>
       </div>
+      
     </div>
-  </section>
+  </div>
+</main>
 
 
- <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    // Get references to the large and smaller images
-    const largeImage = document.getElementById("largeImage");
-    const smallerImages = document.querySelectorAll('.rounded-2.border');
 
-    // Add click event listener to each smaller image
-    smallerImages.forEach(function (smallerImage) {
-      smallerImage.addEventListener("click", function () {
-        // Store the current large image source
-        const originalLargeImageSrc = largeImage.src;
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Get references to the large and smaller images
+      const largeImage = document.getElementById("largeImage");
+      const smallerImages = document.querySelectorAll('.rounded-2.border');
 
-        // Store the current data-image attribute of the large image
-        const originalLargeImageDataImage = largeImage.getAttribute("data-image");
+      // Add click event listener to each smaller image
+      smallerImages.forEach(function (smallerImage) {
+        smallerImage.addEventListener("click", function () {
+          // Store the current large image source
+          const originalLargeImageSrc = largeImage.src;
 
-        // Update the source attribute of the large image with the clicked small image
-        largeImage.src = smallerImage.getAttribute("data-image");
-        // Update the data-image attribute of the large image with the clicked small image data-image
-        largeImage.setAttribute("data-image", smallerImage.getAttribute("data-image"));
+          // Store the current data-image attribute of the large image
+          const originalLargeImageDataImage = largeImage.getAttribute("data-image");
 
-        // Update the source attribute of the clicked small image with the original large image
-        smallerImage.src = originalLargeImageSrc;
-        // Update the data-image attribute of the clicked small image with the original large image data-image
-        smallerImage.setAttribute("data-image", originalLargeImageDataImage);
+          // Update the source attribute of the large image with the clicked small image
+          largeImage.src = smallerImage.getAttribute("data-image");
+          // Update the data-image attribute of the large image with the clicked small image data-image
+          largeImage.setAttribute("data-image", smallerImage.getAttribute("data-image"));
+
+          // Update the source attribute of the clicked small image with the original large image
+          smallerImage.src = originalLargeImageSrc;
+          // Update the data-image attribute of the clicked small image with the original large image data-image
+          smallerImage.setAttribute("data-image", originalLargeImageDataImage);
+        });
       });
     });
-  });
 
-</script>
-<script src="/js/imageZoom.js"></script>
+
+
+  </script>
+  <script src="/js/imageZoom.js"></script>
   <%- include('../layout/footer.ejs') %>

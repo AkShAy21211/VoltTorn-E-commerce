@@ -10,14 +10,19 @@ app.use(morgan("dev"));
 //session
 const config = require("./config/config");
 const session = require("express-session");
+const MongoSessionStore = require("connect-mongodb-session")(session);
 
-
+const store = MongoSessionStore({
+  uri:'mongodb://127.0.0.1:27017/VOLTTRON',
+  collection:'sessions'
+})
 
 
 app.use(session({
   secret: config.SessionSecret,
   resave: false,
   saveUninitialized: false,
+  store:store,
   cookie: {
     maxAge: 24 * 60 * 60 * 1000, // 1 day
   },

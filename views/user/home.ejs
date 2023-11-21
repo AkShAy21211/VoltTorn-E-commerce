@@ -22,7 +22,16 @@
     text-overflow: ellipsis;
     max-width: 200px; /* Adjust the value based on your design */
   }
+
 </style>
+<script>
+  // Check if the user is blocked and show a pop-up message
+   if (locals.userSessionData && locals.userSessionData.status === false) { 
+    alert("You have been blocked by the admin");
+    window.location.href = '/login';
+  }
+</script>
+
 <!--Main Navigation-->
 <header>
   <div class="bg-dark text-white py-5 mt-1">
@@ -37,7 +46,7 @@
   <!-- Jumbotron -->
 </header>
 <!-- Products -->
-<section style="background-color: #eee">
+<main >
     <div class="container ">
       <div class="row">
         <h3 class="p-3">Top Products</h3>
@@ -76,7 +85,7 @@
               <div class="d-flex justify-content-between mb-2">
                 <% if(product.stock !== 0) { %>
                 <p class="text-muted mb-0">
-                  Available: <span class="fw-bold text-success">In Stock</span>
+                  Availablity: <span class="fw-bold text-success">In Stock</span>
                 </p>
                 <% } else { %>
                 <p class="text-muted mb-0">
@@ -93,9 +102,8 @@
       </div>
     </div>
   </section>
-  
-  <section id="featured-brand">
-    <div class="container mt-5">
+  <section id="featured-brand" class="mb-5"> <!-- Add margin-bottom here -->
+    <div class="container-fluid mt-5 mb-5">
       <div class="row">
         <h1 class="col-12 text-center" style="font-size: 30px;">Featured Brands</h1>
         <div class="col-sm-12 col-md-12 col-lg-12 d-flex flex-wrap justify-content-evenly mt-5">
@@ -108,17 +116,9 @@
         </div>
       </div>
     </div>
-  </section>
-<!-- Products -->
-
-<!-- Feature -->
-
-<!-- Feature -->
+  </main>
 
 
-<!-- Blog -->
-
-
-<!-- Footer -->
+  
 
 <%- include('../layout/footer.ejs') %>

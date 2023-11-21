@@ -30,12 +30,12 @@ userRoute.post('/verify',userController.verifyOTP);
 userRoute.get('/login',auth.is_Logout,userController.loadLogin);
 userRoute.post('/login',userController.loadLoginVerify);
 
-userRoute.get('/',homeController.loadHome)
-userRoute.get('/home',homeController.loadHome);
+userRoute.get('/',auth.isUserBlocked,homeController.loadHome)
+userRoute.get('/home',auth.isUserBlocked,homeController.loadHome);
 
 //user single product detail route
 
-userRoute.get('/home/product/details/:id',homeController.productDetail);
+userRoute.get('/home/product/details/:id',auth.isUserBlocked,homeController.productDetail);
 
 //USER LOGOUT
 

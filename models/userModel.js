@@ -40,6 +40,26 @@ const userSchema = new mongoose.Schema({
         type:Boolean,
         default:false
     },
+    cart: [
+        {
+          product_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Product", // You can reference a User schema if you have one
+          },
+          quantity: {
+            type: Number,
+            default:0,
+          },
+        },
+      ],
+      wishlist: [
+        {
+          product_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Product", // You can reference a User schema if you have one
+          },
+        },
+      ],
     createdAt:{                    
         type:Date,
         default:Date.now,

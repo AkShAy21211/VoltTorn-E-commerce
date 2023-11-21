@@ -52,7 +52,7 @@ const securePassword = async (password) => {
     const passwordHash = await bcrypt.hash(password, 10);
     return passwordHash;
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
   }
 };
 
@@ -62,7 +62,7 @@ const loadRegister = async (req, res) => {
   try {
     res.render("registration");
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
   }
 };
 
@@ -137,18 +137,30 @@ const verifyOTP = async (req, res) => {
       otpCode: otp,
     });
 
+
     if (!userData || !otp) {
+      console.log("Invalid OTP or user already verified");
       return res.render("verifyOTP", {
         error: "Invalid OTP or user already verified",
       });
     }
 
-    if (userData && OTPData.otpCode === otp) {
+    if (userData && OTPData && OTPData.otpCode === otp) {
       await userModel.updateOne({ _id: id }, { $set: { is_verified: true } });
-      await userOTPVeryModel.deleteOne({ otpCode: otp });
-      return res.redirect('/');
-    }
+      await userOTPVeryModel.deleteOne({ _id: OTPData._id }); // Assuming _id is the unique identifier for the OTPData
+      req.session.user = {
 
+        isUserAuthenticated:true,
+        userId:userData._id,
+        username:userData.first_name+" "+userData.last_name,
+       
+      }
+      return res.redirect('/');
+    } else {
+      return res.render("verifyOTP", {
+        error: "Invalid OTP",
+      });
+    }
   } catch (error) {
     console.error("Error verifying OTP:", error.message);
     return res.render("verifyOTP", {
@@ -156,6 +168,7 @@ const verifyOTP = async (req, res) => {
     });
   }
 };
+
 
 
 //USER LOGIN
@@ -186,6 +199,7 @@ const loadLoginVerify = async (req, res) => {
             req.session.user = {
 
               isUserAuthenticated:true,
+              userId:userData._id,
               username:userData.first_name+" "+userData.last_name,
              
             }
@@ -213,7 +227,7 @@ const loadLoginVerify = async (req, res) => {
 const userLogout = async(req,res)=>{
   try{
 
-    req.session.destroy();
+   delete  req.session.user;
     res.redirect('/login');
 
   }catch(error){

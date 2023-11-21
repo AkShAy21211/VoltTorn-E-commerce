@@ -27,6 +27,8 @@
         document.getElementById('statusWarning').innerText = '';
         document.getElementById('stockWarning').innerText = '';
         document.getElementById('subCategoryWarning').innerText = '';
+        document.getElementById('img1Warning').innerText = '';
+
 
     
 
@@ -59,11 +61,8 @@
             document.getElementById('stockWarning').innerText = 'StockQuantity cannot be empty.';
         }
         if (Array.from(images).some(image => image.value !== '')) {
-            document.getElementById('img1Warning').innerText = '';
-        } else {
             document.getElementById('img1Warning').innerText = 'Images cannot be empty.';
-        }
-        
+        } 
 
 
         // Check if any warning messages were set, return false if any field is invalid
