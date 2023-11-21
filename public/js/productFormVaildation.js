@@ -12,9 +12,11 @@
         var discount = document.getElementById('discount').value;
         var status = document.getElementById('status').value;
         var stockQuantity = document.getElementById('stockQuantity').value;
+        var color = document.getElementById('color');
 
 
-        var images = document.forms['ProductForm']['image1','image2','image3','image4']
+
+        var images = document.forms['ProductForm']['images']
         
 
         // Reset all warnings
@@ -27,7 +29,9 @@
         document.getElementById('statusWarning').innerText = '';
         document.getElementById('stockWarning').innerText = '';
         document.getElementById('subCategoryWarning').innerText = '';
-        document.getElementById('img1Warning').innerText = '';
+        document.getElementById('imagesWarning').innerText = '';
+        document.getElementById('colorWarning').innerText = '';
+
 
 
     
@@ -51,17 +55,29 @@
         if (!brand) {
             document.getElementById('brandWarning').innerText = 'Brand should be a valid value.';
         }
-        if (!discount) {
+        // Check if discount is less than 0 or greater than 100
+        if (discount < 0 || discount > 100) {
+            document.getElementById('discountWarning').innerText = 'Discount must be between 0 and 100';
+        } else if (!discount) {
+            // If discount is not provided, set a default warning
             document.getElementById('discountWarning').innerText = 'Discount (Optional)';
         }
+        
         if (!status) {
             document.getElementById('statusWarning').innerText = 'Status cannot be empty.';
         }
         if (!stockQuantity) {
             document.getElementById('stockWarning').innerText = 'StockQuantity cannot be empty.';
+        }else if(stockQuantity <0){
+            document.getElementById('stockWarning').innerText = 'StockQuantity must be geater than 0';
+
+
+        }
+        if (!color) {
+            document.getElementById('colorWarning').innerText = 'color cannot be empty.';
         }
         if (Array.from(images).some(image => image.value !== '')) {
-            document.getElementById('img1Warning').innerText = 'Images cannot be empty.';
+            document.getElementById('imagesWarning').innerText = 'Images cannot be empty.';
         } 
 
 
@@ -75,7 +91,8 @@
             document.getElementById('discountWarning').innerText ||
             document.getElementById('statusWarning').innerText ||
             document.getElementById('stockWarning').innerText ||
-            document.getElementById('img1Warning').innerText ) {
+            document.getElementById('colorWarning').innerText||
+            document.getElementById('imagesWarning').innerText ) {
             return false;
         }
         console.log('validateForm function called');

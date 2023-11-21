@@ -127,6 +127,23 @@
                                     <div id="stockWarning" class="text-danger"></div>
                                 </div>
                             </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="color">Color</label>
+                                    <select class="select form-control" id="color" name="color">
+                                        <option value="">Select</option>
+                                        <option value="Red">Red</option>
+                                        <option value="Blue">Blue</option>
+                                        <option value="Black">Black</option>
+                                        <option value="Green">Green</option>
+                                        <option value="Yellow">Yellow</option>
+                                        <option value="Purple">Purple</option>
+                                        <option value="Orange">Orange</option>
+                                      </select>
+                            
+                                    <div id="colorWarning" class="text-danger"></div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="row">
@@ -134,21 +151,12 @@
                                 <div id="img1Warning" class="text-danger"></div>
 
                                 <div class="form-group gap-5 d-flex justify-content-between" style=" display: flex; justify-content: space-between; width: 710px; margin-left:-10px">
-                                    <input type="file" class="form-control" name="image1" >
-                                    <input type="file" class="form-control" name="image2" >
-                                   
-
+                                    <input type="file" id="images" class="form-control" name="images" accept="image/*" multiple required>
+                                    <div id="imagesWarning" class="text-danger"></div>
 
                                 </div>
                                 
-                                <div class="form-group gap-5 d-flex justify-content-between" style=" display: flex; justify-content: space-between; width: 710px; margin-left:-10px">
-                                    <input type="file" class="form-control" name="image3">
-                                    <input type="file" class="form-control" name="image4">
-                                  
-                                   
-
-
-                                </div>
+                                
                             </div>
                         </div>
 

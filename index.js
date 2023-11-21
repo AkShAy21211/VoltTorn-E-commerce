@@ -28,16 +28,6 @@ app.use(session({
   },
 }));
 
-// Separate session middleware for admins
-app.use('/admin', session({
-  secret: config.SessionSecret,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    maxAge: 24 * 60 * 60 * 1000, // 1 day
-  },
-}));
-
 app.use((req, res, next) => {
   console.log(req.session);
   if (req.url.startsWith("/admin")) {

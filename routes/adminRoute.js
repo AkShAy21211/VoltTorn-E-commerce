@@ -65,12 +65,7 @@ adminRoute.get("/products",adminAuth.is_Login, productController.loadProduct);
 adminRoute.get("/products/add",adminAuth.is_Login, productController.addProductLoad);
 adminRoute.post(
   "/products/add",
-  uplode.fields([
-    { name: "image1", maxCount: 1 },
-    { name: "image2", maxCount: 1 },
-    { name: "image3", maxCount: 1 },
-    { name: "image4", maxCount: 1 },
-  ]),
+  uplode.array('images', 4),
   productController.addProduct
 );
 
@@ -79,12 +74,7 @@ adminRoute.post(
 adminRoute.get("/products/edit/:id",adminAuth.is_Login, productController.editProductLoad);
 adminRoute.post(
   "/products/edit/:id",
-  uplode.fields([
-    { name: "image1", maxCount: 1 },
-    { name: "image2", maxCount: 1 },
-    { name: "image3", maxCount: 1 },
-    { name: "image4", maxCount: 1 },
-  ]),
+  uplode.array('images', 4),
   productController.editProduct
 );
 adminRoute.get("/products/delete/:id",adminAuth.is_Login, productController.deleteProduct);

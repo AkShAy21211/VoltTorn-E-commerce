@@ -53,15 +53,12 @@ const loadHomeome = async (req, res) => {
 
 const loadLogout = async (req, res) => {
   try {
-    req.session.destroy();
-        res.redirect("/admin");
+   delete req.session.admin;
+    res.redirect("/admin");
   } catch (error) {
     console.log(error.message);
   }
 };
-
-
-
 
 
 module.exports = {

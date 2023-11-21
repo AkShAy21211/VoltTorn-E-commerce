@@ -113,17 +113,31 @@
                     <td><%=product.stock  %></td>
                   
                   </tr>
-                  <tr>
-                    <th> Images</th>
-
-                    <td>
-                      <% for (let i=0; i < product.image.length; i++) { %>
-                        <img style="margin-bottom: 5px;" width="100px" height="100px"
-                          src="/images/productImages/<%= product.image[i] %>" alt="Product Image <%= i + 1 %>">
-                        <% } %>
-                    </td>
+                  <table class="table ">
+                    <thead class="bg-dark text-white">
+                      <tr>
+                        <th>Color</th>
+                        <th>Images</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for (let i = 0; i < product.variants.length; i++) { %>
+                        <tr>
+                          <td>
+                            <p><strong><%= product.variants[i].color %></strong></p>
+                          </td>
+                          <td>
+                            <% for (let j = 0; j < product.variants[i].images.length; j++) { %>
+                              <img style="margin-bottom: 5px;" width="100px" height="100px"
+                                src="/images/productImages/<%= product.variants[i].images[j] %>"
+                                alt="Product Image <%= j + 1 %>">
+                            <% } %>
+                          </td>
+                        </tr>
+                      <% } %>
+                    </tbody>
+                  </table>
                   
-                  </tr>
                 
                   <% }); %>
  

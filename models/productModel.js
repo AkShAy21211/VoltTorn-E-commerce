@@ -6,6 +6,13 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  variants: [
+    {
+      color: String,
+      images: [String],
+    },
+    
+  ],
   description: {
     type: String,
     required: true,
@@ -45,10 +52,7 @@ const productSchema = new mongoose.Schema({
     default: Date.now,
   },
 
-  image: {
-    type: Array,
-    required: true,
-  },
+
   // Array field for storing reviews and ratings
   reviews: [
     {

@@ -13,6 +13,7 @@ const loadHome = async (req, res) => {
 const productDetail = async (req, res) => {
   try {
     const id = req.params.id;
+    const color = req.params.color;
     const ProductData = await productModel.findById({_id:id});
     res.render("productDetail",{ProductData});
   } catch (error) {

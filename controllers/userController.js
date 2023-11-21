@@ -224,16 +224,17 @@ const loadLoginVerify = async (req, res) => {
 
 //USER LOGOUT 
 
-const userLogout = async(req,res)=>{
-  try{
-
-   delete  req.session.user;
+const userLogout = async (req, res) => {
+  try {
+    delete req.session.user;
     res.redirect('/login');
-
-  }catch(error){
+  } catch (error) {
     console.log(error.message);
   }
 }
+
+
+
 
 module.exports = {
   loadRegister,

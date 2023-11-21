@@ -25,38 +25,47 @@ const addProductLoad = async (req, res) => {
 
 const addProduct = async (req, res) => {
   try {
+    const { name, description, price, brand, discount, status, color, stock } = req.body;
     const category = req.body.category;
-    const categoryData = await categoryModel.findOne({category:category});
+    const categoryData = await categoryModel.findOne({ category: category });
+    const images = req.files.map(file => file.filename);
 
-    const images = [];
-    for (let i = 1; i <= 4; i++) {
-      const fieldName = `image${i}`;
-      if (req.files[fieldName]) {
-        images.push(req.files[fieldName][0].filename);
+    let ProductData = await productModel.findOne({ name });
+
+    if (!ProductData) {
+      console.log(images);
+      ProductData = new productModel({
+        name: name,
+        variants: [{ color: color, images }],
+        description: description,
+        price: parseFloat(price),
+        category: categoryData._id,
+        brand: brand,
+        discount: parseInt(discount),
+        status: status,
+        stock: parseInt(stock),
+      });
+    } else {
+      // If the product exists, add a new color variant or update an existing one
+      const existingVariant = ProductData.variants.find(variant => variant.color === color);
+
+      if (existingVariant) {
+        // If the color variant already exists, append the images to it
+        existingVariant.images = existingVariant.images.concat(images);
+      } else {
+        // If the color variant doesn't exist, create a new one
+        ProductData.variants.push({ color, images });
       }
     }
 
-    console.log(images);
-    const Product = new productModel({
-      name: req.body.name,
-      description: req.body.description,
-      price: parseFloat(req.body.price),
-      category: categoryData._id,
-      brand: req.body.brand,
-      discount: parseInt(req.body.discount),
-      status: req.body.status,
-      stock: parseInt(req.body.stock),
-      image: images,
-    });
+    await ProductData.save();
+    res.redirect("/admin/products");
 
-    const ProductData = await Product.save();
-    if (ProductData) {
-      res.redirect("/admin/products");
-    }
   } catch (error) {
     console.log(error);
   }
 };
+
 
 //ADMIN EDIT-PRODUCT EDIT ROUTE METHOOD
 const editProductLoad = async (req, res) => {
@@ -72,12 +81,15 @@ const editProductLoad = async (req, res) => {
     console.log(error.message);
   }
 };
-
-//ADMIN EDIT-PRODUCT EDIT ROUTE METHOOD
 const editProduct = async (req, res) => {
   try {
+    const { name, description, price, brand, discount, status, color, stock, imageIndexes } = req.body;
     const id = req.params.id;
     const category = req.body.category;
+
+    // Convert comma-separated imageIndexes string to an array of positions
+    const imagePositionsArray = imageIndexes.split(',').map(position => parseInt(position.trim()));
+
     let categoryData;
 
     // Check if category is provided before querying the database
@@ -91,50 +103,77 @@ const editProduct = async (req, res) => {
     }
 
     console.log(id);
-    const ProductData = await productModel.findOne({ _id: id }).populate('category');
-    const images = [];
+    const productData = await productModel.findOne({ _id: id }).populate('category');
 
-    for (let i = 1; i <= 4; i++) {
-      const fieldName = `image${i}`;
-      if (req.files[fieldName]) {
-        images.push(req.files[fieldName][0].filename);
-      }
+    console.log('Color to Update:', color);
+    console.log('Existing Variants:', productData.variants);
+
+    // Find the variant with the specified color
+    const variantToUpdate = productData.variants.find(variant => variant.color === color);
+
+    if (variantToUpdate) {
+      // Update the specified images within the images array for the variant
+      imagePositionsArray.forEach(position => {
+        // Adjust position to zero-based index
+        const index = position - 1;
+
+        console.log('Debugging Info:');
+        console.log('Position:', position);
+        console.log('Index:', index);
+        console.log('variantToUpdate:', variantToUpdate);
+
+        if (variantToUpdate.images && index >= 0) {
+          // If req.files[index] exists and has a filename, update the image
+          if (req.files && req.files[index] && req.files[index].filename) {
+            // If the index is within the current length, update the image
+            if (index < variantToUpdate.images.length) {
+              variantToUpdate.images[index] = req.files[index].filename;
+            } else {
+              // If the index is beyond the current length, push the new image
+              variantToUpdate.images.push(req.files[index].filename);
+            }
+          }
+        }
+      });
     }
 
     const productUpdatedData = {
-      name: req.body.name,
-      description: req.body.description,
-      price: parseFloat(req.body.price),
-      brand: req.body.brand,
-      discount: parseInt(req.body.discount),
-      status: req.body.status,
-      stock: parseInt(req.body.stock),
+      name: name,
+      description: description,
+      price: parseFloat(price),
+      brand: brand,
+      discount: parseInt(discount),
+      status: status,
+      stock: parseInt(stock),
     };
 
-    // Add category to the update object if it exists
-    if (categoryData) {
-      productUpdatedData.category = categoryData._id;
-    }
-
-    // Check if any images are provided before updating
-    if (images.length > 0) {
-      productUpdatedData.image = images;
-    } else if (ProductData.image) {
-      productUpdatedData.image = ProductData.image;
-    }
-
+    // Update the product document
     const productUpdated = await productModel.findOneAndUpdate(
       { _id: id },
-      productUpdatedData,
+      {
+        $set: {
+          name: productUpdatedData.name,
+          description: productUpdatedData.description,
+          price: productUpdatedData.price,
+          brand: productUpdatedData.brand,
+          discount: productUpdatedData.discount,
+          status: productUpdatedData.status,
+          stock: productUpdatedData.stock,
+          'variants': productData.variants, // Update the entire variants array
+        },
+      },
       { upsert: true, new: true }
     );
 
-    console.log(productUpdated);
+    console.log('Product Updated:', productUpdated);
     res.redirect("/admin/products");
   } catch (error) {
     console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 };
+
+
 
 
 const deleteProduct = async(req,res)=>{
