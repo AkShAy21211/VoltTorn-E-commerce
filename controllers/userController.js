@@ -221,7 +221,17 @@ const loadLoginVerify = async (req, res) => {
   }
 };
 
+//USER SETTINGS PAGE 
 
+const loadUserSettingPage  = async(req,res)=>{
+  try{
+
+    res.render('settings')
+
+  }catch(error){
+    console.error(error);
+  }
+}
 //USER LOGOUT 
 
 const userLogout = async (req, res) => {
@@ -244,5 +254,6 @@ module.exports = {
   loadLogin,
   loadLoginVerify,
   userLogout,
+  loadUserSettingPage,
  
 };

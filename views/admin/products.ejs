@@ -113,7 +113,7 @@
                     <td><%=product.stock  %></td>
                   
                   </tr>
-                  <table class="table ">
+                  <table class="table">
                     <thead class="bg-dark text-white">
                       <tr>
                         <th>Color</th>
@@ -133,10 +133,12 @@
                                 alt="Product Image <%= j + 1 %>">
                             <% } %>
                           </td>
+                         
                         </tr>
                       <% } %>
                     </tbody>
                   </table>
+                  
                   
                 
                   <% }); %>
@@ -149,7 +151,6 @@
         </div>
 
         <script src="/js/alertPopUp.js"></script>
-
         <%- include('../layout/adminFooter.ejs') %>
 
 

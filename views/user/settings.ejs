@@ -1,0 +1,58 @@
+<%- include('../layout/header.ejs') %>
+<style>
+    .container{
+        margin-top: 150px;
+    }
+.min-height-div1 {
+  min-height: 200px; /* Adjust the height as needed */
+}
+.min-height-div2 {
+  min-height: 500px; /* Adjust the height as needed */
+}
+body {
+      font-family: Arial, sans-serif;
+    }
+    .list-item {
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+    }
+    .list-item i {
+      font-size: 24px; /* Adjust the icon size */
+      margin-right: 10px; /* Add space between icon and text */
+    }
+</style>
+<main>
+  <div class="container">
+    <div class="row d-flex justify-content-evenly">
+      <div class="setting-options col-md-4 col-lg-4 col-xl-3 col-xxl-3   mb-2 min-height-div1 mb-md-4">
+        <ul class="list-group">
+            <li class="list-group-item list-item">
+              <i class="bi bi-person"></i> Profile
+            </li>
+            <li class="list-group-item list-item">
+              <i class="bi bi-box"></i> Orders
+            </li>
+            <li class="list-group-item list-item">
+              <i class="bi bi-cart"></i> Cart
+            </li>
+            <li class="list-group-item list-item">
+              <i class="bi bi-heart"></i> Wishlist
+            </li>
+            <li class="list-group-item list-item">
+              <i class="bi bi-geo-alt"></i> Address
+            </li>
+          </ul>
+      </div>
+      <div class="view-settings  col-md-6 col-lg-6 col-xl-7 col-xxl-6  border min-height-div1 mb-md-4">View Settings</div>
+    </div>
+  </div>
+</main>
+
+  
+  
+  
+<%- include('../layout/footer.ejs') %>

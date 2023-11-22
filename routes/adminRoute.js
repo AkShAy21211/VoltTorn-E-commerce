@@ -79,7 +79,9 @@ adminRoute.post(
 );
 adminRoute.get("/products/delete/:id",adminAuth.is_Login, productController.deleteProduct);
 
+//edit product varients
 
+adminRoute.get('/products/delete-variant',adminAuth.is_Login,productController.deleteProductVarientByAdmin)
 
 adminRoute.get("*", function (req, res) {
   res.redirect("/admin");

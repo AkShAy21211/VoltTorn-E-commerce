@@ -37,9 +37,15 @@ userRoute.get('/home',auth.isUserBlocked,homeController.loadHome);
 
 userRoute.get('/home/product/details/:id',auth.isUserBlocked,homeController.productDetail);
 
-
 //product color filter
 
+
+
+
+
+//user settings page route
+
+userRoute.get('/home/settings',auth.isUserBlocked,userController.loadUserSettingPage)
 userRoute.get('/home/product/details/:id/filter/:color',auth.isUserBlocked,homeController.productDetail)
 //USER LOGOUT
 

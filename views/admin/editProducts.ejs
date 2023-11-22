@@ -195,6 +195,7 @@
                                                   <tr>
                                                     <th scope="col">Color</th>
                                                     <th scope="col">Images</th>
+                                                    <th scope="col">Action</th>
                                                   </tr>
                                                 </thead>
                                                 <tbody>
@@ -213,6 +214,10 @@
                                                             </div>
                                                           <% } %>
                                                         </div>
+                                                      </td>
+                                                      <td>
+                                                        <a href="javascript:void(0);"
+                                           class="btn btn-danger btn-sm" onclick="confirmDelete('','/admin/products/delete-variant?id=<%= ProductData._id %>&color=<%=ProductData.variants[i].color %>','You will not be able to recover this variant!')">Delete</a>
                                                       </td>
                                                     </tr>
                                                   <% } %>
@@ -248,6 +253,7 @@
 
             </div>
         </div>
+        <script src="/js/alertPopUp.js"></script>
 
 <script src="/js/productFormVaildation.js"></script>
 

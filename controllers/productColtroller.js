@@ -190,6 +190,20 @@ const deleteProduct = async(req,res)=>{
   }
 }
 
+const deleteProductVarientByAdmin = async(req,res)=>{
+
+  try {
+    const {id,color} = req.query;
+    const result = await productModel.updateOne(
+      { _id: id },
+      { $pull: { variants: { color: color } } }
+    );
+        res.redirect(`/admin/products/edit/${id}`)
+  } catch (error) {
+    console.error(`Error deleting variant: ${error.message}`);
+  }
+}
+
 module.exports = {
   loadProduct,
   addProductLoad,
@@ -197,4 +211,5 @@ module.exports = {
   editProductLoad,
   editProduct,
   deleteProduct,
+  deleteProductVarientByAdmin,
 };
