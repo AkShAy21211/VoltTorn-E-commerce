@@ -34,3 +34,32 @@ function confirmBlockUnblock(userId, status) {
   });
 }
 
+
+  // Assuming you have a function to add a product to the cart
+  const addToCart = async (productId) => {
+    try {
+        const response = await fetch(`/home/cart/${productId}`, {
+            method: "POST",
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Show SweetAlert notification
+            Swal.fire({
+                icon: "success",
+                title: "Product Added!",
+                text: result.message,
+            });
+        } else {
+            // Show SweetAlert error
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: result.message,
+            });
+        }
+    } catch (error) {
+        console.error(error);
+    }
+};

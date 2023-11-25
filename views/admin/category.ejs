@@ -17,71 +17,65 @@
                 text-overflow: ellipsis;
             }
         </style>
+<title>Category</title>
+<main>
+    <div class="container-fluid mt-4">
+
+        <div class="row d-flex justify-content-end  ">
+            <div class=" col-md-10 col-lg-10 ">
 
 
-        <div class="container-fluid mt-4">
+                <div class="d-flex justify-content-between">
+                    <h1 class="text-bg-info  rounded"
+                    style="font-size: 30px; width: 230px; text-align: center;  font-family:Arial, Helvetica, sans-serif;">Category List</h1>
+                    <button class="btn btn-success mb-2 " data-toggle="modal" data-target="#addCategoryModal">Add
+                        Category</button>
 
-            <div class="row d-flex justify-content-end  ">
-                <div class=" col-md-10 col-lg-10 ">
-
-
-                    <div class="d-flex justify-content-between">
-                        <h1 class="text-bg-info  rounded"
-                        style="font-size: 30px; width: 230px; text-align: center;  font-family:Arial, Helvetica, sans-serif;">Category List</h1>
-                        <button class="btn btn-success mb-2 " data-toggle="modal" data-target="#addCategoryModal">Add
-                            Category</button>
-
-                    </div>
+                </div>
 
 
-                    
+                
 
-                    <div class="overflow-auto p-3 bg-light" style="max-width: 1500px; max-height: 550px;">
-                     
+                <div class="overflow-auto p-3 bg-light" style="max-width: 1500px; max-height: 550px;">
+                 
 
 
 
-                        <table class="table ">
-                            <thead class="text-center table-dark">
-                                <tr>
-                                    <th>Category</th>
-                                    <th>Sub Category</th>
-                                    <th>Description</th>
-                                    <th>Actions</th>
+                    <table class="table ">
+                        <thead class="text-center table-dark">
+                            <tr>
+                                <th>Category</th>
+                                <th>Sub Category</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="align-center">
+                            <% CategoryData.forEach(function(category) { %>
+                                <tr class="text-center">
+                                    <td>
+                                        <%= category.category %>
+                                    </td>
+                                    <td class="description-column">
+                                        <%= category.sub_Category %>
+                                    </td>
+                                    <td class="description-column">
+                                        <%= category.description %>
+                                    </td>
+                                   
+                                    <td>
+                                        <a href="/admin/category/edit/<%= category._id %>"
+                                            class="btn btn-warning">Edit</a>
+                                        <a href="javascript:void(0);" onclick="confirmDelete('<%= category._id %>','/admin/category/delete/','You will not be able to recover this category!')"
+                                            class="btn btn-danger">Delete</a>
+                                    </td>
+
                                 </tr>
-                            </thead>
-                            <tbody class="align-center">
-                                <% CategoryData.forEach(function(category) { %>
-                                    <tr class="text-center">
-                                        <td>
-                                            <%= category.category %>
-                                        </td>
-                                        <td class="description-column">
-                                            <%= category.sub_Category %>
-                                        </td>
-                                        <td class="description-column">
-                                            <%= category.description %>
-                                        </td>
-                                       
-                                        <td>
-                                            <a href="/admin/category/edit/<%= category._id %>"
-                                                class="btn btn-warning">Edit</a>
-                                            <a href="javascript:void(0);" onclick="confirmDelete('<%= category._id %>','/admin/category/delete/','You will not be able to recover this category!')"
-                                                class="btn btn-danger">Delete</a>
-                                        </td>
-
-                                    </tr>
-                                    <% }); %>
-                            </tbody>
-                        </table>
+                                <% }); %>
+                        </tbody>
+                    </table>
 
 
-
-
-                    </div>
-    
-    
-    
 
 
                 </div>
@@ -90,6 +84,7 @@
 
 
 
+            </div>
 
 
 
@@ -98,63 +93,74 @@
 
 
 
-                <!-- Add Category Modal -->
-                <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+
+
+
+
+
+            <!-- Add Category Modal -->
+            
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="/admin/category/add" onsubmit="return validateCategoryForm()">
+                        <div class="form-group">
+                            <label for="name">Category Name</label>
+                            <select class="select form-control" id="name" name="name" required >
+                                <option value="">Select</option>
+                                <option value="Apple">Laptops</option>
+                                <option value="Apple">Mobiles</option>
+                                <option value="Apple">Headphones</option>
+                                <option value="Apple">SmartWatches</option>
+                        
+
+                                <!-- Add more options here -->
+                            </select>
+                            <div id="nameWarning" class="text-danger"></div>
                         </div>
-                        <div class="modal-body">
-                            <form method="POST" action="/admin/category/add" onsubmit="return validateCategoryForm()">
-                                <div class="form-group">
-                                    <label for="name">Category Name</label>
-                                    <select class="select form-control" id="name" name="name" required >
-                                        <option value="">Select</option>
-                                        <option value="Apple">Laptops</option>
-                                        <option value="Apple">Mobiles</option>
-                                        <option value="Apple">Headphones</option>
-                                        <option value="Apple">SmartWatches</option>
-                                
+                        <div class="form-group">
+                            <label for="SubCategory">Sub-Category Name</label>
+                            <select class="select form-control" id="SubCategory" name="SubCategory" required>
+                                <option value="">Select</option>
+                                <option value="Apple">Gaming</option>
+                                <option value="Apple">Ultrabooks</option>
+                                <option value="Apple">Fitness Trackers  </option>
+                                <option value="Apple">Fashionable Smartwatches</option>
+                                <option value="Apple">Flagship Phones</option>
+                                <option value="Apple">Budget-friendly Phones</option>
+                                <option value="Apple">Over-Ear Headphones </option>
+                                <option value="Apple">True Wireless Earbuds</option>
 
-                                        <!-- Add more options here -->
-                                    </select>
-                                    <div id="nameWarning" class="text-danger"></div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="SubCategory">Sub-Category Name</label>
-                                    <select class="select form-control" id="SubCategory" name="SubCategory" required>
-                                        <option value="">Select</option>
-                                        <option value="Apple">Gaming</option>
-                                        <option value="Apple">Ultrabooks</option>
-                                        <option value="Apple">Fitness Trackers  </option>
-                                        <option value="Apple">Fashionable Smartwatches</option>
-                                        <option value="Apple">Flagship Phones</option>
-                                        <option value="Apple">Budget-friendly Phones</option>
-                                        <option value="Apple">Over-Ear Headphones </option>
-                                        <option value="Apple">True Wireless Earbuds</option>
-
-                                        </select>
-                                    <div id="SubCategoryWarning" class="text-danger"></div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="description">Description</label>
-                                    <textarea class="form-control" id="description" name="description" required></textarea>
-                                    <div id="descriptionWarning" class="text-danger"></div>
-                                </div>
-                                <button type="submit" class="btn btn-success">Add Category</button>
-                            </form>
+                                </select>
+                            <div id="SubCategoryWarning" class="text-danger"></div>
                         </div>
-                    </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea class="form-control" id="description" name="description" required></textarea>
+                            <div id="descriptionWarning" class="text-danger"></div>
+                        </div>
+                        <button type="submit" class="btn btn-success">Add Category</button>
+                    </form>
                 </div>
             </div>
-            </div>
         </div>
-        </div>
+    </div>
+</main>
+        
+        
         <script>
             function validateCategoryForm() {
                 var name = document.getElementById('name').value;

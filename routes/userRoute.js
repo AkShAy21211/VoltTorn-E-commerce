@@ -3,7 +3,7 @@ const userRoute  = express();
 const userController = require("../controllers/userController");
 const userModel = require("../models/userModel");
 const homeController = require("../controllers/homePageController");
-
+const userCartController = require("../controllers/userCartController");
 
 
 const auth = require("../middlewares/auth");
@@ -47,7 +47,10 @@ userRoute.get('/home/product/details/:id',auth.isUserBlocked,homeController.prod
 
 userRoute.get('/home/settings',auth.isUserBlocked,userController.loadUserSettingPage)
 userRoute.get('/home/product/details/:id/filter/:color',auth.isUserBlocked,homeController.productDetail)
-//USER LOGOUT
+
+
+//USER shoppingCart
+userRoute.get('/home/cart',auth.isUserBlocked,userCartController.userShoppingCartPageLoad)
 
 userRoute.get('/logout',auth.is_Login,userController.userLogout)
 

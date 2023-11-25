@@ -1,95 +1,112 @@
 <%- include('../layout/header.ejs') %>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/image-uploader/2.0.7/image-uploader.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/image-uploader/2.0.7/image-uploader.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/image-uploader/2.0.7/image-uploader.min.css"
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/image-uploader/2.0.7/image-uploader.min.js"></script>
 
-  <style>
-    div.product-image {
-      position: relative;
-      width: 40%;
-      background-size: cover;
-
-    }
-
-
-    .btn {
-   z-index: 2; /* or any value higher than other elements */
+<style>
+  div.product-image {
+    position: relative;
+    width: 40%;
+    background-size: cover;
   }
- 
-    div.product-image img {
-      width: 100%;
-      height: auto;
-    }
 
-    .magnifier-lens {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 200px;
-      height: 200px;
+  .btn {
+    z-index: 2; /* or any value higher than other elements */
+  }
 
-      background-color: #ff980030;
-      border: .1px solid var(--orange);
-      opacity: 0;
-    }
+  div.product-image img {
+    width: 100%;
+    height: auto;
+  }
 
-    .magnifier-lens:hover {
-  cursor: zoom-in;
-}
-    .magnifier-lens.active {
+  .magnifier-lens {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 200px;
 
-      opacity: 1;
+    background-color: #ff980030;
+    border: 0.1px solid var(--orange);
+    opacity: 0;
+  }
 
-    }
+  .magnifier-lens:hover {
+    cursor: zoom-in;
+  }
+  .magnifier-lens.active {
+    opacity: 1;
+  }
 
-    .magnified-image {
-      position: absolute;
-      z-index: 2; /* or any value higher than other elements */
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 80vh;
-      border: 2px solid #ff9800;
-      transform: scale(0.5);
-      opacity: 0;
-      transition: opacity 0.5s, transform 0.5s;
-    }
+  .magnified-image {
+    position: absolute;
+    z-index: 2; /* or any value higher than other elements */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80vh;
+    border: 2px solid #ff9800;
+    transform: scale(0.5);
+    opacity: 0;
+  }
 
-    .magnified-image.active {
-      opacity: 1;
-      transform: scale(1);
-      image-rendering: crisp-edges;
-      z-index: 3;
-
-
-    }
-  </style>
+  .magnified-image.active {
+    opacity: 1;
+    transform: scale(1);
+    image-rendering: crisp-edges;
+    z-index: 3;
+  }
+</style>
+<title><%=ProductData.name  %></title>
 <main class="py-5">
   <div class="container mt-md-4 mt-sm-5 pt-sm-5 pt-5 mt-4 pt-md-4">
-    <div class="row ">
+    <div class="row">
       <aside class="col-lg-6">
-        <div class="mb-3 rounded-4 border d-flex justify-content-center">
-          <img id="largeImage" style="width: 100%; height: auto; max-height: 80vh; margin: auto"
-            class="rounded-4 fit border product-image"
-            src="/images/productImages/<%=ProductData.variants[0].images[0] %>"
-            data-image="/images/productImages/<%=ProductData.variants[0].images[0] %>" />
-          <div class="magnifier-lens"></div>
-        </div>
+        <img
+          id="largeImage"
+          style="
+            width: 100%;
+            height: 450px;
+            max-height: 80vh;
+            margin: auto;
+            background-size: cover;
+            -webkit-background-size: cover;
+          "
+          class="rounded-4 fit border product-image"
+          src="/images/productImages/<%=ProductData.variants[0].images[0] %>"
+          data-image="/images/productImages/<%=ProductData.variants[0].images[0] %>"
+          data-color="<%=ProductData.variants[0].color %>"
+        />
+        <div class="magnifier-lens"></div>
 
-        <div class="d-flex justify-content-evenly mb-3 h-50 flex-wrap">
-          <img width="150" height="150" class="rounded-2 border"
+        <div class="d-flex justify-content-evenly mt-3 mb-3 h-50 flex-wrap">
+          <img
+            width="150"
+            height="150"
+            class="rounded-2 border"
             src="/images/productImages/<%=ProductData.variants[0].images[1] %>"
-            data-image="/images/productImages/<%=ProductData.variants[0].images[1] %>" />
-          <img width="150" height="150" class="rounded-2 border"
+            data-image="/images/productImages/<%=ProductData.variants[0].images[1] %>"
+          />
+          <img
+            width="150"
+            height="150"
+            class="rounded-2 border"
             src="/images/productImages/<%=ProductData.variants[0].images[2] %>"
-            data-image="/images/productImages/<%=ProductData.variants[0].images[2] %>" />
-          <img width="150" height="150" class="rounded-2 border"
+            data-image="/images/productImages/<%=ProductData.variants[0].images[2] %>"
+          />
+          <img
+            width="150"
+            height="150"
+            class="rounded-2 border"
             src="/images/productImages/<%=ProductData.variants[0].images[3] %>"
-            data-image="/images/productImages/<%=ProductData.variants[0].images[3] %>" />
+            data-image="/images/productImages/<%=ProductData.variants[0].images[3] %>"
+          />
         </div>
       </aside>
 
-
-      <div class="col-lg-6" style="position: relative;">
+      <div class="col-lg-6" style="position: relative">
         <div class="magnified-image image-uploader"></div>
 
         <div class="ps-lg-3">
@@ -99,98 +116,129 @@
 
           <div class="d-flex flex-row my-3">
             <% if(ProductData.stock !==0) { %>
-              <span class="text-success fw-bold ms-2">
-                In Stock
-              </span>
+            <span class="text-success fw-bold ms-2"> In Stock </span>
             <% } else { %>
-              <span class="text-danger fw-bold ms-2">
-                Out Of Stock
-              </span>
+            <span class="text-danger fw-bold ms-2"> Out Of Stock </span>
             <% } %>
           </div>
 
           <div class="mb-3 d-flex">
             <span class="h4 me-3">
-              Rs:<%= Number(ProductData.price - (ProductData.price * (ProductData.discount/100))).toLocaleString() %>
+              Rs:<%= Number(ProductData.price - (ProductData.price *
+              (ProductData.discount/100))).toLocaleString() %>
             </span>
             <span class="h5 fw-light text-danger me-3">
-              <s>
-                <%= ProductData.price %>
-              </s>
+              <s> <%= ProductData.price %> </s>
             </span>
-            <p class="card-text text-success mb-0"> %<%= ProductData.discount %> off</p>
+            <p class="card-text text-success mb-0">
+              <%= ProductData.discount %>% off
+            </p>
           </div>
-
         </div>
-        
+
         <div class="row mb-4 mt-1 justify-content-center ml-1">
           <div
-            class="col-12 col-md-8 col-xl-8 col-xxl-8 d-flex justify-content-between flex-wrap w-100  text-center flex-md-nowrap flex-xxl-nowrap">
-            <button style="width: 500px; height: 60px;" class="btn btn-primary me-2 mb-2">Add To Cart</button>
-            <button style="width: 500px; height: 60px;" class="btn btn-warning mb-2">Buy Now</button>
+            class="col-12 col-md-8 col-xl-8 col-xxl-8 d-flex justify-content-between flex-wrap w-100 text-center flex-md-nowrap flex-xxl-nowrap"
+          >
+            <a
+              href=""
+              style="width: 500px; height: 60px"
+              class="btn btn-primary d-flex align-items-center justify-content-center me-2 mb-2"
+              >Add To Cart</a
+            >
+            <a
+              style="width: 500px; height: 60px"
+              class="btn btn-warning d-flex align-items-center justify-content-center mb-2"
+              >Buy Now</a
+            >
           </div>
         </div>
 
+        <p class="font-weight-bold justify-content-between">Choose Color:</p>
 
-
-
-
-        <p class="font-weight-bold">Choose Color:</p>
         <div class="d-flex flex-wrap gap-3 mb-4">
           <% ProductData.variants.forEach(variant => { %>
-            <div class="d-flex flex-column align-items-center">
-              <a href="/home/product/details/<%=ProductData._id%>/filter/<%=variant.color  %>">
-                <img width="50" height="50" src="/images/productImages/<%= variant.images[0] %>" alt="">
-              </a>
-              <p><%= variant.color %></p>
-            </div>
+          <div class="d-flex flex-column align-items-center">
+            <a
+              href="/home/product/details/<%=ProductData._id%>/filter/<%=variant.color  %>"
+              class="color-selector"
+              data-color="<%= variant.color %>"
+              data-image="/images/productImages/<%= variant.images[0] %>"
+            >
+              <img
+                style="position: relative; z-index: 2"
+                width="50"
+                height="50"
+                src="/images/productImages/<%= variant.images[0] %>"
+                alt=""
+              />
+            </a>
+            <p><%= variant.color %></p>
+          </div>
           <% }) %>
         </div>
 
         <ul>
           <p class="font-weight-bold">About this item</p>
-          <% var descriptionPoints=ProductData.description.split(/\.\s+/); descriptionPoints.forEach(function(point) { %>
-            <li>
-              <%= point %>
-            </li>
+          <% var descriptionPoints=ProductData.description.split(/\.\s+/);
+          descriptionPoints.forEach(function(point) { %>
+          <li><%= point %></li>
           <% }); %>
         </ul>
       </div>
-
     </div>
   </div>
 </main>
 
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Get references to the large and smaller images
+    const largeImage = document.getElementById("largeImage");
+    const smallerImages = document.querySelectorAll(".rounded-2.border");
 
+    // Add click event listener to each smaller image
+    smallerImages.forEach(function (smallerImage) {
+      smallerImage.addEventListener("click", function () {
+        // Store the current large image source
+        const originalLargeImageSrc = largeImage.src;
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      // Get references to the large and smaller images
-      const largeImage = document.getElementById("largeImage");
-      const smallerImages = document.querySelectorAll('.rounded-2.border');
+        // Store the current data-image attribute of the large image
+        const originalLargeImageDataImage =
+          largeImage.getAttribute("data-image");
 
-      // Add click event listener to each smaller image
-      smallerImages.forEach(function (smallerImage) {
-        smallerImage.addEventListener("click", function () {
-          // Store the current large image source
-          const originalLargeImageSrc = largeImage.src;
+        // Update the source attribute of the large image with the clicked small image
+        largeImage.src = smallerImage.getAttribute("data-image");
+        // Update the data-image attribute of the large image with the clicked small image data-image
+        largeImage.setAttribute(
+          "data-image",
+          smallerImage.getAttribute("data-image")
+        );
 
-          // Store the current data-image attribute of the large image
-          const originalLargeImageDataImage = largeImage.getAttribute("data-image");
+        // Update the source attribute of the clicked small image with the original large image
+        smallerImage.src = originalLargeImageSrc;
+        // Update the data-image attribute of the clicked small image with the original large image data-image
+        smallerImage.setAttribute("data-image", originalLargeImageDataImage);
+      });
+    });
+  });
+  document.addEventListener("DOMContentLoaded", function () {
+    const largeImage = document.getElementById("largeImage");
+    const colorSelectors = document.querySelectorAll(".color-selector");
 
-          // Update the source attribute of the large image with the clicked small image
-          largeImage.src = smallerImage.getAttribute("data-image");
-          // Update the data-image attribute of the large image with the clicked small image data-image
-          largeImage.setAttribute("data-image", smallerImage.getAttribute("data-image"));
-
-          // Update the source attribute of the clicked small image with the original large image
-          smallerImage.src = originalLargeImageSrc;
-          // Update the data-image attribute of the clicked small image with the original large image data-image
-          smallerImage.setAttribute("data-image", originalLargeImageDataImage);
-        });
+    colorSelectors.forEach(function (colorSelector) {
+      colorSelector.addEventListener("mouseover", function () {
+        const color = colorSelector.getAttribute("data-color");
+        const imageSrc = colorSelector.getAttribute("data-image");
+        updateImage(imageSrc, color);
       });
     });
 
-  </script>
-  <script src="/js/imageZoom.js"></script>
-  <%- include('../layout/footer.ejs') %>
+    function updateImage(newImageSrc, color) {
+      largeImage.src = newImageSrc;
+      largeImage.setAttribute("data-image", newImageSrc);
+      largeImage.setAttribute("data-color", color);
+    }
+  });
+</script>
+<script src="/js/imageZoom.js"></script>
+<%- include('../layout/footer.ejs') %>

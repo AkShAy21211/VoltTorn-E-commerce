@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    
 }
 body {
     margin: 0;
@@ -12,6 +13,7 @@ body {
   }
 
   main {
+    margin-top: 25px;
     flex: 1;
     min-height: calc(200vh - 400px); /* Adjust the value as needed */
   }

@@ -5,7 +5,7 @@ const userModel = require("../models/userModel");
 
 const loadCustomers = async (req, res) => {
     try {
-      const customerData = await userModel.find({ is_admin: 0 });
+      const customerData = await userModel.find({ is_admin: 0,isDelete:false});
       if (customerData) {
         res.render("customers", { customers: customerData });
       } else {
@@ -21,7 +21,7 @@ const loadCustomers = async (req, res) => {
   const deleteUser = async (req, res) => {
     try {
       const id = req.query.id;
-      await userModel.deleteOne({ _id: id });
+      await userModel.findByIdAndUpdate({ _id: id },{$set:{isDelete:true}});
       res.redirect("/admin/customers");
     } catch (error) {
       console.log(error.message);

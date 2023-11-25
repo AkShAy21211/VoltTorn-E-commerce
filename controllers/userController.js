@@ -69,33 +69,42 @@ const loadRegister = async (req, res) => {
 //POST REQUEST FOR LOAD USER REGISTRATION TO INSERT NEW USER
 const insertUser = async (req, res) => {
   try {
-    const hashPassword = await securePassword(req.body.password);
-
-    const User = new userModel({
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      email: req.body.email,
-      mobile: req.body.mobile,
-      password: hashPassword,
-      is_verified: false,
-      is_admin: 0,
-      status: true,
-    });
-
+    const {first_name,last_name,email,mobile,password} = req.body;
+    const hashPassword = await securePassword(password);
     const confirmPassword = req.body.password === req.body.confirmPassword;
-    if (!confirmPassword) {
-      const passwordMessage =
-        "Your registration has failed. Please check your password" ||
-        "Your registration has been completed";
-      return res.render("registration", {
-        password: passwordMessage,
-      });
-    }
+    const userExist = await userModel.findOne({$or:[{email:email},{mobile:mobile}]});
 
-    const userData = await User.save();
-    generateAndSendOTP(userData.email);
-    // Redirect to the OTP verification page with _id and email as URL parameters
-    return res.redirect(`/verify?_id=${userData._id}&email=${userData.email}`);
+    if (!confirmPassword) {
+      
+      return res.render("registration", {
+        password: "Your registration has failed. Please check your password",
+      });
+    }else{
+      if(userExist){
+        return res.render("registration", {
+          password: "User with email or phone already exists",
+        });
+      }else{
+        const User = new userModel({
+          first_name: first_name,
+          last_name: last_name,
+          email:email,
+          mobile:mobile,
+          password:hashPassword,
+          is_verified: false,
+          is_admin: 0,
+          status: true,
+          isDelete:false,
+        });
+        const userData = await User.save();
+        generateAndSendOTP(userData.email);
+        // Redirect to the OTP verification page with _id and email as URL parameters
+        return res.redirect(`/verify?_id=${userData._id}&email=${userData.email}`);
+      }
+    }
+   
+
+
   } catch (error) {
     console.error("Error inserting user:", error.message);
     return res.render("registration", {
@@ -193,18 +202,23 @@ const loadLoginVerify = async (req, res) => {
 
       if (passwordMatch) {
         if (userData.is_verified === true) {
-          if (userData.status === false) {
-            return res.render("login", { message: "You have been blocked by the admin" });
-          } else {
-            req.session.user = {
+          if (userData.status === true) {
+            if(userData.isDelete === true){
+               res.render("login", { message: "No user found Please sign in" });
 
-              isUserAuthenticated:true,
-              userId:userData._id,
-              username:userData.first_name+" "+userData.last_name,
-             
+            }else{
+              req.session.user = {
+
+                isUserAuthenticated:true,
+                userId:userData._id,
+                username:userData.first_name+" "+userData.last_name,
+                
+               
+              }
+              res.redirect('/home')
             }
-
-            return res.redirect("/home");
+          } else {
+           return res.render("login", { message: "You have been blocked by admin" });
           }
         } else {
           return res.render("login", { message: "Please verify your email" });
@@ -255,5 +269,6 @@ module.exports = {
   loadLoginVerify,
   userLogout,
   loadUserSettingPage,
+
  
 };

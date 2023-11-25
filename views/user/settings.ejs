@@ -15,8 +15,6 @@ body {
     .list-item {
       padding: 10px;
       margin-bottom: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
       display: flex;
       align-items: center;
     }
@@ -24,27 +22,41 @@ body {
       font-size: 24px; /* Adjust the icon size */
       margin-right: 10px; /* Add space between icon and text */
     }
+    .options{
+      text-decoration: none;
+    }
+    .options:hover{
+      text-decoration: none;
+    }
+    .active {
+      background-color: #3498db;
+      color: #fff;
+    }
+    .inactive {
+      background-color: #fff;
+      color: #333;
+    }
 </style>
 <main>
   <div class="container">
     <div class="row d-flex justify-content-evenly">
-      <div class="setting-options col-md-4 col-lg-4 col-xl-3 col-xxl-3   mb-2 min-height-div1 mb-md-4">
-        <ul class="list-group">
-            <li class="list-group-item list-item">
+      <div class="setting-options  col-md-4 col-lg-4 col-xl-3 col-xxl-3  mb-2 min-height-div1 mb-md-4">
+        <ul class="list-group " id="myList">
+           <a class="options" href=""><li class="list-group-item inactive list-item">
               <i class="bi bi-person"></i> Profile
-            </li>
-            <li class="list-group-item list-item">
+            </li></a> 
+           <a  class="options" href=""><li class="list-group-item inactive list-item">
               <i class="bi bi-box"></i> Orders
-            </li>
-            <li class="list-group-item list-item">
+            </li></a> 
+            <a  class="options" href=""><li class="list-group-item inactive list-item">
               <i class="bi bi-cart"></i> Cart
-            </li>
-            <li class="list-group-item list-item">
+            </li></a>
+           <a   class="options" href=""><li class="list-group-item  inactive list-item">
               <i class="bi bi-heart"></i> Wishlist
-            </li>
-            <li class="list-group-item list-item">
+            </li></a> 
+           <a  class="options" href=""><li class="list-group-item  inactive list-item">
               <i class="bi bi-geo-alt"></i> Address
-            </li>
+            </li></a> 
           </ul>
       </div>
       <div class="view-settings  col-md-6 col-lg-6 col-xl-7 col-xxl-6  border min-height-div1 mb-md-4">View Settings</div>
@@ -52,7 +64,26 @@ body {
   </div>
 </main>
 
-  
-  
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get all list items
+    var listItems = document.querySelectorAll('#myList li');
+
+    // Add click event listeners to each list item
+    listItems.forEach(function(item) {
+      item.addEventListener('click', function() {
+        // Toggle the active state of the clicked item
+        item.classList.toggle('active');
+
+        // Deactivate all other items
+        listItems.forEach(function(innerItem) {
+          if (innerItem !== item) {
+            innerItem.classList.remove('active');
+          }
+        });
+      });
+    });
+  });
+</script>
   
 <%- include('../layout/footer.ejs') %>

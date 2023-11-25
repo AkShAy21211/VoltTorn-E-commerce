@@ -5,27 +5,34 @@ const adminController = require("../controllers/adminController");
 const customerController = require("../controllers/customerController");
 const categoryController = require("../controllers/categoryController");
 const productController = require("../controllers/productColtroller");
-
+const bannerController = require("../controllers/bannerController");
 const path = require("path");
 const multer = require("multer");
-const storage = multer.diskStorage({
+// Define storage for product images
+const productImageStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(
-      null,
-      path.join(__dirname, "../public/images/productImages"),
-      (err, success) => {
-        if (err) {
-          console.log(err.message);
-        }
-      }
-    );
+    cb(null, path.join(__dirname, "../public/images/productImages"));
   },
   filename: function (req, file, cb) {
     const name = Date.now() + "-" + file.originalname;
     cb(null, name);
   },
 });
-const uplode = multer({ storage: storage });
+
+// Define storage for banner images
+const bannerImageStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "../public/images/bannerImages"));
+  },
+  filename: function (req, file, cb) {
+    const name = Date.now() + "-" + file.originalname;
+    cb(null, name);
+  },
+});
+
+// Set up multer instances with the corresponding storage
+const uploadProductImage = multer({ storage: productImageStorage })
+const uploadBannerImage = multer({ storage: bannerImageStorage })
 
 const userModel = require("../models/userModel");
 
@@ -62,10 +69,12 @@ adminRoute.get("/category/delete/:id", adminAuth.is_Login,categoryController.del
 
 //ADMIN PRODUCT ROUTE
 adminRoute.get("/products",adminAuth.is_Login, productController.loadProduct);
+adminRoute.get("/products/view/:id",adminAuth.is_Login, productController.adminSingleProductView);
+
 adminRoute.get("/products/add",adminAuth.is_Login, productController.addProductLoad);
 adminRoute.post(
   "/products/add",
-  uplode.array('images', 4),
+  uploadProductImage.array('images', 4),
   productController.addProduct
 );
 
@@ -74,7 +83,7 @@ adminRoute.post(
 adminRoute.get("/products/edit/:id",adminAuth.is_Login, productController.editProductLoad);
 adminRoute.post(
   "/products/edit/:id",
-  uplode.array('images', 4),
+  uploadProductImage.array('images', 4),
   productController.editProduct
 );
 adminRoute.get("/products/delete/:id",adminAuth.is_Login, productController.deleteProduct);
@@ -82,6 +91,23 @@ adminRoute.get("/products/delete/:id",adminAuth.is_Login, productController.dele
 //edit product varients
 
 adminRoute.get('/products/delete-variant',adminAuth.is_Login,productController.deleteProductVarientByAdmin)
+
+
+
+//admin store add banner route
+
+adminRoute.get('/banners',adminAuth.is_Login,bannerController.loadBannerPage)
+adminRoute.post('/banners/add', uploadBannerImage.single('image'),bannerController.addNewBannerByAdmin)
+
+
+//delete banner
+adminRoute.get('/banners/delete/:id',bannerController.deleteBannerByAdmin)
+
+
+//edit banner
+adminRoute.get('/banners/edit/:id',bannerController.editeBannerByAdminGet)
+adminRoute.post('/banners/edit/:id',uploadBannerImage.single('image'),bannerController.editBannerByAdminPost)
+
 
 adminRoute.get("*", function (req, res) {
   res.redirect("/admin");

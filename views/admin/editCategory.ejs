@@ -1,38 +1,44 @@
 <%- include('../layout/adminHeader.ejs') %>
 
 <%- include('../layout/adminSideBar.ejs') %>
-<div class="container mt-4">
-  <div class="row d-flex justify-content-end  ">
-    <div class=" col-md-10 col-lg-10 ">
-      <div class="d-flex justify-content-between">
-        <h2>Edit Category</h2>
+
+
+<title>Edit Category</title>
+<main>
+  <div class="container mt-4">
+    <div class="row d-flex justify-content-end  ">
+      <div class=" col-md-10 col-lg-10 ">
+        <div class="d-flex justify-content-between">
+          <h2>Edit Category</h2>
+        </div>
+        <form method="post" action="/admin/category/edit/<%=CategoryData._id %>" onsubmit="return validateCategoryForm()">
+          <!-- Name input -->
+          <div class="form-outline mb-4">
+            <label class="form-label" for="form4Example1">Category</label>
+            <input type="text" value="<%=CategoryData.category %>" id="form4Example1" name="name" class="form-control" />
+            <div id="nameWarning" class="text-danger"></div>
+          </div>
+          <div class="form-outline mb-4">
+            <label class="form-label" for="form4Example1">Sub Category</label>
+            <input type="text" value="<%=CategoryData.sub_Category %>" id="form4Example2" name="SubCategory" class="form-control" />
+            <div id="SubCategoryWarning" class="text-danger"></div>
+          </div>
+  
+          <!-- Message input -->
+          <div class="form-outline mb-4">
+            <label class="form-label" for="form4Example3">Description</label>
+            <textarea class="form-control" name="description" id="form4Example3" rows="4"><%=CategoryData.description %></textarea>
+            <div id="descriptionWarning" class="text-danger"></div>
+          </div>
+  
+          <!-- Submit button -->
+          <button type="submit" class="btn btn-primary shadow mb-5 rounded mb-4">Submit</button>
+        </form>
       </div>
-      <form method="post" action="/admin/category/edit/<%=CategoryData._id %>" onsubmit="return validateCategoryForm()">
-        <!-- Name input -->
-        <div class="form-outline mb-4">
-          <label class="form-label" for="form4Example1">Category</label>
-          <input type="text" value="<%=CategoryData.category %>" id="form4Example1" name="name" class="form-control" />
-          <div id="nameWarning" class="text-danger"></div>
-        </div>
-        <div class="form-outline mb-4">
-          <label class="form-label" for="form4Example1">Sub Category</label>
-          <input type="text" value="<%=CategoryData.sub_Category %>" id="form4Example2" name="SubCategory" class="form-control" />
-          <div id="SubCategoryWarning" class="text-danger"></div>
-        </div>
-
-        <!-- Message input -->
-        <div class="form-outline mb-4">
-          <label class="form-label" for="form4Example3">Description</label>
-          <textarea class="form-control" name="description" id="form4Example3" rows="4"><%=CategoryData.description %></textarea>
-          <div id="descriptionWarning" class="text-danger"></div>
-        </div>
-
-        <!-- Submit button -->
-        <button type="submit" class="btn btn-primary shadow mb-5 rounded mb-4">Submit</button>
-      </form>
     </div>
   </div>
-</div>
+  
+</main>
 
 <script>
   function validateCategoryForm() {

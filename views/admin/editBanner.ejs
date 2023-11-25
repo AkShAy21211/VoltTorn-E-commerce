@@ -1,0 +1,28 @@
+<%- include('../layout/adminHeader.ejs') %>
+
+<div class="container mt-5">
+  <h2>Edit Banner</h2>
+  <form method="POST" action="/admin/banners/edit/<%= banner._id %>" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label for="name" class="form-label">Banner Name</label>
+      <input type="text" class="form-control" id="name" name="name" value="<%= banner.name %>" required>
+    </div>
+    <div class="mb-3">
+      <label for="startDate" class="form-label">Start Date</label>
+      <input type="date" class="form-control" id="startDate" name="startDate" value="<%= banner.startDate.toISOString().split('T')[0] %>" required>
+    </div>
+    <div class="mb-3">
+      <label for="endDate" class="form-label">End Date</label>
+      <input type="date" class="form-control" id="endDate" name="endDate" value="<%= banner.endDate.toISOString().split('T')[0] %>" required>
+    </div>
+    <div class="mb-3">
+      <label for="image" class="form-label">Current Image</label>
+      <img src="/images/bannerImages/<%=banner.image %>" alt="<%= banner.name %> Image" style="max-width: 200px; max-height: 200px;">
+      <input type="file" class="form-control" id="image" name="image" accept="image/*">
+      <small class="form-text text-muted">Choose a new image if you want to update.</small>
+    </div>
+    <button type="submit" class="btn btn-primary">Update Banner</button>
+  </form>
+</div>
+
+<%- include('../layout/adminFooter.ejs') %>

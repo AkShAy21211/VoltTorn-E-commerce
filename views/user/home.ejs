@@ -22,6 +22,12 @@
     text-overflow: ellipsis;
     max-width: 200px; /* Adjust the value based on your design */
   }
+  #myCarousel .carousel-item {
+    min-height: 350px;
+    min-height: 450px; /* Minimum height for visibility */
+}
+
+
 
 </style>
 <script>
@@ -32,21 +38,32 @@
   }
 </script>
 
-<!--Main Navigation-->
-<header>
-  <div class="bg-dark text-white py-5 mt-1">
-    <div class="container py-5">
-      <h1 style="font-family:'Rajdhani', sans-serif;" class="pt-md-5 pt-lg-0 pt-sm-5 pb-1 pt-5">
-        Best products & <br />
-        brands in our store
-      </h1>
-     
-    </div>
-  </div>
-  <!-- Jumbotron -->
-</header>
-<!-- Products -->
+<title>VoltTron an online electronics shoping site</title>
 <main >
+
+  <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
+    <div class="carousel-inner">
+      <% banner.forEach((banner, index) => { %>
+        <div class="<%= index === 0 ? 'carousel-item active' : 'carousel-item' %>">
+          <img height="400" data-ride="3000" data-slide="carsoul" class="d-block w-100" src="/images/bannerImages/<%= banner.image %>" alt="Banner <%= index + 1 %>">
+        </div>
+      <% }); %>
+    </div>
+    <a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleFade" role="button" data-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+  
+
+
+
+
+
     <div class="container ">
       <div class="row">
         <h3 class="p-3">Top Products</h3>
@@ -118,7 +135,15 @@
     </div>
   </main>
 
-
+<script>
+  $(document).ready(function(){
+    
+    $('#myCarousel').carousel({
+    interval: 3000,
+ }) 
+    
+});
+</script>
   
 
 <%- include('../layout/footer.ejs') %>

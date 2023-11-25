@@ -8,7 +8,19 @@ const loadProduct = async (req, res) => {
       res.render("products", { ProductData});
     }
   } catch (error) {
-    console.log(error.meesage);
+    console.error(error.meesage);
+  }
+};
+
+const adminSingleProductView = async (req, res) => {
+  try {
+    const {id} = req.params
+    const ProductData = await productModel.findById(id).populate('category');
+    if (ProductData) {
+      res.render("productDetailedView", { ProductData});
+    }
+  } catch (error) {
+    console.error(error.meesage);
   }
 };
 
@@ -19,7 +31,7 @@ const addProductLoad = async (req, res) => {
 
     res.render("addproducts",{category});
   } catch (error) {
-    console.log(error.meesage);
+    console.error(error.meesage);
   }
 };
 
@@ -62,7 +74,7 @@ const addProduct = async (req, res) => {
     res.redirect("/admin/products");
 
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -78,7 +90,7 @@ const editProductLoad = async (req, res) => {
       res.render("editProducts", { ProductData, categories });
     }
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
   }
 };
 const editProduct = async (req, res) => {
@@ -97,7 +109,6 @@ const editProduct = async (req, res) => {
       categoryData = await categoryModel.findOne({ category: category });
       if (!categoryData) {
         // Handle the case where the category is not found
-        console.log("Category not found");
         return res.status(404).send("Category not found");
       }
     }
@@ -116,11 +127,6 @@ const editProduct = async (req, res) => {
       imagePositionsArray.forEach(position => {
         // Adjust position to zero-based index
         const index = position - 1;
-
-        console.log('Debugging Info:');
-        console.log('Position:', position);
-        console.log('Index:', index);
-        console.log('variantToUpdate:', variantToUpdate);
 
         if (variantToUpdate.images && index >= 0) {
           // If req.files[index] exists and has a filename, update the image
@@ -165,7 +171,6 @@ const editProduct = async (req, res) => {
       { upsert: true, new: true }
     );
 
-    console.log('Product Updated:', productUpdated);
     res.redirect("/admin/products");
   } catch (error) {
     console.error(error);
@@ -212,4 +217,5 @@ module.exports = {
   editProduct,
   deleteProduct,
   deleteProductVarientByAdmin,
+  adminSingleProductView,
 };

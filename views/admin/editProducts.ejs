@@ -1,5 +1,4 @@
 <%- include('../layout/adminHeader.ejs') %>
-    <%- include('../layout/adminSideBar.ejs') %>
 
         <style>
       
@@ -17,27 +16,23 @@
             }
         </style>
 
-
-        <div class="container form-box mt-4 ">
+        <title>Edit Product</title>
+<aside>
+    <a href="/admin/products" style="color: rgb(45, 81, 172); position: absolute; left: 50px; top: 80px; font-size: 15px; font-weight: bold; " class="btn"> <-Back</a>
+  </aside>
+<main>
+     <div class="container form-box mt-5 ">
 
             <div class="row d-flex justify-content-center  ">
-                <div class=" col-md-10 col-lg-10 ">
+                <div class="col-md-10 col-lg-12 col-xl-12">
 
-
-                    <div class="d-flex justify-content-between">
-                        <h2>Edit Product </h2>
-
-
-
-                    </div>
-                    <div class="overflow-auto p-3 bg-light" style="max-width: 1200px; max-height: 550px;">
 
                             <form method="post" name="ProductForm" id="ProductForm" action="/admin/products/edit/<%=ProductData._id %>" enctype="multipart/form-data">
 
 
 
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="name">Name</label>
                                         <input type="text" value="<%-ProductData.name%>" class="form-control" id="name" name="name">
@@ -46,7 +41,7 @@
                                 </div>
         
 
-                                <div class="col-md-6">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="price">Price</label>
                                         <input type="text" value="<%=ProductData.price%>"  class="form-control" id="price"
@@ -55,18 +50,7 @@
 
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="form-group ">
-                                <label for="description" class=" ml-3">Description</label>
-                                <textarea class="form-control w-75 ml-3" id="description" name="description"
-                                    ><%=ProductData.description  %></textarea>
-                                    <div id="descriptionWarning" class="text-danger"></div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="category">Category</label>
                                         <select class="select form-control" id="category" name="category" >
@@ -79,7 +63,8 @@
                                         
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="subCategory">Sub Category</label>
                                          <select class="select form-control" id="subCategory" name="subCategory" >
@@ -92,8 +77,7 @@
 
                                     </div>
                                 </div>
-
-                                <div class="col-md-4">
+                                  <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="brand">Brand</label>
                                         <select class="select form-control" id="brand" name="brand">
@@ -122,11 +106,25 @@
                                     </div>
                                 </div>
 
+                            </div>
+
+                           
+                            
+
+                            
+                            
+
+                            <div class="row">
+                               
+                                
+
+                              
+
                                 
                             </div>
 
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="discount">Discount</label>
                                         <input type="number" value="<%=ProductData.discount%>" class="form-control"
@@ -135,7 +133,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="status">Status</label>
                                         <select class="select form-control" id="status" name="status">
@@ -154,7 +152,7 @@
 
 
 
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="stockQuantity">Stock Quantity</label>
                                         <input type="number" value="<%=ProductData.stock  %>" class="form-control"
@@ -163,7 +161,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="color">Color</label>
                                         <select class="select form-control" id="color" name="color">
@@ -180,17 +178,23 @@
                                         <div id="colorWarning" class="text-danger"></div>
                                     </div>
                                 </div>
+                                    <div class="col-md-4"> <div class="form-group">
+                                        <label for="description">Description</label>
+                                        <textarea class="form-control" id="description" name="description"
+                                            ><%=ProductData.description  %></textarea>
+                                            <div id="descriptionWarning" class="text-danger"></div>
+        
+                                    </div></div>
+                                   
+                                
 
-                                <div class="row">
+                                <div class="row">   
 
-                                    
+                                    <div class="col-md-8  ">
 
-                                    <div class="col  ">
+                                        <div class="form-group ">
 
-                                        <div class="form-group gap-5    "
-                                            style="display: flex; flex-wrap: wrap;   width: 700px; margin-left:-10px">
-
-                                            <table class="table">
+                                            <table class="table table-responsive">
                                                 <thead>
                                                   <tr>
                                                     <th scope="col">Color</th>
@@ -216,6 +220,7 @@
                                                         </div>
                                                       </td>
                                                       <td>
+                                                        
                                                         <a href="javascript:void(0);"
                                            class="btn btn-danger btn-sm" onclick="confirmDelete('','/admin/products/delete-variant?id=<%= ProductData._id %>&color=<%=ProductData.variants[i].color %>','You will not be able to recover this variant!')">Delete</a>
                                                       </td>
@@ -228,22 +233,18 @@
 
 
                                         </div>
-                                        <div id="img1Warning" class="text-info" style="display: none;" ></div>
-                                        <p class="text-info">Previous images will be replaced when you add new ones</p>
-
-                                        <div class="form-group gap-5 d-flex justify-content-between" style="display: flex; justify-content: space-between; width: 710px; margin-left: -10px">
-                                            <input type="file" id="images" class="form-control" name="images" accept="image/*" multiple >
-                                            <input type="text" name="imageIndexes" placeholder="Image Positions (comma-separated)" >
-                                            <div id="imagesWarning" class="text-danger"></div>
-
-                                          </div>
+                                       
                                           
                                         
                                     </div>
-                                </div>
-                            </div>
 
-                            <button type="submit" class="btn btn-success mb-3" onclick="return validateForm()">Edit Product</button>
+                                    <div class="col-md-5">
+                                        <button style="width: 100%;" type="submit" class="btn btn-success mb-3" onclick="return validateForm()">Edit Product</button>
+
+                                    </div>
+                                </div>
+                
+
             
 
                     </form>
@@ -253,6 +254,8 @@
 
             </div>
         </div>
+</main>
+       
         <script src="/js/alertPopUp.js"></script>
 
 <script src="/js/productFormVaildation.js"></script>

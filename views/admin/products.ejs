@@ -1,157 +1,87 @@
 <%- include('../layout/adminHeader.ejs') %>
-  <%- include('../layout/adminSideBar.ejs') %>
+<%- include('../layout/adminSideBar.ejs') %>
 
-    <style>
-      .table tbody tr:hover {
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        transform: scale(1.0);
-        transition: 0.2s;
-      }
+<style>
+  .table tbody tr:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transform: scale(1.0);
+    transition: 0.2s;
+  }
 
-      .description-column {
-        max-width: 500px;
-        /* Adjust the maximum width as needed */
-        white-space: wrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-    </style>
+  .small-text {
+    max-width: 300px; /* Adjust the max-width as needed */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+  }
 
+  /* Custom styling for tooltip container */
+  .custom-tooltip {
+    max-width: 200px; /* Adjust the max-width as needed */
+    white-space: normal;
+  }
+</style>
 
-    <div class="container-fluid mt-4">
-
-      <div class="row d-flex justify-content-end  ">
-        <div class=" col-md-10 col-lg-10 ">
-
-
-          <div class="d-flex justify-content-between">
-            <h1 class="text-bg-info  rounded"
-            style="font-size: 30px; width: 230px; text-align: center;  font-family:Arial, Helvetica, sans-serif;">Product List</h1>
-
-            <form method="" action="/admin/Products/add">
-              <button class="btn btn-success mb-2 " data-toggle="modal" data-target="#addCategoryModal">Add
-                Products</button>
-            </form>
-
-          </div>
-          <div class="table-responsive">
-
-            <div class="overflow-auto p-3 bg-light" style="max-width: 1200px; max-height: 550px;">
-
-
-
-              <table class="table">
-                <tbody>
-                  <% ProductData.forEach((product,index)=> { %>
-
-              
-                    <tr class="table-info" style="display: flex;  width: 200px;">
-                      <th >#PRODUCT </th>
-                     
-                        <h1><td><%=index + 1 %></td></h1>
-                        <td >
-                          <div style="display: flex; justify-content: end; width: 985px;">
-                            <a  href="/admin/products/edit/<%=product._id %>" class="me-2 btn btn-outline-primary"
-                               type="button">Edit</a>
-                            <a href="javascript:void(0);" onclick="confirmDelete('<%=product._id%>','/admin/products/delete/','You will not be able to recover this product!')" class="btn btn-outline-danger "
-                              type="button">Delete</a>
-                          </div>
-                      
-                        </td>
-                   
-                    </tr>
-                    
-                  <tr>
-                    <th> Name</th>
-                    <td style="font-weight: bold;"><%=product.name%></td>
-                  
-                  </tr  >
-                  <tr>
-                    <th> Description</th>
-
-                    <td><%=product.description  %></td>
-                  
-                  </tr>
-                  <tr>
-                    <th> Price</th>
-
-                    <td><%=product.price  %></td>
-                  </tr>
-                  <tr>
-                    <th> Category</th>
-
-                    <td><%= product.category?.category %></td>
-                  
-                  </tr>
-                  <tr>
-                    <th>Sub Category</th>
-
-                    <td><%= product.category?.sub_Category %></td>
-                  
-                  </tr>
-                  <tr>
-                    <th> Brand</th>
-
-                    <td><%=product.brand%></td>
-                  
-                  </tr>
-                  <tr>
-                    <th> Discount</th>
-
-                    <td><%=product.discount  %></td>
-                  
-                  </tr>
-                  <tr>
-                    <th> Status</th>
-
-                    <td><%=product.status  %></td>
-                  
-                  </tr>
-                  <tr>
-                    <th> Stock</th>
-
-                    <td><%=product.stock  %></td>
-                  
-                  </tr>
-                  <table class="table">
-                    <thead class="bg-dark text-white">
-                      <tr>
-                        <th>Color</th>
-                        <th>Images</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <% for (let i = 0; i < product.variants.length; i++) { %>
-                        <tr>
-                          <td>
-                            <p><strong><%= product.variants[i].color %></strong></p>
-                          </td>
-                          <td>
-                            <% for (let j = 0; j < product.variants[i].images.length; j++) { %>
-                              <img style="margin-bottom: 5px;" width="100px" height="100px"
-                                src="/images/productImages/<%= product.variants[i].images[j] %>"
-                                alt="Product Image <%= j + 1 %>">
-                            <% } %>
-                          </td>
-                         
-                        </tr>
-                      <% } %>
-                    </tbody>
-                  </table>
-                  
-                  
-                
-                  <% }); %>
- 
-                </tbody>
-              </table>
-
-            </div>
-          </div>
+<title>Products</title>
+<main>
+  <div class="container-fluid mt-4">
+    <div class="row d-flex justify-content-end">
+      <div class="col-md-10 col-lg-10">
+        <div class="d-flex justify-content-between">
+          <h1 class="text-bg-info rounded" style="font-size: 30px; width: 230px; text-align: center; font-family: Arial, Helvetica, sans-serif;">Product List</h1>
+          <form method="" action="/admin/Products/add">
+            <button class="btn btn-success mb-2" data-toggle="modal" data-target="#addCategoryModal">Add Products</button>
+          </form>
         </div>
+        <div class="table-responsive">
+          <table class="table">
+            <thead class="table-dark">
+              <tr>
+                <th>#</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% ProductData.forEach((product, index) => { %>
+                <tr>
+                  <td><%= index + 1 %></td>
+                  <% if (product.variants.length > 0) { %>
+                    <td><img width="50px" height="50px" src="/images/productImages/<%= product.variants[0].images[0] %>" alt=""></td>
+                  <% } else { %>
+                    <td>No image</td>
+                  <% } %>
+                  <td>
+                    <span class="small-text" data-toggle="tooltip" data-placement="top" title="<%= product.name.substring(0,100 ,product.name.length / 2) %>" data-container="body" class="custom-tooltip"><%= product.name %></span>
+                  </td>
+                  <td>
+                    <span class="small-text" data-toggle="tooltip" data-placement="top" title="<%= product.description.substring(0,100, product.description.length / 2) %>" data-container="body" class="custom-tooltip"><%= product.description %></span>
+                  </td>
+                  <td>
+                    <a href="/admin/products/view/<%= product._id %>" class="btn btn-outline-info" type="button">View</a>
+                    <a href="/admin/products/edit/<%= product._id %>" class="btn btn-outline-primary" type="button">Edit</a>
+                    <a href="javascript:void(0);" onclick="confirmDelete('<%= product._id %>','/admin/products/delete/','You will not be able to recover this product!')" class="btn btn-outline-danger" type="button">Delete</a>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</main>
 
-        <script src="/js/alertPopUp.js"></script>
-        <%- include('../layout/adminFooter.ejs') %>
+<script src="/js/alertPopUp.js"></script>
+<%- include('../layout/adminFooter.ejs') %>
 
-
-      
+<script>
+  $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+</script>

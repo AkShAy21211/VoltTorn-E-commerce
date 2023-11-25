@@ -1,9 +1,11 @@
 const productModel = require("../models/productModel");
+const bannerModel = require("../models/bannerModel");
 
 const loadHome = async (req, res) => {
   try {
     const ProductData = await productModel.find({}).populate("category");
-    res.render("home", { ProductData });
+    const banner = await bannerModel.find({});
+    res.render("home", { ProductData,banner});
 
   } catch (error) {
     console.log(error.message);

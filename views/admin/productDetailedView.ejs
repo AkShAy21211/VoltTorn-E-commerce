@@ -1,0 +1,116 @@
+<%- include('../layout/adminHeader.ejs') %>
+
+    <style>
+      .table tbody tr:hover {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        transform: scale(1.0);
+        transition: 0.2s;
+      }
+
+      .description-column {
+        max-width: 500px;
+        /* Adjust the maximum width as needed */
+        white-space: wrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    </style>
+<title><%=ProductData.me  %></title>
+<aside>
+  <a href="/admin/products" style="color: rgb(45, 81, 172); position: absolute; left: 50px; top: 80px; font-size: 15px; font-weight: bold; " class="btn"> <-Back</a>
+</aside>
+<main>
+  <div class="container-fluid mt-4 border-primary">
+
+    <div class="row d-flex justify-content-center  ">
+      <div class="col-md-10 col-lg-11 col-xl-11">
+  
+  
+          <form method="" action="/admin/Products/add">
+          </form>
+  <table class="table">
+    <tbody>
+      <tr>
+      <th>Name</th>
+      <td ><%= ProductData.name %></td>
+      <th>Description</th>
+      <td><%= ProductData.description %></td>
+  
+      </tr>
+     
+    </tbody>
+  </table>
+  
+  
+            <table class="table">
+              <tbody>
+  
+                
+                
+                  <tr>
+                  
+  
+                  </tr>
+                  
+                  <tr>
+                    <th>Price</th>
+                    <td><%= ProductData.price %></td>
+                    <th>Category</th>
+                    <td><%= ProductData.category?.category %></td>
+                    <th>Sub Category</th>
+                    <td><%= ProductData.category?.sub_Category %></td>
+                  </tr>
+                
+               
+                  <tr>
+                    <th>Brand</th>
+                    <td><%= ProductData.brand %></td>
+                    <th>Discount</th>
+                    <td><%= ProductData.discount %></td>
+                    <th>Status</th>
+                    <td><%= ProductData.status %></td>
+                    <th>Stock</th>
+                    <td><%= ProductData.stock %></td>
+                  </tr>
+               
+                  <% for (let i = 0; i < ProductData.variants.length; i++) { %>
+  
+                  <tr>
+             
+                    <th>Color</th>
+                    <td>
+                      <p><%= ProductData.variants[i].color %></strong></p>
+                    </td>
+                    <th>Images</th>
+                    <td>
+                      <% for (let j = 0; j < ProductData.variants[i].images.length; j++) { %>
+                        <img style="margin-bottom: 5px;" width="100px" height="100px" src="/images/productImages/<%= ProductData.variants[i].images[j] %>" alt="Product Image <%= j + 1 %>">
+                      <% } %>
+                    </td>
+                  </tr>
+                   
+                      <tr>
+                        
+                       
+                      </tr>
+                    <% } %>
+                  </tbody>
+  
+          
+  
+              </tbody>
+            </table>
+  
+        
+      </div>
+    </div>
+  </div>
+  
+</main>
+
+
+        <script src="/js/alertPopUp.js"></script>
+        <%- include('../layout/adminFooter.ejs') %>
+
+
+      

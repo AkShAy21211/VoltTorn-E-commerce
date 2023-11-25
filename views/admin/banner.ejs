@@ -1,0 +1,69 @@
+<!-- views/banners.ejs -->
+
+<%- include('../layout/adminHeader.ejs') %>
+<title>Banners</title>
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-3">
+      <h2>Add Banner</h2>
+      <form action="/admin/banners/add" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="name">Banner Name</label>
+          <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="image">Banner Image</label>
+          <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+        </div>
+        <div class="form-group">
+          <label for="startDate">Start Date</label>
+          <input type="date" class="form-control" id="startDate" name="startDate" required>
+        </div>
+        <div class="form-group">
+          <label for="endDate">End Date</label>
+          <input type="date" class="form-control" id="endDate" name="endDate" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Banner</button>
+      </form>
+    </div>
+
+    <div class="col-md-9">
+        <h2>Banner List</h2>
+        <% if (banner.length > 0) { %>
+          <table class="table col-12">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% banner.forEach(banner => { %>
+                <tr>
+                  <td><%= banner.name %></td>
+                  <td>
+                    <img src="/images/bannerImages/<%= banner.image %>" alt="<%= banner.name %> Image" style="max-width: 100px; max-height: 100px;">
+                  </td>
+                  <td><%= banner.startDate.toDateString() %></td>
+                  <td><%= banner.endDate.toDateString() %></td>
+                  <td>
+                    <a href="/admin/banners/edit/<%= banner._id %>" class=" ">Edit</a>
+                    <a href="javascript:void(0);" class=" text-danger" onclick="confirmDelete('<%= banner._id %>','/admin/banners/delete/','You will not be able to recover this banner')">Delete</a>
+                </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } else { %>
+          <p>No banners available.</p>
+        <% } %>
+      </div>
+      
+  </div>
+</div>
+<script src="/js/alertPopUp.js"></script>
+
+<%- include('../layout/adminFooter.ejs') %>

@@ -1,171 +1,358 @@
-<%- include('../layout/adminHeader.ejs') %>
-<%- include('../layout/adminSideBar.ejs') %>
+<%- include('../layout/adminHeader.ejs') %> 
+
+<link rel="stylesheet" href="https://unpkg.com/cropperjs/dist/cropper.min.css">
+<script src="https://unpkg.com/cropperjs/dist/cropper.min.js"></script>
 
 <style>
-    .form-box {
-        width: 1550px;
-        padding-right: 200px;
-        margin-top: 30px;
-    }
+  .form-box {
+    width: 1550px;
+    margin-top: 30px;
+  }
+.cropper-container img {
+    backface-visibility: hidden;
+    height: 80%;
+    image-orientation: 0deg;
+    max-height: none!important;
+    min-width: 0!important;
+    width: 100%;
+}
 </style>
+<title>Add Product</title>
+<aside>
+  <a href="/admin/products" style="color: rgb(45, 81, 172); position: absolute; left: 50px; top: 80px; font-size: 15px; font-weight: bold; " class="btn"> <-Back</a>
+</aside>
+<main>
+  <div class="container form-box mt-5">
+  <div class="row d-flex justify-content-end">
+    <div class="col-md-10 col-lg-12 col-xl-12">
 
-<div class="container form-box mt-4 ">
-
-    <div class="row d-flex justify-content-end ">
-        <div class=" col-md-10 col-lg-11 ">
-
-            <div class="d-flex justify-content-between">
-                <h2>Add Product </h2>
+        <form
+          id="ProductForm"
+          name="ProductForm"
+          method="post"
+          action="/admin/products/add"
+          enctype="multipart/form-data"
+        >
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" name="name" />
+                <div id="nameWarning" class="text-danger"></div>
+              </div>
             </div>
 
-                <div class="overflow-auto p-3 bg-light" style="max-width: 1300px; max-height: 550px;">
+            <div class="col-md-2">
+              <div class="form-group">
+                <label for="price">Price</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="price"
+                  name="price"
+                />
+                <div id="priceWarning" class="text-danger"></div>
+              </div>
+            </div>
 
-                    <form id="ProductForm" name="ProductForm" method="post" action="/admin/products/add" enctype="multipart/form-data">
+            <div class="col-md-2">
+              <div class="form-group">
+                <label for="category">Category</label>
+                <select
+                  class="select form-control"
+                  id="category"
+                  name="category"
+                >
+                  <option value="">Select</option>
+                  <% category.forEach(categoryes => { %>
+                  <option value="<%= categoryes.category %>">
+                    <%= categoryes.category %>
+                  </option>
+                  <% }); %>
+                </select>
+                <div id="categoryWarning" class="text-danger"></div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label for="subCategory">Sub Category</label>
+                <select
+                  class="select form-control"
+                  id="subCategory"
+                  name="subCategory"
+                >
+                  <option value="">Select</option>
+                  <% category.forEach(categoryes => { %>
+                  <option value="<%= categoryes.sub_Category %>">
+                    <%= categoryes.sub_Category %>
+                  </option>
+                  <% }); %>
+                </select>
+                <div id="subCategoryWarning" class="text-danger"></div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label for="brand">Brand</label>
+                <select class="select form-control" id="brand" name="brand">
+                  <option value="">Select</option>
+                  <option value="Apple">Apple</option>
+                  <option value="Apple">Samsung</option>
+                  <option value="Apple">Oppo</option>
+                  <option value="Apple">Asus</option>
+                  <option value="Apple">Dell</option>
+                  <option value="Apple">Hp</option>
+                  <option value="Apple">Zebronics</option>
+                  <option value="Apple">Bolt fire</option>
+                  <option value="Apple">Boat</option>
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input type="text" class="form-control" id="name" name="name" >
-                                    <div id="nameWarning" class="text-danger"></div>
-                                </div>
-                            </div>
+                  <!-- Add more options here -->
+                </select>
+                <div id="brandWarning" class="text-danger"></div>
+              </div>
+            </div>
+          </div>
 
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="price">Price</label>
-                                    <input type="text" class="form-control" id="price" name="price" >
-                                    <div id="priceWarning" class="text-danger"></div>
-                                </div>
-                            </div>
-                        </div>
+         
 
-                        <div class="form-group">
-                            <label for="description" class="ml-3">Description</label>
-                            <textarea class="form-control w-75 ml-3" id="description" name="description" ></textarea>
-                            <div id="descriptionWarning" class="text-danger"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="category">Category</label>
-                                    <select class="select form-control" id="category" name="category" >
-                                        <option value="">Select</option>
-                                        <% category.forEach(categoryes => { %>
-                                            <option value="<%= categoryes.category %>"><%= categoryes.category %></option>
-                                        <% }); %>
-                                    </select>
-                                    <div id="categoryWarning" class="text-danger"></div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="subCategory">Sub Category</label>
-                                     <select class="select form-control" id="subCategory" name="subCategory" >
-                                        <option value="">Select</option>
-                                        <% category.forEach(categoryes => { %>
-                                            <option value="<%= categoryes.sub_Category %>"><%= categoryes.sub_Category %></option>
-                                        <% }); %>
-                                    </select>
-                                        <div id="subCategoryWarning" class="text-danger"></div>
-
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="brand">Brand</label>
-                                    <select class="select form-control" id="brand" name="brand">
-                                        <option value="">Select</option>
-                                        <option value="Apple">Apple</option>
-                                        <option value="Apple">Samsung</option>
-                                        <option value="Apple">Oppo</option>
-                                        <option value="Apple">Asus</option>
-                                        <option value="Apple">Dell</option>
-                                        <option value="Apple">Hp</option>
-                                        <option value="Apple">Zebronics</option>
-                                        <option value="Apple">Bolt fire</option>
-                                        <option value="Apple">Boat</option>
-
-
-                                        <!-- Add more options here -->
-                                    </select>
-                                    <div id="brandWarning" class="text-danger"></div>
-                                </div>
-                            </div>
-
-                            
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="discount">Discount</label>
-                                    <input type="number" class="form-control" id="discount" name="discount" >
-                                    <div id="discountWarning" class="text-danger"></div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="status">Status</label>
-                                    <select class="select form-control" id="status" name="status">
-                                        <option value="">Select</option>
-                                        <option value="true">true</option>
-                                        <option value="false">false</option>
-                                    </select>
-                                    <div id="statusWarning" class="text-danger"></div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="stockQuantity">Stock Quantity</label>
-                                    <input type="number" class="form-control" id="stockQuantity" name="stock" >
-                                    <div id="stockWarning" class="text-danger"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="color">Color</label>
-                                    <select class="select form-control" id="color" name="color">
-                                        <option value="">Select</option>
-                                        <option value="Red">Red</option>
-                                        <option value="Blue">Blue</option>
-                                        <option value="Black">Black</option>
-                                        <option value="Green">Green</option>
-                                        <option value="Yellow">Yellow</option>
-                                        <option value="Purple">Purple</option>
-                                        <option value="Orange">Orange</option>
-                                      </select>
-                            
-                                    <div id="colorWarning" class="text-danger"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col">
-                                <div id="img1Warning" class="text-danger"></div>
-
-                                <div class="form-group gap-5 d-flex justify-content-between" style=" display: flex; justify-content: space-between; width: 710px; margin-left:-10px">
-                                    <input type="file" id="images" class="form-control" name="images" accept="image/*" multiple required>
-                                    <div id="imagesWarning" class="text-danger"></div>
-
-                                </div>
-                                
-                                
-                            </div>
-                        </div>
-
-                        <button type="submit"  onclick="return validateForm()" class="btn btn-success">Add Product</button>
-                    </form>
-                </div>
+          <div class="row">
             
-        </div>
+
+            
+
+           
+            <div class="col-md-2">
+              <div class="form-group">
+                <label for="discount">Discount</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="discount"
+                  name="discount"
+                />
+                <div id="discountWarning" class="text-danger"></div>
+              </div>
+            </div>
+
+            <div class="col-md-2">
+              <div class="form-group">
+                <label for="status">Status</label>
+                <select class="select form-control" id="status" name="status">
+                  <option value="">Select</option>
+                  <option value="true">true</option>
+                  <option value="false">false</option>
+                </select>
+                <div id="statusWarning" class="text-danger"></div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label for="stockQuantity">Stock Quantity</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="stockQuantity"
+                  name="stock"
+                />
+                <div id="stockWarning" class="text-danger"></div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label for="color">Color</label>
+                <select class="select form-control" id="color" name="color">
+                  <option value="">Select</option>
+                  <option value="Red">Red</option>
+                  <option value="Blue">Blue</option>
+                  <option value="Black">Black</option>
+                  <option value="Green">Green</option>
+                  <option value="Yellow">Yellow</option>
+                  <option value="Purple">Purple</option>
+                  <option value="Orange">Orange</option>
+                </select>
+
+                <div id="colorWarning" class="text-danger"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="description" >Description</label>
+                <textarea
+                  class="form-control "
+                  id="description"
+                  name="description"
+                ></textarea>
+                <div id="descriptionWarning" class="text-danger"></div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="description">Images</label>
+
+
+              <div
+                class="form-group "
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                "
+              >
+                <input
+                  type="file"
+                  id="images"
+                  class="form-control"
+                  name="images"
+                  accept="image/*"
+                  multiple
+                  required
+                />
+              </div>
+              <div id="imagesWarning" class="text-danger"></div>
+
+            </div>
+            
+          </div>
+
+          <div class="row">
+            
+            <div class="col-md-6">
+              <div class="form-group">
+                <button
+                style="width: 100%;"
+                onclick="return validateForm()"
+                class="btn btn-success"
+            >
+                Add Product
+            </button>
+              </div>
+            </div>
+        
+          </div>
+        
+        </form>
     </div>
+  </div>
 </div>
-<script src="/js/productFormVaildation.js"></script>
+<div class="form-group">
+  <div class="image-cropper">
+    <div id="imagesWarning" class="text-danger"></div>
+  </div>
+
+  <div class="modal fade" id="imageCropModal" tabindex="-1" role="dialog" aria-labelledby="imageCropModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="imageCropModalLabel">Crop Image</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" style="width: 500px; height: 300px;">
+          <img src="" id="imageToCrop" class="large-image" alt="Cropped">
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="cropImageBtn">Crop Image</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- Add these lines to your HTML form -->
+
+<!-- The modal -->
+<script>
+  document.getElementById('images').addEventListener('change', function (e) {
+    const imageCropModal = new bootstrap.Modal(document.getElementById('imageCropModal'));
+    imageCropModal.show();
+
+    const input = e.target;
+    const files = input.files;
+
+    let currentImageIndex = 0; // Track the index of the current image being cropped
+    let cropper; // Store the Cropper instance
+
+    function initializeCropper(file) {
+      const imageToCrop = document.getElementById('imageToCrop');
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        imageToCrop.src = e.target.result;
+
+        // Initialize Cropper after the image is loaded
+        cropper = new Cropper(imageToCrop, {
+          aspectRatio: 1,
+          autoCropArea: 0,
+          guides: true,
+          dragCrop: true,
+          cropBoxResizable: true,
+          toggleDragModeOnDblclick: true,
+          minContainerWidth: 460,
+          minContainerHeight: 280,
+          minCanvasWidth: 400,
+          minCanvasHeight: 280,
+          minCropBoxWidth: 200,
+          minCropBoxHeight: 200,
+          data: {
+            width: 500,
+            height: 300,
+          },
+        });
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    function handleNextImage() {
+      // Get the cropped image data
+      const croppedDataUrl = cropper.getCroppedCanvas().toDataURL();
+
+      // Create a new image element for the cropped image
+      const croppedImageElement = document.createElement('img');
+      croppedImageElement.src = croppedDataUrl;
+      croppedImageElement.style.width=100+"px"
+      croppedImageElement.style.height=100+"px"
+      croppedImageElement.style.marginLeft=10+"px"
+      croppedImageElement.classList.add('cropped-image');
+
+      // Append the cropped image under the input field
+      document.getElementById('imagesWarning').appendChild(croppedImageElement);
+
+      // TODO: Upload the cropped image data to your server for the current image
+
+      // Reset Cropper for the next image
+      cropper.destroy();
+      cropper = null;
+
+      // Increment the image index
+      currentImageIndex++;
+
+      // If there are more images, initialize Cropper for the next one
+      if (currentImageIndex < files.length) {
+        initializeCropper(files[currentImageIndex]);
+      } else {
+        // No more images, close the modal
+        imageCropModal.hide();
+      }
+    }
+
+    // Start with the first image
+    initializeCropper(files[currentImageIndex]);
+
+    document.getElementById('cropImageBtn').addEventListener('click', function () {
+      handleNextImage();
+    });
+  });
+</script>
+
+
 <%- include('../layout/adminFooter.ejs') %>

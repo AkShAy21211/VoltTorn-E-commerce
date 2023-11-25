@@ -15,72 +15,76 @@
         color: white;
       }
     </style>
-
-
-    <div class="container-fluid mt-4">
-      <div class="row d-flex justify-content-end  ">
-        <div class=" col-md-10 col-lg-10 ">
-          <h1 class="text-bg-info  rounded"
-            style="font-size: 30px; width: 230px; text-align: center;  font-family:Arial, Helvetica, sans-serif;">Customer List</h1>
-          <div class="table-responsive">
-
-
-
+<title>Customers</title>
+<main>
+  <div class="container-fluid mt-4">
+    <div class="row d-flex justify-content-end  ">
+      <div class=" col-md-10 col-lg-10 ">
+        <h1 class="text-bg-info  rounded"
+          style="font-size: 30px; width: 230px; text-align: center;  font-family:Arial, Helvetica, sans-serif;">Customer List</h1>
+        <div class="table-responsive">
 
 
 
 
-            <div class="overflow-auto p-3 bg-light" style="max-width: 1500px; max-height: 600px;">
-                     
 
- <table class="table  ">
-              <thead class="table-dark">
-                <tr>
-                  <th> Name</th>
-                  <th>Email</th>
-                  <th>Mobile</th>
-                  <th>Image</th>
-                  <th>Status</th>
-                  <th style="text-align: center;">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% customers.forEach(customer=> { %>
-                  <tr>
-                    <td>
-                      <%= customer.first_name +' '+ customer.last_name%></td>
-            <td><%= customer.email %></td>
-            <td><%= customer.mobile %></td>
-            <td><img src="<%= customer.image %>" alt="Customer Image" width="50"></td>
-            <td style="font-weight:bold;"><%= customer.status %>
-                    </td>
-                    <td style="text-align: center; ">
-                      <a href="javascript:void(0);" class="btn btn-primary" style="background-color: rgb(37, 129, 195);"
-                      onclick="confirmBlockUnblock('<%= customer._id %>', '<%= customer.status.toString() %>')">
-                       <%= customer.status.toString() === 'true' ? "Block" : "Unblock" %>
-                   </a>
+
+
+          <div class="overflow-auto p-3 bg-light" style="max-width: 1500px; max-height: 600px;">
                    
+
+<table class="table  ">
+            <thead class="table-dark">
+              <tr>
+                <th> Name</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Image</th>
+                <th>Status</th>
+                <th style="text-align: center;">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% customers.forEach(customer=> { %>
+                <tr>
+                  <td>
+                    <%= customer.first_name +' '+ customer.last_name%></td>
+          <td><%= customer.email %></td>
+          <td><%= customer.mobile %></td>
+          <td><img src="<%= customer.image %>" alt="Customer Image" width="50"></td>
+          <td style="font-weight:bold;"><%= customer.status %>
+                  </td>
+                  <td style="text-align: center; ">
+                    <a href="javascript:void(0);" 
+   class="btn <%= customer.status.toString() === 'true' ? 'btn-outline-danger' : 'btn-outline-success' %>"
+   onclick="confirmBlockUnblock('<%= customer._id %>', '<%= customer.status.toString() %>')">
+   <%= customer.status.toString() === 'true' ? 'Block' : 'Unblock' %>
+</a>
+
+                 
+                   
+                   <a href="javascript:void(0);" class="btn btn-danger" onclick="confirmDelete('<%= customer._id %>','/admin/delete-user?id=','You will not be able to recover this user!')">Delete</a>
+                  </td>
+
+                </tr>
+                <% }); %>
+            </tbody>
+          </table>
+
                      
-                     <a href="javascript:void(0);" class="btn btn-danger" onclick="confirmDelete('<%= customer._id %>','/admin/delete-user?id=','You will not be able to recover this user!')">Delete</a>
-                    </td>
 
-                  </tr>
-                  <% }); %>
-              </tbody>
-            </table>
-
-                       
-
-            </div>
-
-
-           
           </div>
+
+
+         
         </div>
       </div>
     </div>
+  </div>
 
 
+</main>
+   
  <script src="/js/alertPopUp.js"></script>
 
     <%- include('../layout/adminFooter.ejs') %>

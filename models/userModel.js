@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
 
 
@@ -41,15 +42,9 @@ const userSchema = new mongoose.Schema({
         default:false
     },
     cart: [
-        {
-          product_id: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Product", // You can reference a User schema if you have one
-          },
-          quantity: {
-            type: Number,
-            default:0,
-          },
+         {
+          _id:ObjectId,          
+          product_id:[]
         },
       ],
       wishlist: [
@@ -69,8 +64,15 @@ const userSchema = new mongoose.Schema({
         type:Date,
         default:Date.now,
         
+    },
+    isDelete:{
+        type:Boolean,
+        default:false,
     }
 });
 
 
-module.exports = mongoose.model('User',userSchema);
+
+
+
+module.exports = mongoose.model('user',userSchema)
