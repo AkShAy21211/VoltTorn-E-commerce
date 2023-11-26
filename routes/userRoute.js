@@ -34,10 +34,11 @@ userRoute.get('/',auth.isUserBlocked,homeController.loadHome)
 userRoute.get('/home',auth.isUserBlocked,homeController.loadHome);
 
 //user single product detail route
-
 userRoute.get('/home/product/details/:id',auth.isUserBlocked,homeController.productDetail);
 
-//product color filter
+//product listts page route 
+
+userRoute.get('/home/products/:cat_name',auth.isUserBlocked,homeController.loaadProductListsByCategory)
 
 
 

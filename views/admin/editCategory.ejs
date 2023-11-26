@@ -11,23 +11,50 @@
         <div class="d-flex justify-content-between">
           <h2>Edit Category</h2>
         </div>
-        <form method="post" action="/admin/category/edit/<%=CategoryData._id %>" onsubmit="return validateCategoryForm()">
+        <form method="post" action="/admin/category/edit/<%=CategoryData._id %>" onsubmit="return validateCategoryForm()" enctype="multipart/form-data">
           <!-- Name input -->
+
+         
           <div class="form-outline mb-4">
             <label class="form-label" for="form4Example1">Category</label>
-            <input type="text" value="<%=CategoryData.category %>" id="form4Example1" name="name" class="form-control" />
+            
+            <select class="select form-control" id="name" name="name" required >
+              <%categorys.forEach(category=>{%>
+
+              <option value="<%=category.category%>"><%=category.category%></option>
+              <% })%>         
+
+            </select>   
             <div id="nameWarning" class="text-danger"></div>
           </div>
+
+
           <div class="form-outline mb-4">
             <label class="form-label" for="form4Example1">Sub Category</label>
-            <input type="text" value="<%=CategoryData.sub_Category %>" id="form4Example2" name="SubCategory" class="form-control" />
+
+            <select class="select form-control" id="SubCategory" name="SubCategory" required>
+              <%categorys.forEach(category=>{%>
+
+                <option value="<%=category.sub_Category%>"><%=category.sub_Category%></option>
+                <% })%>                  
+              </select>
             <div id="SubCategoryWarning" class="text-danger"></div>
           </div>
+
+
+            <label for="form4Example1">Previous Image</label>
+            <img width="100" height="100"  src="/images/categoryImages/<%=CategoryData.image %>" id="" name="previousImage" class="" />
+            <div id="SubCategoryWarning" class="text-danger"></div>
+          <div class="form-outline mb-4">
+              <label for="image">Image</label>
+              <input type="file" class="form-control" id="image" name="image" >
+              <div id="imageWarning" class="text-danger"></div>
+        </div>
   
           <!-- Message input -->
           <div class="form-outline mb-4">
             <label class="form-label" for="form4Example3">Description</label>
-            <textarea class="form-control" name="description" id="form4Example3" rows="4"><%=CategoryData.description %></textarea>
+            <textarea class="form-control" name="description" id="form4Example5" rows="4"><%=CategoryData.description %></textarea>
             <div id="descriptionWarning" class="text-danger"></div>
           </div>
   

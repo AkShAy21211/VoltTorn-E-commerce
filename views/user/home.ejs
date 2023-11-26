@@ -26,7 +26,10 @@
     min-height: 350px;
     min-height: 450px; /* Minimum height for visibility */
 }
-
+.zoom-out-effect:hover {
+    transform: scale(0.9); /* Adjust the scale value to control the zoom-out effect */
+    transition: transform 2s ease; /* Add a smooth transition effect */
+  }
 
 
 </style>
@@ -41,11 +44,11 @@
 <title>VoltTron an online electronics shoping site</title>
 <main >
 
-  <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
+  <div id="carouselExampleFade" class="carousel slide  shadow carousel-fade" data-ride="carousel">
     <div class="carousel-inner">
       <% banner.forEach((banner, index) => { %>
         <div class="<%= index === 0 ? 'carousel-item active' : 'carousel-item' %>">
-          <img height="400" data-ride="3000" data-slide="carsoul" class="d-block w-100" src="/images/bannerImages/<%= banner.image %>" alt="Banner <%= index + 1 %>">
+          <img height="400" style="-webkit-user-drag: none;" data-ride="3000" data-slide="carsoul" class="d-block w-100" src="/images/bannerImages/<%= banner.image %>" alt="Banner <%= index + 1 %>">
         </div>
       <% }); %>
     </div>
@@ -58,78 +61,43 @@
       <span class="sr-only">Next</span>
     </a>
   </div>
-  
 
-
-
-
-
-    <div class="container ">
-      <div class="row">
-        <h3 class="p-3">Top Products</h3>
-        <% ProductData.forEach(product => { %>
-        <div class="col-md-6 col-lg-3 mb-lg mb-md-6 mb-sm-4 md-xs-3 col-12 mt-3">
-          <!-- Use col-lg-3 to include four cards in one row -->
-          <a href="/home/product/details/<%=product._id%>" class="text-decoration-none text-dark" >
-          <div class="card h-100 border shadow rounded">
-            <% for (let i = 0; i <= 0; i++) { %>
-            <img
-              style="margin-bottom: 5px"
-              width="100px"
-              height="300px"
-              class="card-img-top"
-              src="/images/productImages/<%= product.variants[0].images[0] %>"
-              alt="Product Image <%= i + 1 %>"
-            />
-            <% } %>
-            <div class="card-body">
-              <h5 class="card-title"><%= product.name %></h5>
-              <p class="card-text">
-                Price: <b>Rs:<%= Number(product.price - (product.price * (product.discount/100))).toLocaleString() %></b>
-              </p>
-              <p class="card-text text-success"> %<%= product.discount %> off</p>
-            </div>
-          </a>
-            <div class="card-footer">
-              <div class="d-flex justify-content-between">
-                <p class="fw-bold">
-                  <a href="#!" class="text-muted">
-                    <%-product.category.category %>
-                  </a>
-                </p>
-                <p class="small text-danger"><s>Rs<%= product.price %></s></p>
-              </div>
-              <div class="d-flex justify-content-between mb-2">
-                <% if(product.stock !== 0) { %>
-                <p class="text-muted mb-0">
-                  Availablity: <span class="fw-bold text-success">In Stock</span>
-                </p>
-                <% } else { %>
-                <p class="text-muted mb-0">
-                  Available: <span class="fw-bold text-danger">Out Of Stock</span>
-                </p>
-                <% } %>
-               
-              </div>
-            </div>
+  <div class="container text-center">
+    <div class="row">
+      <h3 class="mt-5 fs-5 text-start">Top Categories</h3>
+      <% category.forEach(category => { %>
+        <div class="col-md-5 col-lg-4 col-xl-3 col-xxl-3 mb-lg mb-md-6 col-sm-6 col-12  ">
+          <div style="border-radius: 5%; background-color: #18ACFE; width: 100%; min-width: 250px; height: 250px;" class="zoom-out-effect card border shadow p-2  mt-sm-5  mt-md-5 mt-lg-3 mt-xl-0 mt-xxl-0 mt-4">
+            <a style="-webkit-user-drag: none;" href="/home/products/<%=category.category%>"> <!-- Add your actual link in the href attribute -->
+              <% for (let i = 0; i <= 0; i++) { %>
+                <img
+                  style="margin-bottom: 5px;
+                  -webkit-user-drag: none;"
+                  class="card-img-top"
+                  src="/images/categoryImages/<%= category.image%>"
+                  alt="Product Image <%= i + 1 %>"
+                />
+              <% } %>
+            </a>
+            <p style="font-weight: bold; margin-top: 5px;"><%= category.category %></p>
           </div>
-       
         </div>
-        <% }); %>
-      </div>
+      <% }); %>
     </div>
+  </div>
+  
+  
   </section>
   <section id="featured-brand" class="mb-5"> <!-- Add margin-bottom here -->
     <div class="container-fluid mt-5 mb-5">
       <div class="row">
         <h1 class="col-12 text-center" style="font-size: 30px;">Featured Brands</h1>
         <div class="col-sm-12 col-md-12 col-lg-12 d-flex flex-wrap justify-content-evenly mt-5">
-  
-          <img class="mb-3" style="width: 40px; height: 40px;" src="/images/apple.png" alt="">
-          <img class="mb-3" style="width: 40px; height: 40px;" src="/images/hp.png" alt="">
-          <img class="mb-3" style="width: 40px; height: 40px;" src="/images/dell.png" alt="">
-          <img class="mb-3" style="width: 80px; height: 30px; margin-top: 10px;" src="/images/lenovo.png" alt="">
-          <img class="mb-3" style="width: 100px; height: 30px; margin-top: 10px;" src="/images/samsung.png" alt="">
+          <img class="mb-3" style="width: 40px; height: 40px; -webkit-user-drag: none; " src="/images/apple.png" alt="">
+          <img class="mb-3" style="width: 40px; height: 40px; -webkit-user-drag: none; " src="/images/hp.png" alt="">
+          <img class="mb-3" style="width: 40px; height: 40px; -webkit-user-drag: none; " src="/images/dell.png" alt="">
+          <img class="mb-3" style="width: 80px; height: 30px; margin-top: 10px; -webkit-user-drag: none; " src="/images/lenovo.png" alt="">
+          <img class="mb-3" style="width: 100px; height: 30px; margin-top: 10px; -webkit-user-drag: none; " src="/images/samsung.png" alt="">
         </div>
       </div>
     </div>

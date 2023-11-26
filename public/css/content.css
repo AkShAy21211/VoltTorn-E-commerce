@@ -10,10 +10,11 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    
   }
 
   main {
-    margin-top: 25px;
+    margin-top: 0px;
     flex: 1;
     min-height: calc(200vh - 400px); /* Adjust the value as needed */
   }

@@ -5,19 +5,19 @@
     justify-content: center;
     background-color: #333;
     text-align: center;
-    position: static;
+    position: sticky;
     top: 0;
     left: 0;
     right: 0;
     width: 100%;
+    z-index: 1000; /* Set a z-index to ensure the header stays on top of other elements */
 
 }
 
 .header{
     background-color: white;
-    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.371);
     position: absolute;
     top: 0;
-   
+    position: static;
 
 }

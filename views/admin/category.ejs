@@ -116,15 +116,16 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="/admin/category/add" onsubmit="return validateCategoryForm()">
+                    <form method="POST" action="/admin/category/add" onsubmit="return validateCategoryForm()" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="name">Category Name</label>
                             <select class="select form-control" id="name" name="name" required >
                                 <option value="">Select</option>
-                                <option value="Apple">Laptops</option>
-                                <option value="Apple">Mobiles</option>
-                                <option value="Apple">Headphones</option>
-                                <option value="Apple">SmartWatches</option>
+                                <option value="Laptops">Laptops</option>
+                                <option value="Mobiles">Mobiles</option>
+                                <option value="Headphones">Headphones</option>
+                                <option value="SmartWatches">SmartWatches</option>
+                                <option value="Cameras">Cameras</option>
                         
 
                                 <!-- Add more options here -->
@@ -135,17 +136,24 @@
                             <label for="SubCategory">Sub-Category Name</label>
                             <select class="select form-control" id="SubCategory" name="SubCategory" required>
                                 <option value="">Select</option>
-                                <option value="Apple">Gaming</option>
-                                <option value="Apple">Ultrabooks</option>
-                                <option value="Apple">Fitness Trackers  </option>
-                                <option value="Apple">Fashionable Smartwatches</option>
-                                <option value="Apple">Flagship Phones</option>
-                                <option value="Apple">Budget-friendly Phones</option>
-                                <option value="Apple">Over-Ear Headphones </option>
-                                <option value="Apple">True Wireless Earbuds</option>
+                                <option value="Gaming">Gaming</option>
+                                <option value="Ultrabooks">Ultrabooks</option>
+                                <option value="Fitness Trackers">Fitness Trackers  </option>
+                                <option value="Fashionable Smartwatches">Fashionable Smartwatches</option>
+                                <option value="Flagship Phones">Flagship Phones</option>
+                                <option value="Budget-friendly Phones">Budget-friendly Phones</option>
+                                <option value="Over-Ear Headphones ">Over-Ear Headphones </option>
+                                <option value="True Wireless Earbuds">True Wireless Earbuds</option>
+                                <option value="DSLR Cameras">DSLR Cameras</option>
+
 
                                 </select>
                             <div id="SubCategoryWarning" class="text-danger"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="image">Image</label>
+                            <input type="file" class="form-control" id="image" name="image" >
+                            <div id="imageWarning" class="text-danger"></div>
                         </div>
                         <div class="form-group">
                             <label for="description">Description</label>

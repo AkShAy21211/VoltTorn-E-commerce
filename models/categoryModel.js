@@ -8,6 +8,10 @@ const categorySchema = new mongooose.Schema({
         required:true,
     },
     sub_Category:{
+        type:[String],
+        required:true,
+    },
+    image:{
         type:String,
         required:true,
     },

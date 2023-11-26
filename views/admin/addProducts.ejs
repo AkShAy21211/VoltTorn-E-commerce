@@ -97,14 +97,14 @@
                 <select class="select form-control" id="brand" name="brand">
                   <option value="">Select</option>
                   <option value="Apple">Apple</option>
-                  <option value="Apple">Samsung</option>
-                  <option value="Apple">Oppo</option>
-                  <option value="Apple">Asus</option>
-                  <option value="Apple">Dell</option>
-                  <option value="Apple">Hp</option>
-                  <option value="Apple">Zebronics</option>
-                  <option value="Apple">Bolt fire</option>
-                  <option value="Apple">Boat</option>
+                  <option value="Samsung">Samsung</option>
+                  <option value="Oppo">Oppo</option>
+                  <option value="Asus">Asus</option>
+                  <option value="Dell">Dell</option>
+                  <option value="Hp">Hp</option>
+                  <option value="Zebronics">Zebronics</option>
+                  <option value="fire-Boltt ">fire-Boltt </option>
+                  <option value="Boat">Boat</option>
 
                   <!-- Add more options here -->
                 </select>
@@ -169,6 +169,8 @@
                   <option value="Yellow">Yellow</option>
                   <option value="Purple">Purple</option>
                   <option value="Orange">Orange</option>
+                  <option value="Pink">Pink</option>
+
                 </select>
 
                 <div id="colorWarning" class="text-danger"></div>
@@ -211,6 +213,8 @@
                   multiple
                   required
                 />
+                <input type="hidden" id="croppedImageData" name="croppedImageData" />
+
               </div>
               <div id="imagesWarning" class="text-danger"></div>
 
@@ -290,12 +294,16 @@
 
         // Initialize Cropper after the image is loaded
         cropper = new Cropper(imageToCrop, {
+          autoCropArea: 1,
+          viewMode: 1,
+          scalable: true,
+          movable: true,
           aspectRatio: 1,
-          autoCropArea: 0,
           guides: true,
+          modal: true,
+          background: true,
           dragCrop: true,
           cropBoxResizable: true,
-          toggleDragModeOnDblclick: true,
           minContainerWidth: 460,
           minContainerHeight: 280,
           minCanvasWidth: 400,
@@ -313,37 +321,27 @@
     }
 
     function handleNextImage() {
-      // Get the cropped image data
-      const croppedDataUrl = cropper.getCroppedCanvas().toDataURL();
+  // Get the cropped image data
+  const croppedDataUrl = cropper.getCroppedCanvas().toDataURL();
 
-      // Create a new image element for the cropped image
-      const croppedImageElement = document.createElement('img');
-      croppedImageElement.src = croppedDataUrl;
-      croppedImageElement.style.width=100+"px"
-      croppedImageElement.style.height=100+"px"
-      croppedImageElement.style.marginLeft=10+"px"
-      croppedImageElement.classList.add('cropped-image');
+  // Set the cropped image data to the hidden input field
+  document.getElementById('croppedImageData').value = croppedDataUrl;
 
-      // Append the cropped image under the input field
-      document.getElementById('imagesWarning').appendChild(croppedImageElement);
+  // Increment the image index
+  currentImageIndex++;
 
-      // TODO: Upload the cropped image data to your server for the current image
+  // Reset Cropper for the next image
+  cropper.destroy();
+  cropper = null;
 
-      // Reset Cropper for the next image
-      cropper.destroy();
-      cropper = null;
-
-      // Increment the image index
-      currentImageIndex++;
-
-      // If there are more images, initialize Cropper for the next one
-      if (currentImageIndex < files.length) {
-        initializeCropper(files[currentImageIndex]);
-      } else {
-        // No more images, close the modal
-        imageCropModal.hide();
-      }
-    }
+  // If there are more images, initialize Cropper for the next one
+  if (currentImageIndex < files.length) {
+    initializeCropper(files[currentImageIndex]);
+  } else {
+    // No more images, close the modal
+    imageCropModal.hide();
+  }
+}
 
     // Start with the first image
     initializeCropper(files[currentImageIndex]);
@@ -352,7 +350,8 @@
       handleNextImage();
     });
   });
-</script>
 
+
+</script>
 
 <%- include('../layout/adminFooter.ejs') %>

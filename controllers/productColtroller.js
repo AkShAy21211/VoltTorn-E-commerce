@@ -1,5 +1,6 @@
 const categoryModel = require("../models/categoryModel");
 const productModel = require("../models/productModel");
+const fs = require('fs'); // for file system operations
 
 const loadProduct = async (req, res) => {
   try {
@@ -41,9 +42,8 @@ const addProduct = async (req, res) => {
     const category = req.body.category;
     const categoryData = await categoryModel.findOne({ category: category });
     const images = req.files.map(file => file.filename);
-
     let ProductData = await productModel.findOne({ name });
-
+   
     if (!ProductData) {
       console.log(images);
       ProductData = new productModel({
@@ -51,7 +51,7 @@ const addProduct = async (req, res) => {
         variants: [{ color: color, images }],
         description: description,
         price: parseFloat(price),
-        category: categoryData._id,
+        category: categoryData.category,
         brand: brand,
         discount: parseInt(discount),
         status: status,
@@ -100,7 +100,6 @@ const editProduct = async (req, res) => {
     const category = req.body.category;
 
     // Convert comma-separated imageIndexes string to an array of positions
-    const imagePositionsArray = imageIndexes.split(',').map(position => parseInt(position.trim()));
 
     let categoryData;
 
@@ -124,23 +123,7 @@ const editProduct = async (req, res) => {
 
     if (variantToUpdate) {
       // Update the specified images within the images array for the variant
-      imagePositionsArray.forEach(position => {
-        // Adjust position to zero-based index
-        const index = position - 1;
-
-        if (variantToUpdate.images && index >= 0) {
-          // If req.files[index] exists and has a filename, update the image
-          if (req.files && req.files[index] && req.files[index].filename) {
-            // If the index is within the current length, update the image
-            if (index < variantToUpdate.images.length) {
-              variantToUpdate.images[index] = req.files[index].filename;
-            } else {
-              // If the index is beyond the current length, push the new image
-              variantToUpdate.images.push(req.files[index].filename);
-            }
-          }
-        }
-      });
+     
     }
 
     const productUpdatedData = {
@@ -152,6 +135,7 @@ const editProduct = async (req, res) => {
       status: status,
       stock: parseInt(stock),
     };
+    
 
     // Update the product document
     const productUpdated = await productModel.findOneAndUpdate(

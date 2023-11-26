@@ -32,49 +32,39 @@
 
 <body>
 
-  <header class="p-4  header-outer">
+  <header class="p-0 shadow  header-outer">
     <div class="container-fluid header  ">
-      <div class="d-flex flex-wrap p-3 align-items-center justify-content-center justify-content-lg-start">
+      <div class="d-flex flex-wrap p-2 align-items-center justify-content-center justify-content-lg-start">
         <a class="navbar-brand" href="#">
           <!-- <img src="/images/logo.png" style="margin-top: 15px;" alt="..." height="50" width="50px"> -->
         </a>
         </img>
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="/home" class="nav-link px-2 ">Home</a></li>
+          <li><a href="/home" style="color: #0d6efd; font-size: 20px;" class="nav-link px-2 ">𝐕𝐨𝐥𝐭𝐓𝐫𝐨𝐧</a></li>
 
 
-          <li>
-            <div class="dropdown">
-              <button class="btn dropdown-toggle " type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Category
-              </button>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Mobiles</a></li>
-                <li><a class="dropdown-item" href="#">Laptops</a></li>
-                <li><a class="dropdown-item" href="#">HeadSets</a></li>
-                <li><a class="dropdown-item" href="#">SmartWatch</a></li>
-                <li><a class="dropdown-item" href="#">All</a></li>
-
-
-              </ul>
-            </div>
-          </li>
+         
         </ul>
 
         <!-- Example split primary button -->
 
 
-        <form class="col-5 col-lg-4 mb-3 mb-lg-0 me-lg-3 f" role="search">
-          <div class="d-flex gap-2  "><input type="search" name="search" class="form-control w-100"
-              placeholder="Search..." aria-label="Search">
-            <input class="btn btn-primary " type="submit" value="Search" name="" id="">
+        <form class="col-5 col-lg-4 mb-3 mb-lg-0 me-lg-0" role="search">
+          <div class="input-group">
+            <input type="search" style="border: 1px  solid black; " name="search" class="form-control" placeholder="Search..." aria-label="Search">
+            <button class="btn btn-outline-primary" type="submit">
+              <i class="bi bi-search"></i> <!-- Bootstrap Icon -->
+              
+            </button>
           </div>
-
         </form>
-        <div class="text-end">
-          <a class="text-black" href="/home/cart"><i class="bi bi-bag"></i></a>
+        
+        <div class="col-3 col-lg-3 mb-3 mb-lg-0 " role="search">
 
+        <div class="text-end">
+          <a class="text-black" href="/home/cart"><i style="font-size: 20px;" class="bi bi-bag"></i></a>
+        </div>
         </div>
         <div class="text-end ml-2">
           <button class="btn dropdown-toggle " type="button" data-bs-toggle="dropdown" aria-expanded="false">

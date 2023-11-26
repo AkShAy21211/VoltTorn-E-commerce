@@ -30,9 +30,21 @@ const bannerImageStorage = multer.diskStorage({
   },
 });
 
+const categoryImageStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "../public/images/categoryImages"));
+  },
+  filename: function (req, file, cb) {
+    const name = Date.now() + "-" + file.originalname;
+    cb(null, name);
+  },
+});
+
+
 // Set up multer instances with the corresponding storage
 const uploadProductImage = multer({ storage: productImageStorage })
 const uploadBannerImage = multer({ storage: bannerImageStorage })
+const uploadCategoryImage = multer({storage:categoryImageStorage})
 
 const userModel = require("../models/userModel");
 
@@ -62,9 +74,9 @@ adminRoute.get("/block-unblock-user",adminAuth.is_Login, customerController.bloc
 
 //ADMIN CATEGORY ROUTE
 adminRoute.get("/category",adminAuth.is_Login, categoryController.loadCategory);
-adminRoute.post("/category/add", categoryController.addNewCategory); //ADMIN ADD CATEGORY ROUTE
+adminRoute.post("/category/add",uploadCategoryImage.single('image'), categoryController.addNewCategory); //ADMIN ADD CATEGORY ROUTE
 adminRoute.get("/category/edit/:id",adminAuth.is_Login, categoryController.editCategoryLoad);
-adminRoute.post("/category/edit/:id", categoryController.editCategory); //ADMIN EDIT CATEGORY ROUTE
+adminRoute.post("/category/edit/:id",uploadCategoryImage.single('image'), categoryController.editCategory); //ADMIN EDIT CATEGORY ROUTE
 adminRoute.get("/category/delete/:id", adminAuth.is_Login,categoryController.deleteCategory); //ADMIN DELETE CATEGORY ROUTE
 
 //ADMIN PRODUCT ROUTE
