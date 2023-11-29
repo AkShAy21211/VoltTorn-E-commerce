@@ -44,11 +44,12 @@
 <title>VoltTron an online electronics shoping site</title>
 <main >
 
-  <div id="carouselExampleFade" class="carousel slide  shadow carousel-fade" data-ride="carousel">
+  <div id="carouselExampleFade" class="carousel slide border  carousel-fade" data-ride="carousel">
     <div class="carousel-inner">
+
       <% banner.forEach((banner, index) => { %>
         <div class="<%= index === 0 ? 'carousel-item active' : 'carousel-item' %>">
-          <img height="400" style="-webkit-user-drag: none;" data-ride="3000" data-slide="carsoul" class="d-block w-100" src="/images/bannerImages/<%= banner.image %>" alt="Banner <%= index + 1 %>">
+          <img height="450" style="-webkit-user-drag: none;" data-ride="1000" data-slide="carsoul" class="d-block w-100" src="/images/bannerImages/<%= banner.image %>" alt="Banner <%= index + 1 %>">
         </div>
       <% }); %>
     </div>
@@ -72,7 +73,8 @@
               <% for (let i = 0; i <= 0; i++) { %>
                 <img
                   style="margin-bottom: 5px;
-                  -webkit-user-drag: none;"
+                  -webkit-user-drag: none;
+                "
                   class="card-img-top"
                   src="/images/categoryImages/<%= category.image%>"
                   alt="Product Image <%= i + 1 %>"

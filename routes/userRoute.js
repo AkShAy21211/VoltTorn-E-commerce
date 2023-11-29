@@ -49,9 +49,12 @@ userRoute.get('/home/products/:cat_name',auth.isUserBlocked,homeController.loaad
 userRoute.get('/home/settings',auth.isUserBlocked,userController.loadUserSettingPage)
 userRoute.get('/home/product/details/:id/filter/:color',auth.isUserBlocked,homeController.productDetail)
 
-
 //USER shoppingCart
-userRoute.get('/home/cart',auth.isUserBlocked,userCartController.userShoppingCartPageLoad)
+userRoute.get('/home/cart',auth.isUserBlocked,userCartController.userShoppingCartPageLoad);
+userRoute.post('/home/products/cart/:product_id',auth.isUserBlocked,auth.is_Login,userCartController.userAddToCartButton);
+userRoute.patch('/home/products/cart/updateQuantity/:product_id/:product',auth.isUserBlocked,userCartController.updateQuantity)
+
+
 
 userRoute.get('/logout',auth.is_Login,userController.userLogout)
 

@@ -22,112 +22,102 @@
         color: #dc4c64 !important;
     }
 </style>
-<main class="">
 
-   <%# <section class="bg-light my-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-9">
-                    <div class="card border shadow-0">
-                        <div class="m-4">
-                            <h4 class="card-title mb-4">Your shopping cart</h4>
-                                    <div class="row gy-3 mb-4">
-                                        <div class="col-lg-5">
-                                            <div class="me-lg-5">
-                                                <div class="d-flex">
-                                                    <img src="" class="border rounded me-3"
-                                                        style="width: 96px; height: 96px;" />
-                                                    <div class="">
-                                                        <a href="#" class="nav-link"></a>
-                                                        <p class="text-muted"></p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div
-                                            class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
-                                            <div class="">
-                                                <select style="width: 100px;" class="form-select me-4">
-                                                    <option>1</option>
-                                                    <option>2</option>
-                                                    <option>3</option>
-                                                    <option>4</option>
-                                                </select>
-                                            </div>
-                                            <div class="">
-                                                <text class="h6">1000</text> <br />
-                                                <small class="text-muted text-nowrap"> 100 / per item </small>
-                                            </div>
-                                        </div>
-                                        <div
-                                            class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
-                                            <div class="float-md-end">
-                                                <a href="#!" class="btn btn-light border px-2 icon-hover-primary"><i
-                                                        class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-                                                <a href="#" class="btn btn-light border text-danger icon-hover-danger"> Remove</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                        </div>
+<main class="pb-5">
+    <div class="container">
+      <div class="row w-100">
+        <%if(userCart && userCart.cart !== "undefined") {%>
 
-                        <div class="border-top pt-4 mx-4 mb-4">
-                            <p><i class="fas fa-truck text-muted fa-lg"></i> Free Delivery within 1-2 weeks</p>
-                            <p class="text-muted">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                                laboris nisi ut aliquip
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <!-- cart -->
-                <!-- summary -->
-                <div class="col-lg-3">
-                    <div class="card mb-3 border shadow-0">
-                        <div class="card-body">
-                            <form>
-                                <div class="form-group">
-                                    <label class="form-label">Have coupon?</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control border" name="" placeholder="Coupon code" />
-                                        <button class="btn btn-light border">Apply</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="card shadow-0 border">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <p class="mb-2">Total price:</p>
-                                <p class="mb-2">$329.00</p>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <p class="mb-2">Discount:</p>
-                                <p class="mb-2 text-success">-$60.00</p>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <p class="mb-2">TAX:</p>
-                                <p class="mb-2">$14.00</p>
-                            </div>
-                            <hr />
-                            <div class="d-flex justify-content-between">
-                                <p class="mb-2">Total price:</p>
-                                <p class="mb-2 fw-bold">$283.00</p>
-                            </div>
+          <div class="col-lg-12 col-md-12 col-12">
+              <h3 class="display-5 mb-2 text-center">Shopping Cart</h3>
+              <p class="mb-5 text-center">
+                  <i class="text-info font-weight-bold">3</i> items in your cart</p>
 
-                            <div class="mt-3">
-                                <a href="#" class="btn btn-success w-100 shadow-0 mb-2"> Make Purchase </a>
-                                <a href="#" class="btn btn-light w-100 border mt-2"> Back to shop </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-             
+              <table id="shoppingCart" class="table table-condensed table-responsive">
+                  <thead>
+                      <tr>
+                          <th style="width:60%">Product</th>
+                          <th style="width:12%">Price</th>
+                          <th style="width:10%">Quantity</th>
+                          <th style="width:16%"></th>
+                      </tr>
+                  </thead>
+                  <tbody>
+
+                    <%userCart.cart.forEach(cart=>{%>
+
+                      <tr>
+                          <td data-th="Product">
+                              <div class="row">
+                                  <div class="col-md-3 text-left">
+                                      <img src="/images/productImages/<%=cart.image %>" alt=""   class="img-fluid d-none d-md-block rounded mb-2 shadow ">
+                                  </div>
+                                  <div class="col-md-9 text-left mt-sm-2">
+                                      <h4> <%=cart.product_id.name%> </h4>
+                                      <p class="font-weight-light">Brand: <b><%=cart.product_id.brand  %></b></p>
+                                  </div>
+                              </div>
+                          </td>
+                          <td data-th="Price">$49.00</td>
+                          <td data-th="Quantity">
+                            <input type="number" data-product-id="<%= userCart._id %>" data-product="<%= cart.product_id._id %>" class="form-control form-control-lg text-center quantity-input" value="<%= cart.quantity %>">
+                        </td>
+                          <td class="actions" data-th="">
+                              <div class="text-right">
+                                  <button class="btn btn-white border-secondary bg-white btn-md mb-2">
+                                      <i class="fas fa-sync"></i>
+                                  </button>
+                                  <button class="btn btn-white border-secondary bg-white btn-md mb-2">
+                                      <i class="fas fa-trash"></i>
+                                  </button>
+                              </div>
+                          </td>
+                      </tr>
+                    </tbody>
+
+                <% })  %>
+            </table>
+
+            <div class="float-right text-right">
+                <h4>Subtotal:</h4>
+                <h1>$99.00</h1>
             </div>
+
+               <%}else{%>
+                <div class="col-lg-12 col-md-12 col-12">
+                    <h3 class="display-5 mb-2 text-center">Your Shopping Cart is empty</h3>
+                    <p class="mb-5 text-center">
+                        <i class="text-info font-weight-bold">0</i> items in your cart</p>
+   
+      
+                </div>
+                <div class="col-sm-6 mb-3 mb-m-1 order-md-1 ">
+                    <a href="catalog.html">
+                        <i class="fas fa-arrow-left mr-2"></i> Continue Shopping</a>
+                </div>
+
+               <%}%>
+
+
+          </div>
+      </div>
+      <div class="row mt-4 d-flex align-items-center">
+        <%if(userCart && userCart.cart !== "undefined") {%>
+
+          <div class="col-sm-6 order-md-2 text-right">
+              <a href="catalog.html" class="btn btn-primary mb-4 btn-lg pl-5 pr-5">Checkout</a>
+          </div>
+
+          <div class="col-sm-6 mb-3 mb-m-1 order-md-1 text-md-left">
+            <a href="catalog.html">
+                <i class="fas fa-arrow-left mr-2 text-center"></i> Continue Shopping</a>
         </div>
-    </section>%>
 
+          <%}%>
+         
+      </div>
+  </div>
 </main>
-
+<script src="/js/addTOcart.js"></script>
+ 
 <%- include('../layout/footer.ejs') %>

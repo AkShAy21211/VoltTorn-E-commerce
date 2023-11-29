@@ -34,7 +34,7 @@
         }
    
     </style>
-
+<div id="add-to-cart"></div>
     <main>
 
 
@@ -163,7 +163,11 @@
                                           </div>
                                         </div>
                                     </a>
-                                        <button class="btn btn-outline-primary cartButtton" >Add to cart</button>
+                               
+                                    
+                                    
+                                    <button class="addToCartButton btn btn-outline-primary" data-product-id="<%= product._id %>">Add to Cart</button>
+
                                       </div>
                                    
                                     <div class="card-footer">
@@ -211,5 +215,17 @@
     </nav>
 
 
+    <div id="cart-toast" class="toast " role="alert"  aria-live="assertive" aria-atomic="true" style= "position: absolute; top: 0; right: 0; margin-top: 100px;">
+        <div class="toast-header">
+            <strong class="mr-auto">Cart</strong>
+<!-- Assuming you want to display the current time in the <small> tag -->
+    <small><%= new Date().toLocaleTimeString() %></small>
+            
+        </div>
+        <div style="background-color: rgb(165, 229, 165);" class="toast-body" id="cart-message"></div>
+    </div>
+<script>
+</script>
+<script src="/js/addTOcart.js"></script>
+<%- include('../layout/footer.ejs') %>
 
-    <%- include('../layout/footer.ejs') %>

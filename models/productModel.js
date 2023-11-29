@@ -50,33 +50,10 @@ const productSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-
-
-  // Array field for storing reviews and ratings
-  reviews: [
-    {
-      user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User", // You can reference a User schema if you have one
-      },
-      rating: {
-        type: Number,
-        min: 1,
-        max: 5,
-      },
-      review: {
-        type: String,
-      },
-      created_at: {
-        type: Date,
-        default: Date.now,
-      },
-      updated_at: {
-        type: Date,
-        default: Date.now,
-      },
-    },
-  ],
+  reviews:{
+    type:[Object],
+    require:false,
+  }
 });
 
 
