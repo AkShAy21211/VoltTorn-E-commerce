@@ -20,14 +20,23 @@ const CartSchema = new mongoose.Schema({
                 type: String,
                 required: false,
             },
-            total_price: {
+            price: {
                 type: Number,
                 required: false,
                 default: 0,
             }
         }
-    ]
+    ],
+    total_price: {
+        type: Number,
+        required:false,
+    },
 });
+
+
+
+
+
 
 const WishListSchema = new mongoose.Schema({
 

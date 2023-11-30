@@ -5,7 +5,6 @@ const userModel = require("../models/userModel");
 const homeController = require("../controllers/homePageController");
 const userCartController = require("../controllers/userCartController");
 
-
 const auth = require("../middlewares/auth");
 userRoute.set('view engine','ejs');
 userRoute.set('views','./views/user')

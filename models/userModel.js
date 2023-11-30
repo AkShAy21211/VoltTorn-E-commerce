@@ -1,6 +1,25 @@
 const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
 
+const addressSchema = new mongoose.Schema({
+  street: {
+    type: String,
+    required: false,
+  },
+  city: {
+    type: String,
+    required: false,
+  },
+  state: {
+    type: String,
+    required: false,
+  },
+  zip: {
+    type: String,
+    required: false,
+  },
+});
+
 const userSchema = new mongoose.Schema({
   first_name: {
     type: String,
@@ -42,11 +61,11 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Cart",
   },
-
   wishlist: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Wishlist",
   },
+  addresses: [addressSchema], // Array of addresses
 
   createdAt: {
     type: Date,

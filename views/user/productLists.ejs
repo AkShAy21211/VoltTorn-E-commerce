@@ -156,7 +156,7 @@
                                         <% } %>
                                         <div class="card-body" style="height: 130px;">
                                           <h6><%= product.name.substring(0, 40, product.name.length / 2) %></h6>
-                                          <p class="card-text">Price: <b>Rs:<%= Number(product.price - (product.price * (product.discount / 100))).toLocaleString() %></b></p>
+                                          <p class="card-text" data-price="<%= Number(product.price - (product.price * (product.discount / 100)))%>" >Price: <b>Rs:<%= Number(product.price - (product.price * (product.discount / 100))).toLocaleString() %></b></p>
                                           <div class="d-flex justify-content-between">
                                             <p class="card-text text-success">%<%= product.discount %> off</p>
                                             <p class="small text-danger"><s>Rs<%= product.price %></s></p>
@@ -166,7 +166,8 @@
                                
                                     
                                     
-                                    <button class="addToCartButton btn btn-outline-primary" data-product-id="<%= product._id %>">Add to Cart</button>
+<!-- Inside the loop where you render product details -->
+                            <button class=" btn btn-outline-primary addToCartButton" data-product-id="<%= product._id %>" data-product-price="<%= Number(product.price - (product.price * (product.discount / 100))) %>">Add to Cart</button>
 
                                       </div>
                                    

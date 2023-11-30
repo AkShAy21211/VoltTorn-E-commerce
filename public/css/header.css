@@ -21,3 +21,24 @@
     position: static;
 
 }
+
+body {
+    background: black;
+  }
+  
+  #cart-icon {
+    position: relative;
+    display: inline-block;
+  }
+  
+  #cart-item-count {
+    position: absolute;
+    top: -5px;
+    right: -8px;
+    background-color: red; /* Choose a background color for the badge */
+    color: white; /* Choose a text color for the badge */
+    border-radius: 50%;
+    padding: 5px 8px;
+    font-size: 12px;
+  }
+  

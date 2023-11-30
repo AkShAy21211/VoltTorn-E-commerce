@@ -61,10 +61,14 @@
         </form>
         
         <div class="col-3 col-lg-3 mb-3 mb-lg-0 " role="search">
-
-        <div class="text-end">
-          <a class="text-black" href="/home/cart"><i style="font-size: 20px;" class="bi bi-bag"></i></a>
+          <div class="text-end position-relative">
+            <a class="text-black" href="/home/cart" id="cart-icon">
+                <span style="font-size: 20px;" class="bi bi-cart"></span>
+                <span id="cart-item-count" class="badge" id="cart-count"></span>
+            </a>
         </div>
+        
+          
         </div>
         <div class="text-end ml-2">
           <button class="btn dropdown-toggle " type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -78,7 +82,7 @@
                 <li><a class="dropdown-item" href="/register">Sign Up</a></li>
                 <%} %>
                   
-                  <li><a class="dropdown-item" href="#">Cart</a></li>
+                  <li><a class="dropdown-item" href="/home/cart">Cart</a></li>
                   <li><a class="dropdown-item" href="/home/settings">Settings</a></li>
                   <% if (locals.userSessionData && locals.userSessionData.isUserAuthenticated) { %>
                     <li><a class="dropdown-item" href="/logout">Logout</a></li>
