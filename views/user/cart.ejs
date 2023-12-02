@@ -7,6 +7,19 @@
 <%- include('../layout/header.ejs') %>
 
 <style>
+     /* Add a container for the two columns */
+     .cart-container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    /* Style for the left column */
+    .left-column {
+        flex-grow: 1;
+        overflow-y: auto; /* Make the left column scrollable */
+        max-height: 600px; /* Set a maximum height for the left column */
+    }
+
     .icon-hover-primary:hover {
         border-color: #3b71ca !important;
         background-color: white !important;
@@ -48,10 +61,10 @@
         <div class="row justify-content-between   d-flex">
             <% if (userCart && userCart.cart.length > 0) { %>
 
-            <h6 class="text-center mt-4"><b style="color: #3bb0ca;"><%=userCartCount%> </b> Items in your cart</h6>
+            <h6 class="text-center mt-4"><b style="color: #3bb0ca;" data-item-quantity="userCartCount"><%=userCartCount%> </b> Items in your cart</h6>
                 <!-- Shopping Cart Table -->
 
-                <div class="col-lg-8 col-md-12 col-12 mt-3  ">
+                <div class="col-lg-8 col-md-12 col-12 mt-3 left-column ">
                     <%userCart.cart.forEach(cart=>{%>
 
                     <table id="shoppingCart" class="table  table-borderless table-responsive">
@@ -59,30 +72,31 @@
                         <tbody>
       
       
-                            <tr>
+                            <tr data-cart-item-id="<%=cart._id  %>">
                                 <td data-th="Product">
                                     <div class="row">
                                         <div class="col-md-3 text-left" style="display: flex; align-items: center; justify-content: center;">
                                             <img src="/images/productImages/<%=cart.image %>" alt="" width="100" height="100"   class="img-fluid d-none d-md-block rounded mb-2 shadow ">
                                         </div>
                                         <div class="col-md-9 text-left mt-sm-2">
-                                            <h6> <%=cart.product_id.name%> </h6>
+                                            <h6 style="height: 20px; width: 350px; overflow: hidden; text-overflow: ellipsis;"> <%= cart.product_id.name %> </h6>
                                             <p class="font-weight-light">Brand: <b><%=cart.product_id.brand  %></b></p>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="item_price" data-price="Price"><%=cart.price%></td>
                                 <td data-th="Quantity">
                                   <input type="number"  min="1" oninput="this.value = Math.abs(this.value)" data-product-price="<%=parseFloat(cart.product_id.price - (cart.product_id.price * (cart.product_id.discount / 100)))*cart.quantity %>" data-product-id="<%= userCart._id %>" data-product="<%= cart.product_id._id %>" class="form-control text-center quantity-input" value="<%= cart.quantity %>">
                               </td>
                                 <td class="actions" data-th="">
                                     <div class="text-right">
                                         <button class="btn btn-white border-secondary bg-white btn-md mb-2">
-                                            <i class="fas fa-sync"></i>
+                                            <i class="fas fa-heart"></i> <!-- Replace "fas fa-sync" with "fas fa-heart" for the heart icon -->
                                         </button>
-                                        <button class="btn btn-white border-secondary bg-white btn-md mb-2">
-                                            <i class="fas fa-trash"></i>
+                                        
+                                        <button data-delete-item="<%= cart._id %>" class="btn btn-white border-secondary bg-white btn-md mb-2 delete-item">
+                                            <i class="fas fa-trash text-danger"></i>
                                         </button>
+                                        
                                     </div>
                                 </td>
                             </tr>
@@ -94,18 +108,51 @@
                 
                 </div>
 
+                
                 <!-- Summary on the right side -->
                 <div class="col-lg-3 col-md-12 col-12 ">
-                    <div style="height: 280px;" class="summary ">
+                    <div style="" class="summary ">
                         <!-- Add your summary content here -->
                         <h5 class="mb-5">Price Details</h5>
+                        <%userCart.cart.forEach(cart=>{%>
+
+                            <div class="checkout" data-checkout-items-id="<%=cart._id  %>" style="display: flex; justify-content: space-between;">
+                                <p  style="height: 20px; overflow: hidden; width: 150px;"> <%= cart.product_id.name  %> :</p>
+                                <p class="quantity" data-product-id="<%= cart.product_id._id %>"><%= cart.quantity  %> </p>
+                                <p class="price" data-product-id="<%= cart.product_id._id %>"><%= cart.price  %> </p>
+                            </div>
+                            
+                       
+                            <% })  %>
+
                         <h6 class="mb-5">Sub Total:  <b data-total-price="total-price" style="font-size:  20px;font-weight:500;float: right;">₹<%=userCart.total_price  %></b></h6>
                         <h6 class="mb-5">Delivery Charges: <p class="text-success " style="float: right;">Free</p></h6>
 
-                        <a href="catalog.html"  style="width: 150px;" class="btn btn-primary mb-1 float-right btn-lg  ">Checkout</a>
                     </div>
+                    <a href="/home/cart/checkout"  style="width: 150px;" class="btn btn-primary mb-1 float-right btn-lg mt-3 ">Checkout</a>
+
                 </div>
-            <% }  %>
+            <% }else{%>
+
+
+
+                <div class="container">
+                    <div class="row justify-content-center align-items-center">
+                      <div class="col text-center" style="margin-top: 250px;">
+                          <h5 class="mt-4">
+                            Your Shopping Cart is empty <img src="/images/emptyCart.png" alt="">
+                          </h5>
+                     
+                      </div>
+                    </div>
+                  </div>
+                  
+                      
+                  <% } %>
+
+            
+                  </div>
+               
                 <!-- Display message for an empty cart -->
                
           </div>
@@ -117,6 +164,8 @@
 </main>
 
 <script src="/js/addTOcart.js"></script>
+<!-- Include SweetAlert2 via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <%- include('../layout/footer.ejs') %>
 

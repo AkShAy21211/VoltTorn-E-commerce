@@ -29,7 +29,7 @@ userRoute.post('/verify',userController.verifyOTP);
 userRoute.get('/login',auth.is_Logout,userController.loadLogin);
 userRoute.post('/login',userController.loadLoginVerify);
 
-userRoute.get('/',auth.isUserBlocked,homeController.loadHome)
+userRoute.get('/',auth.isUserBlocked,homeController.loadHome);
 userRoute.get('/home',auth.isUserBlocked,homeController.loadHome);
 
 //user single product detail route
@@ -53,7 +53,16 @@ userRoute.get('/home/cart',auth.isUserBlocked,userCartController.userShoppingCar
 userRoute.post('/home/products/cart/:product_id',auth.isUserBlocked,auth.is_Login,userCartController.userAddToCartButton);
 userRoute.patch('/home/products/cart/updateQuantity/:product_id/:product',auth.isUserBlocked,userCartController.updateQuantity)
 
+userRoute.delete('/home/cart/:product_id',auth.isUserBlocked,userCartController.deleteCartItem);
 
+userRoute.get('/home/cart/checkout',auth.isUserBlocked,userCartController.loadCheckOutPage);
+userRoute.post('/home/cart/checkout',auth.isUserBlocked,userCartController.stateCityLoad);
+
+//user address add
+userRoute.post('/home/cart/add-address',auth.isUserBlocked,userCartController.addUserBellingAddress)
+
+//user address edit
+userRoute.post('/home/cart/edit-address/:id',auth.isUserBlocked,userCartController.editUserBillingAddress);
 
 userRoute.get('/logout',auth.is_Login,userController.userLogout)
 

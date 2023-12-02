@@ -1,5 +1,5 @@
 
-function confirmDelete(Id,route,message) {
+ function confirmDelete(Id,route,message) {
     Swal.fire({
         title: 'Are you sure?',
         text: message,
@@ -63,3 +63,7 @@ function confirmBlockUnblock(userId, status) {
         console.error(error);
     }
 };
+
+module.exports ={
+    confirmDelete,
+}

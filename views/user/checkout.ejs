@@ -1,0 +1,303 @@
+<%- include('../layout/header.ejs') %>
+
+
+
+  
+  <section class="py-5">
+    <div class="container">
+      <div class="row ">
+        <div class="col-lg-6 mb-4 ">
+  
+          <!-- Checkout -->
+          <div class="card shadow-0 border bg-light">
+            <div class="p-4">
+          
+              <!-- Add a button to toggle the collapse -->
+              <button class="btn btn-outline-primary mb-3" type="button" data-toggle="collapse" data-target="#addressCollapse" aria-expanded="false" aria-controls="addressCollapse">
+                Add New Address
+              </button>
+          
+              <form class="collapse" id="addressCollapse" method="POST" action="/home/cart/add-address">
+
+                <div class="row">
+              
+                  <div class="col-sm-8 mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <div class="form-outline">
+                      <input type="text" id="address" name="address" placeholder="Type here" class="form-control" />
+                    </div>
+                  </div>
+              
+                  <div class="col-sm-4 mb-3">
+                    <label for="country" class="form-label">Country</label>
+                    <div class="form-outline">
+                        <select id="country"  name="country" class="form-select">
+                                <option class="text-black" value="India">India</option>
+                        </select>
+                    </div>
+                </div>
+                
+                  <div class="col-sm-4 mb-3">
+                    <label for="state" class="form-label">State</label>
+                    <div class="form-outline">                        
+                      <select id="state"  name="state" class="form-select">
+                        <option value="">select</option>
+                        <%states.forEach(states => {%>
+                          <option class="text-black" data-state="<%=states.isoCode%>" value="<%=states.name%>"><%=states.name%></option>
+                          <%});  %>
+                      </select>
+                    </div>
+                  </div>
+              
+                  <div class="col-sm-4 mb-3">
+                    <label for="city" class="form-label">City</label>
+                    <div class="form-outline">
+
+                      <select id="city" name="city" class="form-select">
+                        <option value="">select</option>
+                          <option class="text-black"  value=""></option>
+                     
+                          </select>
+                    </div>
+                  </div>
+              
+                  <div class="col-sm-4 col-6 mb-3">
+                    <label for="postalCode" class="form-label">Postal code</label>
+                    <div class="form-outline">
+                      <input type="text" id="postalCode" name="postalCode" class="form-control" />
+                    </div>
+                  </div>
+              
+                </div>
+              
+                <!-- Submit button -->
+                <div class="d-grid gap-2">
+                  <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+              
+              </form>
+              
+              <!-- End of collapsible section -->
+          
+            </div>
+          </div>
+        <%user.addresses.forEach(address=>{%>
+
+          <div id="addressDetails" class="mb-3">
+            <!-- Example addresses, you can replace these with dynamic data -->
+            <div class="form-check mt-4 border rounded bg-light" style="height: 100px; display: flex; justify-content: start; align-items: center;">
+                <input class="form-check-input ml-1" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                <label class="ml-4 form-check-label" for="address1">
+                    <div>
+                        <strong>Address:</strong> <%= address.address %><br>
+                       
+                    </div>
+                </label>
+                <a style="cursor: pointer;" id="editAddressBtn" class="ml-4 text-primary ">Edit</a>
+            </div>
+        </div>
+
+        <form id="addressForm" class="mt-4" style="display: none;" method="POST" action="/home/cart/edit-address/<%=address._id  %>">
+          <!-- Form fields for editing address -->
+          <div class="row mb-3">
+              <div class="col-md-6">
+                  <div class="input-group">
+                      <span class="input-group-text">Address</span>
+                      <input type="text" class="form-control" id="address" name="address" value="<%= address.address %>" required>
+                  </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="input-group">
+                      <span class="input-group-text">Country</span>
+                      <input type="text" class="form-control" id="country" name="country" value="<%= address.country %>" required>
+                  </div>
+              </div>
+          </div>
+          <div class="row mb-3">
+              <div class="col-md-4">
+                  <div class="input-group">
+                      <span class="input-group-text">State</span>
+                      <input type="text" class="form-control" id="state" name="state" value="<%= address.state %>" required>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="input-group">
+                      <span class="input-group-text">City</span>
+                      <input type="text" class="form-control" id="city" name="city" value="<%= address.city %>" required>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="input-group">
+                      <span class="input-group-text">Postal Code</span>
+                      <input type="text" class="form-control" id="postalCode" name="postalCode" value="<%= address.zip %>" required>
+                  </div>
+              </div>
+          </div>
+          <button type="submit" class="btn btn-success">Save</button>
+          <button type="button" id="cancelEditBtn" class="btn btn-secondary ml-2">Cancel</button>
+      </form>
+      
+
+
+
+
+
+
+
+
+
+
+
+        <%})  %>  
+
+          <!-- Checkout -->
+        </div>
+  
+        <div class="col-lg-6 d-flex justify-content-end">
+          <div class="ms-lg-5 mt-lg-0" style="max-width: 320px;">
+                <div class="ms-lg-4 mt-lg-0" style="max-width: 320px;">
+                    <h6 class="mb-3">Summary</h6>
+                    <div class="d-flex justify-content-between">
+                      <p class="mb-2">Total price:</p>
+                      <p class="mb-2">$195.90</p>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <p class="mb-2">Discount:</p>
+                      <p class="mb-2 text-danger">- $60.00</p>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <p class="mb-2">Shipping cost:</p>
+                      <p class="mb-2">+ $14.00</p>
+                    </div>
+                    <hr />
+                    <div class="d-flex justify-content-between">
+                      <p class="mb-2">Total price:</p>
+                      <p class="mb-2 fw-bold">$149.90</p>
+                    </div>
+          
+                    <div class="input-group mt-3 mb-4">
+                      <input type="text" class="form-control border" name="" placeholder="Promo code" />
+                      <button class="btn btn-light text-primary border">Apply</button>
+                    </div>
+          
+                    <hr />
+                    <h6 class="text-dark my-4">Items in cart</h6>
+          
+                    <div class="d-flex align-items-center mb-4">
+                      <div class="me-3 position-relative">
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-secondary">
+                          1
+                        </span>
+                        <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/7.webp" style="height: 96px; width: 96x;" class="img-sm rounded border" />
+                      </div>
+                      <div class="">
+                        <a href="#" class="nav-link">
+                          Gaming Headset with Mic <br />
+                          Darkblue color
+                        </a>
+                        <div class="price text-muted">Total: $295.99</div>
+                      </div>
+                    </div>
+          
+                    <div class="d-flex align-items-center mb-4">
+                      <div class="me-3 position-relative">
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-secondary">
+                          1
+                        </span>
+                        <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/5.webp" style="height: 96px; width: 96x;" class="img-sm rounded border" />
+                      </div>
+                      <div class="">
+                        <a href="#" class="nav-link">
+                          Apple Watch Series 4 Space <br />
+                          Large size
+                        </a>
+                        <div class="price text-muted">Total: $217.99</div>
+                      </div>
+                    </div>
+          
+                    <div class="d-flex align-items-center mb-4">
+                      <div class="me-3 position-relative">
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-secondary">
+                          3
+                        </span>
+                        <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/1.webp" style="height: 96px; width: 96x;" class="img-sm rounded border" />
+                      </div>
+                      <div class="">
+                        <a href="#" class="nav-link">GoPro HERO6 4K Action Camera - Black</a>
+                        <div class="price text-muted">Total: $910.00</div>
+                      </div>
+                    </div>
+                  
+            <!-- Your right column content goes here -->
+          </div>
+        </div>
+      </div>
+  
+      <!-- Section to show available addresses with checkboxes -->
+      
+      <!-- End of section to show available addresses with checkboxes -->
+  
+    </div>
+
+<!-- //edit address form -->
+   
+
+
+
+
+
+
+  </section>
+  <script>
+    const addressDetails = document.getElementById('addressDetails');
+    const addressForm = document.getElementById('addressForm');
+    const editAddressBtn = document.getElementById('editAddressBtn');
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
+
+    editAddressBtn.addEventListener('click', () => {
+        // Hide address details div
+        addressDetails.style.display = 'none';
+        // Show address form
+        addressForm.style.display = 'block';
+    });
+
+    cancelEditBtn.addEventListener('click', () => {
+        // Show address details div
+        addressDetails.style.display = 'block';
+        // Hide address form
+        addressForm.style.display = 'none';
+    });
+</script>
+  <script>
+    document.getElementById('state').addEventListener('change',async function () {
+      // Fetch cities for the selected state
+      const selectedState = this.value;
+  
+  // Get the data-state attribute value
+     const dataState = this.options[this.selectedIndex].getAttribute('data-state');
+
+  console.log(dataState);
+      try {
+        const response = await axios.post(`http://localhost:3000/home/cart/checkout`,{dataState});
+        const cities = response.data.city;
+  
+
+        console.log(cities);
+        // Clear existing options
+        const cityDropdown = document.getElementById('city');
+        cityDropdown.innerHTML = '';
+  
+        // Add new options
+        cities.forEach(city => {
+          const option = document.createElement('option');
+          option.value = city;
+          option.text = city;
+          cityDropdown.add(option);
+        });
+      } catch (error) {
+        console.error('Error fetching cities:', error);
+      }
+    });
+
+  </script>
+  <%- include('../layout/footer.ejs') %>

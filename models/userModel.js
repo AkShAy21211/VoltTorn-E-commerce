@@ -2,17 +2,21 @@ const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
 
 const addressSchema = new mongoose.Schema({
-  street: {
+  address: {
     type: String,
     required: false,
   },
-  city: {
+  country: {
     type: String,
     required: false,
   },
   state: {
     type: String,
     required: false,
+  },
+  city:{
+    type:String,
+    required:true,
   },
   zip: {
     type: String,

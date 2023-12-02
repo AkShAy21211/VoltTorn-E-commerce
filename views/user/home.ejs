@@ -32,6 +32,38 @@
   }
 
 
+.form-subscribe
+{
+  max-width:600px;
+  margin:0 auto
+}
+.form-subscribe .form-control
+{
+  padding-left:24px;
+  padding-right:24px;
+  letter-spacing:1px;
+  border:none;
+  border-top-left-radius:36px;
+  border-bottom-left-radius:36px
+}
+.form-subscribe .form-control.focus,.form-subscribe .form-control:focus
+{
+  z-index:2;
+  background-color:hsla(0,0%,100%,.8)
+}
+.form-subscribe .btn
+{
+  border-top-right-radius:36px;
+  border-bottom-right-radius:36px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  font-size: 15px;
+  background:#7ec855;
+  border-color:#7ec855;
+  height:38px;
+}
+
 </style>
 <script>
   // Check if the user is blocked and show a pop-up message
@@ -48,8 +80,8 @@
     <div class="carousel-inner">
 
       <% banner.forEach((banner, index) => { %>
-        <div class="<%= index === 0 ? 'carousel-item active' : 'carousel-item' %>">
-          <img height="450" style="-webkit-user-drag: none;" data-ride="1000" data-slide="carsoul" class="d-block w-100" src="/images/bannerImages/<%= banner.image %>" alt="Banner <%= index + 1 %>">
+        <div class="<%= index === 0 ? 'carousel-item active' : 'carousel-item' %> d-flex justify-content-center">
+          <img height="350" style="-webkit-user-drag: none; background-size: cover;" data-ride="1000" data-slide="carsoul" class="d-block w-75 mt-4" src="/images/bannerImages/<%= banner.image %>" alt="Banner <%= index + 1 %>">
         </div>
       <% }); %>
     </div>
@@ -89,7 +121,6 @@
   </div>
   
   
-  </section>
   <section id="featured-brand" class="mb-5"> <!-- Add margin-bottom here -->
     <div class="container-fluid mt-5 mb-5">
       <div class="row">
@@ -103,6 +134,27 @@
         </div>
       </div>
     </div>
+    </section>
+
+
+    <section class="bg-img text-center">
+      <div class="container" style="background-color: #18ACFE; height: 300px; border-radius: 20px;">
+        <h2 class="pt-4">
+          NEWSLETTER
+        </h2>
+        <h6 class="font-alt mt-2">subscribe to our newsletter get latest updates</h6>
+        <br><br>
+        <form class="form-subscribe" action="#">
+          <div class="input-group">
+            <input type="text" class="form-control input-lg" placeholder="Your email address" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Enter a valid email address" required>
+            <span class="input-group-btn">
+              <button class="btn btn-success btn-lg" type="submit" >Subscribe</button>
+            </span>
+          </div>
+        </form>
+      </div>
+    </section>
+
   </main>
 
 <script>

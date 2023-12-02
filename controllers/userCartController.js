@@ -1,7 +1,9 @@
 const { ObjectId } = require("mongodb");
 const { CartModel, WishListModel } = require("../models/cart&WishlistModel");
 const productModel = require("../models/productModel");
+const countryState = require("country-state-city");
 
+const userModel = require("../models/userModel");
 const userShoppingCartPageLoad = async (req, res) => {
   try {
     // Check if the user is logged in
@@ -170,8 +172,147 @@ const updateQuantity = async (req, res) => {
   }
 };
 
+
+const deleteCartItem = async (req, res) => {
+  try {
+    const id = req.session.user.userId;
+    const product_id = req.params.product_id;
+
+    // Assuming CartModel has a 'cart' array and 'total_price' field
+    const cart = await CartModel.findById(id);
+
+    console.log("product id  ", product_id);
+
+    const updatedCart = await CartModel.findOneAndUpdate(
+      { _id: id },
+      { $pull: { cart: { _id: product_id } } },
+      { new: true } // Return the modified document
+    );
+
+    const total_price = updatedCart.cart.reduce((total, item) => total + item.price, 0);
+
+    await CartModel.findOneAndUpdate({ _id: id }, { $set: { total_price: total_price } });
+
+    console.log(updatedCart);
+    const userCartCount =
+    updatedCart && updatedCart.cart ? updatedCart.cart.length : 0;
+
+    res.status(200).json({
+      success: true,
+      updatedCart,
+      total_price,
+      userCartCount,
+    });
+  
+    console.log(total_price);
+
+    console.log(userCartCount);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      error: 'Internal Server Error',
+    });
+  }
+};
+
+
+
+const loadCheckOutPage = async(req,res)=>{
+
+  try{
+    const user = await userModel.findById(req.session.user.userId);
+    const dataState = req.body.dataState;
+    const states = countryState.State.getStatesOfCountry("IN");
+    const cart = await CartModel.findById(req.session.user.userId);
+
+    console.log(cart);
+    res.render('checkout',{states,user,cart});
+
+  
+
+  }catch(error){
+    console.error(error);
+  }
+}
+
+const stateCityLoad = async(req,res)=>{
+
+  try{
+    const dataState = req.body.dataState;
+    const states = countryState.State.getStatesOfCountry("IN");
+    const city = countryState.City.getCitiesOfState("IN",dataState).map(City=> City.name);
+
+    res.status(200).json({
+      success: true,
+      city
+    });
+console.log(city);
+  
+
+  }catch(error){
+    console.error(error);
+  }
+}
+
+
+
+const addUserBellingAddress = async(req,res)=>{
+
+  try{
+
+ const  {address,country,state,city,postalCode} = req.body;
+
+ const userAddress = {
+
+  address:address,
+  country:country,
+  state:state,
+  city:city,
+  zip:postalCode,
+
+ }
+await userModel.findOneAndUpdate({_id:req.session.user.userId},{$push:{addresses:userAddress}});
+
+res.redirect('/home/cart/checkout')
+}catch(error){
+    console.error(error);
+  }
+}
+
+
+
+const editUserBillingAddress = async(req,res)=>{
+
+  try{
+
+ const  {address,country,state,city,postalCode} = req.body;
+ const addressId = req.params.id;
+
+ const userAddress = {
+  address:address,
+  country:country,
+  state:state,
+  city:city,
+  zip:postalCode,
+ }
+
+ await userModel.findOneAndUpdate({'addresses._id':addressId},{$set:{addresses:userAddress}});
+ res.redirect('/home/cart/checkout')
+}catch(error){
+    console.error(error);
+  }
+}
+
+
 module.exports = {
   userShoppingCartPageLoad,
   userAddToCartButton,
   updateQuantity,
+  deleteCartItem,
+  loadCheckOutPage,
+  addUserBellingAddress,
+  stateCityLoad,
+  editUserBillingAddress,
 };
