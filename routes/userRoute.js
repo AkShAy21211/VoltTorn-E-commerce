@@ -13,6 +13,22 @@ const bodyParser = require("body-parser");
 const { Admin } = require("mongodb");
 userRoute.use(bodyParser.json())
 userRoute.use(bodyParser.urlencoded({extended:true}))
+const path = require("path");
+const multer = require("multer");
+
+
+const userImageStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, path.join(__dirname, "../public/images/userImages"));
+    },
+    filename: function (req, file, cb) {
+      const name = Date.now() + "-" + file.originalname;
+      cb(null, name);
+    },
+  });
+
+  const uploadUserImage = multer({ storage: userImageStorage })
+
 
 
 userRoute.use(express.static('public'))
@@ -63,6 +79,12 @@ userRoute.post('/home/cart/add-address',auth.isUserBlocked,userCartController.ad
 
 //user address edit
 userRoute.post('/home/cart/edit-address/:id',auth.isUserBlocked,userCartController.editUserBillingAddress);
+
+
+
+//user profile page route
+
+userRoute.post('/home/setting/edit-profile/:id',uploadUserImage.single('image'),auth.isUserBlocked,userController.editUserProfile);
 
 userRoute.get('/logout',auth.is_Login,userController.userLogout)
 

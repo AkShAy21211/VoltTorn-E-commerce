@@ -2,6 +2,7 @@ const userModel = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const userOTPVeryModel = require("../models/userVerifyOTPModel");
+const e = require("express");
 
 //user otp verification configure
 
@@ -236,13 +237,55 @@ const loadLoginVerify = async (req, res) => {
 };
 
 //USER SETTINGS PAGE 
+const loadUserSettingPage = async (req, res) => {
+  try {
+    const id = req.session.user && req.session.user.userId ? req.session.user.userId : undefined;
 
-const loadUserSettingPage  = async(req,res)=>{
+    if (id) {
+      const user = await userModel.findById(id);
+      res.render('settings', { user });
+    } else {
+      res.render('settings');
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const editUserProfile = async(req,res)=>{
+
   try{
-
-    res.render('settings')
-
+    const id = req.params.id ? req.params.is : {};
+    const { firstName, lastName, mobile, email, password } = req.body;
+    const image = req.file ? req.file.filename : null;
+    
+    // Check if a new password is provided
+    const hashPassword = password ? await securePassword(password) : undefined;
+    
+    // Build the update object based on whether a new password is provided
+    const updateObject = {
+      first_name: firstName,
+      last_name: lastName,
+      email: email,
+      mobile: mobile,
+      image: image,
+    };
+    
+    // Include password in the update only if a new password is provided
+    if (hashPassword) {
+      updateObject.password = hashPassword;
+    }
+    
+    // Update the user profile
+    const updateUserProfile = await userModel.findOneAndUpdate(
+      { _id: id },
+      { $set: updateObject },
+      { new: true } // Return the updated document
+    );
+    
+    res.redirect('/home/settings')
   }catch(error){
+
     console.error(error);
   }
 }
@@ -269,6 +312,7 @@ module.exports = {
   loadLoginVerify,
   userLogout,
   loadUserSettingPage,
+  editUserProfile,
 
  
 };

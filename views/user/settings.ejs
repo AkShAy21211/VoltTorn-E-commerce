@@ -1,7 +1,7 @@
 <%- include('../layout/header.ejs') %>
 <style>
     .container{
-        margin-top: 150px;
+        margin-top: 80px;
     }
 .min-height-div1 {
   min-height: 200px; /* Adjust the height as needed */
@@ -36,10 +36,40 @@ body {
       background-color: #fff;
       color: #333;
     }
+    .blurry-form {
+    filter: blur(5px); 
+    opacity: 0.8; /* Adjust the opacity as needed */
+    transition: filter 0.3s, opacity 0.3s; /* Add a smooth transition effect */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Optional: Set a specific height if needed */
+  }
+
+
+  .login-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 50px;
+    transform: translate(-50%, -50%);
+    z-index: 2; /* Ensure the z-index is higher than the form */
+  }
+
+  .non-blurred-button {
+    filter: none;
+    opacity: 1;
+    margin-top: 20px; /* Adjust spacing as needed */
+  }
+
 </style>
+
+<title>Settings | Profile</title>
 <main>
   <div class="container">
-    <div class="row d-flex justify-content-evenly">
+    <div class="row d-flex justify-content-arround">
       <div class="setting-options  col-md-4 col-lg-4 col-xl-3 col-xxl-3  mb-2 min-height-div1 mb-md-4">
         <ul class="list-group " id="myList">
            <a class="options" href=""><li class="list-group-item inactive list-item">
@@ -59,8 +89,136 @@ body {
             </li></a> 
           </ul>
       </div>
-      <div class="view-settings  col-md-6 col-lg-6 col-xl-7 col-xxl-6  border min-height-div1 mb-md-4">View Settings</div>
-    </div>
+      <div class="view-settings col-md-8 col-lg-8 col-xl-9 col-xxl-8 border min-height-div1 mb-md-4">
+      <%if(typeof user !== 'undefined'){%>
+
+    
+        <!-- Profile Form -->
+        <form action="/home/setting/edit-profile/<%=user._id%>" method="post" class="mb-3" enctype="multipart/form-data">
+      
+          <!-- Profile Image -->
+          <div class="text-center mt-3 mb-3">
+            <div class="profile-picture-container d-flex flex-column align-items-center">
+              <img style="width: 150px; height: 150px; border-radius: 50%;" id="profileImagePreview" src="/images/userImages/<%=user.image  %>" alt="Profile Picture" class="image-fluid mb-2">
+              <input type="file" class="form-control"  id="profileImage" name="image" style="display:contents;" accept="image/*">
+              <label style="width: 250px; height: 40px;" for="profileImage" class="btn btn-outline-primary mt-2">Change</label>
+            </div>
+          </div>
+      
+          <!-- First Name and Last Name in the same row -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="firstName" name="firstName" placeholder=" " multiple="/*" value="<%=user.first_name  %>">
+                <label for="firstName" class="form-label">First Name</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="lastName" name="lastName" placeholder=" "value="<%=user.last_name  %>">
+                <label for="lastName" class="form-label">Last Name</label>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Email and Mobile in the same row -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="email" name="email" placeholder=" "value="<%=user.email %>">
+                <label for="email" class="form-label">Email</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="mobile" name="mobile" placeholder=" "value="<%=user.mobile%>">
+                <label for="mobile" class="form-label">Mobile</label>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="password" name="password" placeholder=" ">
+                <label for="password" class="form-label">Cahnge Password</label>
+                <label for="password" class="form-label"></label>
+              </div>
+            </div>
+          </div>
+          
+      
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-primary">Update Profile</button>
+        </form>
+        <%} else{%>
+
+
+          <form class="blurry-form" action="" method="" class="mb-3">
+      
+            <!-- Profile Image -->
+            <div class="text-center mt-3 mb-3">
+              <div class="profile-picture-container d-flex flex-column align-items-center">
+                <img style="width: 150px; height: 150px; border-radius: 50%;" id="profileImagePreview" src="" alt="Profile Picture" class="image-fluid mb-2">
+                <input disabled type="" class="form-control"  id="profileImage" name="image" style="display:contents;" accept="image/*">
+                <label  style="width: 250px; height: 40px;" for="profileImage" class="btn btn-outline-primary mt-2">Change</label>
+              </div>
+            </div>
+        
+            <!-- First Name and Last Name in the same row -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" readonly disabled id="firstName" name="firstName" placeholder=" " multiple="/*" value="">
+                  <label for="firstName" class="form-label">First Name</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <input type="" class="form-control"  readonly disabled id="lastName" name="lastName" placeholder=" "value="">
+                  <label for="lastName" class="form-label">Last Name</label>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Email and Mobile in the same row -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <input type="" class="form-control"  readonly disabled id="email" name="email" placeholder=" "value="">
+                  <label for="email" class="form-label">Email</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <input type="" class="form-control"  readonly disabled id="mobile" name="mobile" placeholder=" "value="">
+                  <label for="mobile" class="form-label">Mobile</label>
+                </div>
+              </div>
+            </div>
+            
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <input type="" class="form-control"  readonly disabled id="password" name="password" placeholder=" ">
+                  <label for="password" class="form-label">Cahnge Password</label>
+                  <label for="password" class="form-label"></label>
+                </div>
+              </div>
+            </div>
+            
+        
+            <!-- Submit Button -->
+            <button type="" disabled class="btn btn-primary">Update Profile</button>
+
+          </form>
+          <a style="text-align: center; color: white;padding: 10px;" href="/login" class="btn btn-primary login-button">Login</a>
+
+        <%} %>
+        <!-- JavaScript to handle file input change and update preview -->
+       
+      </div>
+          </div>
   </div>
 </main>
 
@@ -85,5 +243,22 @@ body {
     });
   });
 </script>
-  
+<script>
+  const profileImageInput = document.getElementById('profileImage');
+  const profileImagePreview = document.getElementById('profileImagePreview');
+
+  profileImageInput.addEventListener('change', function () {
+    const file = this.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        profileImagePreview.src = e.target.result;
+      };
+
+      reader.readAsDataURL(file);
+    }
+  });
+</script>
 <%- include('../layout/footer.ejs') %>

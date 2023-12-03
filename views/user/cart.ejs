@@ -120,13 +120,13 @@
                                 <p  style="height: 20px; overflow: hidden; width: 150px;"> <%= cart.product_id.name  %> :</p>
                                 <p class="quantity" data-product-id="<%= cart.product_id._id %>"><%= cart.quantity  %> </p>
                                 <p class="price" data-product-id="<%= cart.product_id._id %>"><%= cart.price  %> </p>
+                                
                             </div>
                             
                        
                             <% })  %>
 
                         <h6 class="mb-5">Sub Total:  <b data-total-price="total-price" style="font-size:  20px;font-weight:500;float: right;">₹<%=userCart.total_price  %></b></h6>
-                        <h6 class="mb-5">Delivery Charges: <p class="text-success " style="float: right;">Free</p></h6>
 
                     </div>
                     <a href="/home/cart/checkout"  style="width: 150px;" class="btn btn-primary mb-1 float-right btn-lg mt-3 ">Checkout</a>

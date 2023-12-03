@@ -2,7 +2,7 @@ const { ObjectId } = require("mongodb");
 const { CartModel, WishListModel } = require("../models/cart&WishlistModel");
 const productModel = require("../models/productModel");
 const countryState = require("country-state-city");
-
+const {calculateTotalDiscount} = require("../helpers/totalDiscountHelper");
 const userModel = require("../models/userModel");
 const userShoppingCartPageLoad = async (req, res) => {
   try {
@@ -227,8 +227,10 @@ const loadCheckOutPage = async(req,res)=>{
     const states = countryState.State.getStatesOfCountry("IN");
     const cart = await CartModel.findById(req.session.user.userId);
 
-    console.log(cart);
-    res.render('checkout',{states,user,cart});
+   
+    const total_discount = await calculateTotalDiscount(cart.cart); 
+
+    res.render('checkout',{states,user,cart,total_discount});
 
   
 

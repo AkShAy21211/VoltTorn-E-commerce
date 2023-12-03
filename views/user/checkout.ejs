@@ -1,6 +1,6 @@
 <%- include('../layout/header.ejs') %>
 
-
+<link rel="stylesheet" href="/css/checkout.css">
 
   
   <section class="py-5">
@@ -138,95 +138,100 @@
       </form>
       
 
-
-
-
-
-
-
-
-
-
-
         <%})  %>  
 
+        <table id="shoppingCart" class="table table-borderless table-responsive">
+          <tbody>
+            <tr>
+              <% cart.cart.forEach(item => { %>
+                <td data-th="Product">
+                  <div class="row mt-4">
+                    <div class="col-md-5 text-left" style="">
+                      <img src="/images/productImages/<%= item.image %>" height="150" width="150"  alt="" class=" d-none d-md-block rounded mb-2 shadow">
+                    </div>
+                    <div class="col-md-3 text-left mt-sm-2">
+                      <h6 style="height: 50px; width: 50px; "></h6>
+                    </div>
+                  </div>
+                </td>
+              <% }); %>
+            </tr>
+          </tbody>
+        </table>
+                       
           <!-- Checkout -->
         </div>
   
         <div class="col-lg-6 d-flex justify-content-end">
-          <div class="ms-lg-5 mt-lg-0" style="max-width: 320px;">
-                <div class="ms-lg-4 mt-lg-0" style="max-width: 320px;">
+          <div class="ms-lg-5 mt-lg-0 " >
+                <div class="ms-lg-4 mt-lg-0  rounded p-4 bg-light" style="max-width: 320px;">
                     <h6 class="mb-3">Summary</h6>
+                    <%cart.cart.forEach((cart,i)=>{%>
+
                     <div class="d-flex justify-content-between">
-                      <p class="mb-2">Total price:</p>
-                      <p class="mb-2">$195.90</p>
+                      <p  style="height: 20px; width: 150px;">(Item)<%=i+1  %></p>
+                      <p class="quantity" data-product-id="<%= cart.product_id._id %>">X<%= cart.quantity  %> </p>
+                      <p class="price" data-product-id="<%= cart.product_id._id %>"><%= cart.price  %> </p>
                     </div>
-                    <div class="d-flex justify-content-between">
-                      <p class="mb-2">Discount:</p>
-                      <p class="mb-2 text-danger">- $60.00</p>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                      <p class="mb-2">Shipping cost:</p>
-                      <p class="mb-2">+ $14.00</p>
-                    </div>
+                               
+                    <% })  %>
+                    <h6 class="mb-5">Delivery Charges: <p class="text-success " style="float: right;">Free</p></h6>
+
                     <hr />
+                    <div class="d-flex justify-content-start">
+                      <p class="mb-2 text-success">You can save Rs:<b class="text-success"> <%=total_discount  %></b> on this order</p>
+                    </div>
                     <div class="d-flex justify-content-between">
                       <p class="mb-2">Total price:</p>
-                      <p class="mb-2 fw-bold">$149.90</p>
+
+                        
+       
+
+                      <p class="mb-2 fw-bold">RS:<%=cart.total_price  %></p>
                     </div>
           
-                    <div class="input-group mt-3 mb-4">
+                    <!-- <div class="input-group mt-3 mb-4">
                       <input type="text" class="form-control border" name="" placeholder="Promo code" />
                       <button class="btn btn-light text-primary border">Apply</button>
-                    </div>
+                    </div> -->
           
                     <hr />
-                    <h6 class="text-dark my-4">Items in cart</h6>
+                    
           
-                    <div class="d-flex align-items-center mb-4">
-                      <div class="me-3 position-relative">
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-secondary">
-                          1
-                        </span>
-                        <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/7.webp" style="height: 96px; width: 96x;" class="img-sm rounded border" />
-                      </div>
-                      <div class="">
-                        <a href="#" class="nav-link">
-                          Gaming Headset with Mic <br />
-                          Darkblue color
-                        </a>
-                        <div class="price text-muted">Total: $295.99</div>
-                      </div>
+                      <form action="" class="form" method="">
+                       
+                    
+                        <fieldset>
+                          <legend>Payment Method</legend>
+                    
+                          <div class="form__radios">
+                           
+                    
+                            <div class="form__radio">
+                              <label for="paypal"><svg class="icon">
+
+                              </svg>PayPal</label>
+                              <input id="paypal" name="payment-method" type="radio" />
+                            </div>
+                            <div class="form__radio">
+                              <label for="visa"><svg class="icon">
+                                  <use xlink:href="#icon-sales" />
+                                </svg>Cash On Delivery</label>
+                              <input checked id="visa" name="payment-method" type="radio" />
+                            </div>
+                          </div>
+                        </fieldset>
+                    
+                       
+                        <div>
+                          <button class="button button--full" type="submit"><svg class="icon">
+                              <use xlink:href="#icon-shopping-bag" />
+                            </svg>Buy Now</button>
+                        </div>
+                      </form>
                     </div>
-          
-                    <div class="d-flex align-items-center mb-4">
-                      <div class="me-3 position-relative">
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-secondary">
-                          1
-                        </span>
-                        <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/5.webp" style="height: 96px; width: 96x;" class="img-sm rounded border" />
-                      </div>
-                      <div class="">
-                        <a href="#" class="nav-link">
-                          Apple Watch Series 4 Space <br />
-                          Large size
-                        </a>
-                        <div class="price text-muted">Total: $217.99</div>
-                      </div>
-                    </div>
-          
-                    <div class="d-flex align-items-center mb-4">
-                      <div class="me-3 position-relative">
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-secondary">
-                          3
-                        </span>
-                        <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/1.webp" style="height: 96px; width: 96x;" class="img-sm rounded border" />
-                      </div>
-                      <div class="">
-                        <a href="#" class="nav-link">GoPro HERO6 4K Action Camera - Black</a>
-                        <div class="price text-muted">Total: $910.00</div>
-                      </div>
-                    </div>
+                    
+                    
                   
             <!-- Your right column content goes here -->
           </div>
