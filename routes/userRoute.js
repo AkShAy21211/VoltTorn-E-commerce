@@ -1,10 +1,9 @@
 const express  = require("express");
 const userRoute  = express();
 const userController = require("../controllers/userController");
-const userModel = require("../models/userModel");
 const homeController = require("../controllers/homePageController");
 const userCartController = require("../controllers/userCartController");
-
+const userSettingController = require("../controllers/userSettingsController");
 const auth = require("../middlewares/auth");
 userRoute.set('view engine','ejs');
 userRoute.set('views','./views/user')
@@ -61,7 +60,6 @@ userRoute.get('/home/products/:cat_name',auth.isUserBlocked,homeController.loaad
 
 //user settings page route
 
-userRoute.get('/home/settings',auth.isUserBlocked,userController.loadUserSettingPage)
 userRoute.get('/home/product/details/:id/filter/:color',auth.isUserBlocked,homeController.productDetail)
 
 //USER shoppingCart
@@ -83,8 +81,23 @@ userRoute.post('/home/cart/edit-address/:id',auth.isUserBlocked,userCartControll
 
 
 //user profile page route
+userRoute.get('/home/settings/profile',auth.isUserBlocked,userSettingController.loadUserSettings);
+userRoute.post('/home/setting/edit-profile/:id',uploadUserImage.single('image'),auth.isUserBlocked,userSettingController.editUserProfile);
 
-userRoute.post('/home/setting/edit-profile/:id',uploadUserImage.single('image'),auth.isUserBlocked,userController.editUserProfile);
+
+//user oder page eroutes
+userRoute.get('/home/settings/oders',auth.isUserBlocked,userSettingController.loadUserOdersPage)
+userRoute.get('/home/settings/cancel-oders/:oder_id',auth.isUserBlocked,userSettingController.forCancelUserOders)
+
+
+
+
+//user checkout page complete transcation cash on delivery
+userRoute.post('/home/cart/checkout/complete/:id',auth.isUserBlocked,userCartController.completeOderCashOnDelivery);
+
+
+
+
 
 userRoute.get('/logout',auth.is_Login,userController.userLogout)
 

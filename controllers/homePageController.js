@@ -7,8 +7,9 @@ const loadHome = async (req, res) => {
     const category = await categoryModel.find({});
     const currentDate = new Date();
     console.log(currentDate);
+    const ProductData = await productModel.find({}).limit(4);
     const banner = await bannerModel.find({ endDate: { $gt: currentDate } });
-    res.render("home", { category,banner});
+    res.render("home", { category,banner,ProductData});
   } catch (error) {
     console.log(error.message);
   }

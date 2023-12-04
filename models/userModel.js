@@ -24,6 +24,29 @@ const addressSchema = new mongoose.Schema({
   },
 });
 
+
+const orderSchema = new mongoose.Schema({
+  oder_id:{
+    type:Number,
+    required:true
+  },
+  customerName: String,
+  products: [],
+  status: {
+    type: String,
+    enum: ['Pending', 'Shipped', 'Delivered'], // Define possible status values
+    default: 'Pending', // Set a default status
+  },
+  date:Date,
+  quantity:Number,
+  totalAmount: Number,
+  is_cancelled:{
+    type:Boolean,
+    default:false,
+  }
+});
+
+
 const userSchema = new mongoose.Schema({
   first_name: {
     type: String,
@@ -70,7 +93,7 @@ const userSchema = new mongoose.Schema({
     ref: "Wishlist",
   },
   addresses: [addressSchema], // Array of addresses
-
+  oders:[orderSchema],
   createdAt: {
     type: Date,
     default: Date.now,

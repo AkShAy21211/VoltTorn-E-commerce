@@ -137,6 +137,50 @@
     </section>
 
 
+
+<%if(ProductData !== 'undefined') {%>
+
+
+    <div class="container text-center mb-5">
+      <div class="row">
+        <h3 class="mt-5 fs-5 text-start">Top Products</h3>
+          <% ProductData.forEach(product => { %>
+
+          <div class="col-md-5 col-lg-4 col-xl-3 col-xxl-3 mb-lg mb-md-6 col-sm-6 col-12  ">
+                <!-- Use col-lg-4 to include three cards in one row -->
+                <a href="/home/product/details/<%=product._id%>" class="text-decoration-none text-dark">
+                  <div class="card border-0 h-100 p-2 " id="product-card">
+                      <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px" class="card-img-top"
+                        src="/images/productImages/<%= product.variants[0].images[0] %>" alt="Product Image " />
+                    <div class="card-body" style="height: 130px;">
+                      <h6><%= product.name.substring(0, 40, product.name.length / 2) %></h6>
+                      <p class="card-text" data-price="<%= Number(product.price - (product.price * (product.discount / 100)))%>" >Price: <b>Rs:<%= Number(product.price - (product.price * (product.discount / 100))).toLocaleString() %></b></p>
+                      <div class="d-flex justify-content-between">
+                        <p class="card-text text-success">%<%= product.discount %> off</p>
+                        <p class="small text-danger"><s>Rs<%= product.price %></s></p>
+                      </div>
+                    </div>
+                </a>
+           
+                
+                
+<!-- Inside the loop where you render product details -->
+        <button class=" btn btn-outline-primary addToCartButton" data-product-id="<%= product._id %>" data-product-price="<%= Number(product.price - (product.price * (product.discount / 100))) %>">Add to Cart</button>
+
+                  
+               
+             
+              </div>
+          </div>
+          <% }); %>
+
+      </div>
+    </div>
+    
+    <%} %>
+
+    
+
     <section class="bg-img text-center">
       <div class="container" style="background-color: #18ACFE; height: 300px; border-radius: 20px;">
         <h2 class="pt-4">
@@ -155,7 +199,27 @@
       </div>
     </section>
 
+
+
+
+
+
+
+
+    
   </main>
+
+  <div id="cart-toast" class="toast " role="alert"  aria-live="assertive" aria-atomic="true" style= "position: absolute; top: 0; right: 0; margin-top: 100px;">
+    <div class="toast-header">
+        <strong class="mr-auto">Cart</strong>
+<!-- Assuming you want to display the current time in the <small> tag -->
+<small><%= new Date().toLocaleTimeString() %></small>
+        
+    </div>
+    <div style="background-color: rgb(165, 229, 165);" class="toast-body" id="cart-message"></div>
+</div>
+
+<script src="/js/addTOcart.js"></script>
 
 <script>
   $(document).ready(function(){

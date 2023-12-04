@@ -1,0 +1,131 @@
+<%- include('../layout/header.ejs') %>
+<style>
+    .container{
+        margin-top: 80px;
+    }
+.min-height-div1 {
+  min-height: 200px; /* Adjust the height as needed */
+}
+.min-height-div2 {
+  min-height: 500px; /* Adjust the height as needed */
+}
+body {
+      font-family: Arial, sans-serif;
+    }
+    .list-item {
+      padding: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+    .list-item i {
+      font-size: 24px; /* Adjust the icon size */
+      margin-right: 10px; /* Add space between icon and text */
+    }
+    .options{
+      text-decoration: none;
+    }
+    .options:hover{
+      text-decoration: none;
+    }
+    .active {
+      background-color: #3498db;
+      color: #fff;
+    }
+    .inactive {
+      background-color: #fff;
+      color: #333;
+    }
+    
+ 
+
+</style>
+
+<title>Settings | Oders</title>
+<main>
+  <div class="container">
+    <div class="row d-flex justify-content-arround">
+      <div class="setting-options  col-md-4 col-lg-4 col-xl-3 col-xxl-3  mb-2 min-height-div1 mb-md-4">
+        <ul class="list-group " id="myList">
+           <a class="options" href="/home/settings/profile"><li class="list-group-item inactive list-item">
+              <i class="bi bi-person"></i> Profile
+            </li></a> 
+           <a  class="options" href="/home/settings/oders"><li class="list-group-item inactive list-item">
+              <i class="bi bi-box"></i> Orders
+            </li></a> 
+            <a  class="options" href=""><li class="list-group-item inactive list-item">
+              <i class="bi bi-cart"></i> Cart
+            </li></a>
+           <a   class="options" href=""><li class="list-group-item  inactive list-item">
+              <i class="bi bi-heart"></i> Wishlist
+            </li></a> 
+           <a  class="options" href=""><li class="list-group-item  inactive list-item">
+              <i class="bi bi-geo-alt"></i> Address
+            </li></a> 
+          </ul>
+      </div>
+      <div class="view-settings col-md-8 col-lg-8 col-xl-9 col-xxl-8 border min-height-div1 mb-md-4">
+        <!-- Iterate through each order -->
+        <%if(oders !== 'undefined'){%>
+
+       <%oders.forEach(oder => {%>
+
+          <div class="row mb-3 p-3">
+            <!-- Image (Assuming you have an image URL in the order or user data) -->
+            <%oder.products.forEach(product=>{%>
+
+            <div class="col-md-2">
+              <img src="/images/productImages/<%=product.image%>" alt="User Image" class="" style="width: 100px;height: 100px;">
+            </div>
+            <% oder.products.forEach(product => { %>
+              <!-- User Name -->
+              <div style="align-items: center; display: flex;" class="col-md-3">
+                <%= product.name && product.name.substring(0, 20, product.name.length / 2) %>
+              </div>
+            <% }); %>
+            
+
+               <% })  %>
+
+            <!-- Total Price -->
+            <div style="align-items: center; display: flex;" class="col-md-2">
+             <b>Total</b>: <%=oder.totalAmount  %>
+            </div>
+      
+            <!-- Order Status -->
+            <% if(oder.is_cancelled == false){%>
+              <div style="align-items: center; display: flex;" class="col-md-2 text-warning">
+                <%=oder.status  %>
+
+            </div>
+            <%} else{%>
+
+            <%}%>
+         
+      
+            <!-- Action Buttons -->
+            <div style="align-items: center; display: flex;" class="col-md-3">
+              <!-- Add your action buttons here -->
+              <% if (!oder.is_cancelled) { %>
+                <a type="button" href="/home/settings/cancel-oders/<%= oder._id %>" class="btn btn-danger btn-sm">
+                  Cancel Order
+                </a>
+              <% } else { %>
+                <span class="text-info">Cancelled</span>
+              <% } %>
+                          </div>
+          </div>
+
+          <% });  %>
+
+          <%}  %>
+      </div>
+      
+          </div>
+  </div>
+</main>
+
+
+
+
+<%- include('../layout/footer.ejs') %>

@@ -3,6 +3,7 @@ const { CartModel, WishListModel } = require("../models/cart&WishlistModel");
 const productModel = require("../models/productModel");
 const countryState = require("country-state-city");
 const {calculateTotalDiscount} = require("../helpers/totalDiscountHelper");
+const {generateOrderID} = require("../helpers/oderIdHelper");
 const userModel = require("../models/userModel");
 const userShoppingCartPageLoad = async (req, res) => {
   try {
@@ -92,6 +93,7 @@ const userAddToCartButton = async (req, res) => {
             {
               product_id: product_id,
               quantity: 1,
+              name:product.name,
               image: product.variants[0].images[0],
               price: parseFloat(productPrice),
             },
@@ -308,6 +310,60 @@ const editUserBillingAddress = async(req,res)=>{
 }
 
 
+
+//compete cash on deliver methood payment and add producvt to user oders
+
+const completeOderCashOnDelivery = async(req,res)=>{
+
+  try{
+
+    const id = req.params.id;
+
+    console.log("ef ef fe fe f ef e fe fe f ef e fe  ",id);
+    const user = await userModel.findById(id)
+
+    console.log(user);
+    const userCart = await CartModel.findById(id).populate('cart.product_id');
+
+    console.log(userCart);
+    
+    if(userCart){
+      const userOder  = {
+        oder_id:generateOrderID(),
+        customerName: user.first_name+" "+user.last_name,
+        products: userCart.cart,
+        date:Date.now().toString(),
+        status:'Pending',
+        totalAmount: userCart.total_price, 
+      }
+      const userOderAdd = await userModel.findOneAndUpdate({_id:id},{$push:{oders:userOder}});
+
+
+
+
+      if(userOderAdd){
+
+        await userCart.deleteOne({_id:id});
+
+        res.redirect('/home/cart');
+
+      }
+
+    }else{
+
+      console.log("no user found");
+      res.redirect('/home/cart');
+
+    }
+
+
+  }catch(error){
+    console.error(error);
+  }
+}
+
+
+
 module.exports = {
   userShoppingCartPageLoad,
   userAddToCartButton,
@@ -317,4 +373,5 @@ module.exports = {
   addUserBellingAddress,
   stateCityLoad,
   editUserBillingAddress,
+  completeOderCashOnDelivery,
 };

@@ -1,0 +1,94 @@
+
+<%- include('../layout/adminHeader.ejs') %>
+<title>Oders</title>
+<aside>
+  <a href="/admin" style="color: rgb(45, 81, 172); position: absolute; left: 50px; top: 80px; font-size: 15px; font-weight: bold; " class="btn"> <-Back</a>
+</aside>
+  <!-- main content -->
+  <main class="p-4 min-vh-100">
+    <div class="container">
+        <section class="row">
+            <div class="col-md-6 col-lg-4">
+              <!-- card -->
+              <article class="p-4 rounded shadow-sm border-left
+             mb-4">
+                <a href="#" class="d-flex align-items-center">
+                  <span class="bi bi-box h5"></span>
+                  <h5 class="ml-2"><%=oderCount  %> Oders</h5>
+                </a>
+              </article>
+            </div>
+            <div class="col-md-6 col-lg-4">
+              <article class="p-4 rounded shadow-sm border-left mb-4">
+                <a href="#" class="d-flex align-items-center">
+                  <span class="bi bi-person h5"></span>
+                  <h5 class="ml-2"><%=customers  %> Customers</h5>
+                </a>
+              </article>
+            </div>
+            <!-- <div class="col-md-6 col-lg-4">
+              <article class="p-4 rounded shadow-sm border-left mb-4">
+                <a href="#" class="d-flex align-items-center">
+                  <span class="bi bi-person-check h5"></span>
+                  <h5 class="ml-2">Sellers</h5>
+                </a>
+              </article>
+            </div> -->
+          </section>
+          <div class="jumbotron jumbotron-fluid rounded bg-white border-0 shadow-sm border-left px-4">
+            <div class="container">
+              <table class="table table-responsive-md">
+                <thead>
+                  <tr>
+                    <th scope="col">Oder Id</th>
+                    <th scope="col">User Name</th>
+                    <th scope="col">Order Date</th>
+                    <th scope="col">Order Status</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <%oders.forEach(oder => {%>
+
+                <tbody>
+                  <!-- Sample data, replace with dynamic data from your backend -->
+                  <tr>
+                    <th scope="row">#<%=oder.oder_id  %></th>                           
+                    <td><%=oder.customerName%></td>
+                    <td><%= new Date(oder.date).toLocaleString('en-US', { day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true }) %></td>
+                    <td>
+                      <% if(oder.is_cancelled == false){%>
+
+                      <%var options = ['Pending','Shipped','Delivered']  %>
+                      <select class="form-select form-select-sm">
+                        <%for(i=0; i<=options.length; i++){%>
+                          <option value="<%=options[i] %>"><%=options[i] %></option>
+                        <%}  %>
+                        <!-- Add more status options as needed -->
+                      </select>
+                    </td>
+
+                      <% } else{%>
+                        <td class="text-danger">
+                          Cancled
+                        </td>
+                      <%}%>
+
+                    <td>
+                      <button type="button" class="btn btn-primary btn-sm">View</button>
+
+                    </td>
+                  </tr>
+                  <!-- Add more rows as needed -->
+                </tbody>
+                <%});  %>
+              </table>
+            </div>
+          </div>
+          
+
+
+          
+    </div>
+   
+  </main>
+<%- include('../layout/adminFooter.ejs') %>

@@ -1,8 +1,32 @@
 <%- include('../layout/header.ejs') %>
 
 <link rel="stylesheet" href="/css/checkout.css">
+<style>
+  .tick-icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20vh;
+  }
 
-  
+  .tick-icon {
+    font-size: 0; /* Start with no font size */
+    color: #28a745; /* Green color for the tick icon */
+    animation: zoomOut 0.5s ease-in-out forwards; /* Animation name, duration, and forwards to keep the final state */
+  }
+
+  @keyframes zoomOut {
+    0% {
+      font-size: 0; /* Start with no font size */
+    }
+    100% {
+      font-size: 48px; /* End with the desired font size */
+    }
+  }
+</style>
+
+
+  <title>Checkout</title>
   <section class="py-5">
     <div class="container">
       <div class="row ">
@@ -158,7 +182,12 @@
             </tr>
           </tbody>
         </table>
-                       
+                  
+        
+
+<!-- checkout modal if  paymentMethod is cash on delevry -->
+
+
           <!-- Checkout -->
         </div>
   
@@ -198,10 +227,9 @@
                     <hr />
                     
           
-                      <form action="" class="form" method="">
+                    <form action="" class="form" method="">
                        
                     
-                        <fieldset>
                           <legend>Payment Method</legend>
                     
                           <div class="form__radios">
@@ -209,26 +237,24 @@
                     
                             <div class="form__radio">
                               <label for="paypal"><svg class="icon">
-
                               </svg>PayPal</label>
-                              <input id="paypal" name="payment-method" type="radio" />
-                            </div>
+                              <input id="paypal" name="paymentMethod" value="paypal" type="radio" />
+                                                          </div>
                             <div class="form__radio">
-                              <label for="visa"><svg class="icon">
+                              <label for="cash"><svg class="icon">
                                   <use xlink:href="#icon-sales" />
                                 </svg>Cash On Delivery</label>
-                              <input checked id="visa" name="payment-method" type="radio" />
-                            </div>
+                                <input id="cash" name="paymentMethod" type="radio" value="cash" />
+                              </div>
                           </div>
-                        </fieldset>
                     
                        
                         <div>
-                          <button class="button button--full" type="submit"><svg class="icon">
-                              <use xlink:href="#icon-shopping-bag" />
-                            </svg>Buy Now</button>
+                          <button data-oder="<%=user._id  %>" class="button button--full" type="button" id="buyNowBtn">Buy Now</button>
+                        
                         </div>
                       </form>
+
                     </div>
                     
                     
@@ -238,14 +264,39 @@
         </div>
       </div>
   
-      <!-- Section to show available addresses with checkboxes -->
-      
-      <!-- End of section to show available addresses with checkboxes -->
-  
     </div>
 
-<!-- //edit address form -->
-   
+
+
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="orderSuccessModal" tabindex="-1" aria-labelledby="orderSuccessModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="orderSuccessModalLabel">Order Completed Successfully</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="tick-icon-container">
+          <div class="tick-icon">&#10003;</div>
+        </div>
+        Your order has been successfully placed. Click the button below to view your order.
+      </div>
+      <div class="modal-footer">
+        <a type="button" class="btn btn-primary" id="viewOrderBtn" data-bs-dismiss="modal">View Order</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
 
 
 
@@ -254,10 +305,70 @@
 
   </section>
   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const buyNowBtn = document.getElementById('buyNowBtn');
+      const viewOrderBtn = document.getElementById('viewOrderBtn');
+      const paymentMethodRadioButtons = document.querySelectorAll('input[name="paymentMethod"]');
+      const orderSuccessModal = new bootstrap.Modal(document.getElementById('orderSuccessModal'));
+  
+      buyNowBtn.addEventListener('click', async function () {
+  // Check if the selected payment method is "Cash on Delivery"
+   const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
+
+    const oder = buyNowBtn.dataset.oder;
+
+
+  console.log(oder);
+  if (selectedPaymentMethod && selectedPaymentMethod.value === 'cash') {
+
+    const userOder = await axios.post(`/home/cart/checkout/complete/${oder}`);
+    // Show the success modal
+    orderSuccessModal.show();
+
+    setTimeout(() => {
+      window.location.href = "/home/cart";
+
+    }, 10000);
+
+
+
+  
+  }
+});
+
+  
+      viewOrderBtn.addEventListener('click', function () {
+        // Redirect to the page where the user can view their order
+        // Replace 'your_order_page_url' with the actual URL
+        window.location.href = '';
+      });
+    });
+  </script>
+  
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const paymentMethodRadioButtons = document.querySelectorAll('input[name="paymentMethod"]');
+      
+      paymentMethodRadioButtons.forEach(function (radioButton) {
+        radioButton.addEventListener('change', function () {
+          // Unselect all other radio buttons
+          paymentMethodRadioButtons.forEach(function (otherButton) {
+            if (otherButton !== radioButton) {
+              otherButton.checked = false;
+            }
+          });
+        });
+      });
+    });
+  </script>
+  
+  <script>
     const addressDetails = document.getElementById('addressDetails');
     const addressForm = document.getElementById('addressForm');
     const editAddressBtn = document.getElementById('editAddressBtn');
     const cancelEditBtn = document.getElementById('cancelEditBtn');
+
 
     editAddressBtn.addEventListener('click', () => {
         // Hide address details div

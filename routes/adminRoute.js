@@ -6,6 +6,7 @@ const customerController = require("../controllers/customerController");
 const categoryController = require("../controllers/categoryController");
 const productController = require("../controllers/productColtroller");
 const bannerController = require("../controllers/bannerController");
+const userSettingController = require("../controllers/userSettingsController");
 const path = require("path");
 const multer = require("multer");
 // Define storage for product images
@@ -120,6 +121,11 @@ adminRoute.get('/banners/delete/:id',bannerController.deleteBannerByAdmin)
 adminRoute.get('/banners/edit/:id',bannerController.editeBannerByAdminGet)
 adminRoute.post('/banners/edit/:id',uploadBannerImage.single('image'),bannerController.editBannerByAdminPost)
 
+
+
+//admin oder mangment
+
+adminRoute.get('/oders',userSettingController.loadOderManagment);
 
 adminRoute.get("*", function (req, res) {
   res.redirect("/admin");
