@@ -38,6 +38,8 @@ userRoute.post('/register',userController.insertUser);
 //USER VERIFICATION THROUGH EMAIL TO COMPLETE
 userRoute.get('/verify',auth.is_Logout,userController.loadVerify);
 userRoute.post('/verify',userController.verifyOTP);
+userRoute.post('/verify/resend-otp',userController.resendOTPWhenTimeOut);
+
 
 //SIGN IN USER
 
@@ -69,7 +71,7 @@ userRoute.patch('/home/products/cart/updateQuantity/:product_id/:product',auth.i
 
 userRoute.delete('/home/cart/:product_id',auth.isUserBlocked,userCartController.deleteCartItem);
 
-userRoute.get('/home/cart/checkout',auth.isUserBlocked,userCartController.loadCheckOutPage);
+userRoute.get('/home/cart/checkout',auth.isUserBlocked,auth.in_cart, userCartController.loadCheckOutPage);
 userRoute.post('/home/cart/checkout',auth.isUserBlocked,userCartController.stateCityLoad);
 
 //user address add
@@ -83,11 +85,13 @@ userRoute.post('/home/cart/edit-address/:id',auth.isUserBlocked,userCartControll
 //user profile page route
 userRoute.get('/home/settings/profile',auth.isUserBlocked,userSettingController.loadUserSettings);
 userRoute.post('/home/setting/edit-profile/:id',uploadUserImage.single('image'),auth.isUserBlocked,userSettingController.editUserProfile);
+userRoute.get('/home/setting/edit-profile/delete-address/:address_id',auth.isUserBlocked,userSettingController.deleteUserAddress);
 
 
 //user oder page eroutes
-userRoute.get('/home/settings/oders',auth.isUserBlocked,userSettingController.loadUserOdersPage)
-userRoute.get('/home/settings/cancel-oders/:oder_id',auth.isUserBlocked,userSettingController.forCancelUserOders)
+userRoute.get('/home/settings/oders',auth.isUserBlocked,userSettingController.loadUserOdersPage);
+userRoute.get('/home/settings/cancel-oders/:oder_id',auth.isUserBlocked,userSettingController.forCancelUserOders);
+
 
 
 

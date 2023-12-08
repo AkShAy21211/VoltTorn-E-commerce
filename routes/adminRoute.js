@@ -1,14 +1,16 @@
 const express = require("express");
 const adminRoute = express();
+const flash = require("express-flash")
 const userController = require("../controllers/userController");
 const adminController = require("../controllers/adminController");
 const customerController = require("../controllers/customerController");
 const categoryController = require("../controllers/categoryController");
 const productController = require("../controllers/productColtroller");
 const bannerController = require("../controllers/bannerController");
-const userSettingController = require("../controllers/userSettingsController");
+const adminOderController = require("../controllers/oderControllers");
 const path = require("path");
 const multer = require("multer");
+adminRoute.use(flash())
 // Define storage for product images
 const productImageStorage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -87,7 +89,10 @@ adminRoute.get("/products/view/:id",adminAuth.is_Login, productController.adminS
 adminRoute.get("/products/add",adminAuth.is_Login, productController.addProductLoad);
 adminRoute.post(
   "/products/add",
-  uploadProductImage.array('images', 4),
+  uploadProductImage.fields([
+    { name: 'images1', maxCount: 6 },
+    { name: 'images2', maxCount: 6 }
+  ]),
   productController.addProduct
 );
 
@@ -96,14 +101,15 @@ adminRoute.post(
 adminRoute.get("/products/edit/:id",adminAuth.is_Login, productController.editProductLoad);
 adminRoute.post(
   "/products/edit/:id",
-  uploadProductImage.array('images', 4),
+  uploadProductImage.fields([
+    { name: 'images1', maxCount: 6 },
+    { name: 'images2', maxCount: 6 }
+  ]),
   productController.editProduct
 );
 adminRoute.get("/products/delete/:id",adminAuth.is_Login, productController.deleteProduct);
 
 //edit product varients
-
-adminRoute.get('/products/delete-variant',adminAuth.is_Login,productController.deleteProductVarientByAdmin)
 
 
 
@@ -124,8 +130,9 @@ adminRoute.post('/banners/edit/:id',uploadBannerImage.single('image'),bannerCont
 
 
 //admin oder mangment
+adminRoute.get('/oders',adminOderController.loadOderManagment);
 
-adminRoute.get('/oders',userSettingController.loadOderManagment);
+adminRoute.patch('/oders/change-oder-status/:status/:id',adminOderController.adminChangeOderStatus)
 
 adminRoute.get("*", function (req, res) {
   res.redirect("/admin");

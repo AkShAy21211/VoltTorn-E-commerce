@@ -25,14 +25,14 @@
 
 <title>Products</title>
 <main>
+  
   <div class="container-fluid mt-4">
     <div class="row d-flex justify-content-end">
       <div class="col-md-10 col-lg-10">
         <div class="d-flex justify-content-between">
           <h1 class="text-bg-info rounded" style="font-size: 30px; width: 230px; text-align: center; font-family: Arial, Helvetica, sans-serif;">Product List</h1>
-          <form method="" action="/admin/Products/add">
-            <button class="btn btn-success mb-2" data-toggle="modal" data-target="#addCategoryModal">Add Products</button>
-          </form>
+          <a href="/admin/products/add" class="btn btn-success mb-2">Add Products</a>
+
         </div>
         <div class="table-responsive">
           <table class="table">
@@ -49,8 +49,8 @@
               <% ProductData.forEach((product, index) => { %>
                 <tr>
                   <td><%= index + 1 %></td>
-                  <% if (product.variants.length > 0) { %>
-                    <td><img width="50px" height="50px" src="/images/productImages/<%= product.variants[0].images[0] %>" alt=""></td>
+                  <% if (product.images.length > 0) { %>
+                    <td><img width="50px" height="50px" src="/images/productImages/<%=product.images[0]%>" alt=""></td>
                   <% } else { %>
                     <td>No image</td>
                   <% } %>
@@ -76,6 +76,13 @@
   </div>
   
 </main>
+<% if (messages.success) { %>
+  <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000" style="background-color: rgba(74, 205, 74, 0.679); position:  absolute; top: 80px; right: 10px; min-width: 200px;">
+    <div class="toast-body">
+      <%= messages.success %>
+    </div>
+  </div>
+<% } %>
 
 <script src="/js/alertPopUp.js"></script>
 <%- include('../layout/adminFooter.ejs') %>
@@ -84,4 +91,8 @@
   $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
   });
+ $(document).ready(function(){
+    $('.toast').toast('show');
+  });
+
 </script>

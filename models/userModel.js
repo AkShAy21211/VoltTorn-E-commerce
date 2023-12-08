@@ -25,26 +25,59 @@ const addressSchema = new mongoose.Schema({
 });
 
 
+
+
 const orderSchema = new mongoose.Schema({
-  oder_id:{
-    type:Number,
-    required:true
+  order_id: {
+    type: Number,
+    required: true,
   },
   customerName: String,
+  address: {
+    address: {
+      type: String,
+      required: true,
+    },
+    country: {
+      type: String,
+      required: true,
+    },
+    state: {
+      type: String,
+      required: true,
+    },
+    city: {
+      type: String,
+      required: true,
+    },
+    zip: {
+      type: String,
+      required: true,
+    },
+    mobile: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+  },
   products: [],
   status: {
     type: String,
-    enum: ['Pending', 'Shipped', 'Delivered'], // Define possible status values
-    default: 'Pending', // Set a default status
+    enum: ['Pending', 'Shipped', 'Delivered'],
+    default: 'Pending',
   },
-  date:Date,
-  quantity:Number,
+  date: Date,
+  quantity: Number,
   totalAmount: Number,
-  is_cancelled:{
-    type:Boolean,
-    default:false,
-  }
+  is_cancelled: {
+    type: Boolean,
+    default: false,
+  },
 });
+
 
 
 const userSchema = new mongoose.Schema({

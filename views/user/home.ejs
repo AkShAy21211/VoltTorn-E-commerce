@@ -81,7 +81,7 @@
 
       <% banner.forEach((banner, index) => { %>
         <div class="<%= index === 0 ? 'carousel-item active' : 'carousel-item' %> d-flex justify-content-center">
-          <img height="350" style="-webkit-user-drag: none; background-size: cover;" data-ride="1000" data-slide="carsoul" class="d-block w-75 mt-4" src="/images/bannerImages/<%= banner.image %>" alt="Banner <%= index + 1 %>">
+          <img height="500" style="-webkit-user-drag: none; background-size: cover;width: 95%;" data-ride="1000" data-slide="carsoul" class="d-block  mt-4" src="/images/bannerImages/<%= banner.image %>" alt="Banner <%= index + 1 %>">
         </div>
       <% }); %>
     </div>
@@ -151,12 +151,18 @@
                 <a href="/home/product/details/<%=product._id%>" class="text-decoration-none text-dark">
                   <div class="card border-0 h-100 p-2 " id="product-card">
                       <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px" class="card-img-top"
-                        src="/images/productImages/<%= product.variants[0].images[0] %>" alt="Product Image " />
+                        src="/images/productImages/<%=product.images[0]  %>" alt="Product Image " />
                     <div class="card-body" style="height: 130px;">
+                      <div style="display: flex; justify-content: start; margin-bottom: 10px; text-align: start;">
+
                       <h6><%= product.name.substring(0, 40, product.name.length / 2) %></h6>
-                      <p class="card-text" data-price="<%= Number(product.price - (product.price * (product.discount / 100)))%>" >Price: <b>Rs:<%= Number(product.price - (product.price * (product.discount / 100))).toLocaleString() %></b></p>
+                      </div>
+                      <div style="display: flex; justify-content: start; margin-bottom: 10px;">
+                        <p class="card-text " data-price="<%= Number(product.price - (product.price * (product.discount / 100)))%>" >Price: <b>Rs:<%= Number(product.price - (product.price * (product.discount / 100))).toLocaleString() %></b></p>
+
+                      </div>
                       <div class="d-flex justify-content-between">
-                        <p class="card-text text-success">%<%= product.discount %> off</p>
+                        <p class="card-text text-success"><%= product.discount %> %off</p>
                         <p class="small text-danger"><s>Rs<%= product.price %></s></p>
                       </div>
                     </div>

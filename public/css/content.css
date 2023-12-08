@@ -14,9 +14,8 @@ body {
   }
 
   main {
-    margin-top: 0px;
     flex: 1;
-    min-height: calc(200vh - 400px); /* Adjust the value as needed */
+    min-height: calc(200vh - 600px); /* Adjust the value as needed */
   }
 
   footer {

@@ -51,12 +51,12 @@
                             </tr>
                         </thead>
                         <tbody class="align-center">
-                            <% CategoryData.forEach(function(category) { %>
+                            <% CategoryData.forEach(function(category,i) { %>
                                 <tr class="text-center">
                                     <td>
-                                        <%= category.category %>
+                                       <%= category.category %>
                                     </td>
-                                    <td class="description-column">
+                                    <td class="description-column w-25 wrap">
                                         <%= category.sub_Category %>
                                     </td>
                                     <td class="description-column">
@@ -119,7 +119,7 @@
                     <form method="POST" action="/admin/category/add" onsubmit="return validateCategoryForm()" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="name">Category Name</label>
-                            <select class="select form-control" id="name" name="name" required >
+                            <select class="select form-control" id="name" name="name"  >
                                 <option value="">Select</option>
                                 <option value="Laptops">Laptops</option>
                                 <option value="Mobiles">Mobiles</option>
@@ -134,7 +134,7 @@
                         </div>
                         <div class="form-group">
                             <label for="SubCategory">Sub-Category Name</label>
-                            <select class="select form-control" id="SubCategory" name="SubCategory" required>
+                            <select class="select form-control" id="SubCategory" name="SubCategory" >
                                 <option value="">Select</option>
                                 <option value="Gaming">Gaming</option>
                                 <option value="Ultrabooks">Ultrabooks</option>
@@ -157,7 +157,7 @@
                         </div>
                         <div class="form-group">
                             <label for="description">Description</label>
-                            <textarea class="form-control" id="description" name="description" required></textarea>
+                            <textarea class="form-control" id="description" name="description" ></textarea>
                             <div id="descriptionWarning" class="text-danger"></div>
                         </div>
                         <button type="submit" class="btn btn-success">Add Category</button>
@@ -174,11 +174,15 @@
                 var name = document.getElementById('name').value;
                 var description = document.getElementById('description').value;
                 var sub_Category = document.getElementById('SubCategory').value;
+                var image = document.getElementById('image').value;
+
                 
                 // Reset all warnings
                 document.getElementById('nameWarning').innerText = '';
                 document.getElementById('descriptionWarning').innerText = '';
                 document.getElementById('SubCategoryWarning').innerText = '';
+                document.getElementById('imageWarning').innerText = '';
+
         
                 // Validate name with no white spaces
                 if (!name.trim()) {
@@ -191,6 +195,9 @@
                     document.getElementById('SubCategoryWarning').innerText = 'Sub Category should not be empty.';
                     return false;
                 }
+                if (!image.trim()) {
+              document.getElementById('imageWarning').innerText = 'Please select at least one image.';
+             }
         
                 // Validate description with more than 10 words
                 var wordCount = description.trim().split(/\s+/).length;

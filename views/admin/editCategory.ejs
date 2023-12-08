@@ -18,11 +18,11 @@
           <div class="form-outline mb-4">
             <label class="form-label" for="form4Example1">Category</label>
             
-            <select class="select form-control" id="name" name="name" required >
-              <%categorys.forEach(category=>{%>
+            <select class="select form-control"  id="name" name="name" required >
+            
 
-              <option value="<%=category.category%>"><%=category.category%></option>
-              <% })%>         
+              <option value="<%=CategoryData.category%>"><%=CategoryData.category%></option>
+              
 
             </select>   
             <div id="nameWarning" class="text-danger"></div>
@@ -33,9 +33,9 @@
             <label class="form-label" for="form4Example1">Sub Category</label>
 
             <select class="select form-control" id="SubCategory" name="SubCategory" required>
-              <%categorys.forEach(category=>{%>
+              <%CategoryData.sub_Category.forEach(subCategory=>{%>
 
-                <option value="<%=category.sub_Category%>"><%=category.sub_Category%></option>
+                <option value="<%=subCategory%>"><%=subCategory%></option>
                 <% })%>                  
               </select>
             <div id="SubCategoryWarning" class="text-danger"></div>
@@ -69,25 +69,26 @@
 
 <script>
   function validateCategoryForm() {
-    var name = document.getElementById('form4Example1').value;
-    var description = document.getElementById('form4Example3').value;
-    var sub_Category = document.getElementById('form4Example2').value;
-    
-    // Reset the warning
+    var name = document.getElementById('name').value;
+    var subCategory = document.getElementById('SubCategory').value;
+    var description = document.getElementById('form4Example5').value;
+
+    // Reset the warnings
     document.getElementById('nameWarning').innerText = '';
-    document.getElementById('descriptionWarning').innerText = '';
     document.getElementById('SubCategoryWarning').innerText = '';
+    document.getElementById('descriptionWarning').innerText = '';
 
     // Validate name with no leading or trailing whitespaces
     if (!name.trim() || /\s/.test(name)) {
-    document.getElementById('nameWarning').innerText = 'Name should not be empty or contain trailing white spaces.';
-    return false;
-}
+      document.getElementById('nameWarning').innerText = 'Name should not be empty or contain trailing white spaces.';
+      return false;
+    }
 
-if (!sub_Category.trim() || /\s/.test(sub_Category)) {
-    document.getElementById('SubCategoryWarning').innerText = 'Sub Category should not be empty or contain trailing white spaces.';
-    return false;
-}
+    // Validate sub category with no leading or trailing whitespaces
+    if (!subCategory.trim() || /\s/.test(subCategory)) {
+      document.getElementById('SubCategoryWarning').innerText = 'Sub Category should not be empty or contain trailing white spaces.';
+      return false;
+    }
 
     // Validate description with more than 10 words
     var wordCount = description.trim().split(/\s+/).length;
@@ -100,4 +101,5 @@ if (!sub_Category.trim() || /\s/.test(sub_Category)) {
     return true;
   }
 </script>
+
 <%- include('../layout/adminFooter.ejs') %>

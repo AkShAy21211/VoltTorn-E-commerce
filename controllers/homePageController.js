@@ -54,8 +54,7 @@ const brandCount =  await productModel.aggregate([{$match: {category: cat_name, 
 
 const productDetail = async (req, res) => {
   try {
-    const id = req.params.id;
-    const color = req.params.color;
+    const {id,color} = req.params;
     const ProductData = await productModel.findById({_id:id});
     res.render("productDetail",{ProductData});
   } catch (error) {

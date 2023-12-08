@@ -2,7 +2,6 @@ const userModel = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const userOTPVeryModel = require("../models/userVerifyOTPModel");
-const e = require("express");
 
 //user otp verification configure
 
@@ -35,7 +34,7 @@ const sendEmail = async (email, otpCode) => {
 
 const generateAndSendOTP = async (email) => {
   const otpCode = generateOTP();
-  const otpExpiration = new Date(Date.now() + 600000); // OTP expires in 10 minutes
+  const otpExpiration = new Date(Date.now() + 60000); // OTP expires in 1 minute
 
   await userOTPVeryModel.updateOne(
     { email },
@@ -70,42 +69,51 @@ const loadRegister = async (req, res) => {
 //POST REQUEST FOR LOAD USER REGISTRATION TO INSERT NEW USER
 const insertUser = async (req, res) => {
   try {
-    const {first_name,last_name,email,mobile,password} = req.body;
+    const { first_name, last_name, email, mobile, password, confirmPassword } = req.body;
     const hashPassword = await securePassword(password);
-    const confirmPassword = req.body.password === req.body.confirmPassword;
-    const userExist = await userModel.findOne({$or:[{email:email},{mobile:mobile}]});
-
+    
     if (!confirmPassword) {
-      
       return res.render("registration", {
         password: "Your registration has failed. Please check your password",
       });
-    }else{
-      if(userExist){
-        return res.render("registration", {
-          password: "User with email or phone already exists",
-        });
-      }else{
-        const User = new userModel({
-          first_name: first_name,
-          last_name: last_name,
-          email:email,
-          mobile:mobile,
-          password:hashPassword,
-          is_verified: false,
-          is_admin: 0,
-          status: true,
-          isDelete:false,
-        });
-        const userData = await User.save();
-        generateAndSendOTP(userData.email);
-        // Redirect to the OTP verification page with _id and email as URL parameters
-        return res.redirect(`/verify?_id=${userData._id}&email=${userData.email}`);
-      }
     }
-   
+
+    const userExist = await userModel.findOne({ $or: [{ email: email }, { mobile: mobile }] });
+
+    if (userExist) {
+      return res.render("registration", {
+        password: "User with email or phone already exists",
+      });
+    }
+
+    const User = new userModel({
+      first_name: first_name,
+      last_name: last_name,
+      email: email,
+      mobile: mobile,
+      password: hashPassword,
+      is_verified: false,
+      is_admin: 0,
+      status: true,
+      isDelete: false,
+    });
+
+    const userData = await User.save();
+
+    // Session handling
+    if (!req.session.user) {
+      req.session.user = {};
+
+    }
+    
+    req.session.user.email = User.email;
+    req.session.user.userId = User._id;
 
 
+    generateAndSendOTP(userData.email);
+    
+    // Redirect to the appropriate route
+    return res.redirect(`/verify`);
   } catch (error) {
     console.error("Error inserting user:", error.message);
     return res.render("registration", {
@@ -113,9 +121,14 @@ const insertUser = async (req, res) => {
     });
   }
 };
+
+
+
+
+
 const loadVerify = async (req, res) => {
   try {
-    const email = req.query.email;
+    const email = req.session.user.email;
 
     // Check if the user is already verified
     const userData = await userModel.findOne({ email: email, is_verified: true });
@@ -126,7 +139,7 @@ const loadVerify = async (req, res) => {
     }
 
     // User is not yet verified, render the verifyOTP page
-    res.render("verifyOTP");
+    res.render("verifyOTP",{email});
   } catch (error) {
     console.log(error.message);
     // Handle the error
@@ -137,40 +150,32 @@ const loadVerify = async (req, res) => {
 //VERIFY OTP
 const verifyOTP = async (req, res) => {
   try {
-    const id = req.query._id;
-    const email = req.query.email;
+    const { userId, email } = req.session.user;
     const otp = req.body.otp;
+    const currentTime = new Date();
 
-    const userData = await userModel.findOne({ _id: id, email: email });
+    const userData = await userModel.findOne({ _id: userId, email: email });
     const OTPData = await userOTPVeryModel.findOne({
       email: email,
       otpCode: otp,
+      otpExpiration: { $gt: currentTime }, // Check if the OTP is not expired
     });
 
-
-    if (!userData || !otp) {
-      console.log("Invalid OTP or user already verified");
+    if (!userData || !otp || !OTPData) {
       return res.render("verifyOTP", {
-        error: "Invalid OTP or user already verified",
+        error: "Invalid OTP or Expired",
       });
     }
 
-    if (userData && OTPData && OTPData.otpCode === otp) {
-      await userModel.updateOne({ _id: id }, { $set: { is_verified: true } });
-      await userOTPVeryModel.deleteOne({ _id: OTPData._id }); // Assuming _id is the unique identifier for the OTPData
-      req.session.user = {
+    await userModel.updateOne({ _id: userId }, { $set: { is_verified: true } });
+    await userOTPVeryModel.findByIdAndDelete(OTPData._id);
+    
+    req.session.user = {
+      userId:userData._id,
+      username: userData.first_name + " " + userData.last_name,
+    };
 
-        isUserAuthenticated:true,
-        userId:userData._id,
-        username:userData.first_name+" "+userData.last_name,
-       
-      }
-      return res.redirect('/');
-    } else {
-      return res.render("verifyOTP", {
-        error: "Invalid OTP",
-      });
-    }
+    return res.redirect('/');
   } catch (error) {
     console.error("Error verifying OTP:", error.message);
     return res.render("verifyOTP", {
@@ -178,6 +183,33 @@ const verifyOTP = async (req, res) => {
     });
   }
 };
+
+
+
+const resendOTPWhenTimeOut = async (req, res) => {
+  try {
+    const email = req.session.user.email;
+    const currentTime = new Date();
+
+    // Delete documents where otpExpiration is less than the current time
+    const deleteOtp =  await userOTPVeryModel.deleteOne({email:email},{ otpExpiration: { $lt: currentTime } });
+    console.log('Expired OTPs deleted successfully');
+
+    if(deleteOtp){
+
+    generateAndSendOTP(email);
+    }
+
+    return res.json({ success: true, message: 'OTP resent successfully', deleteOtp });
+  } catch (error) {
+    console.error('Error resending OTP:', error.message);
+    return res.status(500).json({ success: false, message: 'Error resending OTP' });
+  }
+};
+
+
+
+
 
 
 
@@ -192,10 +224,11 @@ const loadLogin = async (req, res) => {
   }
 };
 
+
+
 const loadLoginVerify = async (req, res) => {
   try {
-    const email = req.body.email;
-    const password = req.body.password;
+    const {email,password} = req.body;
     const userData = await userModel.findOne({ email: email });
 
     if (userData) {
@@ -260,6 +293,7 @@ module.exports = {
   loadLogin,
   loadLoginVerify,
   userLogout,
+  resendOTPWhenTimeOut,
 
  
 };

@@ -137,17 +137,41 @@ body {
             </div>
           </div>
           
+          <h5 class="p-1 fw-bold">Billing Address</h5>
           <div class="row mb-3">
+
+          <% user.addresses.forEach((address, i) => { %>
+
+          <%if(!user.addresses){%>
+            <h6 class="p-1 text-info">No Address Found Please Add Your Belling Address At The Time Of Checkout.</h6>
+
+          <%} else{%>
+
+
             <div class="col-md-6">
               <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="password" name="password" placeholder=" ">
-                <label for="password" class="form-label">Cahnge Password</label>
-                <label for="password" class="form-label"></label>
+                <div data-index="<%= i %>" class="mb-3">
+                  <!-- Example addresses, you can replace these with dynamic data -->
+                <div class="form-check mt-4 border rounded bg-light" style="height: 100px; display: flex; justify-content: space-between; align-items: center;">
+                    <input class="form-check-input ml-1" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                    <label class="ml-4 form-check-label" for="address1">
+                        <div>
+                            <strong>Address:</strong> <%= address.address %><br>
+                           
+                        </div>
+                    </label>
+                    <a style="cursor: pointer; float: right;" class="me-3 text-primary editAddressBtn" href="/home/setting/edit-profile/delete-address/<%=address._id  %>">Delete</a>
+                  </div>
+            </div>
+    
               </div>
             </div>
-          </div>
-          
-      
+                 
+          <%}%>
+
+          <%})  %>  
+        </div>
+
           <!-- Submit Button -->
           <button type="submit" class="btn btn-primary">Update Profile</button>
         </form>
@@ -197,16 +221,7 @@ body {
               </div>
             </div>
             
-            <div class="row mb-3">
-              <div class="col-md-6">
-                <div class="form-floating mb-3">
-                  <input type="" class="form-control"  readonly disabled id="password" name="password" placeholder=" ">
-                  <label for="password" class="form-label">Cahnge Password</label>
-                  <label for="password" class="form-label"></label>
-                </div>
-              </div>
-            </div>
-            
+         
         
             <!-- Submit Button -->
             <button type="" disabled class="btn btn-primary">Update Profile</button>

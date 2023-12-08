@@ -1,10 +1,10 @@
-const { ObjectId } = require("mongodb");
 const { CartModel, WishListModel } = require("../models/cart&WishlistModel");
 const productModel = require("../models/productModel");
 const countryState = require("country-state-city");
-const {calculateTotalDiscount} = require("../helpers/totalDiscountHelper");
-const {generateOrderID} = require("../helpers/oderIdHelper");
+const { calculateTotalDiscount } = require("../helpers/totalDiscountHelper");
+const { generateOrderID } = require("../helpers/oderIdHelper");
 const userModel = require("../models/userModel");
+
 const userShoppingCartPageLoad = async (req, res) => {
   try {
     // Check if the user is logged in
@@ -47,13 +47,15 @@ const userAddToCartButton = async (req, res) => {
 
         if (existingProduct) {
           // Return a JSON response with redirectTo property
+          req.session.user.cart = existingProduct;
+
           return res.status(200).json({
             success: true,
             redirectTo: "/home/cart",
           });
-        } else {
 
-            //when new item added in existing cart
+        } else {
+          //when new item added in existing cart
 
           const updatedCart = await CartModel.findOneAndUpdate(
             { _id: user_id },
@@ -62,6 +64,7 @@ const userAddToCartButton = async (req, res) => {
                 cart: {
                   product_id: product_id,
                   quantity: 1,
+                  name: product.name,
                   image: product.variants[0].images[0],
                   price: parseFloat(productPrice),
                 },
@@ -70,12 +73,18 @@ const userAddToCartButton = async (req, res) => {
             { new: true }
           );
 
-          const total_price = updatedCart.cart.reduce((total, item) => total + item.price, 0);
+          const total_price = updatedCart.cart.reduce(
+            (total, item) => total + item.price,
+            0
+          );
 
           await CartModel.findOneAndUpdate(
-            { _id: user_id },{$set:{total_price:total_price}}
+            { _id: user_id },
+            { $set: { total_price: total_price } }
           );
           // Return a JSON response with message and redirectTo properties
+          req.session.user.cart = updatedCart;
+
           return res.status(200).json({
             success: true,
             total_price,
@@ -84,8 +93,7 @@ const userAddToCartButton = async (req, res) => {
           });
         }
       } else {
-
-        //when new cart is created 
+        //when new cart is created
 
         const newCart = new CartModel({
           _id: user_id,
@@ -93,17 +101,19 @@ const userAddToCartButton = async (req, res) => {
             {
               product_id: product_id,
               quantity: 1,
-              name:product.name,
-              image: product.variants[0].images[0],
+              name: product.name,
+              image: product.images[0],
               price: parseFloat(productPrice),
             },
           ],
-          total_price:parseFloat(productPrice),
+          total_price: parseFloat(productPrice),
         });
 
         const cartData = await newCart.save();
 
         // Return a JSON response with message and redirectTo properties
+        req.session.user.cart = newCart;
+
         return res.status(200).json({
           success: true,
           message: "Item added to cart",
@@ -139,7 +149,8 @@ const updateQuantity = async (req, res) => {
     const newProductPrice =
       parseFloat(
         productDetails.price -
-          productDetails.price * (productDetails.discount / 100)) * newQuantity;
+          productDetails.price * (productDetails.discount / 100)
+      ) * newQuantity;
 
     const cart = await CartModel.findOneAndUpdate(
       {
@@ -155,11 +166,15 @@ const updateQuantity = async (req, res) => {
       { new: true }
     );
 
-    const total_price = cart.cart.reduce((total, item) => total + item.price, 0);
+    const total_price = cart.cart.reduce(
+      (total, item) => total + item.price,
+      0
+    );
 
-    await CartModel.findOneAndUpdate({_id:cart},{$set:{total_price:total_price}});
-
-
+    await CartModel.findOneAndUpdate(
+      { _id: cart },
+      { $set: { total_price: total_price } }
+    );
 
     res.status(200).json({
       success: true,
@@ -173,7 +188,6 @@ const updateQuantity = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
-
 
 const deleteCartItem = async (req, res) => {
   try {
@@ -191,13 +205,19 @@ const deleteCartItem = async (req, res) => {
       { new: true } // Return the modified document
     );
 
-    const total_price = updatedCart.cart.reduce((total, item) => total + item.price, 0);
+    const total_price = updatedCart.cart.reduce(
+      (total, item) => total + item.price,
+      0
+    );
 
-    await CartModel.findOneAndUpdate({ _id: id }, { $set: { total_price: total_price } });
+    await CartModel.findOneAndUpdate(
+      { _id: id },
+      { $set: { total_price: total_price } }
+    );
 
     console.log(updatedCart);
     const userCartCount =
-    updatedCart && updatedCart.cart ? updatedCart.cart.length : 0;
+      updatedCart && updatedCart.cart ? updatedCart.cart.length : 0;
 
     res.status(200).json({
       success: true,
@@ -205,164 +225,156 @@ const deleteCartItem = async (req, res) => {
       total_price,
       userCartCount,
     });
-  
+
     console.log(total_price);
 
     console.log(userCartCount);
-
   } catch (error) {
     console.error(error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
+      error: "Internal Server Error",
     });
   }
 };
 
-
-
-const loadCheckOutPage = async(req,res)=>{
-
-  try{
+const loadCheckOutPage = async (req, res) => {
+  try {
     const user = await userModel.findById(req.session.user.userId);
     const dataState = req.body.dataState;
     const states = countryState.State.getStatesOfCountry("IN");
     const cart = await CartModel.findById(req.session.user.userId);
 
-   
-    const total_discount = await calculateTotalDiscount(cart.cart); 
+    const total_discount = await calculateTotalDiscount(cart.cart);
 
-    res.render('checkout',{states,user,cart,total_discount});
-
-  
-
-  }catch(error){
+    res.render("checkout", { states, user, cart, total_discount });
+  } catch (error) {
     console.error(error);
   }
-}
+};
 
-const stateCityLoad = async(req,res)=>{
-
-  try{
+const stateCityLoad = async (req, res) => {
+  try {
     const dataState = req.body.dataState;
     const states = countryState.State.getStatesOfCountry("IN");
-    const city = countryState.City.getCitiesOfState("IN",dataState).map(City=> City.name);
+    const city = countryState.City.getCitiesOfState("IN", dataState).map(
+      (City) => City.name
+    );
 
     res.status(200).json({
       success: true,
-      city
+      city,
     });
-console.log(city);
-  
-
-  }catch(error){
+    console.log(city);
+  } catch (error) {
     console.error(error);
   }
-}
+};
 
+const addUserBellingAddress = async (req, res) => {
+  try {
+    const { address, country, state, city, postalCode } = req.body;
 
+    const userAddress = {
+      address: address,
+      country: country,
+      state: state,
+      city: city,
+      zip: postalCode,
+    };
+    await userModel.findOneAndUpdate(
+      { _id: req.session.user.userId },
+      { $push: { addresses: userAddress } }
+    );
 
-const addUserBellingAddress = async(req,res)=>{
-
-  try{
-
- const  {address,country,state,city,postalCode} = req.body;
-
- const userAddress = {
-
-  address:address,
-  country:country,
-  state:state,
-  city:city,
-  zip:postalCode,
-
- }
-await userModel.findOneAndUpdate({_id:req.session.user.userId},{$push:{addresses:userAddress}});
-
-res.redirect('/home/cart/checkout')
-}catch(error){
+    res.redirect("/home/cart/checkout");
+  } catch (error) {
     console.error(error);
   }
-}
+};
 
+const editUserBillingAddress = async (req, res) => {
+  try {
+    const { address, country, state, city, postalCode } = req.body;
+    const addressId = req.params.id;
 
-
-const editUserBillingAddress = async(req,res)=>{
-
-  try{
-
- const  {address,country,state,city,postalCode} = req.body;
- const addressId = req.params.id;
-
- const userAddress = {
-  address:address,
-  country:country,
-  state:state,
-  city:city,
-  zip:postalCode,
- }
-
- await userModel.findOneAndUpdate({'addresses._id':addressId},{$set:{addresses:userAddress}});
- res.redirect('/home/cart/checkout')
-}catch(error){
+       const result = await userModel.findOneAndUpdate(
+      { "addresses._id": addressId },
+      {
+        $set: {
+          "addresses.$.address": address,
+          "addresses.$.country": country,
+          "addresses.$.state":state,
+          "addresses.$.city": city,
+          "addresses.$.zip":postalCode,
+        },
+      },
+      { new: true }
+    );
+    
+    res.redirect("/home/cart/checkout");
+  } catch (error) {
     console.error(error);
+    // Handle the error appropriately, e.g., send an error response to the client
+    res.status(500).send("Internal Server Error");
   }
-}
-
-
+};
 
 //compete cash on deliver methood payment and add producvt to user oders
 
-const completeOderCashOnDelivery = async(req,res)=>{
-
-  try{
-
+const completeOderCashOnDelivery = async (req, res) => {
+  try {
     const id = req.params.id;
-
-    console.log("ef ef fe fe f ef e fe fe f ef e fe  ",id);
-    const user = await userModel.findById(id)
-
-    console.log(user);
-    const userCart = await CartModel.findById(id).populate('cart.product_id');
-
-    console.log(userCart);
+    const addressId = req.body.selectedAddressId;
+    const user = await userModel.findById(id);
+    const userCart = await CartModel.findById(id).populate("cart.product_id");
+    const address = await userModel.findOne({_id:id,'addresses._id':addressId},{'addresses.$':1});
+    const selectedAddress = address.addresses[0];
     
-    if(userCart){
-      const userOder  = {
-        oder_id:generateOrderID(),
-        customerName: user.first_name+" "+user.last_name,
-        products: userCart.cart,
-        date:Date.now().toString(),
-        status:'Pending',
-        totalAmount: userCart.total_price, 
+
+
+
+
+
+    if (userCart) {
+      const userOder = {
+        oder_id: generateOrderID(),
+        customerName: user.first_name + " " + user.last_name,
+        address: {
+          address: selectedAddress.address,
+          country: selectedAddress.country,
+          state: selectedAddress.state,
+          city: selectedAddress.city,
+          zip: selectedAddress.zip,
+          mobile: user.mobile,
+          email: user.email,
+        },
+         products: userCart.cart,
+        date: Date.now().toString(),
+        status: "Pending",
+        totalAmount: userCart.total_price,
+      };
+      
+      const userOderAdd = await userModel.findOneAndUpdate(
+        { _id: id },
+        { $push: { oders: userOder } }
+      );
+
+      if (userOderAdd) {
+        await userCart.deleteOne({ _id: id });
+
+        delete req.session.user.cart;
+
+       return res.status(303).redirect("/home/settings/oders");
       }
-      const userOderAdd = await userModel.findOneAndUpdate({_id:id},{$push:{oders:userOder}});
-
-
-
-
-      if(userOderAdd){
-
-        await userCart.deleteOne({_id:id});
-
-        res.redirect('/home/cart');
-
-      }
-
-    }else{
-
+    } else {
       console.log("no user found");
-      res.redirect('/home/cart');
-
+      res.redirect("/home");
     }
-
-
-  }catch(error){
+  } catch (error) {
     console.error(error);
   }
-}
-
-
+};
 
 module.exports = {
   userShoppingCartPageLoad,

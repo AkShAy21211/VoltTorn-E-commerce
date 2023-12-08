@@ -1,5 +1,4 @@
 const bannerModel = require("../models/bannerModel");
-const { findById } = require("../models/userModel");
 
 const loadBannerPage = async (req,res)=>{
 

@@ -21,22 +21,10 @@
       <form id="ProductForm" action="/admin/products/add" method="POST" enctype="multipart/form-data" >
 
           <div class="row">
-            <% if (messages.error) { %>
-              <div class="alert alert-danger" role="alert">
-                <%= messages.error %>
-              </div>
-            <% } else if(messages.success){%>
-              <div class="alert alert-success" role="alert">
-                <%= messages.success %>
-              </div>
-            <%}%>
-            
             <div class="col-md-4">
-            
               <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" class="form-control" id="name" name="name" />
-                <div id="nameWarning" class="text-danger"></div>
               </div>
             </div>
 
@@ -49,11 +37,9 @@
                   id="price"
                   name="price"
                 />
-                <div id="priceWarning" class="text-danger"></div>
               </div>
             </div>
 
-            
             <div class="col-md-2">
               <div class="form-group">
                 <label for="category">Category</label>
@@ -69,91 +55,42 @@
                   </option>
                   <% }); %>
                 </select>
-                <div id="categoryWarning" class="text-danger"></div>
               </div>
             </div>
-
-
             <div class="col-md-2">
               <div class="form-group">
                 <label for="subCategory">Sub Category</label>
-                <select class="select form-control" id="subCategory" name="subCategory">
+                <select
+                  class="select form-control"
+                  id="subCategory"
+                  name="subCategory"
+                >
                   <option value="">Select</option>
-                  <% var subCategories = category.flatMap(cat => cat.sub_Category) %>
-                  <% subCategories.forEach(subCategory => { %>
-                    <option value="<%= subCategory%>">
-                      <%= subCategory %>
-                    </option>
+                  <% category.forEach(categoryes => { %>
+                  <option value="<%= categoryes.sub_Category %>">
+                    <%= categoryes.sub_Category %>
+                  </option>
                   <% }); %>
                 </select>
-                
-                <div id="subCategoryWarning" class="text-danger"></div>
               </div>
             </div>
             <div class="col-md-2">
               <div class="form-group">
                 <label for="brand">Brand</label>
                 <select class="select form-control" id="brand" name="brand">
-                  <!-- Laptops -->
-                  <optgroup label="Laptops">
-                    <option value="Dell">Dell</option>
-                    <option value="HP">HP (Hewlett-Packard)</option>
-                    <option value="Lenovo">Lenovo</option>
-                    <option value="ASUS">ASUS</option>
-                    <option value="Acer">Acer</option>
-                    <option value="Acer">Acer</option>
-                    <option value="Microsoft">Microsoft</option>
-                    <option value="Apple">Apple</option>
-                    <option value="MSI">MSI</option>
-                    <option value="LG">LG</option>
-                  </optgroup>
-                  
-                  <!-- Headphones -->
-                  <optgroup label="Headphones">
-                    <option value="Sony">Sony</option>
-                    <option value="JBL">JBL</option>
-                    <option value="Zebronics">Zebronics</option>
-                    <option value="Bose">Bose</option>
-                    <option value="Skullcandy">Skullcandy</option>
-                    <option value="Audio-Technica">Audio-Technica</option>
-                    <option value="Beats">Beats</option>
-                    <option value="Philips">Philips</option>
-                    <option value="Jabra">Jabra</option>
-                    <option value="Plantronics">Plantronics</option>
-                  </optgroup>
-                  
-                  <!-- Mobiles -->
-                  <optgroup label="Mobiles">
-                    <option value="Samsung">Samsung</option>
-                    <option value="Apple">Apple iPhone</option>
-                    <option value="Xiaomi">Xiaomi</option>
-                    <option value="OnePlus">OnePlus</option>
-                    <option value="Vivo">Vivo</option>
-                    <option value="Oppo">Oppo</option>
-                    <option value="Realme">Realme</option>
-                    <option value="Motorola">Motorola</option>
-                    <option value="Nokia">Nokia</option>
-                    <option value="Google">Google Pixel</option>
-                  </optgroup>
-                  
-                  <!-- Smartwatches -->
-                  <optgroup label="Smartwatches">
-                    <option value="AppleWatch">Apple Watch</option>
-                    <option value="SamsungGalaxyWatch">Samsung Galaxy Watch</option>
-                    <option value="Fire Boltt">Fire Boltt</option>
-                    <option value="Amazfit">Amazfit</option>
-                    <option value="Garmin">Garmin</option>
-                    <option value="Huawei">Huawei</option>
-                    <option value="Fossil">Fossil</option>
-                    <option value="Xiaomi">Xiaomi</option>
-                    <option value="TicWatch">TicWatch</option>
-                    <option value="Suunto">Suunto</option>
-                  </optgroup>
-                </select>
-                
+                  <option value="">Select</option>
+                  <option value="Apple">Apple</option>
+                  <option value="Samsung">Samsung</option>
+                  <option value="Oppo">Oppo</option>
+                  <option value="Asus">Asus</option>
+                  <option value="Dell">Dell</option>
+                  <option value="Hp">Hp</option>
+                  <option value="Zebronics">Zebronics</option>
+                  <option value="fire-Boltt ">fire-Boltt </option>
+                  <option value="Boat">Boat</option>
+
                   <!-- Add more options here -->
-               
-                <div id="brandWarning" class="text-danger"></div>
+                </select>
               </div>
             </div>
           </div>
@@ -175,7 +112,6 @@
                   id="discount"
                   name="discount"
                 />
-                <div id="discountWarning" class="text-danger"></div>
               </div>
             </div>
 
@@ -187,7 +123,6 @@
                   <option value="true">true</option>
                   <option value="false">false</option>
                 </select>
-                <div id="statusWarning" class="text-danger"></div>
               </div>
             </div>
             <div class="col-md-2">
@@ -199,7 +134,6 @@
                   id="stockQuantity"
                   name="stock"
                 />
-                <div id="stockWarning" class="text-danger"></div>
               </div>
             </div>
             
@@ -283,7 +217,6 @@
                   <!-- Add more fancy colors as needed -->
                 
                 </div>
-                <div id="colorWarning" class="text-danger"></div>
                 
               </div>
             </div>
@@ -300,7 +233,6 @@
                   id="description"
                   name="description"
                 ></textarea>
-                <div id="descriptionWarning" class="text-danger"></div>
               </div>
             </div>
 
@@ -317,10 +249,8 @@
 
                
               </div>
-              <div id="images1Warning" class="text-danger"></div>
 
-
-              <label for="images2">Varient Images</label>
+              <label for="images2">Images</label>
               <div
                 class="form-group "
                 style="
@@ -332,7 +262,6 @@
 
                
               </div>
-              <div id="images2Warning" class="text-danger"></div>
 
             </div>
 
@@ -344,7 +273,13 @@
             
             <div class="col-md-6">
               <div class="form-group">
-               <input type="submit"  placeholder="Add Product" class="btn btn-success w-100"  onclick="return validateForm()">
+                <button
+                onclick="return validateForm()"
+                style="width: 100%;"
+                class="btn btn-success"
+            >
+                Add Product
+            </button>
               </div>
             </div>
         
@@ -357,11 +292,12 @@
 </main>
 
 
-<script src="/js/productFormVaildation.js"></script>
+
+<script src="productFormVaildation.js"></script>
 <script>
  const toogle = document.addEventListener('DOMContentLoaded', function (e) {
     // Get the button and color container
-
+    e.preventDefault()
     const toggleColorsBtn = document.getElementById('toggleColorsBtn');
     const colorContainer = document.querySelector('.color-container');
 
@@ -371,9 +307,6 @@
       colorContainer.style.display = colorContainer.style.display === 'none' ? 'block' : 'none';
     });
   });
-
-
-
 </script>
 
 <%- include('../layout/adminFooter.ejs') %>

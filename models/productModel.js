@@ -6,13 +6,17 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  variants: [
+  images:{
+    type:[String],
+    require:true,
+  },
+  variants: 
     {
-      color: String,
+      color: [String],
       images: [String],
     },
     
-  ],
+  
   description: {
     type: String,
     required: true,
@@ -23,7 +27,11 @@ const productSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    required: true, // You can reference a User schema if you have one
+    ref:'Category',  // You can reference a User schema if you have one
+  },
+  sub_Category: {
+    type: String,
+    ref:'Category', // You can reference a User schema if you have one
   },
   brand: {
     type: String,

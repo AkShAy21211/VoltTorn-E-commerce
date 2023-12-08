@@ -1,12 +1,13 @@
 const categoryModel = require("../models/categoryModel");
 const productModel = require("../models/productModel");
-const fs = require('fs'); // for file system operations
+const fs = require("fs");
+const path = require("path")
 
 const loadProduct = async (req, res) => {
   try {
-    const ProductData = await productModel.find({}).populate('category');
+    const ProductData = await productModel.find({});
     if (ProductData) {
-      res.render("products", { ProductData});
+      res.render("products", { ProductData });
     }
   } catch (error) {
     console.error(error.meesage);
@@ -15,10 +16,10 @@ const loadProduct = async (req, res) => {
 
 const adminSingleProductView = async (req, res) => {
   try {
-    const {id} = req.params
-    const ProductData = await productModel.findById(id).populate('category');
+    const { id } = req.params;
+    const ProductData = await productModel.findById(id);
     if (ProductData) {
-      res.render("productDetailedView", { ProductData});
+      res.render("productDetailedView", { ProductData });
     }
   } catch (error) {
     console.error(error.meesage);
@@ -30,7 +31,7 @@ const addProductLoad = async (req, res) => {
     const category = await categoryModel.find({});
     console.log(category);
 
-    res.render("addproducts",{category});
+    res.render("addProducts", { category });
   } catch (error) {
     console.error(error.meesage);
   }
@@ -38,53 +39,66 @@ const addProductLoad = async (req, res) => {
 
 const addProduct = async (req, res) => {
   try {
-    const { name, description, price, brand, discount, status, color, stock } = req.body;
-    const category = req.body.category;
-    const categoryData = await categoryModel.findOne({ category: category });
-    const images = req.files.map(file => file.filename);
-    let ProductData = await productModel.findOne({ name });
-   
-    if (!ProductData) {
-      console.log(images);
-      ProductData = new productModel({
-        name: name,
-        variants: [{ color: color, images }],
-        description: description,
-        price: parseFloat(price),
-        category: categoryData.category,
-        brand: brand,
-        discount: parseInt(discount),
-        status: status,
-        stock: parseInt(stock),
-      });
-    } else {
-      // If the product exists, add a new color variant or update an existing one
-      const existingVariant = ProductData.variants.find(variant => variant.color === color);
+    const {
+      name,
+      description,
+      price,
+      brand,
+      discount,
+      status,
+      colors,
+      stock,
+      category,
+      subCategory,
+    } = req.body;
 
-      if (existingVariant) {
-        // If the color variant already exists, append the images to it
-        existingVariant.images = existingVariant.images.concat(images);
-      } else {
-        // If the color variant doesn't exist, create a new one
-        ProductData.variants.push({ color, images });
+    // Extract filenames from images1 and images2
+    const images1 = req.files["images1"].map((file) => file.filename);
+    const images2 = req.files["images2"].map((file) => file.filename);
+
+   const productData = await productModel.findOne({ name: name }).populate('category');
+
+    // Validate if category exists
+    const categoryData = await categoryModel.findOne({ category });
+
+
+      if (!productData) {
+        // Create a new product instance
+        const newProduct = new productModel({
+          name:name,
+          images: images1,
+          variants: { color: colors, images: images2 },
+          description:description,
+          price: parseFloat(price),
+          category: category,
+          sub_Category:subCategory,
+          brand:brand,
+          discount: parseInt(discount),
+          status:status,
+          stock: parseInt(stock),
+        });
+  
+        const product = await newProduct.save();
+        req.flash('success','Product Added Sussessfully')
+       return res.redirect('/admin/products/add');
+      }else{
+       req.flash('error',"Product Name Already Exists");
+      return res.status(403).redirect("/admin/products/add");
+
+     
       }
-    }
-
-    await ProductData.save();
-    res.redirect("/admin/products");
+    
 
   } catch (error) {
     console.error(error);
   }
 };
 
-
 //ADMIN EDIT-PRODUCT EDIT ROUTE METHOOD
 const editProductLoad = async (req, res) => {
   try {
-    const id = req.params.id;
-    const ProductData = await productModel.findById(id).populate('category');
-
+    const { id } = req.params;
+    const ProductData = await productModel.findById(id);
     if (ProductData) {
       const categories = await categoryModel.find({}); // Fetch all categories
       res.render("editProducts", { ProductData, categories });
@@ -93,41 +107,50 @@ const editProductLoad = async (req, res) => {
     console.error(error.message);
   }
 };
+
+
+
+
 const editProduct = async (req, res) => {
   try {
-    const { name, description, price, brand, discount, status, color, stock, imageIndexes } = req.body;
-    const id = req.params.id;
-    const category = req.body.category;
-
-    // Convert comma-separated imageIndexes string to an array of positions
-
-    let categoryData;
-
-    // Check if category is provided before querying the database
-    if (category) {
-      categoryData = await categoryModel.findOne({ category: category });
-      if (!categoryData) {
-        // Handle the case where the category is not found
-        return res.status(404).send("Category not found");
-      }
-    }
-
-    console.log(id);
-    const productData = await productModel.findOne({ _id: id }).populate('category');
-
-    console.log('Color to Update:', color);
-    console.log('Existing Variants:', productData.variants);
-
-    // Find the variant with the specified color
-    const variantToUpdate = productData.variants.find(variant => variant.color === color);
-
-    if (variantToUpdate) {
-      // Update the specified images within the images array for the variant
+    const { name, description, category, subCategory, price, brand, discount, status, colors, stock } =
+      req.body;
      
+    const id = req.params.id;
+    const product = await productModel.findById(id);
+    const categoryData = await categoryModel.findOne({category:category});
+    const existingProductName = await productModel.find({name:name});
+
+    if(!name || !description || !category|| !subCategory || !price || !brand || !discount || !status || !colors || !stock){
+
+      req.flash('error','All Feilds Required')
+      return res.redirect(`/admin/products/edit/${id}`);    
+      }
+    let images1 = [];
+    let images2 = [];
+    if(existingProductName){
+      req.flash('error','Product name already exists')
+      return res.redirect(`/admin/products/edit/${id}`);  
     }
+
+    if (req.files['images1']) {
+      images1 = req.files['images1'].map((file) => file.filename);
+    }
+    if (req.files['images2']) {
+      images2 = req.files['images2'].map((file) => file.filename);
+    }
+
+    const existingColors = product.variants.color.map((color) => color);
+    const existingImages = product.images.map((images) => images);
+    const existingVariants = product.variants.images.map((images) => images);
+
+    const productData = await productModel
+      .findOne({ _id: id });
 
     const productUpdatedData = {
       name: name,
+      category: categoryData.category,
+      sub_Category:subCategory,
       description: description,
       price: parseFloat(price),
       brand: brand,
@@ -135,63 +158,72 @@ const editProduct = async (req, res) => {
       status: status,
       stock: parseInt(stock),
     };
-    
 
-    // Update the product document
+    // Update the product document without modifying variants.images and images
     const productUpdated = await productModel.findOneAndUpdate(
       { _id: id },
       {
-        $set: {
-          name: productUpdatedData.name,
-          description: productUpdatedData.description,
-          price: productUpdatedData.price,
-          brand: productUpdatedData.brand,
-          discount: productUpdatedData.discount,
-          status: productUpdatedData.status,
-          stock: productUpdatedData.stock,
-          'variants': productData.variants, // Update the entire variants array
-        },
+        $set: productUpdatedData,
+        $push: { images: images1 ? images1 : existingImages, 'variants.images': images2 ? images2 : existingVariants },
+        'variants.color': colors ? colors : existingColors,
       },
       { upsert: true, new: true }
     );
 
-    res.redirect("/admin/products");
+    req.flash('success', 'Product Updated Successfully');
+    res.redirect('/admin/products');
   } catch (error) {
     console.error(error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send('Internal Server Error');
   }
 };
 
 
-
-
-const deleteProduct = async(req,res)=>{
-
-  try{
-
-    const id = req.params.id;
-    const deleteProduct = await productModel.deleteOne({_id:id});
-    res.redirect('/admin/products')
-
-
-  }catch(error){
-    console.log(error.message);
-  }
-}
-
-const deleteProductVarientByAdmin = async(req,res)=>{
+const deleteProduct = async (req, res) => {
+  const productId = req.params.id;
 
   try {
-    const {id,color} = req.query;
-    const result = await productModel.updateOne(
-      { _id: id },
-      { $pull: { variants: { color: color } } }
-    );
-        res.redirect(`/admin/products/edit/${id}`)
+    // First, retrieve the product from your database
+    const product = await productModel.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    // Delete the product from the database
+    await productModel.deleteOne({_id:productId});
+
+    // Now, delete the associated images from the directory
+    product.images.forEach(image => {
+    const imagePath = path.join(__dirname, '../public/images/productImages', image);
+      
+      // Use fs.unlinkSync to synchronously delete the file
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+        console.log(`Deleted image: ${image}`);
+      }
+    });
+
+    // Do the same for variant images if needed
+    product.variants.images.forEach(variant => {
+        const imagePath = path.join(__dirname, '../public/images/productImages', variant);
+        
+        if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
+          console.log(`Deleted image: ${variant}`);
+        }
+
+    });
+
+    req.flash('success',"Product Deleted Successfully")
+    return res.status(200).redirect('/admin/products');
   } catch (error) {
-    console.error(`Error deleting variant: ${error.message}`);
+    console.error(error);
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
-}
+};
+
+
 
 module.exports = {
   loadProduct,
@@ -200,6 +232,5 @@ module.exports = {
   editProductLoad,
   editProduct,
   deleteProduct,
-  deleteProductVarientByAdmin,
   adminSingleProductView,
 };

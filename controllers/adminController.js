@@ -1,6 +1,5 @@
 const userModel = require("../models/userModel");
 const bcrypt = require("bcryptjs");
-const nodemailer = require("nodemailer");
 
 
 const loadLogin = async (req, res) => {
@@ -11,10 +10,11 @@ const loadLogin = async (req, res) => {
   }
 };
 
+
 const loginVerifyAdmin = async (req, res) => {
   try {
-    const email = req.body.email;
-    const password = req.body.password;
+    const {email,password} = req.body;
+   
 
     const adminData = await userModel.findOne({ email: email });
 

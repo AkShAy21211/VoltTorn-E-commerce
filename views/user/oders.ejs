@@ -64,67 +64,85 @@ body {
             </li></a> 
           </ul>
       </div>
-      <div class="view-settings col-md-8 col-lg-8 col-xl-9 col-xxl-8 border min-height-div1 mb-md-4">
+      <div class="view-settings col-md-8 col-lg-8 col-xl-9 col-xxl-8 min-height-div1 mb-md-4">
         <!-- Iterate through each order -->
-        <%if(oders !== 'undefined'){%>
+        <% if (typeof oders !== 'undefined' && oders.length >0) { %>
+            <table class="table">
+                
+                <tbody>
+                    <% oders.forEach(oder => { %>
+                        <!-- Iterate through each product in the order -->
+                        <% oder.products.forEach((product, index) => { %>
+                            <tr>
+                                <td>
+                                    <img src="/images/productImages/<%= product.image %>" alt="Product Image" style="width: 100px; height: 100px;">
+                                </td>
+                                <td class="align-middle text-wrap w-25">
+                                    <%= product.name.substring(0, 50, product.name.length / 2) %>
+                                </td>
+                                <% if (index === 0) { %>
+                                    <!-- Display Total Price, Order Status, and Action Buttons for the first product in the order -->
+                                    <td class="align-middle text-center" rowspan="<%= oder.products.length %>">
+                                        <b>Total</b>: <%= oder.totalAmount %>
+                                    </td>
 
-       <%oders.forEach(oder => {%>
+                                    <%if(!oder.is_cancelled){%>
 
-          <div class="row mb-3 p-3">
-            <!-- Image (Assuming you have an image URL in the order or user data) -->
-            <%oder.products.forEach(product=>{%>
+                                    <% if (oder.status === 'Pending') { %>
+                                      <td class="align-middle text-center text-warning" rowspan="<%= oder.products.length %>">
+                                          <%= oder.status %>
+                                      </td>
+                                  <% } else if (oder.status === 'Shipped' || oder.status === 'Delivered') { %>
+                                    <% if (oder.status === 'Delivered') { %>
+                                      <td class="align-middle text-center">
+                                          <%= new Date().toLocaleString() %>
+                                      </td>
+                                  <% } %>
+                                  
+                                      <td class="align-middle text-center text-success" rowspan="<%= oder.products.length %>">
+                                          <%= oder.status %>
+                                      </td>
+                                  <% } else { %>
+                                      <!-- Handle other cases or set a default class -->
+                                      <td class="align-middle text-center" rowspan="<%= oder.products.length %>">
+                                          <%= oder.status %>
+                                      </td>
+                                  <% } %>
+                                  
+                                  <%}  %>
 
-            <div class="col-md-2">
-              <img src="/images/productImages/<%=product.image%>" alt="User Image" class="" style="width: 100px;height: 100px;">
-            </div>
-            <% oder.products.forEach(product => { %>
-              <!-- User Name -->
-              <div style="align-items: center; display: flex;" class="col-md-3">
-                <%= product.name && product.name.substring(0, 20, product.name.length / 2) %>
-              </div>
-            <% }); %>
-            
-
-               <% })  %>
-
-            <!-- Total Price -->
-            <div style="align-items: center; display: flex;" class="col-md-2">
-             <b>Total</b>: <%=oder.totalAmount  %>
-            </div>
-      
-            <!-- Order Status -->
-            <% if(oder.is_cancelled == false){%>
-              <div style="align-items: center; display: flex;" class="col-md-2 text-warning">
-                <%=oder.status  %>
-
-            </div>
-            <%} else{%>
-
-            <%}%>
-         
-      
-            <!-- Action Buttons -->
-            <div style="align-items: center; display: flex;" class="col-md-3">
-              <!-- Add your action buttons here -->
-              <% if (!oder.is_cancelled) { %>
-                <a type="button" href="/home/settings/cancel-oders/<%= oder._id %>" class="btn btn-danger btn-sm">
-                  Cancel Order
-                </a>
-              <% } else { %>
-                <span class="text-info">Cancelled</span>
-              <% } %>
-                          </div>
-          </div>
-
-          <% });  %>
-
-          <%}  %>
-      </div>
+                                  
+                                    <td class="align-middle text-center" rowspan="<%= oder.products.length %>">
+                                      <% if (!oder.is_cancelled && (oder.status === 'Pending' || oder.status === 'Shipped')) { %>
+                                        <a type="button" href="/home/settings/cancel-oders/<%= oder._id %>" class="btn btn-danger btn-sm">
+                                            Cancel Order
+                                        </a>
+                                    <% } else if (oder.is_cancelled) { %>
+                                        <span class="text-info">Cancelled</span>
+                                    <% } %>
+                                    
+                                    </td>
+                                <% } %>
+                            </tr>
+                        <% }); %>
+                    <% }); %>
+                </tbody>
+            </table>
+            <% } else { %>
+              <table class="table">
+                  <tbody>
+                      <tr>      
+                          <h5 class="text-dark text-center">No Orders Available</h5>
+                      </tr>
+                  </tbody>
+              </table>
+          <% } %>
+    </div>
+    
       
           </div>
   </div>
 </main>
-
 
 
 

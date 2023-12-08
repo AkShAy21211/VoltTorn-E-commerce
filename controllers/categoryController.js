@@ -1,4 +1,3 @@
-const userModel = require("../models/userModel");
 const categoryModel = require("../models/categoryModel");
 
 //ADMIN CATEGORY PAGE LOAD
@@ -18,17 +17,14 @@ const loadCategory = async (req, res) => {
 
 const addNewCategory = async (req, res) => {
   try {
-    const name = req.body.name;
-    const description = req.body.description;
-    const subCategory = req.body.SubCategory;
+    const {name,description,SubCategory} = req.body;
     const image = req.file.filename;
-
     // Check if the category with the given name already exists
     const existingCategory = await categoryModel.findOne({ category: name });
 
     if (existingCategory) {
       // If the category exists, update its sub_Category array
-      existingCategory.sub_Category.push(subCategory);
+      existingCategory.sub_Category.push(SubCategory);
       const updatedCategory = await existingCategory.save();
       console.log('Updated Category:', updatedCategory);
     } else {
@@ -36,7 +32,7 @@ const addNewCategory = async (req, res) => {
       const newCategory = new categoryModel({
         category: name,
         description: description,
-        sub_Category: [subCategory], // Initialize the array with the new subcategory
+        sub_Category: [SubCategory], // Initialize the array with the new subcategory
         image: image,
       });
 
@@ -56,8 +52,7 @@ const editCategoryLoad = async (req, res) => {
   try {
     const categoryId = req.params.id;
     const CategoryData = await categoryModel.findOne({ _id: categoryId });
-    const categorys = await categoryModel.find({});
-    res.render("editCategory", { CategoryData,categorys}); // Pass
+    res.render("editCategory", { CategoryData}); // Pass
   } catch (error) {
     console.log(error.message);
   }
@@ -68,11 +63,8 @@ const editCategoryLoad = async (req, res) => {
 const editCategory = async (req, res) => {
   try {
     const id = req.params.id;
-    const name = req.body.name;
-    const subCategory = req.body.subCategory;
-    const description = req.body.description;
+    const {name,subCategory,description} = req.body;
     const image = req.file ? req.file.filename : null; // Use null if no new image is provided
-
     const updateFields = { category: name, description: description, sub_Category: subCategory };
 
     if (image) {
@@ -104,7 +96,7 @@ const deleteCategory  = async(req,res)=>{
 
   try{
 
-    const id = req.params.id;
+    const {id} = req.params;
     const deleteCategory = await categoryModel.deleteOne({_id:id}); 
     if(deleteCategory){
       res.redirect('/admin/category');

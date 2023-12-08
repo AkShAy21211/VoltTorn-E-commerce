@@ -32,7 +32,10 @@ addToCartButtons.forEach((button) => {
           window.location.href = "/home/cart";
         }, 2000);
       } else {
-        // Handle other cases (redirect, error messages, etc.)
+
+        //display login model if user is not logged in while trying to add to cart
+        displayLoginModal();
+
       }
     } catch (error) {
       console.error("Error:", error);
@@ -41,6 +44,37 @@ addToCartButtons.forEach((button) => {
     // ...
   });
 });
+
+function closeLoginModal() {
+  document.getElementById("loginModal").style.display = "none";
+}
+
+function redirectLogin() {
+  window.location.href = "/login";
+}
+
+//display popup modal if user try to add to cart without login
+function displayLoginModal() {
+  // Get the modal element
+  const modal = document.getElementById("loginModal");
+
+  // Get the <span> element that closes the modal
+  const closeBtn = modal.querySelector(".close");
+
+  // Display the modal
+  modal.style.display = "block";
+
+  // Close the modal when the close button is clicked
+  closeBtn.onclick = function () {
+    modal.style.display = "none";
+  };
+
+  // Redirect to login page after a delay (e.g., 3000 milliseconds or 3 seconds)
+  
+}
+
+
+
 
 // Add event listener to all quantity inputs with the class 'quantity-input'
 

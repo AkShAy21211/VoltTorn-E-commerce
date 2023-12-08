@@ -1,4 +1,3 @@
-const { param } = require("express-validator");
 const userModel = require("../models/userModel");
 
 
@@ -24,12 +23,11 @@ const adminChangeOderStatus = async(req,res)=>{
 
     try{
 
-        const oderId = req.params.id;
-        const status = req.params.status;
+        const {id,status} = req.params;
 
-        console.log(oderId,' ',status);
+        console.log(id,' ',status);
 
-           const updateStatus =  await userModel.findOneAndUpdate({'oders._id':oderId},{$set:{'oders.$.status':status}},{new:true});
+           const updateStatus =  await userModel.findOneAndUpdate({'oders._id':id},{$set:{'oders.$.status':status}},{new:true});
             return res.status(200).json({ updateStatus });
 
 

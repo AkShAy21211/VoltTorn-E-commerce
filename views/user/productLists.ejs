@@ -32,6 +32,49 @@
             box-shadow: 1px 1px 10px 3px  rgb(211, 208, 208) ;
 
         }
+        /* CSS styles for the centered modal */
+/* Updated CSS styles for the centered modal with reduced width */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(255, 255, 255);
+  padding: 20px;
+  text-align: center;
+  max-width: 400px; /* Adjust the maximum width as needed */
+  width: 100%; /* Ensure the width is responsive */
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.button-container {
+  margin-top: 20px;
+}
+
+/* Style the buttons as needed */
+button {
+  padding: 10px;
+  margin: 0 10px;
+  cursor: pointer;
+}
+
    
     </style>
 
@@ -52,15 +95,20 @@
                                 </a>
                             </header>
                             <div class="filter-content collapse show" id="collapse_1" style="color: black;">
-                                <div class="card-body">
-                                    <ul class="list-menu">
-                                        <% category.forEach(categoryItem => { %>
-                                            <% categoryItem.sub_Category.forEach(subCategory => { %>
-                                                <li ><a style="color: black; text-decoration: none;" href="#"><%= subCategory %></a></li>
-                                            <% }) %>
-                                        <% }) %>
-                                    </ul>
-                                </div> <!-- card-body.// -->
+                              <div class="card-body">
+                                  <ul class="list-menu">
+                                    <% category.forEach(categoryItem => { %>
+                                      <% categoryItem.sub_Category.forEach(subCategory => { %>
+                                        <li>
+                                          <label>
+                                            <input type="checkbox" name="selectedCategories" value="<%= subCategory %>">
+                                            <%= subCategory %>
+                                          </label>
+                                        </li>
+                                      <% }) %>
+                                    <% }) %>
+                                  </ul>
+                              </div>
                             </div>
                             
                         </article> <!-- filter-group  .// -->
@@ -93,34 +141,9 @@
                                 </div> <!-- card-body.// -->
                             </div>
                         </article> <!-- filter-group .// -->
-                        <article class="filter-group">
-                            <header class="card-header">
-                                <a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true"
-                                    class="">
-                                    <i class="icon-control fa fa-chevron-down"></i>
-                                    <h6 class="title">Price range </h6>
-                                </a>
-                            </header>
-                            <div class="filter-content collapse show" id="collapse_3" style="">
-                                <div class="card-body">
-                                    <input type="range" class="custom-range" min="0" max="100" name="">
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <label>Min</label>
-                                            <input class="form-control" placeholder="$0" type="number">
-                                        </div>
-                                        <div class="form-group text-right col-md-6">
-                                            <label>Max</label>
-                                            <input class="form-control" placeholder="$1,0000" type="number">
-                                        </div>
-                                    </div> <!-- form-row.// -->
-                                    <button class="btn btn-block btn-outline-secondary">Apply</button>
-                                </div><!-- card-body.// -->
-                            </div>
-                        </article> <!-- filter-group .// -->
                         
-                    </div> <!-- card.// -->
-
+                  
+                    </div> 
                 </aside>
                 <div class="col-md-9">
 
@@ -129,12 +152,11 @@
                         <div class="form-inline">
                             <span style="padding-top: 10px;" class="mr-md-auto">
                                 <%=ProductCount%> Items found
-                            </span>
-                            <select style="text-align: center;" class="me-3 mt-3 form-control">
+                            </span> 
+                            <select style="text-align: center;"  class="me-3 mt-3 form-control">
                                 <option value="">Sort By</option>
-                                <option>High to Low</option>
-                                <option>Low to High</option>
-                                <option>Most Rated</option>
+                                <option value="High to Low">High to Low</option>
+                                <option value="Low to High">Low to High</option>
                             </select>
 
                         </div>
@@ -152,7 +174,7 @@
                                       <div class="card border-0 h-100 p-2 " id="product-card">
                                         <% for (let i = 0; i <= 0; i++) { %>
                                           <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px" class="card-img-top"
-                                            src="/images/productImages/<%= product.variants[0].images[0] %>" alt="Product Image <%= i + 1 %>" />
+                                            src="/images/productImages/<%=product.images[0]  %>" alt="Product Image <%= i + 1 %>" />
                                         <% } %>
                                         <div class="card-body" style="height: 130px;">
                                           <h6><%= product.name.substring(0, 40, product.name.length / 2) %></h6>
@@ -205,16 +227,6 @@
 
 
 
-    <nav class="mt-4 " aria-label="Page navigation sample">
-        <ul class="pagination justify-content-center">
-            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
-    </nav>
-
 <!-- cart item added pop up -->
     <div id="cart-toast" class="toast " role="alert"  aria-live="assertive" aria-atomic="true" style= "position: absolute; top: 0; right: 0; margin-top: 100px;">
         <div class="toast-header">
@@ -226,7 +238,21 @@
         <div style="background-color: rgb(165, 229, 165);" class="toast-body" id="cart-message"></div>
     </div>
 
+<!-- Add this HTML structure to your page for the modal -->
+<!-- Updated HTML structure for a centered modal with login and cancel buttons -->
 
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeLoginModal()">&times;</span>
+      <p>You need to login to proceed.</p>
+      <div class="button-container">
+        <button class="btn btn-outline-primary" onclick="redirectLogin()">Login</button>
+        <button class="btn btn-outline-danger" onclick="closeLoginModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+  
+  
 <script src="/js/addTOcart.js"></script>
 <%- include('../layout/footer.ejs') %>
 

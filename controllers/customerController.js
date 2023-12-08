@@ -32,7 +32,7 @@ const loadCustomers = async (req, res) => {
   
   const blockUnblockUser = async (req, res) => {
     try {
-      const id = req.query.id;
+      const {id} = req.query;
       const userData = await userModel.findOne({ _id: id });
   
       if (!userData) {

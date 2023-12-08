@@ -60,11 +60,28 @@ const isUserBlocked = async (req, res, next) => {
     }
 };
 
+const in_cart = async(req,res,next)=>{
+
+    try {
+        if (req.session.user && req.session.user.cart) {
+            next();
+        } else {
+            res.redirect('/home');
+        }
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Internal Server Error");
+    }
+
+}
+
+
 
 
 module.exports = {
     is_Login,
     is_Logout,
     isUserBlocked,
+    in_cart,
     
 };

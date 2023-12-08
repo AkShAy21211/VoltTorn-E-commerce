@@ -26,7 +26,7 @@
       <div class="col-md-10 col-lg-11 col-xl-11">
   
   
-          <form method="" action="/admin/Products/add">
+          <form method="" action="">
           </form>
   <table class="table">
     <tbody>
@@ -56,9 +56,9 @@
                     <th>Price</th>
                     <td><%= ProductData.price %></td>
                     <th>Category</th>
-                    <td><%= ProductData.category?.category %></td>
+                    <td><%= ProductData.category %></td>
                     <th>Sub Category</th>
-                    <td><%= ProductData.category?.sub_Category %></td>
+                    <td><%= ProductData.sub_Category %></td>
                   </tr>
                 
                
@@ -73,28 +73,42 @@
                     <td><%= ProductData.stock %></td>
                   </tr>
                
-                  <% for (let i = 0; i < ProductData.variants.length; i++) { %>
+                  <% ProductData.variants.color.forEach(variant=>{%>
+
   
                   <tr>
              
                     <th>Color</th>
                     <td>
-                      <p><%= ProductData.variants[i].color %></strong></p>
+                      <%=variant  %>
                     </td>
+                    <%}) %>
+
                     <th>Images</th>
+                    <% ProductData.images.forEach(images=>{%>
+
                     <td>
-                      <% for (let j = 0; j < ProductData.variants[i].images.length; j++) { %>
-                        <img style="margin-bottom: 5px;" width="100px" height="100px" src="/images/productImages/<%= ProductData.variants[i].images[j] %>" alt="Product Image <%= j + 1 %>">
-                      <% } %>
+                        <img style="margin-bottom: 5px;" width="100px" height="100px" src="/images/productImages/<%=images  %>" alt="Product Image ">
+                   
                     </td>
+                    <%}) %>
+
+                    <th>Variant Images</th>
+                    <% ProductData.variants.images.forEach(images=>{%>
+
+                    <td>
+                        <img style="margin-bottom: 5px;" width="100px" height="100px" src="/images/productImages/<%=images  %>" alt="Product Image ">
+                   
+                    </td>
+                    <%}) %>
+
                   </tr>
                    
                       <tr>
                         
                        
                       </tr>
-                    <% } %>
-                  </tbody>
+                    </tbody>
   
           
   

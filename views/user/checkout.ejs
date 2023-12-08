@@ -105,23 +105,25 @@
           
             </div>
           </div>
-        <%user.addresses.forEach(address=>{%>
+          <% user.addresses.forEach((address, i) => { %>
 
-          <div id="addressDetails" class="mb-3">
-            <!-- Example addresses, you can replace these with dynamic data -->
+            <div data-index="<%= i %>" class="mb-3">
+              <!-- Example addresses, you can replace these with dynamic data -->
             <div class="form-check mt-4 border rounded bg-light" style="height: 100px; display: flex; justify-content: start; align-items: center;">
-                <input class="form-check-input ml-1" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                <label class="ml-4 form-check-label" for="address1">
+              <input class="form-check-input ml-1 address-radio" type="radio" name="flexRadioDefault" id="flexRadioDefault<%= i + 1 %>" data-address-id="<%=address._id  %>">
+              <label class="ml-4 form-check-label" for="address1">
                     <div>
                         <strong>Address:</strong> <%= address.address %><br>
                        
                     </div>
                 </label>
-                <a style="cursor: pointer;" id="editAddressBtn" class="ml-4 text-primary ">Edit</a>
-            </div>
+                <a style="cursor: pointer;" class="ml-4 text-primary editAddressBtn">Edit</a>
+              </div>
         </div>
 
-        <form id="addressForm" class="mt-4" style="display: none;" method="POST" action="/home/cart/edit-address/<%=address._id  %>">
+
+
+        <form data-index="<%= i %>" class="mt-4" style="display: none;" method="POST" action="/home/cart/edit-address/<%=address._id %>">
           <!-- Form fields for editing address -->
           <div class="row mb-3">
               <div class="col-md-6">
@@ -158,11 +160,12 @@
               </div>
           </div>
           <button type="submit" class="btn btn-success">Save</button>
-          <button type="button" id="cancelEditBtn" class="btn btn-secondary ml-2">Cancel</button>
-      </form>
+          <button type="button" class="btn btn-secondary ml-2 cancelEditBtn">Cancel</button>
+        </form>
       
-
         <%})  %>  
+
+      
 
         <table id="shoppingCart" class="table table-borderless table-responsive">
           <tbody>
@@ -284,7 +287,7 @@
         Your order has been successfully placed. Click the button below to view your order.
       </div>
       <div class="modal-footer">
-        <a type="button" class="btn btn-primary" id="viewOrderBtn" data-bs-dismiss="modal">View Order</a>
+        <a href="/home/settings/oders" type="button" class="btn btn-primary" id="viewOrderBtn" data-bs-dismiss="modal">View Order</a>
       </div>
     </div>
   </div>
@@ -309,24 +312,33 @@
       const buyNowBtn = document.getElementById('buyNowBtn');
       const viewOrderBtn = document.getElementById('viewOrderBtn');
       const paymentMethodRadioButtons = document.querySelectorAll('input[name="paymentMethod"]');
+      const addressRadioButtons = document.querySelectorAll('.address-radio');
       const orderSuccessModal = new bootstrap.Modal(document.getElementById('orderSuccessModal'));
   
       buyNowBtn.addEventListener('click', async function () {
   // Check if the selected payment method is "Cash on Delivery"
    const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
+   const selectedAddressRadioButton = document.querySelector('input[name="flexRadioDefault"]:checked');
+    if (!selectedAddressRadioButton) {
+      alert('Please select an address.');
+      return;
+    }
+
+    const selectedAddressId = selectedAddressRadioButton.dataset.addressId;
+    
+    console.log("address id",selectedAddressId);
+    // Replace this with the actual way to get the address
 
     const oder = buyNowBtn.dataset.oder;
 
-
-  console.log(oder);
   if (selectedPaymentMethod && selectedPaymentMethod.value === 'cash') {
 
-    const userOder = await axios.post(`/home/cart/checkout/complete/${oder}`);
+    const userOder = await axios.post(`/home/cart/checkout/complete/${oder}`, {selectedAddressId});
     // Show the success modal
     orderSuccessModal.show();
 
     setTimeout(() => {
-      window.location.href = "/home/cart";
+      window.location.href = "/home/settings/oders";
 
     }, 10000);
 
@@ -337,10 +349,10 @@
 });
 
   
-      viewOrderBtn.addEventListener('click', function () {
-        // Redirect to the page where the user can view their order
-        // Replace 'your_order_page_url' with the actual URL
-        window.location.href = '';
+  viewOrderBtn.addEventListener('click', function () {
+   // Redirect to the page where the user can view their order
+     // Replace 'your_order_page_url' with the actual URL
+        window.location.href = '/home/settings/oders';
       });
     });
   </script>
@@ -362,28 +374,50 @@
       });
     });
   </script>
-  
-  <script>
-    const addressDetails = document.getElementById('addressDetails');
-    const addressForm = document.getElementById('addressForm');
-    const editAddressBtn = document.getElementById('editAddressBtn');
-    const cancelEditBtn = document.getElementById('cancelEditBtn');
 
 
-    editAddressBtn.addEventListener('click', () => {
-        // Hide address details div
-        addressDetails.style.display = 'none';
-        // Show address form
-        addressForm.style.display = 'block';
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Get all elements with the class 'editAddressBtn' and 'cancelEditBtn'
+    const editAddressBtns = document.querySelectorAll('.editAddressBtn');
+    const cancelEditBtns = document.querySelectorAll('.cancelEditBtn');
+
+    // Add click event listeners to handle the display toggling
+    editAddressBtns.forEach(function (editAddressBtn) {
+        editAddressBtn.addEventListener('click', function () {
+            const index = this.closest('[data-index]').dataset.index;
+            toggleDisplay(index);
+        });
     });
 
-    cancelEditBtn.addEventListener('click', () => {
-        // Show address details div
-        addressDetails.style.display = 'block';
-        // Hide address form
-        addressForm.style.display = 'none';
+    cancelEditBtns.forEach(function (cancelEditBtn) {
+        cancelEditBtn.addEventListener('click', function () {
+            const index = this.closest('[data-index]').dataset.index;
+            toggleDisplay(index);
+        });
     });
+
+    // Function to toggle display based on the index
+    function toggleDisplay(index) {
+        const addressDetails = document.querySelector(`[data-index="${index}"]`);
+        const addressForm = document.querySelector(`form[data-index="${index}"]`);
+
+        if (addressDetails && addressForm) {
+            addressDetails.style.display = addressDetails.style.display === 'none' ? 'block' : 'none';
+            addressForm.style.display = addressForm.style.display === 'none' ? 'block' : 'none';
+        }
+    }
+});
+
 </script>
+
+
+
+
+
+
+
+
   <script>
     document.getElementById('state').addEventListener('change',async function () {
       // Fetch cities for the selected state
@@ -394,7 +428,7 @@
 
   console.log(dataState);
       try {
-        const response = await axios.post(`http://localhost:3000/home/cart/checkout`,{dataState});
+        const response = await axios.post(`/home/cart/checkout`,{dataState});
         const cities = response.data.city;
   
 

@@ -2,16 +2,15 @@ const mongoose = require("mongoose");
 mongoose.connect("mongodb://127.0.0.1:27017/VOLTTRON");
 const express = require("express");
 const app = express();
+const nocache = require('nocache');
 const PORT = 3000;
 const morgan = require("morgan");
-
 app.use(morgan("dev"));
-
+app.use(nocache())
 //session
 const config = require("./config/config");
 const session = require("express-session");
 const MongoSessionStore = require("connect-mongodb-session")(session);
-const flash = require("express-flash")
 const store = MongoSessionStore({
   uri:'mongodb://127.0.0.1:27017/VOLTTRON',
   collection:'sessions'
@@ -24,11 +23,10 @@ app.use(session({
   saveUninitialized: false,
   store:store,
   cookie: {
-    maxAge: 24 * 60 * 60 * 1000, // 1 day
+    maxAge: 24 * 60 * 60 * 1000,
   },
 }));
 
-app.use(flash())
 app.use((req, res, next) => {
   console.log(req.session);
   if (req.url.startsWith("/admin")) {
