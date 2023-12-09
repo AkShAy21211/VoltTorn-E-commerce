@@ -26,6 +26,8 @@ const completeOderCashOnDelivery = async (req, res) => {
       const userOder = {
         order_id: generateOrderID(),
         customerName: user.first_name + " " + user.last_name,
+        payment: false,
+        payment_mode: "COD",
         address: {
           address: selectedAddress.address,
           country: selectedAddress.country,
@@ -65,63 +67,63 @@ const completeOderCashOnDelivery = async (req, res) => {
 const completeOnlinePaymentOder = async (req, res) => {
   try {
     const { id } = req.params;
-    const { total_price } = req.session.user.cart;
-    const oderId = await CartModel.findById(id);
     const addressId = req.body.selectedAddressId;
     const user = await userModel.findById(id);
     const userCart = await CartModel.findById(id).populate("cart.product_id");
+    const total_price = userCart.total_price;
+
     const address = await userModel.findOne(
       { _id: id, "addresses._id": addressId },
       { "addresses.$": 1 }
     );
     const selectedAddress = address.addresses[0];
-    if (userCart) {
-      const userOder = {
-        order_id: generateOrderID(),
-        customerName: user.first_name + " " + user.last_name,
-        address: {
-          address: selectedAddress.address,
-          country: selectedAddress.country,
-          state: selectedAddress.state,
-          city: selectedAddress.city,
-          zip: selectedAddress.zip,
-          mobile: user.mobile,
-          email: user.email,
-        },
-        products: userCart.cart,
-        date: Date.now().toString(),
-        status: "Pending",
-        totalAmount: userCart.total_price,
-      };
 
-      const userOderAdd = await userModel.findOneAndUpdate(
-        { _id: id },
-        { $push: { oders: userOder } }
-      );
+    const userOder = {
+      order_id: generateOrderID(),
+      customerName: user.first_name + " " + user.last_name,
+      payment: true,
+      payment_mode: "Online",
+      address: {
+        address: selectedAddress.address,
+        country: selectedAddress.country,
+        state: selectedAddress.state,
+        city: selectedAddress.city,
+        zip: selectedAddress.zip,
+        mobile: user.mobile,
+        email: user.email,
+      },
+      products: userCart.cart,
+      date: Date.now().toString(),
+      status: "Pending",
+      totalAmount: userCart.total_price,
+    };
 
-      const oderId = generateOrderID();
+    console.log("total price recived in backedn", total_price);
 
-      var options = {
-        amount: userCart.total_price * 100, // amount in the smallest currency unit
-        currency: "INR",
-        receipt: "" + oderId,
-      };
+    const oderId = generateOrderID();
 
-      const order = createRazorpayOrder(
-        instance,
-        options,
-        async (err, order) => {
-          if (order) {
-            await userCart.deleteOne({ _id: id });
-            console.log("this is oder", order);
+    var options = {
+      amount: total_price * 100, // amount in the smallest currency unit
+      currency: "INR",
+      receipt: "" + oderId,
+    };
 
-            res.status(200).json({ order });
-          } else {
-            console.log(err);
-          }
+    const order = createRazorpayOrder(instance, options, async (err, order) => {
+      if (order) {
+        const userOderAdd = await userModel.findOneAndUpdate(
+          { _id: id },
+          { $push: { oders: userOder } }
+        );
+
+        if (userOderAdd) {
+          await userCart.deleteOne({ _id: id });
+          delete req.session.user.cart;
         }
-      );
-    }
+        res.status(200).json({ order, redirect: "/home/settings/oders" });
+      } else {
+        console.log(err);
+      }
+    });
   } catch (error) {
     console.error(error);
   }

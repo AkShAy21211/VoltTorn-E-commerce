@@ -280,7 +280,7 @@
 
 
                     <div>
-                      <button data-oder="<%=user._id  %>" data-total-amount="<%=cart.total_price  %>"
+                      <button data-email="<%user.email  %>" data-mobile="<%user.mobile  %>" data-name="<%user.name  %>" data-oder-Id="<%=user._id  %>" data-total-amount="<%=cart.total_price  %>"
                         class="button button--full" type="button" id="buyNowBtn">Buy
                         Now</button>
 
@@ -339,7 +339,9 @@
         // Check if the selected payment method is "Cash on Delivery"
         const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
         const totalAmount = buyNowBtn.dataset.totalAmount;
-
+        const userName = buyNowBtn.dataset.name;
+        const email = buyNowBtn.dataset.email;
+        const mobile = buyNowBtn.dataset.mobile;
         const selectedAddressRadioButton = document.querySelector('input[name="flexRadioDefault"]:checked');
         if (!selectedAddressRadioButton) {
           alert('Please select an address.');
@@ -351,11 +353,11 @@
         console.log("address id", selectedAddressId);
         // Replace this with the actual way to get the address
 
-        const oder = buyNowBtn.dataset.oder;
+        const oderId = buyNowBtn.dataset.oderId;
 
         if (selectedPaymentMethod && selectedPaymentMethod.value === 'cash') {
 
-          const userOder = await axios.post(`/home/cart/checkout/complete/cash/${oder}`, { selectedAddressId });
+          const userOder = await axios.post(`/home/cart/checkout/complete/cash/${oderId}`, { selectedAddressId });
           // Show the success modal
           orderSuccessModal.show();
 
@@ -369,14 +371,14 @@
 
           try {
 
-            const response = await axios.post(`/home/cart/checkout/complete/online/${oder}`, { selectedAddressId });
+            const response = await axios.post(`/home/cart/checkout/complete/online/${oderId}`, { selectedAddressId });
 
-            if (response.data) {
+            console.log(response.data.order);
 
-              console.log(response.data.order);
-            }
 
-            var orderId;
+            let orderId;
+            const amount = response.data.order.amount;
+
             $(document).ready(function () {
               var settings = {
                 "url": "/create/orderId",
@@ -386,7 +388,7 @@
                   "Content-Type": "application/json"
                 },
                 "data": JSON.stringify({
-                  "amount": "500",
+                  "amount": amount,
                 }),
               };
 
@@ -394,34 +396,35 @@
               $.ajax(settings).done(function (response) {
 
                 orderId = response.data.order.id;
-                console.log(orderId);
                 $("buyNowBtn").show();
               });
             });
 
+
+
             var options = {
-              "key": "YOUR_KEY_ID", // Enter the Key ID generated from the Dashboard
-              "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+              "key": "rzp_test_IqLBbBfcC14Mtr", // Enter the Key ID generated from the Dashboard
+              "amount": amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
               "currency": "INR",
-              "name": "Acme Corp",
+              "name": "ValtTron",
               "description": "Test Transaction",
-              "image": "https://example.com/your_logo",
-              "order_id": "order_IluGWxBm9U8zJ8", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+              "image": "/images/logo.png",
+              "order_id": orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
               "handler": function (response) {
                 alert(response.razorpay_payment_id);
                 alert(response.razorpay_order_id);
                 alert(response.razorpay_signature)
               },
               "prefill": {
-                "name": "Gaurav Kumar",
-                "email": "gaurav.kumar@example.com",
-                "contact": "9000090000"
+                "name": userName,
+                "email": email,
+                "contact": mobile,
               },
               "notes": {
                 "address": "Razorpay Corporate Office"
               },
               "theme": {
-                "color": "#3399cc"
+                "color": "#0d6efd"
               }
             };
             var rzp1 = new Razorpay(options);
@@ -437,6 +440,8 @@
             document.getElementById('buyNowBtn').onclick = function (e) {
               rzp1.open();
               e.preventDefault();
+
+           
             }
 
 
