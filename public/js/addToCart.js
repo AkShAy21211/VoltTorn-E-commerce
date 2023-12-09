@@ -92,7 +92,7 @@ quantityInputs.forEach((input) => {
 
       
       const response = await axios.patch(
-        `http://localhost:3000/home/products/cart/updateQuantity/${productId}/${product}`,
+        `/home/products/cart/updateQuantity/${productId}/${product}`,
         { quantity: newQuantity, productPrice }
       );
 
@@ -145,7 +145,7 @@ deleteCartItemButtons.forEach((deleteButton) => {
 
     if (result.isConfirmed) {
       try {
-        const response = await axios.delete(`http://localhost:3000/home/cart/${deleteItemId}`);
+        const response = await axios.delete(`/home/cart/${deleteItemId}`);
         const totalPrice = response.data.total_price;
         const cartCount = response.data.userCartCount;
 

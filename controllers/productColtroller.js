@@ -1,3 +1,4 @@
+const { name } = require("ejs");
 const categoryModel = require("../models/categoryModel");
 const productModel = require("../models/productModel");
 const fs = require("fs");
@@ -119,7 +120,7 @@ const editProduct = async (req, res) => {
     const id = req.params.id;
     const product = await productModel.findById(id);
     const categoryData = await categoryModel.findOne({category:category});
-    const existingProductName = await productModel.find({name:name});
+    const existingProduct = await productModel.findOne({ name: name, _id: { $ne: id } }); // Check for existing product with the same name excluding the current product
 
     if(!name || !description || !category|| !subCategory || !price || !brand || !discount || !status || !colors || !stock){
 
@@ -128,10 +129,12 @@ const editProduct = async (req, res) => {
       }
     let images1 = [];
     let images2 = [];
-    if(existingProductName){
-      req.flash('error','Product name already exists')
-      return res.redirect(`/admin/products/edit/${id}`);  
+    
+    if (existingProduct) {
+      req.flash('error', 'Product name already exists');
+      return res.redirect(`/admin/products/edit/${id}`);
     }
+
 
     if (req.files['images1']) {
       images1 = req.files['images1'].map((file) => file.filename);

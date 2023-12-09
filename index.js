@@ -2,11 +2,14 @@ const mongoose = require("mongoose");
 mongoose.connect("mongodb://127.0.0.1:27017/VOLTTRON");
 const express = require("express");
 const app = express();
+const dotenc = require("dotenv").config();
 const nocache = require('nocache');
 const PORT = 3000;
 const morgan = require("morgan");
 app.use(morgan("dev"));
 app.use(nocache())
+const Razorpay = require("razorpay");
+
 //session
 const config = require("./config/config");
 const session = require("express-session");

@@ -44,7 +44,7 @@ const brandCount =  await productModel.aggregate([{$match: {category: cat_name, 
   },
 },]);
 
-    res.render("productLists",{ProductData,ProductCount,category,brands,brandCount});
+    res.render("productLists",{ProductData,ProductCount,category,cat_name,brands,brandCount});
 
   }catch(error){
     console.error(error);
@@ -63,9 +63,47 @@ const productDetail = async (req, res) => {
 };
 
 
+const sortProductByUserPreference = async (req, res) => {
+  try {
+      const { category, sortOption } = req.params;
+
+      // Match stage to filter by category
+      const matchStage = {
+          $match: {
+              category: category,
+          },
+      };
+
+      // Sort stage based on sortOption
+      const sortStage = {
+          $sort: {
+              price: sortOption === 'High to Low' ? -1 : 1,
+          },
+      };
+
+      // Aggregate pipeline
+      const aggregationPipeline = [matchStage, sortStage];
+
+      // Your MongoDB aggregation query here
+
+      // Example: Assuming you have a 'products' collection
+      const products = await productModel.aggregate(aggregationPipeline);
+
+      console.log('Sorted products:', products);
+
+      // Your response logic here
+      res.status(200).json({ products });
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+  }
+};
+
+
 module.exports = { 
   loadHome,
   productDetail,
   loaadProductListsByCategory,
+  sortProductByUserPreference,
 
 };

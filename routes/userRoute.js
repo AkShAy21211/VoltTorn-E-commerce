@@ -4,6 +4,8 @@ const userController = require("../controllers/userController");
 const homeController = require("../controllers/homePageController");
 const userCartController = require("../controllers/userCartController");
 const userSettingController = require("../controllers/userSettingsController");
+const paymentController = require("../controllers/userPaymentController");
+
 const auth = require("../middlewares/auth");
 userRoute.set('view engine','ejs');
 userRoute.set('views','./views/user')
@@ -54,14 +56,12 @@ userRoute.get('/home/product/details/:id',auth.isUserBlocked,homeController.prod
 
 //product listts page route 
 
-userRoute.get('/home/products/:cat_name',auth.isUserBlocked,homeController.loaadProductListsByCategory)
+userRoute.get('/home/products/:cat_name',auth.isUserBlocked,homeController.loaadProductListsByCategory);
 
-
-
-
+//product sort by filter route
+userRoute.get('/home/products/sort/:category/:sortOption',auth.isUserBlocked,homeController.sortProductByUserPreference)
 
 //user settings page route
-
 userRoute.get('/home/product/details/:id/filter/:color',auth.isUserBlocked,homeController.productDetail)
 
 //USER shoppingCart
@@ -97,7 +97,9 @@ userRoute.get('/home/settings/cancel-oders/:oder_id',auth.isUserBlocked,userSett
 
 
 //user checkout page complete transcation cash on delivery
-userRoute.post('/home/cart/checkout/complete/:id',auth.isUserBlocked,userCartController.completeOderCashOnDelivery);
+userRoute.post('/home/cart/checkout/complete/cash/:id',auth.isUserBlocked,paymentController.completeOderCashOnDelivery);
+//user checkout page complete transcation online  payment
+userRoute.post('/home/cart/checkout/complete/online/:id',auth.isUserBlocked,paymentController.completeOnlinePaymentOder);
 
 
 

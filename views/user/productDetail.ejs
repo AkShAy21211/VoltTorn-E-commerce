@@ -157,30 +157,27 @@
         <p class="font-weight-bold justify-content-between">Choose Color:</p>
 
         <div class="d-flex flex-wrap gap-3 mb-4">
-          <% ProductData.variants.images.forEach(image => { %>
-            <% ProductData.variants.color.forEach(color => { %>
-
-          <div class="d-flex flex-column align-items-center">
-            <a
-              href="/home/product/details/<%=ProductData._id%>/filter/<%=color  %>"
-              class="color-selector"
-              data-color="<%= color %>"
-              data-image="/images/productImages/<%=image%>"
-            >
-              <img
-                style="position: relative; z-index: 2"
-                width="50"
-                height="50"
-                src="/images/productImages/<%=image %>"
-                alt=""
-              />
-            </a>
-            <p><%=color %></p>
-          </div>
-          <% }) %>
-          <% }) %>
-
+          <% for (let i = 0; i < ProductData.variants.images.length && i < ProductData.variants.color.length; i++) { %>
+            <div class="d-flex flex-column align-items-center">
+              <a
+                href="/home/product/details/<%=ProductData._id%>/filter/<%=ProductData.variants.color[i]%>"
+                class="color-selector"
+                data-color="<%= ProductData.variants.color[i] %>"
+                data-image="/images/productImages/<%=ProductData.variants.images[i]%>"
+              >
+                <img
+                  style="position: relative; z-index: 2"
+                  width="50"
+                  height="50"
+                  src="/images/productImages/<%=ProductData.variants.images[i] %>"
+                  alt=""
+                />
+              </a>
+              <p><%=ProductData.variants.color[i] %></p>
+            </div>
+          <% } %>
         </div>
+        
 
         <ul>
           <p class="font-weight-bold">About this item</p>

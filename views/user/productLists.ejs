@@ -1,247 +1,238 @@
 <%- include('../layout/header.ejs') %>
-    <style>
-        .icon-control {
-            margin-top: 5px;
-            float: right;
-            font-size: 80%;
-        }
+  <style>
+    .icon-control {
+      margin-top: 5px;
+      float: right;
+      font-size: 80%;
+    }
 
-.cartButtton:hover{
-    background-color: #007bffb6 !important; 
-    color: white;
-}
+    .cartButtton:hover {
+      background-color: #007bffb6 !important;
+      color: white;
+    }
 
-        .btn-light {
-            background-color: #fff;
-            border-color: #e4e4e4;
-        }
-
-   
-        .list-menu {
-            list-style: none;
-            margin: 0;
-            padding-left: 0;
-        }
-
-        .list-menu a {
-            color: #d6cece0e;
-        }
-     
-        #product-card:hover{
-            border-radius: 0;
-            box-shadow: 1px 1px 10px 3px  rgb(211, 208, 208) ;
-
-        }
-        /* CSS styles for the centered modal */
-/* Updated CSS styles for the centered modal with reduced width */
-.modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-.modal-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgb(255, 255, 255);
-  padding: 20px;
-  text-align: center;
-  max-width: 400px; /* Adjust the maximum width as needed */
-  width: 100%; /* Ensure the width is responsive */
-}
-
-.close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.button-container {
-  margin-top: 20px;
-}
-
-/* Style the buttons as needed */
-button {
-  padding: 10px;
-  margin: 0 10px;
-  cursor: pointer;
-}
-
-   
-    </style>
-
-    <title>VoltTron | Categories</title>
-<div id="add-to-cart"></div>
-    <main>
-        <div class="container-fluid">
-            <div class="row">
-                <aside class="col-md-3">
-
-                    <div class="card mt-5">
-                        <article class="filter-group">
-                            <header class="card-header">
-                                <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true"
-                                    class="">
-                                    <i class="icon-control fa fa-chevron-down"></i>
-                                    <h6 class="title">Sub Category</h6>
-                                </a>
-                            </header>
-                            <div class="filter-content collapse show" id="collapse_1" style="color: black;">
-                              <div class="card-body">
-                                  <ul class="list-menu">
-                                    <% category.forEach(categoryItem => { %>
-                                      <% categoryItem.sub_Category.forEach(subCategory => { %>
-                                        <li>
-                                          <label>
-                                            <input type="checkbox" name="selectedCategories" value="<%= subCategory %>">
-                                            <%= subCategory %>
-                                          </label>
-                                        </li>
-                                      <% }) %>
-                                    <% }) %>
-                                  </ul>
-                              </div>
-                            </div>
-                            
-                        </article> <!-- filter-group  .// -->
-                        <article class="filter-group">
-                            <header class="card-header">
-                                <a href="#" data-toggle="collapse" data-target="#collapse_2" aria-expanded="true"
-                                    class="">
-                                    <i class="icon-control fa fa-chevron-down"></i>
-                                    <h6 class="title">Brands </h6>
-                                </a>
-                            </header>
-                            <div class="filter-content collapse show" id="collapse_2" style="">
-                                <div class="card-body">
-                                    <label class="custom-control custom-checkbox">
-                                        <% brands.forEach(brand => { %>
-
-                                        <input type="checkbox" checked="" class="custom-control-input">
-                                        <div class="custom-control-label"><%=brand  %>
-                                            <% brandCount.forEach(count => { %>
-
-                                            <b style="font-size: 10px;" class="badge badge-pill text-dark bg-info float-right"><%=count.count%></b>
-                                            <% }) %>
-
-                                        </div>
-                                        <% }) %>
-
-                                    </label>
-                                 
-                                    
-                                </div> <!-- card-body.// -->
-                            </div>
-                        </article> <!-- filter-group .// -->
-                        
-                  
-                    </div> 
-                </aside>
-                <div class="col-md-9">
+    .btn-light {
+      background-color: #fff;
+      border-color: #e4e4e4;
+    }
 
 
-                    <header class="border-bottom mb-4 pb-3">
-                        <div class="form-inline">
-                            <span style="padding-top: 10px;" class="mr-md-auto">
-                                <%=ProductCount%> Items found
-                            </span> 
-                            <select style="text-align: center;"  class="me-3 mt-3 form-control">
-                                <option value="">Sort By</option>
-                                <option value="High to Low">High to Low</option>
-                                <option value="Low to High">Low to High</option>
-                            </select>
+    .list-menu {
+      list-style: none;
+      margin: 0;
+      padding-left: 0;
+    }
 
-                        </div>
-                    </header><!-- sect-heading -->
+    .list-menu a {
+      color: #d6cece0e;
+    }
 
-                    <div class="row">
+    #product-card:hover {
+      border-radius: 0;
+      box-shadow: 1px 1px 10px 3px rgb(211, 208, 208);
 
-                        <div class="col-12 col-sm-12  col-md-11 col-lg-12 col-xl-11">
-                            <div class="container">
-                              <div class="row">
-                                <% ProductData.forEach(product => { %>
-                                  <div class="col-lg-4 col-md-6 col-sm-6 mt-xl-0 mt-lg-2 mt-md-3 mt-sm-4 mt-4">
-                                    <!-- Use col-lg-4 to include three cards in one row -->
-                                    <a href="/home/product/details/<%=product._id%>" class="text-decoration-none text-dark">
-                                      <div class="card border-0 h-100 p-2 " id="product-card">
-                                        <% for (let i = 0; i <= 0; i++) { %>
-                                          <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px" class="card-img-top"
-                                            src="/images/productImages/<%=product.images[0]  %>" alt="Product Image <%= i + 1 %>" />
-                                        <% } %>
-                                        <div class="card-body" style="height: 130px;">
-                                          <h6><%= product.name.substring(0, 40, product.name.length / 2) %></h6>
-                                          <p class="card-text" data-price="<%= Number(product.price - (product.price * (product.discount / 100)))%>" >Price: <b>Rs:<%= Number(product.price - (product.price * (product.discount / 100))).toLocaleString() %></b></p>
-                                          <div class="d-flex justify-content-between">
-                                            <p class="card-text text-success">%<%= product.discount %> off</p>
-                                            <p class="small text-danger"><s>Rs<%= product.price %></s></p>
-                                          </div>
-                                        </div>
-                                    </a>
-                               
-                                    
-                                    
-<!-- Inside the loop where you render product details -->
-                            <button class=" btn btn-outline-primary addToCartButton" data-product-id="<%= product._id %>" data-product-price="<%= Number(product.price - (product.price * (product.discount / 100))) %>">Add to Cart</button>
+    }
 
-                                      </div>
-                                   
-                                    <div class="card-footer">
-                                      <div class="d-flex justify-content-between mb-2">
-                                        <!-- <% if (parseInt(product.stock) >= 10) { %>
-                                          <p class="text-muted mb-0">
-                                            Availablity: <span class="fw-bold text-success">In Stock</span>
-                                          </p>
-                                        <% } else if (parseInt(product.stock) <= 10) { %>
-                                          <p class="text-muted mb-0">
-                                            Available: <span class="fw-bold text-warning">Only few left</span>
-                                          </p>
-                                        <% } else { %>
-                                          <p class="text-muted mb-0">
-                                            Available: <span class="fw-bold text-danger">Out of stock</span>
-                                          </p>
-                                        <% } %> -->
-                                      </div>
-                                    </div>
-                                  </div>
-                                <% }); %>
-                              </div>
-                            </div>
-                          </div>
-                          
-                    </div> <!-- row end.// -->
+    /* CSS styles for the centered modal */
+    /* Updated CSS styles for the centered modal with reduced width */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
 
+    .modal-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgb(255, 255, 255);
+      padding: 20px;
+      text-align: center;
+      max-width: 400px;
+      /* Adjust the maximum width as needed */
+      width: 100%;
+      /* Ensure the width is responsive */
+    }
 
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .button-container {
+      margin-top: 20px;
+    }
+
+    /* Style the buttons as needed */
+    button {
+      padding: 10px;
+      margin: 0 10px;
+      cursor: pointer;
+    }
+  </style>
+
+  <title>VoltTron | Categories</title>
+  <div id="add-to-cart"></div>
+  <main>
+    <div class="container-fluid">
+      <div class="row">
+        <aside class="col-md-3">
+
+          <div class="card mt-5">
+            <article class="filter-group">
+              <header class="card-header">
+                <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
+                  <i class="icon-control fa fa-chevron-down"></i>
+                  <h6 class="title">Sub Category</h6>
+                </a>
+              </header>
+              <div class="filter-content collapse show" id="collapse_1" style="color: black;">
+                <div class="card-body">
+                  <ul class="list-menu">
+                    <% category.forEach(categoryItem=> { %>
+                      <% categoryItem.sub_Category.forEach(subCategory=> { %>
+                        <li>
+                          <label>
+                            <input type="checkbox" name="selectedCategories" value="<%= subCategory %>">
+                            <%= subCategory %>
+                          </label>
+                        </li>
+                        <% }) %>
+                          <% }) %>
+                  </ul>
                 </div>
+              </div>
+
+            </article> <!-- filter-group  .// -->
+
+
+            <article class="filter-group">
+              <header class="card-header">
+                <a href="#" data-toggle="collapse" data-target="#collapse_2" aria-expanded="true" class="">
+                  <i class="icon-control fa fa-chevron-down"></i>
+                  <h6 class="title">Brands </h6>
+                </a>
+              </header>
+
+              <div class="filter-content collapse show" id="collapse_2" style="">
+                <div class="card-body">
+                  <% brands.forEach((brand, index)=> { %>
+                    <label class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="<%= 'checkbox_' + index %>">
+                      <div class="custom-control-label">
+                        <%= brand %>
+                      </div>
+                    </label>
+                    <% }) %>
+                </div>
+              </div>
+            </article> <!-- filter-group .// -->
+
+
+          </div>
+        </aside>
+
+
+        <div  class="col-md-9">
+
+          <header class="border-bottom mb-4 pb-3">
+            <div class="form-inline">
+              <span style="padding-top: 10px;" class="mr-md-auto">
+                <%=ProductCount%> Items found
+              </span>
+              <select data-category="<%=cat_name%>" data-product="<%=ProductData  %>" id="sortDropdown"
+                style="text-align: center;" class="me-3 mt-3 form-control">
+                <option value="">Sort By</option>
+                <option value="High to Low">High to Low</option>
+                <option value="Low to High">Low to High</option>
+              </select>
             </div>
-        </div>
-    </main>
+          </header><!-- sect-heading -->
+
+
+          <div class="row">
+
+            <div class="col-12 col-sm-12 mt-3 col-md-11 col-lg-12 col-xl-11">
+              <div class="container">
+                <div id="product-container" class="row">
+                  <% ProductData.forEach(product=> { %>
+                    <div class="col-lg-4 col-md-6 col-sm-6 mt-xl-0 mt-lg-2 mt-md-3 mb-4 mt-sm-4 mt-4">
+                      <!-- Use col-lg-4 to include three cards in one row -->
+                      <a href="/home/product/details/<%=product._id%>" class="text-decoration-none text-dark">
+                        <div class="card border-0 h-100 p-2" id="product-card">
+                          <% for (let i=0; i <=0; i++) { %>
+                            <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px"
+                              class="card-img-top" src="/images/productImages/<%=product.images[0]  %>"
+                              alt="Product Image <%= i + 1 %>" />
+                            <% } %>
+                              <div class="card-body" style="height: 130px;">
+                                <h6>
+                                  <%= product.name.substring(0, 40, product.name.length / 2) %>
+                                </h6>
+                                <p class="card-text"
+                                  data-price="<%= Number(product.price - (product.price * (product.discount / 100)))%>">
+                                  Price: <b>Rs:<%= Number(product.price - (product.price * (product.discount /
+                                      100))).toLocaleString() %></b></p>
+                                <div class="d-flex justify-content-between">
+                                  <p class="card-text text-success">%<%= product.discount %> off</p>
+                                  <p class="small text-danger"><s>Rs<%= product.price %></s></p>
+                                </div>
+                              </div>
+                      </a>
 
 
 
+                      <!-- Inside the loop where you render product details -->
+                      <button class=" btn btn-outline-primary addToCartButton" data-product-id="<%= product._id %>"
+                        data-product-price="<%= Number(product.price - (product.price * (product.discount / 100))) %>">Add
+                        to Cart</button>
 
-<!-- cart item added pop up -->
-    <div id="cart-toast" class="toast " role="alert"  aria-live="assertive" aria-atomic="true" style= "position: absolute; top: 0; right: 0; margin-top: 100px;">
-        <div class="toast-header">
-            <strong class="mr-auto">Cart</strong>
-<!-- Assuming you want to display the current time in the <small> tag -->
-    <small><%= new Date().toLocaleTimeString() %></small>
-            
-        </div>
-        <div style="background-color: rgb(165, 229, 165);" class="toast-body" id="cart-message"></div>
+                    </div>
+
+                    
+                </div>
+                <% }); %>
+              </div>
+            </div>
+          </div>
+
+        </div> <!-- row end.// -->
+
+
+      </div>
     </div>
+    </div>
+  </main>
 
-<!-- Add this HTML structure to your page for the modal -->
-<!-- Updated HTML structure for a centered modal with login and cancel buttons -->
 
-<div id="loginModal" class="modal">
+
+
+  <!-- cart item added pop up -->
+  <div id="cart-toast" class="toast " role="alert" aria-live="assertive" aria-atomic="true"
+    style="position: absolute; top: 0; right: 0; margin-top: 100px;">
+    <div class="toast-header">
+      <strong class="mr-auto">Cart</strong>
+      <!-- Assuming you want to display the current time in the <small> tag -->
+      <small>
+        <%= new Date().toLocaleTimeString() %>
+      </small>
+
+    </div>
+    <div style="background-color: rgb(165, 229, 165);" class="toast-body" id="cart-message"></div>
+  </div>
+
+  <!-- Add this HTML structure to your page for the modal -->
+  <!-- Updated HTML structure for a centered modal with login and cancel buttons -->
+
+  <div id="loginModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeLoginModal()">&times;</span>
       <p>You need to login to proceed.</p>
@@ -251,8 +242,81 @@ button {
       </div>
     </div>
   </div>
-  
-  
-<script src="/js/addTOcart.js"></script>
-<%- include('../layout/footer.ejs') %>
 
+
+  <script src="/js/addTOcart.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      const select = $('#sortDropdown').on('change', async function () {
+        var sortOption = $(this).val();
+        var category = $(this).data('category');
+        let ProductData = $(this).data('product');
+
+        try {
+          if (sortOption && category !== '') {
+            const response = await axios.get(`/home/products/sort/${category}/${sortOption}`);
+
+            if (response.data) {
+              // Assuming 'products' is the key in the response containing the sorted products
+              ProductData = response.data.products;
+
+              // Clear existing product container content
+
+              // Append the new sorted products to the container
+              renderProducts(ProductData);
+            }
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      });
+
+      // Function to render products in the UI
+      // Function to render products in the UI
+      // Function to render products in the UI
+    // Function to render products in the UI
+function renderProducts(products) {
+  const productContainer = $('#product-container');
+
+  // Clear existing product container content
+  productContainer.empty();
+
+  // Render each product card and append to the container
+  products.forEach(product => {
+    const productCard = `
+      <div class="col-lg-4 col-md-6 col-sm-6  mt-xl-0 mt-lg-4 mt-md-5 mb-4 mt-sm-5 mt-5">
+        <a href="/home/product/details/${product._id}" class="text-decoration-none text-dark">
+          <div class="card border-0 h-100 p-2" id="product-card">
+            ${product.images.slice(0, 1).map(image => `
+              <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px"
+                class="card-img-top" src="/images/productImages/${image}"
+                alt="Product Image 1" />
+            `).join('')}
+            <div class="card-body" style="height: 130px;">
+              <h6>${product.name.substring(0, 40, product.name.length / 2)}</h6>
+              <p class="card-text" data-price="${Number(product.price - (product.price * (product.discount / 100)))}">
+                Price: <b>Rs:${Number(product.price - (product.price * (product.discount / 100))).toLocaleString()}</b>
+              </p>
+              <div class="d-flex justify-content-between">
+                <p class="card-text text-success">%${product.discount} off</p>
+                <p class="small text-danger"><s>Rs${product.price}</s></p>
+              </div>
+            </div>
+          </a>
+          <button class="btn btn-outline-primary w-750 addToCartButton" data-product-id="${product._id}"
+          data-product-price="${Number(product.price - (product.price * (product.discount / 100)))}">Add to Cart</button>
+    
+          </div>
+        
+        
+      </div>`;
+    
+    productContainer.append(productCard);
+  });
+}
+
+    });
+
+  </script>
+  <%- include('../layout/footer.ejs') %>

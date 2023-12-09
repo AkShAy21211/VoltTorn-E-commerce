@@ -65,7 +65,7 @@ const userAddToCartButton = async (req, res) => {
                   product_id: product_id,
                   quantity: 1,
                   name: product.name,
-                  image: product.variants[0].images[0],
+                  image: product.variants.images[0],
                   price: parseFloat(productPrice),
                 },
               },
@@ -175,6 +175,7 @@ const updateQuantity = async (req, res) => {
       { _id: cart },
       { $set: { total_price: total_price } }
     );
+
 
     res.status(200).json({
       success: true,
@@ -322,60 +323,6 @@ const editUserBillingAddress = async (req, res) => {
 
 //compete cash on deliver methood payment and add producvt to user oders
 
-const completeOderCashOnDelivery = async (req, res) => {
-  try {
-    const id = req.params.id;
-    const addressId = req.body.selectedAddressId;
-    const user = await userModel.findById(id);
-    const userCart = await CartModel.findById(id).populate("cart.product_id");
-    const address = await userModel.findOne({_id:id,'addresses._id':addressId},{'addresses.$':1});
-    const selectedAddress = address.addresses[0];
-    
-
-
-
-
-
-    if (userCart) {
-      const userOder = {
-        oder_id: generateOrderID(),
-        customerName: user.first_name + " " + user.last_name,
-        address: {
-          address: selectedAddress.address,
-          country: selectedAddress.country,
-          state: selectedAddress.state,
-          city: selectedAddress.city,
-          zip: selectedAddress.zip,
-          mobile: user.mobile,
-          email: user.email,
-        },
-         products: userCart.cart,
-        date: Date.now().toString(),
-        status: "Pending",
-        totalAmount: userCart.total_price,
-      };
-      
-      const userOderAdd = await userModel.findOneAndUpdate(
-        { _id: id },
-        { $push: { oders: userOder } }
-      );
-
-      if (userOderAdd) {
-        await userCart.deleteOne({ _id: id });
-
-        delete req.session.user.cart;
-
-       return res.status(303).redirect("/home/settings/oders");
-      }
-    } else {
-      console.log("no user found");
-      res.redirect("/home");
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 module.exports = {
   userShoppingCartPageLoad,
   userAddToCartButton,
@@ -385,5 +332,4 @@ module.exports = {
   addUserBellingAddress,
   stateCityLoad,
   editUserBillingAddress,
-  completeOderCashOnDelivery,
 };

@@ -85,7 +85,7 @@
                                     </div>
                                 </td>
                                 <td data-th="Quantity">
-                                  <input type="number"  min="1" oninput="this.value = Math.abs(this.value)" data-product-price="<%=parseFloat(cart.product_id.price - (cart.product_id.price * (cart.product_id.discount / 100)))*cart.quantity %>" data-product-id="<%= userCart._id %>" data-product="<%= cart.product_id._id %>" class="form-control text-center quantity-input" value="<%= cart.quantity %>">
+                                  <input type="number"  min="1" oninput="if(this.value == 0) this.value = 1; this.value = Math.abs(this.value)" data-product-price="<%=parseFloat(cart.product_id.price - (cart.product_id.price * (cart.product_id.discount / 100)))*cart.quantity %>" data-product-id="<%= userCart._id %>" data-product="<%= cart.product_id._id %>" class="form-control text-center quantity-input" value="<%= cart.quantity %>">
                               </td>
                                 <td class="actions" data-th="">
                                     <div class="text-right">

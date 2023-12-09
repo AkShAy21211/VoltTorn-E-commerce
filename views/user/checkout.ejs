@@ -1,29 +1,36 @@
 <%- include('../layout/header.ejs') %>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
-<link rel="stylesheet" href="/css/checkout.css">
-<style>
-  .tick-icon-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 20vh;
-  }
-
-  .tick-icon {
-    font-size: 0; /* Start with no font size */
-    color: #28a745; /* Green color for the tick icon */
-    animation: zoomOut 0.5s ease-in-out forwards; /* Animation name, duration, and forwards to keep the final state */
-  }
-
-  @keyframes zoomOut {
-    0% {
-      font-size: 0; /* Start with no font size */
+  <link rel="stylesheet" href="/css/checkout.css">
+  <style>
+    .tick-icon-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 20vh;
     }
-    100% {
-      font-size: 48px; /* End with the desired font size */
+
+    .tick-icon {
+      font-size: 0;
+      /* Start with no font size */
+      color: #28a745;
+      /* Green color for the tick icon */
+      animation: zoomOut 0.5s ease-in-out forwards;
+      /* Animation name, duration, and forwards to keep the final state */
     }
-  }
-</style>
+
+    @keyframes zoomOut {
+      0% {
+        font-size: 0;
+        /* Start with no font size */
+      }
+
+      100% {
+        font-size: 48px;
+        /* End with the desired font size */
+      }
+    }
+  </style>
 
 
   <title>Checkout</title>
@@ -31,282 +38,295 @@
     <div class="container">
       <div class="row ">
         <div class="col-lg-6 mb-4 ">
-  
+
           <!-- Checkout -->
           <div class="card shadow-0 border bg-light">
             <div class="p-4">
-          
+
               <!-- Add a button to toggle the collapse -->
-              <button class="btn btn-outline-primary mb-3" type="button" data-toggle="collapse" data-target="#addressCollapse" aria-expanded="false" aria-controls="addressCollapse">
+              <button class="btn btn-outline-primary mb-3" type="button" data-toggle="collapse"
+                data-target="#addressCollapse" aria-expanded="false" aria-controls="addressCollapse">
                 Add New Address
               </button>
-          
+
               <form class="collapse" id="addressCollapse" method="POST" action="/home/cart/add-address">
 
                 <div class="row">
-              
+
                   <div class="col-sm-8 mb-3">
                     <label for="address" class="form-label">Address</label>
                     <div class="form-outline">
                       <input type="text" id="address" name="address" placeholder="Type here" class="form-control" />
                     </div>
                   </div>
-              
+
                   <div class="col-sm-4 mb-3">
                     <label for="country" class="form-label">Country</label>
                     <div class="form-outline">
-                        <select id="country"  name="country" class="form-select">
-                                <option class="text-black" value="India">India</option>
-                        </select>
-                    </div>
-                </div>
-                
-                  <div class="col-sm-4 mb-3">
-                    <label for="state" class="form-label">State</label>
-                    <div class="form-outline">                        
-                      <select id="state"  name="state" class="form-select">
-                        <option value="">select</option>
-                        <%states.forEach(states => {%>
-                          <option class="text-black" data-state="<%=states.isoCode%>" value="<%=states.name%>"><%=states.name%></option>
-                          <%});  %>
+                      <select id="country" name="country" class="form-select">
+                        <option class="text-black" value="India">India</option>
                       </select>
                     </div>
                   </div>
-              
+
+                  <div class="col-sm-4 mb-3">
+                    <label for="state" class="form-label">State</label>
+                    <div class="form-outline">
+                      <select id="state" name="state" class="form-select">
+                        <option value="">select</option>
+                        <%states.forEach(states=> {%>
+                          <option class="text-black" data-state="<%=states.isoCode%>" value="<%=states.name%>">
+                            <%=states.name%>
+                          </option>
+                          <%}); %>
+                      </select>
+                    </div>
+                  </div>
+
                   <div class="col-sm-4 mb-3">
                     <label for="city" class="form-label">City</label>
                     <div class="form-outline">
 
                       <select id="city" name="city" class="form-select">
                         <option value="">select</option>
-                          <option class="text-black"  value=""></option>
-                     
-                          </select>
+                        <option class="text-black" value=""></option>
+
+                      </select>
                     </div>
                   </div>
-              
+
                   <div class="col-sm-4 col-6 mb-3">
                     <label for="postalCode" class="form-label">Postal code</label>
                     <div class="form-outline">
                       <input type="text" id="postalCode" name="postalCode" class="form-control" />
                     </div>
                   </div>
-              
+
                 </div>
-              
+
                 <!-- Submit button -->
                 <div class="d-grid gap-2">
                   <button type="submit" class="btn btn-primary">Add</button>
                 </div>
-              
+
               </form>
-              
+
               <!-- End of collapsible section -->
-          
+
             </div>
           </div>
-          <% user.addresses.forEach((address, i) => { %>
+          <% user.addresses.forEach((address, i)=> { %>
 
             <div data-index="<%= i %>" class="mb-3">
               <!-- Example addresses, you can replace these with dynamic data -->
-            <div class="form-check mt-4 border rounded bg-light" style="height: 100px; display: flex; justify-content: start; align-items: center;">
-              <input class="form-check-input ml-1 address-radio" type="radio" name="flexRadioDefault" id="flexRadioDefault<%= i + 1 %>" data-address-id="<%=address._id  %>">
-              <label class="ml-4 form-check-label" for="address1">
-                    <div>
-                        <strong>Address:</strong> <%= address.address %><br>
-                       
-                    </div>
+              <div class="form-check mt-4 border rounded bg-light"
+                style="height: 100px; display: flex; justify-content: start; align-items: center;">
+                <input class="form-check-input ml-1 address-radio" type="radio" name="flexRadioDefault"
+                  id="flexRadioDefault<%= i + 1 %>" data-address-id="<%=address._id  %>">
+                <label class="ml-4 form-check-label" for="address1">
+                  <div>
+                    <strong>Address:</strong>
+                    <%= address.address %><br>
+
+                  </div>
                 </label>
                 <a style="cursor: pointer;" class="ml-4 text-primary editAddressBtn">Edit</a>
               </div>
+            </div>
+
+
+
+            <form data-index="<%= i %>" class="mt-4" style="display: none;" method="POST"
+              action="/home/cart/edit-address/<%=address._id %>">
+              <!-- Form fields for editing address -->
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <div class="input-group">
+                    <span class="input-group-text">Address</span>
+                    <input type="text" class="form-control" id="address" name="address" value="<%= address.address %>"
+                      required>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="input-group">
+                    <span class="input-group-text">Country</span>
+                    <input type="text" class="form-control" id="country" name="country" value="<%= address.country %>"
+                      required>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-4">
+                  <div class="input-group">
+                    <span class="input-group-text">State</span>
+                    <input type="text" class="form-control" id="state" name="state" value="<%= address.state %>"
+                      required>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="input-group">
+                    <span class="input-group-text">City</span>
+                    <input type="text" class="form-control" id="city" name="city" value="<%= address.city %>" required>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="input-group">
+                    <span class="input-group-text">Postal Code</span>
+                    <input type="text" class="form-control" id="postalCode" name="postalCode" value="<%= address.zip %>"
+                      required>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-success">Save</button>
+              <button type="button" class="btn btn-secondary ml-2 cancelEditBtn">Cancel</button>
+            </form>
+
+            <%}) %>
+
+
+
+              <table id="shoppingCart" class="table table-borderless table-responsive">
+                <tbody>
+                  <tr>
+                    <% cart.cart.forEach(item=> { %>
+                      <td data-th="Product">
+                        <div class="row mt-4">
+                          <div class="col-md-5 text-left" style="">
+                            <img src="/images/productImages/<%= item.image %>" height="150" width="150" alt=""
+                              class=" d-none d-md-block rounded mb-2 shadow">
+                          </div>
+                          <div class="col-md-3 text-left mt-sm-2">
+                            <h6 style="height: 50px; width: 50px; "></h6>
+                          </div>
+                        </div>
+                      </td>
+                      <% }); %>
+                  </tr>
+                </tbody>
+              </table>
+
+
+
+              <!-- checkout modal if  paymentMethod is cash on delevry -->
+
+
+              <!-- Checkout -->
         </div>
 
-
-
-        <form data-index="<%= i %>" class="mt-4" style="display: none;" method="POST" action="/home/cart/edit-address/<%=address._id %>">
-          <!-- Form fields for editing address -->
-          <div class="row mb-3">
-              <div class="col-md-6">
-                  <div class="input-group">
-                      <span class="input-group-text">Address</span>
-                      <input type="text" class="form-control" id="address" name="address" value="<%= address.address %>" required>
-                  </div>
-              </div>
-              <div class="col-md-6">
-                  <div class="input-group">
-                      <span class="input-group-text">Country</span>
-                      <input type="text" class="form-control" id="country" name="country" value="<%= address.country %>" required>
-                  </div>
-              </div>
-          </div>
-          <div class="row mb-3">
-              <div class="col-md-4">
-                  <div class="input-group">
-                      <span class="input-group-text">State</span>
-                      <input type="text" class="form-control" id="state" name="state" value="<%= address.state %>" required>
-                  </div>
-              </div>
-              <div class="col-md-4">
-                  <div class="input-group">
-                      <span class="input-group-text">City</span>
-                      <input type="text" class="form-control" id="city" name="city" value="<%= address.city %>" required>
-                  </div>
-              </div>
-              <div class="col-md-4">
-                  <div class="input-group">
-                      <span class="input-group-text">Postal Code</span>
-                      <input type="text" class="form-control" id="postalCode" name="postalCode" value="<%= address.zip %>" required>
-                  </div>
-              </div>
-          </div>
-          <button type="submit" class="btn btn-success">Save</button>
-          <button type="button" class="btn btn-secondary ml-2 cancelEditBtn">Cancel</button>
-        </form>
-      
-        <%})  %>  
-
-      
-
-        <table id="shoppingCart" class="table table-borderless table-responsive">
-          <tbody>
-            <tr>
-              <% cart.cart.forEach(item => { %>
-                <td data-th="Product">
-                  <div class="row mt-4">
-                    <div class="col-md-5 text-left" style="">
-                      <img src="/images/productImages/<%= item.image %>" height="150" width="150"  alt="" class=" d-none d-md-block rounded mb-2 shadow">
-                    </div>
-                    <div class="col-md-3 text-left mt-sm-2">
-                      <h6 style="height: 50px; width: 50px; "></h6>
-                    </div>
-                  </div>
-                </td>
-              <% }); %>
-            </tr>
-          </tbody>
-        </table>
-                  
-        
-
-<!-- checkout modal if  paymentMethod is cash on delevry -->
-
-
-          <!-- Checkout -->
-        </div>
-  
         <div class="col-lg-6 d-flex justify-content-end">
-          <div class="ms-lg-5 mt-lg-0 " >
-                <div class="ms-lg-4 mt-lg-0  rounded p-4 bg-light" style="max-width: 320px;">
-                    <h6 class="mb-3">Summary</h6>
-                    <%cart.cart.forEach((cart,i)=>{%>
+          <div class="ms-lg-5 mt-lg-0 ">
+            <div class="ms-lg-4 mt-lg-0  rounded p-4 bg-light" style="max-width: 320px;">
+              <h6 class="mb-3">Summary</h6>
+              <%cart.cart.forEach((cart,i)=>{%>
 
-                    <div class="d-flex justify-content-between">
-                      <p  style="height: 20px; width: 150px;">(Item)<%=i+1  %></p>
-                      <p class="quantity" data-product-id="<%= cart.product_id._id %>">X<%= cart.quantity  %> </p>
-                      <p class="price" data-product-id="<%= cart.product_id._id %>"><%= cart.price  %> </p>
-                    </div>
-                               
-                    <% })  %>
-                    <h6 class="mb-5">Delivery Charges: <p class="text-success " style="float: right;">Free</p></h6>
+                <div class="d-flex justify-content-between">
+                  <p style="height: 20px; width: 150px;">(Item)<%=i+1 %>
+                  </p>
+                  <p class="quantity" data-product-id="<%= cart.product_id._id %>">X<%= cart.quantity %>
+                  </p>
+                  <p class="price" data-product-id="<%= cart.product_id._id %>">
+                    <%= cart.price %>
+                  </p>
+                </div>
 
-                    <hr />
-                    <div class="d-flex justify-content-start">
-                      <p class="mb-2 text-success">You can save Rs:<b class="text-success"> <%=total_discount  %></b> on this order</p>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                      <p class="mb-2">Total price:</p>
+                <% }) %>
+                  <h6 class="mb-5">Delivery Charges: <p class="text-success " style="float: right;">Free</p>
+                  </h6>
 
-                        
-       
+                  <hr />
+                  <div class="d-flex justify-content-start">
+                    <p class="mb-2 text-success">You can save Rs:<b class="text-success">
+                        <%=total_discount %>
+                      </b> on this order</p>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <p class="mb-2">Total price:</p>
 
-                      <p class="mb-2 fw-bold">RS:<%=cart.total_price  %></p>
-                    </div>
-          
-                    <!-- <div class="input-group mt-3 mb-4">
+
+
+
+                    <p class="mb-2 fw-bold">RS:<%=cart.total_price %>
+                    </p>
+                  </div>
+
+                  <!-- <div class="input-group mt-3 mb-4">
                       <input type="text" class="form-control border" name="" placeholder="Promo code" />
                       <button class="btn btn-light text-primary border">Apply</button>
                     </div> -->
-          
-                    <hr />
-                    
-          
-                    <form action="" class="form" method="">
-                       
-                    
-                          <legend>Payment Method</legend>
-                    
-                          <div class="form__radios">
-                           
-                    
-                            <div class="form__radio">
-                              <label for="paypal"><svg class="icon">
-                              </svg>PayPal</label>
-                              <input id="paypal" name="paymentMethod" value="paypal" type="radio" />
-                                                          </div>
-                            <div class="form__radio">
-                              <label for="cash"><svg class="icon">
-                                  <use xlink:href="#icon-sales" />
-                                </svg>Cash On Delivery</label>
-                                <input id="cash" name="paymentMethod" type="radio" value="cash" />
-                              </div>
-                          </div>
-                    
-                       
-                        <div>
-                          <button data-oder="<%=user._id  %>" class="button button--full" type="button" id="buyNowBtn">Buy Now</button>
-                        
-                        </div>
-                      </form>
+
+                  <hr />
+
+
+                  <form action="" class="form" method="">
+
+
+                    <legend>Payment Method</legend>
+
+                    <div class="form__radios">
+
+
+                      <div class="form__radio">
+                        <label for="paypal"><svg class="icon">
+                          </svg>Razorpay</label>
+                        <input id="razorpay" name="paymentMethod" value="online" type="radio" />
+                      </div>
+                      <div class="form__radio">
+                        <label for="cash"><svg class="icon">
+                            <use xlink:href="#icon-sales" />
+                          </svg>Cash On Delivery</label>
+                        <input id="cash" name="paymentMethod" type="radio" value="cash" />
+                      </div>
+                    </div>
+
+
+                    <div>
+                      <button data-oder="<%=user._id  %>" data-total-amount="<%=cart.total_price  %>"
+                        class="button button--full" type="button" id="buyNowBtn">Buy
+                        Now</button>
 
                     </div>
-                    
-                    
-                  
+                  </form>
+
+            </div>
+
+
+
             <!-- Your right column content goes here -->
           </div>
         </div>
       </div>
-  
+
     </div>
 
 
 
 
-<!-- Bootstrap Modal -->
-<div class="modal fade" id="orderSuccessModal" tabindex="-1" aria-labelledby="orderSuccessModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="orderSuccessModalLabel">Order Completed Successfully</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="tick-icon-container">
-          <div class="tick-icon">&#10003;</div>
+    <!-- Bootstrap Modal -->
+    <div class="modal fade" id="orderSuccessModal" tabindex="-1" aria-labelledby="orderSuccessModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="orderSuccessModalLabel">Order Completed Successfully</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="tick-icon-container">
+              <div class="tick-icon">&#10003;</div>
+            </div>
+            Your order has been successfully placed. Click the button below to view your order.
+          </div>
+          <div class="modal-footer">
+            <a href="/home/settings/oders" type="button" class="btn btn-primary" id="viewOrderBtn"
+              data-bs-dismiss="modal">View Order</a>
+          </div>
         </div>
-        Your order has been successfully placed. Click the button below to view your order.
-      </div>
-      <div class="modal-footer">
-        <a href="/home/settings/oders" type="button" class="btn btn-primary" id="viewOrderBtn" data-bs-dismiss="modal">View Order</a>
       </div>
     </div>
-  </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   </section>
+
+
+
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const buyNowBtn = document.getElementById('buyNowBtn');
@@ -314,54 +334,131 @@
       const paymentMethodRadioButtons = document.querySelectorAll('input[name="paymentMethod"]');
       const addressRadioButtons = document.querySelectorAll('.address-radio');
       const orderSuccessModal = new bootstrap.Modal(document.getElementById('orderSuccessModal'));
-  
+
       buyNowBtn.addEventListener('click', async function () {
-  // Check if the selected payment method is "Cash on Delivery"
-   const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
-   const selectedAddressRadioButton = document.querySelector('input[name="flexRadioDefault"]:checked');
-    if (!selectedAddressRadioButton) {
-      alert('Please select an address.');
-      return;
-    }
+        // Check if the selected payment method is "Cash on Delivery"
+        const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
+        const totalAmount = buyNowBtn.dataset.totalAmount;
 
-    const selectedAddressId = selectedAddressRadioButton.dataset.addressId;
-    
-    console.log("address id",selectedAddressId);
-    // Replace this with the actual way to get the address
+        const selectedAddressRadioButton = document.querySelector('input[name="flexRadioDefault"]:checked');
+        if (!selectedAddressRadioButton) {
+          alert('Please select an address.');
+          return;
+        }
 
-    const oder = buyNowBtn.dataset.oder;
+        const selectedAddressId = selectedAddressRadioButton.dataset.addressId;
 
-  if (selectedPaymentMethod && selectedPaymentMethod.value === 'cash') {
+        console.log("address id", selectedAddressId);
+        // Replace this with the actual way to get the address
 
-    const userOder = await axios.post(`/home/cart/checkout/complete/${oder}`, {selectedAddressId});
-    // Show the success modal
-    orderSuccessModal.show();
+        const oder = buyNowBtn.dataset.oder;
 
-    setTimeout(() => {
-      window.location.href = "/home/settings/oders";
+        if (selectedPaymentMethod && selectedPaymentMethod.value === 'cash') {
 
-    }, 10000);
+          const userOder = await axios.post(`/home/cart/checkout/complete/cash/${oder}`, { selectedAddressId });
+          // Show the success modal
+          orderSuccessModal.show();
+
+          setTimeout(() => {
+            window.location.href = "/home/settings/oders";
+
+          }, 10000);
 
 
+        } else if (selectedPaymentMethod && selectedPaymentMethod.value === 'online') {
 
-  
-  }
-});
+          try {
 
-  
-  viewOrderBtn.addEventListener('click', function () {
-   // Redirect to the page where the user can view their order
-     // Replace 'your_order_page_url' with the actual URL
+            const response = await axios.post(`/home/cart/checkout/complete/online/${oder}`, { selectedAddressId });
+
+            if (response.data) {
+
+              console.log(response.data.order);
+            }
+
+            var orderId;
+            $(document).ready(function () {
+              var settings = {
+                "url": "/create/orderId",
+                "method": "POST",
+                "timeout": 0,
+                "headers": {
+                  "Content-Type": "application/json"
+                },
+                "data": JSON.stringify({
+                  "amount": "500",
+                }),
+              };
+
+              //creates new orderId everytime
+              $.ajax(settings).done(function (response) {
+
+                orderId = response.data.order.id;
+                console.log(orderId);
+                $("buyNowBtn").show();
+              });
+            });
+
+            var options = {
+              "key": "YOUR_KEY_ID", // Enter the Key ID generated from the Dashboard
+              "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+              "currency": "INR",
+              "name": "Acme Corp",
+              "description": "Test Transaction",
+              "image": "https://example.com/your_logo",
+              "order_id": "order_IluGWxBm9U8zJ8", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+              "handler": function (response) {
+                alert(response.razorpay_payment_id);
+                alert(response.razorpay_order_id);
+                alert(response.razorpay_signature)
+              },
+              "prefill": {
+                "name": "Gaurav Kumar",
+                "email": "gaurav.kumar@example.com",
+                "contact": "9000090000"
+              },
+              "notes": {
+                "address": "Razorpay Corporate Office"
+              },
+              "theme": {
+                "color": "#3399cc"
+              }
+            };
+            var rzp1 = new Razorpay(options);
+            rzp1.on('payment.failed', function (response) {
+              alert(response.error.code);
+              alert(response.error.description);
+              alert(response.error.source);
+              alert(response.error.step);
+              alert(response.error.reason);
+              alert(response.error.metadata.order_id);
+              alert(response.error.metadata.payment_id);
+            });
+            document.getElementById('buyNowBtn').onclick = function (e) {
+              rzp1.open();
+              e.preventDefault();
+            }
+
+
+          } catch (error) {
+            console.error(error);
+          }
+
+        }
+      });
+      viewOrderBtn.addEventListener('click', function () {
+        // Redirect to the page where the user can view their order
+        // Replace 'your_order_page_url' with the actual URL
         window.location.href = '/home/settings/oders';
       });
     });
   </script>
-  
-  
+
+
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const paymentMethodRadioButtons = document.querySelectorAll('input[name="paymentMethod"]');
-      
+
       paymentMethodRadioButtons.forEach(function (radioButton) {
         radioButton.addEventListener('change', function () {
           // Unselect all other radio buttons
@@ -376,40 +473,40 @@
   </script>
 
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    // Get all elements with the class 'editAddressBtn' and 'cancelEditBtn'
-    const editAddressBtns = document.querySelectorAll('.editAddressBtn');
-    const cancelEditBtns = document.querySelectorAll('.cancelEditBtn');
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Get all elements with the class 'editAddressBtn' and 'cancelEditBtn'
+      const editAddressBtns = document.querySelectorAll('.editAddressBtn');
+      const cancelEditBtns = document.querySelectorAll('.cancelEditBtn');
 
-    // Add click event listeners to handle the display toggling
-    editAddressBtns.forEach(function (editAddressBtn) {
+      // Add click event listeners to handle the display toggling
+      editAddressBtns.forEach(function (editAddressBtn) {
         editAddressBtn.addEventListener('click', function () {
-            const index = this.closest('[data-index]').dataset.index;
-            toggleDisplay(index);
+          const index = this.closest('[data-index]').dataset.index;
+          toggleDisplay(index);
         });
-    });
+      });
 
-    cancelEditBtns.forEach(function (cancelEditBtn) {
+      cancelEditBtns.forEach(function (cancelEditBtn) {
         cancelEditBtn.addEventListener('click', function () {
-            const index = this.closest('[data-index]').dataset.index;
-            toggleDisplay(index);
+          const index = this.closest('[data-index]').dataset.index;
+          toggleDisplay(index);
         });
-    });
+      });
 
-    // Function to toggle display based on the index
-    function toggleDisplay(index) {
+      // Function to toggle display based on the index
+      function toggleDisplay(index) {
         const addressDetails = document.querySelector(`[data-index="${index}"]`);
         const addressForm = document.querySelector(`form[data-index="${index}"]`);
 
         if (addressDetails && addressForm) {
-            addressDetails.style.display = addressDetails.style.display === 'none' ? 'block' : 'none';
-            addressForm.style.display = addressForm.style.display === 'none' ? 'block' : 'none';
+          addressDetails.style.display = addressDetails.style.display === 'none' ? 'block' : 'none';
+          addressForm.style.display = addressForm.style.display === 'none' ? 'block' : 'none';
         }
-    }
-});
+      }
+    });
 
-</script>
+  </script>
 
 
 
@@ -419,24 +516,24 @@
 
 
   <script>
-    document.getElementById('state').addEventListener('change',async function () {
+    document.getElementById('state').addEventListener('change', async function () {
       // Fetch cities for the selected state
       const selectedState = this.value;
-  
-  // Get the data-state attribute value
-     const dataState = this.options[this.selectedIndex].getAttribute('data-state');
 
-  console.log(dataState);
+      // Get the data-state attribute value
+      const dataState = this.options[this.selectedIndex].getAttribute('data-state');
+
+      console.log(dataState);
       try {
-        const response = await axios.post(`/home/cart/checkout`,{dataState});
+        const response = await axios.post(`/home/cart/checkout`, { dataState });
         const cities = response.data.city;
-  
+
 
         console.log(cities);
         // Clear existing options
         const cityDropdown = document.getElementById('city');
         cityDropdown.innerHTML = '';
-  
+
         // Add new options
         cities.forEach(city => {
           const option = document.createElement('option');
@@ -450,4 +547,6 @@
     });
 
   </script>
+
+
   <%- include('../layout/footer.ejs') %>
