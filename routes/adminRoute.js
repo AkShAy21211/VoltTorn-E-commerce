@@ -8,6 +8,8 @@ const categoryController = require("../controllers/categoryController");
 const productController = require("../controllers/productColtroller");
 const bannerController = require("../controllers/bannerController");
 const adminOderController = require("../controllers/oderControllers");
+const dashBoardController = require("../controllers/adminDashboard");
+
 const path = require("path");
 const multer = require("multer");
 adminRoute.use(flash())
@@ -131,8 +133,12 @@ adminRoute.post('/banners/edit/:id',uploadBannerImage.single('image'),bannerCont
 
 //admin oder mangment
 adminRoute.get('/oders',adminOderController.loadOderManagment);
-
 adminRoute.patch('/oders/change-oder-status/:status/:id',adminOderController.adminChangeOderStatus)
+
+
+//admin dashboard statictics
+adminRoute.get('/dashboard/statistics',dashBoardController.getProductStatistics);
+adminRoute.get('/search',dashBoardController.searchItem);
 
 adminRoute.get("*", function (req, res) {
   res.redirect("/admin");

@@ -182,7 +182,7 @@
                                   Price: <b>Rs:<%= Number(product.price - (product.price * (product.discount /
                                       100))).toLocaleString() %></b></p>
                                 <div class="d-flex justify-content-between">
-                                  <p class="card-text text-success">%<%= product.discount %> off</p>
+                                  <p class="card-text text-success"><%= product.discount %>% off</p>
                                   <p class="small text-danger"><s>Rs<%= product.price %></s></p>
                                 </div>
                               </div>
@@ -299,7 +299,7 @@ function renderProducts(products) {
                 Price: <b>Rs:${Number(product.price - (product.price * (product.discount / 100))).toLocaleString()}</b>
               </p>
               <div class="d-flex justify-content-between">
-                <p class="card-text text-success">%${product.discount} off</p>
+                <p class="card-text text-success">${product.discount}% off</p>
                 <p class="small text-danger"><s>Rs${product.price}</s></p>
               </div>
             </div>

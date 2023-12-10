@@ -170,6 +170,7 @@
               <div class="form-group">
                 <label for="discount">Discount</label>
                 <input
+                  min="0" oninput="if(this.value < 0) this.value = 0; this.value = Math.abs(this.value)"
                   type="number"
                   class="form-control"
                   id="discount"
@@ -194,6 +195,7 @@
               <div class="form-group">
                 <label for="stockQuantity">Stock Quantity</label>
                 <input
+                min="0" oninput="if(this.value < 0) this.value = 0; this.value = Math.abs(this.value)"
                   type="number"
                   class="form-control"
                   id="stockQuantity"

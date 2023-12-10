@@ -103,9 +103,6 @@ userRoute.post('/home/cart/checkout/verify',auth.isUserBlocked,paymentController
 //user checkout page complete transcation online  payment
 
 
-
-
-
 userRoute.get('/logout',auth.is_Login,userController.userLogout)
 
 
