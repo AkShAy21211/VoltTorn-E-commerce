@@ -19,24 +19,36 @@ const store = MongoSessionStore({
   collection:'sessions'
 })
 
-
-app.use(session({
-  secret: config.SessionSecret,
+const userSession = session({
+  secret: config.userSessionSecreat,
   resave: false,
   saveUninitialized: false,
-  store:store,
+  store: store,
   cookie: {
     maxAge: 24 * 60 * 60 * 1000,
   },
-}));
+  name: 'userSession', // Set a unique name for user sessions
+});
+
+const adminSession = session({
+  secret: config.adminSessionSecret,
+  resave: false,
+  saveUninitialized: false,
+  store: store,
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000,
+  },
+  name: 'adminSession', // Set a unique name for admin sessions
+});
+
+app.use(userSession);
+app.use(adminSession);
 
 app.use((req, res, next) => {
-  console.log(req.session);
   if (req.url.startsWith("/admin")) {
     res.locals.adminSessionData = req.session.admin;
   } else {
     res.locals.userSessionData = req.session.user;
-    
   }
   next();
 });

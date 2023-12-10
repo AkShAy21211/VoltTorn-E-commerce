@@ -48,6 +48,7 @@
                 <th scope="col">Oder Id</th>
                 <th scope="col">User Name</th>
                 <th scope="col">Order Date</th>
+                <th scope="col">Payment</th>
                 <th scope="col">Order Status</th>
                 <th scope="col">Actions</th>
               </tr>
@@ -65,6 +66,17 @@
                   <td>
                     <%= new Date(oder.date).toLocaleString('en-US', { day: 'numeric' , month: 'short' , year: 'numeric'
                       , hour: 'numeric' , minute: 'numeric' , hour12: true }) %>
+                  </td>
+
+                  <td>
+                    <%if(oder.payment){%>
+
+                      <p class="badge bg-success">Paid</p>
+
+                    <%}else{%>
+                    <p class="badge bg-warning">Pending</p>
+
+                    <%}  %>
                   </td>
                   <td>
                     <!-- Replace 'statusSelect' ID with 'statusDropdown' class -->

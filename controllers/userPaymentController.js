@@ -2,134 +2,131 @@ const { CartModel } = require("../models/cart&WishlistModel");
 const { generateOrderID } = require("../helpers/oderIdHelper");
 const userModel = require("../models/userModel");
 const Razorpay = require("razorpay");
-const { createRazorpayOrder } = require("../helpers/razorPayHelper");
+const {
+  createRazorpayOrder,
+  verifyPayment,
+} = require("../helpers/razorPayHelper");
 const { json } = require("body-parser");
+const { selectFields } = require("express-validator/src/field-selection");
 const { RAZORPAY_ID_KEY, RAZORPAY_SECRET_KEY } = process.env;
 var instance = new Razorpay({
   key_id: "rzp_test_IqLBbBfcC14Mtr",
   key_secret: "iS5lOhiy9F8G62U1h1mo8lD9",
 });
 
-const completeOderCashOnDelivery = async (req, res) => {
+const verfyUserPaymentOption = async (req, res) => {
   try {
     const id = req.params.id;
-    const addressId = req.body.selectedAddressId;
+    const { selectedAddressId, paymentMethod } = req.body;
     const user = await userModel.findById(id);
     const userCart = await CartModel.findById(id).populate("cart.product_id");
     const address = await userModel.findOne(
-      { _id: id, "addresses._id": addressId },
+      { _id: id, "addresses._id": selectedAddressId },
       { "addresses.$": 1 }
     );
     const selectedAddress = address.addresses[0];
 
-    if (userCart) {
-      const userOder = {
-        order_id: generateOrderID(),
-        customerName: user.first_name + " " + user.last_name,
-        payment: false,
-        payment_mode: "COD",
-        address: {
-          address: selectedAddress.address,
-          country: selectedAddress.country,
-          state: selectedAddress.state,
-          city: selectedAddress.city,
-          zip: selectedAddress.zip,
-          mobile: user.mobile,
-          email: user.email,
-        },
-        products: userCart.cart,
-        date: Date.now().toString(),
-        status: "Pending",
-        totalAmount: userCart.total_price,
-      };
-
-      const userOderAdd = await userModel.findOneAndUpdate(
-        { _id: id },
-        { $push: { oders: userOder } }
+    if (paymentMethod && paymentMethod === "COD") {
+      const order = createOder(
+        id,
+        selectedAddress,
+        user,
+        paymentMethod,
+        userCart
       );
 
-      if (userOderAdd) {
-        await userCart.deleteOne({ _id: id });
-
-        delete req.session.user.cart;
-
-        return res.status(303).redirect("/home/settings/oders");
-      }
+      await userCart.deleteOne({ _id: id });
+      delete req.session.user.cart;
+      return res.status(201).json({});
     } else {
-      console.log("no user found");
-      res.redirect("/home");
+      const oderId = generateOrderID();
+
+      var options = {
+        amount: userCart.total_price * 100, // amount in the smallest currency unit
+        currency: "INR",
+        receipt: "" + oderId,
+      };
+
+      createRazorpayOrder(instance, options, async (err, order) => {
+        if (order) {
+          console.log(order);
+          res.status(201).json({ order });
+        } else {
+          console.log(err);
+        }
+      });
     }
   } catch (error) {
     console.error(error);
   }
 };
 
-const completeOnlinePaymentOder = async (req, res) => {
+const verifyOnlinePayment = async (req, res) => {
   try {
-    const { id } = req.params;
-    const addressId = req.body.selectedAddressId;
+    const id = req.session.user.userId;
+    const { selectedAddressId, paymentMethod } = req.body;
     const user = await userModel.findById(id);
     const userCart = await CartModel.findById(id).populate("cart.product_id");
-    const total_price = userCart.total_price;
-
     const address = await userModel.findOne(
-      { _id: id, "addresses._id": addressId },
+      { _id: id, "addresses._id": selectedAddressId },
       { "addresses.$": 1 }
     );
-    const selectedAddress = address.addresses[0];
+    const selectedAddress = address?.addresses?.[0];
 
-    const userOder = {
-      order_id: generateOrderID(),
-      customerName: user.first_name + " " + user.last_name,
-      payment: true,
-      payment_mode: "Online",
-      address: {
-        address: selectedAddress.address,
-        country: selectedAddress.country,
-        state: selectedAddress.state,
-        city: selectedAddress.city,
-        zip: selectedAddress.zip,
-        mobile: user.mobile,
-        email: user.email,
-      },
-      products: userCart.cart,
-      date: Date.now().toString(),
-      status: "Pending",
-      totalAmount: userCart.total_price,
-    };
+    console.log(req.body);
 
-    console.log("total price recived in backedn", total_price);
-
-    const oderId = generateOrderID();
-
-    var options = {
-      amount: total_price * 100, // amount in the smallest currency unit
-      currency: "INR",
-      receipt: "" + oderId,
-    };
-
-    const order = createRazorpayOrder(instance, options, async (err, order) => {
-      if (order) {
-        const userOderAdd = await userModel.findOneAndUpdate(
-          { _id: id },
-          { $push: { oders: userOder } }
-        );
-
-        if (userOderAdd) {
-          await userCart.deleteOne({ _id: id });
-          delete req.session.user.cart;
+    verifyPayment(req.body)
+      .then((response) => {
+        if (response) {
+          const order = createOder(
+            id,
+            selectedAddress,
+            user,
+            paymentMethod,
+            userCart
+          ); 
+        }else{
+          console.error("Order not placed");
         }
-        res.status(200).json({ order, redirect: "/home/settings/oders" });
-      } else {
-        console.log(err);
-      }
-    });
+      });
+      await userCart.deleteOne({ _id: id });
+      delete req.session.user.cart;
+      return res.status(201).redirect('/home/settings/oders');
   } catch (error) {
     console.error(error);
   }
 };
 
+async function createOder(id, selectedAddress, user, paymentMethod, userCart) {
+  const userOder = {
+    order_id: generateOrderID(),
+    customerName: user.first_name + " " + user.last_name,
+    payment: paymentMethod=='COD'?false:true,
+    payment_mode: paymentMethod,
+    address: {
+      address: selectedAddress.address,
+      country: selectedAddress.country,
+      state: selectedAddress.state,
+      city: selectedAddress.city,
+      zip: selectedAddress.zip,
+      mobile: user.mobile,
+      email: user.email,
+    },
+    products: userCart.cart,
+    date: Date.now().toString(),
+    status: "Pending",
+    totalAmount: userCart.total_price,
+  };
+
+  const userOderAdd = await userModel.findOneAndUpdate(
+    { _id: id },
+    { $push: { oders: userOder } }
+  );
+
+  return true;
+}
+
 module.exports = {
-  completeOderCashOnDelivery,
-  completeOnlinePaymentOder,
+  verfyUserPaymentOption,
+  verifyOnlinePayment,
 };

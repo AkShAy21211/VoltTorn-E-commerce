@@ -277,6 +277,7 @@ const loadLoginVerify = async (req, res) => {
 const userLogout = async (req, res) => {
   try {
     delete req.session.user;
+    
     res.redirect('/login');
   } catch (error) {
     console.log(error.message);

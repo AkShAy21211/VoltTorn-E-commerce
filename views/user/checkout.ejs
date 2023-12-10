@@ -274,13 +274,14 @@
                         <label for="cash"><svg class="icon">
                             <use xlink:href="#icon-sales" />
                           </svg>Cash On Delivery</label>
-                        <input id="cash" name="paymentMethod" type="radio" value="cash" />
+                        <input id="cash" name="paymentMethod" type="radio" value="COD" />
                       </div>
                     </div>
 
 
                     <div>
-                      <button data-email="<%user.email  %>" data-mobile="<%user.mobile  %>" data-name="<%user.name  %>" data-oder-Id="<%=user._id  %>" data-total-amount="<%=cart.total_price  %>"
+                      <button data-email="<%user.email  %>" data-mobile="<%user.mobile  %>" data-name="<%user.name  %>"
+                        data-oder-Id="<%=user._id  %>" data-total-amount="<%=cart.total_price  %>"
                         class="button button--full" type="button" id="buyNowBtn">Buy
                         Now</button>
 
@@ -342,6 +343,8 @@
         const userName = buyNowBtn.dataset.name;
         const email = buyNowBtn.dataset.email;
         const mobile = buyNowBtn.dataset.mobile;
+        const oderId = buyNowBtn.dataset.oderId;
+
         const selectedAddressRadioButton = document.querySelector('input[name="flexRadioDefault"]:checked');
         if (!selectedAddressRadioButton) {
           alert('Please select an address.');
@@ -349,115 +352,139 @@
         }
 
         const selectedAddressId = selectedAddressRadioButton.dataset.addressId;
+        const paymentMethod = selectedPaymentMethod.value;
 
-        console.log("address id", selectedAddressId);
-        // Replace this with the actual way to get the address
+        console.log(paymentMethod);
 
-        const oderId = buyNowBtn.dataset.oderId;
-
-        if (selectedPaymentMethod && selectedPaymentMethod.value === 'cash') {
-
-          const userOder = await axios.post(`/home/cart/checkout/complete/cash/${oderId}`, { selectedAddressId });
+        //cash on deliverry
+        let response;
+        if (selectedPaymentMethod && selectedPaymentMethod.value === 'COD') {
+          response = await axios.post(`/home/cart/checkout/verify-payment/${oderId}`, { selectedAddressId, paymentMethod });
           // Show the success modal
           orderSuccessModal.show();
-
-          setTimeout(() => {
-            window.location.href = "/home/settings/oders";
-
-          }, 10000);
-
+          viewOrderBtn.addEventListener('click', function () {
+            window.location.href = '/home/settings/oders';
+          });
 
         } else if (selectedPaymentMethod && selectedPaymentMethod.value === 'online') {
+          response = await axios.post(`/home/cart/checkout/verify-payment/${oderId}`, { selectedAddressId, paymentMethod });
+          const order = response.data.order;
 
-          try {
-
-            const response = await axios.post(`/home/cart/checkout/complete/online/${oderId}`, { selectedAddressId });
-
-            console.log(response.data.order);
+          initializeRazorpayPayment(order,selectedAddressId,paymentMethod)
 
 
-            let orderId;
-            const amount = response.data.order.amount;
-
-            $(document).ready(function () {
-              var settings = {
-                "url": "/create/orderId",
-                "method": "POST",
-                "timeout": 0,
-                "headers": {
-                  "Content-Type": "application/json"
-                },
-                "data": JSON.stringify({
-                  "amount": amount,
-                }),
-              };
-
-              //creates new orderId everytime
-              $.ajax(settings).done(function (response) {
-
-                orderId = response.data.order.id;
-                $("buyNowBtn").show();
-              });
-            });
-
-
-
-            var options = {
-              "key": "rzp_test_IqLBbBfcC14Mtr", // Enter the Key ID generated from the Dashboard
-              "amount": amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-              "currency": "INR",
-              "name": "ValtTron",
-              "description": "Test Transaction",
-              "image": "/images/logo.png",
-              "order_id": orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-              "handler": function (response) {
-                alert(response.razorpay_payment_id);
-                alert(response.razorpay_order_id);
-                alert(response.razorpay_signature)
-              },
-              "prefill": {
-                "name": userName,
-                "email": email,
-                "contact": mobile,
-              },
-              "notes": {
-                "address": "Razorpay Corporate Office"
-              },
-              "theme": {
-                "color": "#0d6efd"
-              }
-            };
-            var rzp1 = new Razorpay(options);
-            rzp1.on('payment.failed', function (response) {
-              alert(response.error.code);
-              alert(response.error.description);
-              alert(response.error.source);
-              alert(response.error.step);
-              alert(response.error.reason);
-              alert(response.error.metadata.order_id);
-              alert(response.error.metadata.payment_id);
-            });
-            document.getElementById('buyNowBtn').onclick = function (e) {
-              rzp1.open();
-              e.preventDefault();
-
-           
-            }
-
-
-          } catch (error) {
-            console.error(error);
-          }
 
         }
       });
-      viewOrderBtn.addEventListener('click', function () {
-        // Redirect to the page where the user can view their order
-        // Replace 'your_order_page_url' with the actual URL
-        window.location.href = '/home/settings/oders';
-      });
     });
+
+
+
+
+    function initializeRazorpayPayment(order,selectedAddressId,paymentMethod) {
+      const orderSuccessModal = new bootstrap.Modal(document.getElementById('orderSuccessModal'));
+      const viewOrderBtn = document.getElementById('viewOrderBtn');
+
+      const amount = order.amount;
+
+
+
+      var options = {
+        "key": "rzp_test_IqLBbBfcC14Mtr", // Enter the Key ID generated from the Dashboard
+        "amount": amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "VoltTron",
+        "description": "Test Transaction",
+        "image": "https://example.com/your_logo",
+        "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function (response) {
+          // alert(response.razorpay_payment_id);
+          // alert(response.razorpay_order_id);
+          // alert(response.razorpay_signature);
+          verifyPayment(response, order,selectedAddressId,paymentMethod);
+          orderSuccessModal.show();
+          viewOrderBtn.addEventListener('click', function () {
+            window.location.href = '/home/settings/oders';
+          });
+
+        },
+        "prefill": {
+          "name": "Gaurav Kumar",
+          "email": "gaurav.kumar@example.com",
+          "contact": "9000090000"
+        },
+        "notes": {
+          "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+          "color": "#3399cc"
+        }
+      };
+
+
+
+      function verifyPayment(response, order,selectedAddressId,paymentMethod) {
+        var orderId;
+        $(document).ready(function () {
+          var settings = {
+            url: "/home/cart/checkout/verify",
+            method: "POST",
+            timeout: 0,
+
+            data: {
+              response,
+              order,
+              selectedAddressId,
+              paymentMethod,
+              
+            },
+          };
+
+          //creates new orderId everytime
+          $.ajax(settings).done(function (response) {
+
+            orderId = response.orderId;
+            console.log(orderId);
+            $("button").show();
+          });
+        });
+      };
+
+
+      var rzp1 = new Razorpay(options);
+      rzp1.on('payment.failed', function (response) {
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+      });
+      document.getElementById('buyNowBtn').onclick = function (e) {
+        rzp1.open();
+        e.preventDefault();
+      }
+    }
+
+
+
+
+
   </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   <script>

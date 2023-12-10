@@ -97,9 +97,10 @@ userRoute.get('/home/settings/cancel-oders/:oder_id',auth.isUserBlocked,userSett
 
 
 //user checkout page complete transcation cash on delivery
-userRoute.post('/home/cart/checkout/complete/cash/:id',auth.isUserBlocked,paymentController.completeOderCashOnDelivery);
+userRoute.post('/home/cart/checkout/verify-payment/:id',auth.isUserBlocked,paymentController.verfyUserPaymentOption);
+userRoute.post('/home/cart/checkout/verify',auth.isUserBlocked,paymentController.verifyOnlinePayment);
+
 //user checkout page complete transcation online  payment
-userRoute.post('/home/cart/checkout/complete/online/:id',auth.isUserBlocked,paymentController.completeOnlinePaymentOder);
 
 
 
