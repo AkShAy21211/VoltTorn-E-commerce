@@ -2,16 +2,10 @@ const { CartModel } = require("../models/cart&WishlistModel");
 const { generateOrderID } = require("../helpers/oderIdHelper");
 const userModel = require("../models/userModel");
 const Razorpay = require("razorpay");
-const {
-  createRazorpayOrder,
-  verifyPayment,
-} = require("../helpers/razorPayHelper");
-const { json } = require("body-parser");
-const { selectFields } = require("express-validator/src/field-selection");
-const { RAZORPAY_ID_KEY, RAZORPAY_SECRET_KEY } = process.env;
+const {createRazorpayOrder,verifyPayment} = require("../helpers/razorPayHelper");
 var instance = new Razorpay({
-  key_id: "rzp_test_IqLBbBfcC14Mtr",
-  key_secret: "iS5lOhiy9F8G62U1h1mo8lD9",
+  key_id: process.env.RAZORPAY_ID_KEY,
+  key_secret: process.env.RAZORPAY_SECRET_KEY,
 });
 
 const verfyUserPaymentOption = async (req, res) => {

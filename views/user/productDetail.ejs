@@ -141,9 +141,11 @@
             class="col-12 col-md-8 col-xl-8 col-xxl-8 d-flex justify-content-between flex-wrap w-100 text-center flex-md-nowrap flex-xxl-nowrap"
           >
             <a
-              href=""
+              href="#"
               style="width: 500px; height: 60px"
-              class="btn btn-primary d-flex align-items-center justify-content-center me-2 mb-2"
+              data-product-id="<%= ProductData._id %>"
+              data-product-price="<%= Number(ProductData.price - (ProductData.price * (ProductData.discount / 100))) %>"
+              class="btn btn-primary d-flex align-items-center justify-content-center me-2 mb-2 addToCartButton"
               >Add To Cart</a
             >
             <a
@@ -190,6 +192,31 @@
     </div>
   </div>
 </main>
+
+<!-- cart item added pop up -->
+  <div id="cart-toast" class="toast " role="alert" aria-live="assertive" aria-atomic="true"
+    style="position: absolute; top: 0; right: 0; margin-top: 100px;">
+    <div class="toast-header">
+      <strong class="mr-auto">Cart</strong>
+      <small>
+        <%= new Date().toLocaleTimeString() %>
+      </small>
+
+    </div>
+    <div class="toast-body" id="cart-message"></div>
+  </div>
+
+
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeLoginModal()">&times;</span>
+      <p>You need to login to proceed.</p>
+      <div class="button-container">
+        <button class="btn btn-outline-primary" onclick="redirectLogin()">Login</button>
+        <button class="btn btn-outline-danger" onclick="closeLoginModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
@@ -242,4 +269,6 @@
   });
 </script>
 <script src="/js/imageZoom.js"></script>
+<script src="/js/addTOcart.js"></script>
+
 <%- include('../layout/footer.ejs') %>

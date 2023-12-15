@@ -1,215 +1,265 @@
-<%- include('../layout/adminHeader.ejs') %>
+<%- include('../layout/adminHeader.ejs') %> <%-
+include('../layout/adminSideBar.ejs') %>
 
-    <%- include('../layout/adminSideBar.ejs') %>
+<style>
+  .table tbody tr:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transform: scale(1);
+    transition: 0.2s;
+  }
 
-        <style>
-            .table tbody tr:hover {
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-                transform: scale(1.0);
-                transition: 0.2s;
-            }
-
-            .description-column {
-                max-width: 200px;
-                /* Adjust the maximum width as needed */
-                white-space: wrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-        </style>
+  .description-column {
+    max-width: 200px;
+    /* Adjust the maximum width as needed */
+    white-space: wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>
 <title>Category</title>
 <main>
-    <div class="container-fluid mt-4">
-
-        <div class="row d-flex justify-content-end  ">
-            <div class=" col-md-10 col-lg-10 ">
-
-
-                <div class="d-flex justify-content-between">
-                    <h1 class="text-bg-info  rounded"
-                    style="font-size: 30px; width: 230px; text-align: center;  font-family:Arial, Helvetica, sans-serif;">Category List</h1>
-                    <button class="btn btn-success mb-2 " data-toggle="modal" data-target="#addCategoryModal">Add
-                        Category</button>
-
-                </div>
-
-
-                
-
-                <div class="overflow-auto p-3 bg-light" style="max-width: 1500px; max-height: 550px;">
-                 
-
-
-
-                    <table class="table ">
-                        <thead class="text-center table-dark">
-                            <tr>
-                                <th>Category</th>
-                                <th>Sub Category</th>
-                                <th>Description</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="align-center">
-                            <% CategoryData.forEach(function(category,i) { %>
-                                <tr class="text-center">
-                                    <td>
-                                       <%= category.category %>
-                                    </td>
-                                    <td class="description-column w-25 wrap">
-                                        <%= category.sub_Category %>
-                                    </td>
-                                    <td class="description-column">
-                                        <%= category.description %>
-                                    </td>
-                                   
-                                    <td>
-                                        <a href="/admin/category/edit/<%= category._id %>"
-                                            class="btn btn-warning">Edit</a>
-                                        <a href="javascript:void(0);" onclick="confirmDelete('<%= category._id %>','/admin/category/delete/','You will not be able to recover this category!')"
-                                            class="btn btn-danger">Delete</a>
-                                    </td>
-
-                                </tr>
-                                <% }); %>
-                        </tbody>
-                    </table>
-
-
-
-
-                </div>
-
-
-
-
-
-            </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-            <!-- Add Category Modal -->
-            
+  <div class="container-fluid mt-4">
+    <div class="row d-flex justify-content-end">
+      <div class="col-md-10 col-lg-10">
+        <div class="d-flex justify-content-between">
+          <h1
+            class=" rounded"
+            style="
+              font-size: 30px;
+              width: 230px;
+              text-align: center;
+              font-family: Arial, Helvetica, sans-serif;
+            "
+          >
+            Category List
+          </h1>
+          <button
+            class="btn btn-success mb-2"
+            data-toggle="modal"
+            data-target="#addCategoryModal"
+          >
+            Add Category
+          </button>
         </div>
-    </div>
 
+        <div
+          class="overflow-auto p-3 bg-light"
+          style="max-width: 1500px; max-height: 550px"
+        >
+          <table class="table">
+            <thead class="text-center">
+              <tr>
+                <th>Category</th>
+                <th>Sub Category</th>
+                <th>Description</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="category-table" class="align-center">
+              <% CategoryData.forEach(function(category,i) { %>
+              <tr class="text-center">
+                <td><%= category.category %></td>
+                <td class="description-column w-25 wrap">
+                  <%= category.sub_Category %>
+                </td>
+                <td class="description-column"><%= category.description %></td>
 
-
-    <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form method="POST" action="/admin/category/add" onsubmit="return validateCategoryForm()" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <label for="name">Category Name</label>
-                            <select class="select form-control" id="name" name="name"  >
-                                <option value="">Select</option>
-                                <option value="Laptops">Laptops</option>
-                                <option value="Mobiles">Mobiles</option>
-                                <option value="Headphones">Headphones</option>
-                                <option value="SmartWatches">SmartWatches</option>
-                                <option value="Cameras">Cameras</option>
-                        
-
-                                <!-- Add more options here -->
-                            </select>
-                            <div id="nameWarning" class="text-danger"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="SubCategory">Sub-Category Name</label>
-                            <select class="select form-control" id="SubCategory" name="SubCategory" >
-                                <option value="">Select</option>
-                                <option value="Gaming">Gaming</option>
-                                <option value="Ultrabooks">Ultrabooks</option>
-                                <option value="Fitness Trackers">Fitness Trackers  </option>
-                                <option value="Fashionable Smartwatches">Fashionable Smartwatches</option>
-                                <option value="Flagship Phones">Flagship Phones</option>
-                                <option value="Budget-friendly Phones">Budget-friendly Phones</option>
-                                <option value="Over-Ear Headphones ">Over-Ear Headphones </option>
-                                <option value="True Wireless Earbuds">True Wireless Earbuds</option>
-                                <option value="DSLR Cameras">DSLR Cameras</option>
-
-
-                                </select>
-                            <div id="SubCategoryWarning" class="text-danger"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="image">Image</label>
-                            <input type="file" class="form-control" id="image" name="image" >
-                            <div id="imageWarning" class="text-danger"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="description">Description</label>
-                            <textarea class="form-control" id="description" name="description" ></textarea>
-                            <div id="descriptionWarning" class="text-danger"></div>
-                        </div>
-                        <button type="submit" class="btn btn-success">Add Category</button>
-                    </form>
-                </div>
-            </div>
+                <td>
+                  <a
+                    href="/admin/category/edit/<%= category._id %>"
+                    class="btn btn-warning"
+                    >Edit</a
+                  >
+                  <a
+                    href="javascript:void(0);"
+                    onclick="confirmDelete('<%= category._id %>','/admin/category/delete/','You will not be able to recover this category!')"
+                    class="btn btn-danger"
+                    >Delete</a
+                  >
+                </td>
+              </tr>
+              <% }); %>
+            </tbody>
+          </table>
         </div>
+      </div>
+
+      <!-- Add Category Modal -->
     </div>
+  </div>
+
+  <div
+    class="modal fade"
+    id="addCategoryModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="addCategoryModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form
+            method="POST"
+            action="/admin/category/add"
+            onsubmit="return validateCategoryForm()"
+            enctype="multipart/form-data"
+          >
+            <div class="form-group">
+              <label for="name">Category Name</label>
+              <select class="select form-control" id="name" name="name">
+                <option value="">Select</option>
+                <option value="Laptops">Laptops</option>
+                <option value="Mobiles">Mobiles</option>
+                <option value="Headphones">Headphones</option>
+                <option value="SmartWatches">SmartWatches</option>
+                <option value="Cameras">Cameras</option>
+
+                <!-- Add more options here -->
+              </select>
+              <div id="nameWarning" class="text-danger"></div>
+            </div>
+            <div class="form-group">
+              <label for="SubCategory">Sub-Category Name</label>
+              <select
+                class="select form-control"
+                id="SubCategory"
+                name="SubCategory"
+              >
+                <option value="">Select</option>
+                <option value="Gaming">Gaming</option>
+                <option value="Ultrabooks">Ultrabooks</option>
+                <option value="Fitness Trackers">Fitness Trackers</option>
+                <option value="Fashionable Smartwatches">
+                  Fashionable Smartwatches
+                </option>
+                <option value="Flagship Phones">Flagship Phones</option>
+                <option value="Budget-friendly Phones">
+                  Budget-friendly Phones
+                </option>
+                <option value="Over-Ear Headphones ">
+                  Over-Ear Headphones
+                </option>
+                <option value="True Wireless Earbuds">
+                  True Wireless Earbuds
+                </option>
+                <option value="DSLR Cameras">DSLR Cameras</option>
+              </select>
+              <div id="SubCategoryWarning" class="text-danger"></div>
+            </div>
+            <div class="form-group">
+              <label for="image">Image</label>
+              <input type="file" class="form-control" id="image" name="image" />
+              <div id="imageWarning" class="text-danger"></div>
+            </div>
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea
+                class="form-control"
+                id="description"
+                name="description"
+              ></textarea>
+              <div id="descriptionWarning" class="text-danger"></div>
+            </div>
+            <button type="submit" class="btn btn-success">Add Category</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
-        
-        
-        <script>
-            function validateCategoryForm() {
-                var name = document.getElementById('name').value;
-                var description = document.getElementById('description').value;
-                var sub_Category = document.getElementById('SubCategory').value;
-                var image = document.getElementById('image').value;
 
-                
-                // Reset all warnings
-                document.getElementById('nameWarning').innerText = '';
-                document.getElementById('descriptionWarning').innerText = '';
-                document.getElementById('SubCategoryWarning').innerText = '';
-                document.getElementById('imageWarning').innerText = '';
+<script>
+  function validateCategoryForm() {
+    var name = document.getElementById("name").value;
+    var description = document.getElementById("description").value;
+    var sub_Category = document.getElementById("SubCategory").value;
+    var image = document.getElementById("image").value;
+
+    // Reset all warnings
+    document.getElementById("nameWarning").innerText = "";
+    document.getElementById("descriptionWarning").innerText = "";
+    document.getElementById("SubCategoryWarning").innerText = "";
+    document.getElementById("imageWarning").innerText = "";
+
+    // Validate name with no white spaces
+    if (!name.trim()) {
+      document.getElementById("nameWarning").innerText =
+        "Name should not be empty.";
+      return false;
+    }
+
+    // Validate sub_Category with no white spaces
+    if (!sub_Category.trim()) {
+      document.getElementById("SubCategoryWarning").innerText =
+        "Sub Category should not be empty.";
+      return false;
+    }
+    if (!image.trim()) {
+      document.getElementById("imageWarning").innerText =
+        "Please select at least one image.";
+    }
+
+    // Validate description with more than 10 words
+    var wordCount = description.trim().split(/\s+/).length;
+    if (wordCount < 10) {
+      document.getElementById("descriptionWarning").innerText =
+        "Description should contain at least 10 words.";
+      return false;
+    }
+
+    // Form is valid
+    return true;
+  }
+</script>
+
+<script src="/js/alertPopUp.js"></script>
+<%- include('../layout/adminFooter.ejs') %>
+
+<script>
+  const search_bar = document.getElementById("search-bar");
+  const category_table = document.getElementById("category-table");
+  const search_type = document.getElementById("search-type");
+
+  document.addEventListener("DOMContentLoaded", () => {
+    search_bar.addEventListener("input", async (e) => {
+      const searchValue = e.target.value;
+      const searchType = search_type.value; // Get the selected search type
+
+      try {
+        const response = await axios.get(
+          `/admin/search?type=${searchType}&value=${searchValue}`
+        );
+
+        const results = response.data.searchItem;
+        category_table.innerHTML = ``;
 
         
-                // Validate name with no white spaces
-                if (!name.trim()) {
-                    document.getElementById('nameWarning').innerText = 'Name should not be empty.';
-                    return false;
-                }
-        
-                // Validate sub_Category with no white spaces
-                if (!sub_Category.trim()) {
-                    document.getElementById('SubCategoryWarning').innerText = 'Sub Category should not be empty.';
-                    return false;
-                }
-                if (!image.trim()) {
-              document.getElementById('imageWarning').innerText = 'Please select at least one image.';
-             }
-        
-                // Validate description with more than 10 words
-                var wordCount = description.trim().split(/\s+/).length;
-                if (wordCount < 10) {
-                    document.getElementById('descriptionWarning').innerText = 'Description should contain at least 10 words.';
-                    return false;
-                }
-        
-                // Form is valid
-                return true;
-            }
-        </script>
-        
- <script src="/js/alertPopUp.js"></script>
-        <%- include('../layout/adminFooter.ejs') %>
+        results.forEach((category, index) => {
+          category_table.innerHTML = `
+            <td>${category.category}</td>
+            <td class="description-column w-25 wrap">${category.sub_Category}</td>
+            <td class="description-column">${category.description}</td>
+            <td>
+              <a href="/admin/category/edit/${category._id}" class="btn btn-warning">Edit</a>
+              <a href="javascript:void(0);" onclick="confirmDelete('${category._id}','/admin/category/delete/','You will not be able to recover this category!')" class="btn btn-danger">Delete</a>
+            </td>
+          `;
+        });
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    });
+  });
+</script>

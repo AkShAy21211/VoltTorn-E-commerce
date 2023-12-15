@@ -135,6 +135,13 @@ body {
                 <label for="mobile" class="form-label">Mobile</label>
               </div>
             </div>
+            <div class="col-md-6">
+              <div class="form-floating mb-2">
+                <input type="password" class="form-control" id="mobile" name="mobile" placeholder=" "value="<%=user.password.slice(0,6)%>">
+                <label for="mobile" class="form-label">Password</label>
+              </div>
+              <a style="font-size: 13px; padding: 3px;" href="/forget-password" >Change Password</a>
+            </div>
           </div>
           
           <h5 class="p-1 fw-bold">Billing Address</h5>
@@ -175,62 +182,8 @@ body {
           <!-- Submit Button -->
           <button type="submit" class="btn btn-primary">Update Profile</button>
         </form>
-        <%} else{%>
+        <%}%>
 
-
-          <form class="blurry-form" action="" method="" class="mb-3">
-      
-            <!-- Profile Image -->
-            <div class="text-center mt-3 mb-3">
-              <div class="profile-picture-container d-flex flex-column align-items-center">
-                <img style="width: 150px; height: 150px; border-radius: 50%;" id="profileImagePreview" src="" alt="Profile Picture" class="image-fluid mb-2">
-                <input disabled type="" class="form-control"  id="profileImage" name="image" style="display:contents;" accept="image/*">
-                <label  style="width: 250px; height: 40px;" for="profileImage" class="btn btn-outline-primary mt-2">Change</label>
-              </div>
-            </div>
-        
-            <!-- First Name and Last Name in the same row -->
-            <div class="row mb-3">
-              <div class="col-md-6">
-                <div class="form-floating mb-3">
-                  <input type="text" class="form-control" readonly disabled id="firstName" name="firstName" placeholder=" " multiple="/*" value="">
-                  <label for="firstName" class="form-label">First Name</label>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-floating mb-3">
-                  <input type="" class="form-control"  readonly disabled id="lastName" name="lastName" placeholder=" "value="">
-                  <label for="lastName" class="form-label">Last Name</label>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Email and Mobile in the same row -->
-            <div class="row mb-3">
-              <div class="col-md-6">
-                <div class="form-floating mb-3">
-                  <input type="" class="form-control"  readonly disabled id="email" name="email" placeholder=" "value="">
-                  <label for="email" class="form-label">Email</label>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-floating mb-3">
-                  <input type="" class="form-control"  readonly disabled id="mobile" name="mobile" placeholder=" "value="">
-                  <label for="mobile" class="form-label">Mobile</label>
-                </div>
-              </div>
-            </div>
-            
-         
-        
-            <!-- Submit Button -->
-            <button type="" disabled class="btn btn-primary">Update Profile</button>
-
-          </form>
-          <a style="text-align: center; color: white;padding: 10px;" href="/login" class="btn btn-primary login-button">Login</a>
-
-        <%} %>
-        <!-- JavaScript to handle file input change and update preview -->
        
       </div>
           </div>

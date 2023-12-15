@@ -1,6 +1,6 @@
 const express = require("express");
 const adminRoute = express();
-const flash = require("express-flash")
+const flash = require("express-flash");
 const userController = require("../controllers/userController");
 const adminController = require("../controllers/adminController");
 const customerController = require("../controllers/customerController");
@@ -9,10 +9,8 @@ const productController = require("../controllers/productColtroller");
 const bannerController = require("../controllers/bannerController");
 const adminOderController = require("../controllers/oderControllers");
 const dashBoardController = require("../controllers/adminDashboard");
-
 const path = require("path");
 const multer = require("multer");
-adminRoute.use(flash())
 // Define storage for product images
 const productImageStorage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -111,8 +109,6 @@ adminRoute.post(
 );
 adminRoute.get("/products/delete/:id",adminAuth.is_Login, productController.deleteProduct);
 
-//edit product varients
-
 
 
 //admin store add banner route
@@ -140,6 +136,13 @@ adminRoute.patch('/oders/change-oder-status/:status/:id',adminOderController.adm
 adminRoute.get('/dashboard/statistics',dashBoardController.getProductStatistics);
 adminRoute.get('/search',dashBoardController.searchItem);
 
+
+//admin sales report downlode
+adminRoute.get('/sales-report',dashBoardController.downlodeSalesReport);
+
+
+
+//send newsLetter for subscribed User
 adminRoute.get("*", function (req, res) {
   res.redirect("/admin");
 });

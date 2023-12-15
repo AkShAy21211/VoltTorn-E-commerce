@@ -5,13 +5,11 @@ const homeController = require("../controllers/homePageController");
 const userCartController = require("../controllers/userCartController");
 const userSettingController = require("../controllers/userSettingsController");
 const paymentController = require("../controllers/userPaymentController");
-
 const auth = require("../middlewares/auth");
 userRoute.set('view engine','ejs');
 userRoute.set('views','./views/user')
 
 const bodyParser = require("body-parser");
-const { Admin } = require("mongodb");
 userRoute.use(bodyParser.json())
 userRoute.use(bodyParser.urlencoded({extended:true}))
 const path = require("path");
@@ -101,6 +99,12 @@ userRoute.post('/home/cart/checkout/verify-payment/:id',auth.isUserBlocked,payme
 userRoute.post('/home/cart/checkout/verify',auth.isUserBlocked,paymentController.verifyOnlinePayment);
 
 //user checkout page complete transcation online  payment
+userRoute.get('/forget-password',userController.loadForgetPasswordPage);
+userRoute.post('/forget-password',userController.resetPasswordByEmail);
+userRoute.get('/reset-password',userController.resetPasswordGet);
+userRoute.post('/reset-password/:token',userController.resetPasswordPost);
+
+userRoute.post('/send-newsletter',homeController.sendEmailNewsLetter);
 
 
 userRoute.get('/logout',auth.is_Login,userController.userLogout)

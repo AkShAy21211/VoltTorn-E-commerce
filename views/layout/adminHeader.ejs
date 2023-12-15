@@ -43,15 +43,21 @@
 </head>
 <body>
  
-  <header class="p-3 mb-0 border-bottom text-bg-dark ">
+  <header  class="p-3 mb-0 border-bottom  bg-primary">
     <div class="container text-white">
       <div class="d-flex flex-wrap align-items-lg-baseline justify-content-between justify-content-lg-between">
         <h4>VoltTron Drashboard</h4>
-
+       
         <form class="col-5 col-lg-4 mb-3 mb-lg-0 me-lg-3" role="search" enctype="application/x-www-form-urlencoded" >
           <div class="d-flex gap-2">
             <input type="search" name="search" id="search-bar" class="form-control w-100" placeholder="Search..." aria-label="Search">
-            <input class="btn btn-secondary" type="submit" value="Search" name="" id="">
+            <select class="form-select w-50 btn-dark" id="search-type">
+              <option value="">Type</option>
+              <option value="product">Product</option>
+              <option value="customer">Customer</option>
+              <option value="category">Category</option>
+            </select>
+            
           </div>
         </form>
 
@@ -65,9 +71,8 @@
             <% } else { %>
             <li><a class="dropdown-item" href="/register">Sign In</a></li>
             <% } %>
-            <li><a class="dropdown-item" href="#">Settings</a></li>
-            <li><a class="dropdown-item" href="#">Profile</a></li>
-            <li><hr class="dropdown-divider"></li>
+            <!-- <li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><a class="dropdown-item" href="#">Profile</a></li> -->
             <% if (locals.adminSessionData && locals.adminSessionData.isAdminAuthenticated) { %>
             <li><a class="dropdown-item" href="/admin/logout">Logout</a></li>
             <% } %>

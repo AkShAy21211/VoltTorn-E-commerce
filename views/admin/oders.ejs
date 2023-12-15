@@ -13,7 +13,7 @@
           <!-- card -->
           <article class="p-4 rounded shadow-sm border-left
              mb-4">
-            <a href="#" class="d-flex align-items-center">
+            <a href="#" class="d-flex align-items-center" style="text-decoration: none; color: black;">
               <span class="bi bi-box h5"></span>
               <h5 class="ml-2">
                 <%=oderCount %> Oders
@@ -23,7 +23,7 @@
         </div>
         <div class="col-md-6 col-lg-4">
           <article class="p-4 rounded shadow-sm border-left mb-4">
-            <a href="#" class="d-flex align-items-center">
+            <a href="#" class="d-flex align-items-center" style="text-decoration: none;color: black;">
               <span class="bi bi-person h5"></span>
               <h5 class="ml-2">
                 <%=customers %> Customers
@@ -50,7 +50,7 @@
                 <th scope="col">Order Date</th>
                 <th scope="col">Payment</th>
                 <th scope="col">Order Status</th>
-                <th scope="col">Actions</th>
+                <!-- <th scope="col">Actions</th> -->
               </tr>
             </thead>
             <%oders.forEach(oder=> {%>
@@ -99,10 +99,10 @@
                   </td>
 
 
-                  <td>
+                  <!-- <td>
                     <button type="button" class="btn btn-primary btn-sm">View</button>
 
-                  </td>
+                  </td> -->
                 </tr>
                 <!-- Add more rows as needed -->
               </tbody>

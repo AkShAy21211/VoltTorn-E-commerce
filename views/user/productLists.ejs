@@ -141,7 +141,7 @@
         </aside>
 
 
-        <div  class="col-md-9">
+        <div class="col-md-9">
 
           <header class="border-bottom mb-4 pb-3">
             <div class="form-inline">
@@ -182,7 +182,9 @@
                                   Price: <b>Rs:<%= Number(product.price - (product.price * (product.discount /
                                       100))).toLocaleString() %></b></p>
                                 <div class="d-flex justify-content-between">
-                                  <p class="card-text text-success"><%= product.discount %>% off</p>
+                                  <p class="card-text text-success">
+                                    <%= product.discount %>% off
+                                  </p>
                                   <p class="small text-danger"><s>Rs<%= product.price %></s></p>
                                 </div>
                               </div>
@@ -197,7 +199,7 @@
 
                     </div>
 
-                    
+
                 </div>
                 <% }); %>
               </div>
@@ -226,7 +228,7 @@
       </small>
 
     </div>
-    <div style="background-color: rgb(165, 229, 165);" class="toast-body" id="cart-message"></div>
+    <div class="toast-body" id="cart-message"></div>
   </div>
 
   <!-- Add this HTML structure to your page for the modal -->
@@ -272,19 +274,16 @@
         }
       });
 
-      // Function to render products in the UI
-      // Function to render products in the UI
-      // Function to render products in the UI
-    // Function to render products in the UI
-function renderProducts(products) {
-  const productContainer = $('#product-container');
+ 
+      function renderProducts(products) {
+        const productContainer = $('#product-container');
 
-  // Clear existing product container content
-  productContainer.empty();
+        // Clear existing product container content
+        productContainer.empty();
 
-  // Render each product card and append to the container
-  products.forEach(product => {
-    const productCard = `
+        // Render each product card and append to the container
+        products.forEach(product => {
+          const productCard = `
       <div class="col-lg-4 col-md-6 col-sm-6  mt-xl-0 mt-lg-4 mt-md-5 mb-4 mt-sm-5 mt-5">
         <a href="/home/product/details/${product._id}" class="text-decoration-none text-dark">
           <div class="card border-0 h-100 p-2" id="product-card">
@@ -311,10 +310,10 @@ function renderProducts(products) {
         
         
       </div>`;
-    
-    productContainer.append(productCard);
-  });
-}
+
+          productContainer.append(productCard);
+        });
+      }
 
     });
 

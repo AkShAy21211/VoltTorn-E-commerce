@@ -1,6 +1,7 @@
 const productModel = require("../models/productModel");
 const bannerModel = require("../models/bannerModel");
 const categoryModel = require("../models/categoryModel");
+const mailchimp = require("@mailchimp/mailchimp_marketing");
 
 const loadHome = async (req, res) => {
   try {
@@ -51,7 +52,6 @@ const brandCount =  await productModel.aggregate([{$match: {category: cat_name, 
   }
 }
 
-
 const productDetail = async (req, res) => {
   try {
     const {id,color} = req.params;
@@ -99,11 +99,31 @@ const sortProductByUserPreference = async (req, res) => {
   }
 };
 
+const sendEmailNewsLetter = async(req,res)=>{
 
+  try{
+      const {email} = req.body;
+        const response = await mailchimp.lists.addListMember(process.env.LIST_ID, {
+        email_address: email,
+        status: "subscribed",
+      }).then(response=>{
+
+        res.status(200).json({response})
+
+      });
+
+   
+
+  }catch(error){
+    res.status(400);
+    console.error(error);
+  }
+}
 module.exports = { 
   loadHome,
   productDetail,
   loaadProductListsByCategory,
   sortProductByUserPreference,
+  sendEmailNewsLetter,
 
 };

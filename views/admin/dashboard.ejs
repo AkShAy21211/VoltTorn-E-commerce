@@ -1,243 +1,305 @@
-<%- include('../layout/adminHeader.ejs') %> <%-
-include('../layout/adminSideBar.ejs') %>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<%- include('../layout/adminHeader.ejs') %> <%- include('../layout/adminSideBar.ejs') %>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
-<style>
+    <style>
+      .revenue,
+      .customer,
+      .oders,
+      .customer,
+      .products {
 
-  .revenue,.customer,.oders,.customer,.products{
-    background: linear-gradient(89.8deg, rgb(39, 115, 255) 4.3%, rgb(62, 211, 232) 101.4%);
-
-  }
-</style>
-
-
-<title>Dashboard</title>
-<main>
-  <section class="content-main container">
-    <div class="content-header">
-      <h2 class="content-title">Dashboard</h2>
-    </div>
-
-    
-   
-
-    <div class="row">
-      <div class="col-lg-3">
-        <div class="card revenue card-body mb-4 shadow-sm">
-          <article class="icontext">
-            <span class="icon icon-sm rounded-circle alert-primary"
-              ><i class="text-primary fas fa-usd-circle"></i
-            ></span>
-            <div class="text">
-              <h6 class="mb-1 ">Total Revenue</h6><b class="h5">₹ </b> 
-              <span class="h5" id="totalRevenue"></span>
-            </div>
-          </article>
-        </div>
-      </div>
-
-      <div class="col-lg-3">
-        <div class="card customer card-body mb-4 shadow-sm">
-          <article class="icontext">
-            <span class="icon icon-sm rounded-circle alert-success"
-              ><i class="text-success fas fa-bags-shopping"></i
-            ></span>
-            <div class="text">
-              <h6 class="mb-1">Total Customers</h6>
-              <span class="h5" id="totalCustomers"></span>
-            </div>
-          </article>
-        </div>
-      </div>
-
-      <div class="col-lg-3">
-        <div class="card oders card-body mb-4 shadow-sm">
-          <article class="icontext">
-            <span class="icon icon-sm rounded-circle alert-success"
-              ><i class="text-success fas fa-bags-shopping"></i
-            ></span>
-            <div class="text">
-              <h6 class="mb-1">Total Orders</h6>
-              <span class="h5" id="totalOders"></span>
-            </div>
-          </article>
-        </div>
-      </div>
-
-      <div class="col-lg-3">
-        <div class="card products card-body mb-4 shadow-sm">
-          <article class="icontext">
-            <span class="icon icon-sm rounded-circle alert-warning"
-              ><i class="text-warning fas fa-shopping-basket"></i
-            ></span>
-            <div class="text">
-              <h6 class="mb-1">Total Products</h6>
-              <span class="h5" id="totalProduct"></span>
-            </div>
-          </article>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-xl-6 col-lg-12">
-        <div class="card mb-4 shadow-sm">
-          <article class="card-body">
-            <h5 class="card-title">Revnue statistics</h5>
-            <canvas id="productsChart" width="100%" height="80"></canvas>
-          </article>
-        </div>
-      </div>
-
-      <div class="col-xl-6 col-lg-12">
-        <div class="card mb-4 shadow-sm">
-          <article class="card-body">
-            <h5 class="card-title">Sale statistics</h5>
-            <canvas id="saleChart" width="100%" height="80"></canvas>
-          </article>
-        </div>
-      </div>
-
-
-      
-    </div>
-
-    <div class="card mb-4 shadow-sm">
-      <div class="card-body">
-        <h5 class="card-title">Latest orders</h5>
-        <div class="table-responsive">
-          <table class="table">
-            <tbody>
-              <tr>
-                <td><b>User</b></td>
-                <td>user@example.com</td>
-                <td>$345</td>
-                <td>
-                  <span class="badge rounded-pill alert-success"
-                    >Paid At Today at 10:13 AM</span
-                  >
-                </td>
-                <td>Today at 10:13 AM</td>
-                <td class="d-flex justify-content-end align-item-center">
-                  <a class="text-success" href="/order"
-                    ><i class="fas fa-eye"></i
-                  ></a>
-                </td>
-              </tr>
-              <tr>
-                <td><b>User</b></td>
-                <td>user@example.com</td>
-                <td>$345</td>
-                <td>
-                  <span class="badge rounded-pill alert-danger"
-                    >Created At Today at 10:13 AM</span
-                  >
-                </td>
-                <td>Today at 10:13 AM</td>
-                <td class="d-flex justify-content-end align-item-center">
-                  <a class="text-success" href="/order"
-                    ><i class="fas fa-eye"></i
-                  ></a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </section>
-</main>
-
-<script>
-  const saleData = {
-    labels: ["January", "February", "March", "April", "May", "June"],
-    datasets: [
-      {
-        label: "Sales",
-        data: [65, 59, 80, 81, 56, 55],
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const productsData = {
-    labels:  ["January", "February", "March", "April", "May", "June","July","August","September","October","November","December"],
-    datasets: [
-      {
-        label: "Quantity",
-        data: [12, 19, 3, 5, 2,10],
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        borderColor: "rgba(255, 99, 132, 1)",
-        borderWidth: 1,
-      },
-    ],
-  };
-
-
-
-
-
-  const saleCanvas = document.getElementById("saleChart").getContext("2d");
-  const productsCanvas = document
-    .getElementById("productsChart")
-    .getContext("2d");
-
-
-  const saleChart = new Chart(saleCanvas, {
-    type: "bar",
-    data: saleData,
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
-  });
-
-  // Create Products Statistics Chart
-  const productsChart = new Chart(productsCanvas, {
-    type: "bar",
-    data: productsData,
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
-  });
-
-
-
-</script>
-
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const totalProduct = document.getElementById('totalProduct');
-    const totalOders = document.getElementById('totalOders');
-    const totalCustomers = document.getElementById('totalCustomers');
-    const totalRevenue = document.getElementById('totalRevenue');
-    async function getStatistics(){
-      try {
-        const response = await axios.get("/admin/dashboard/statistics");
-
-        totalProduct.innerText = response.data.totalProducts;
-        totalOders.innerText = response.data.totalOrders;
-        totalCustomers.innerText = response.data.totalCustomers;
-        totalRevenue.innerText = response.data.totalRevenue;
-
-
-    } catch (error) {
-        console.error(error);
+        background-color: #007bff19;
       }
-    }
+    </style>
 
-    getStatistics()
+
+    <title>Dashboard</title>
+    <main class="ml-5" >
+      <section class="content-main container">
+        <div class="content-header d-flex justify-content-between">
+          <div>
+            <h2 class="content-title">Dashboard</h2>
+          </div>
+
+          <div class="content-header d-flex justify-content-between">
+            <div>
+              <span for="reportType" class="form-label">Select Report Type:</span>
+              <div style="display: inline-flex; gap: 10px;">
+                <select style="width: 100px; height: 40px; "class="form-select" id="reportType">
+                  <option value="weekly">Weekly</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="yearly">Yearly</option>
+                </select>
+                <butotn id="download-report"  style="width: 100px; height: 30px; text-align: center; padding: 10px; line-height: 10px;" class="btn btn-primary" >Download</button>
+
+              </div>
+
+
+            </div>
+          
+          </div>
+          
+        </div>
+        
+
+
+
+
+        <div class="row">
+          <div class="col-lg-3">
+            <div class="card revenue card-body mb-4 shadow-sm">
+              <article class="icontext">
+                <span class="icon icon-sm rounded-circle alert-primary"><i
+                    class="text-primary fas fa-usd-circle"></i></span>
+                <div class="text">
+                  <h6 class="mb-1 ">Total Revenue</h6><b class="h5">₹ </b>
+                  <span class="h5" id="totalRevenue"></span>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div class="col-lg-3">
+            <div class="card customer card-body mb-4 shadow-sm">
+              <article class="icontext">
+                <span class="icon icon-sm rounded-circle alert-success"><i
+                    class="text-success fas fa-bags-shopping"></i></span>
+                <div class="text">
+                  <h6 class="mb-1">Total Customers</h6>
+                  <span class="h5" id="totalCustomers"></span>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div class="col-lg-3">
+            <div class="card oders card-body mb-4 shadow-sm">
+              <article class="icontext">
+                <span class="icon icon-sm rounded-circle alert-success"><i
+                    class="text-success fas fa-bags-shopping"></i></span>
+                <div class="text">
+                  <h6 class="mb-1">Total Orders</h6>
+                  <span class="h5" id="totalOders"></span>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div class="col-lg-3">
+            <div class="card products card-body mb-4 shadow-sm">
+              <article class="icontext">
+                <span class="icon icon-sm rounded-circle alert-warning"><i
+                    class="text-warning fas fa-shopping-basket"></i></span>
+                <div class="text">
+                  <h6 class="mb-1">Total Products</h6>
+                  <span class="h5" id="totalProduct"></span>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xl-6 col-lg-12">
+            <div class="card mb-4 shadow-sm">
+              <article class="card-body">
+                <h5 class="card-title">Revnue statistics</h5>
+                <canvas id="productsChart" width="100%" height="80"></canvas>
+              </article>
+            </div>
+          </div>
+
+          <div class="col-xl-6 col-lg-12">
+            <div class="card mb-4 shadow-sm">
+              <article class="card-body">
+                <h5 class="card-title">Sale statistics</h5>
+                <canvas id="saleChart" width="100%" height="80"></canvas>
+              </article>
+            </div>
+          </div>
+
+
+
+        </div>
+
+        <!-- <div class="card mb-4 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Latest orders</h5>
+            <div class="table-responsive">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td><b>User</b></td>
+                    <td>user@example.com</td>
+                    <td>$345</td>
+                    <td>
+                      <span class="badge rounded-pill alert-success">Paid At Today at 10:13 AM</span>
+                    </td>
+                    <td>Today at 10:13 AM</td>
+                    <td class="d-flex justify-content-end align-item-center">
+                      <a class="text-success" href="/order"><i class="fas fa-eye"></i></a>
+                    </td>
+                  </tr>
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div> -->
+      </section>
+    </main>
+
+    <script>
+
+
+      // Create Products Statistics Chart
+
+
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const productsCanvas = document.getElementById("productsChart").getContext("2d");
+        const saleCanvas = document.getElementById("saleChart").getContext("2d");
+
+        const totalProduct = document.getElementById('totalProduct');
+        const totalOders = document.getElementById('totalOders');
+        const totalCustomers = document.getElementById('totalCustomers');
+        const totalRevenue = document.getElementById('totalRevenue');
+        async function getStatistics() {
+          try {
+            const response = await axios.get("/admin/dashboard/statistics");
+
+
+            totalProduct.innerText = response.data.totalProducts;
+            totalOders.innerText = response.data.oderCount;
+            totalCustomers.innerText = response.data.totalCustomers;
+            totalRevenue.innerText = response.data.totalRevenue;
+
+            let Revenue = response.data.formattedMonthlyRevenue;
+
+            let Sales = response.data.formattedMonthlySales;
+
+
+            console.log(response.data.latestOders);
+
+
+
+            const productsData = {
+              labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+              datasets: [
+                {
+                  label: "Revenue",
+                  data: Revenue,
+                  backgroundColor: "rgba(255, 99, 132, 0.2)",
+                  borderColor: "rgba(255, 99, 132, 1)",
+                  borderWidth: 1,
+                },
+              ],
+            };
+
+            // Create Products Statistics Chart
+            const productsChart = new Chart(productsCanvas, {
+              type: "bar",
+              data: productsData,
+              options: {
+                scales: {
+                  yAxes: [{
+                    ticks: {
+                      stepSize: 1
+                    },
+
+                  }]
+                },
+              },
+            });
+
+            const saleData = {
+              labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+              datasets: [
+                {
+                  label: "Sales",
+                  data: Sales,
+                  backgroundColor: "rgba(75, 192, 192, 0.2)",
+                  borderColor: "rgba(75, 192, 192, 1)",
+                  borderWidth: 1,
+                },
+              ],
+            };
+            const saleChart = new Chart(saleCanvas, {
+              type: "bar",
+              data: saleData,
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    ticks: {
+                      stepSize: 1,
+                    },
+                  },
+                },
+              },
+            });
+
+
+
+          } catch (error) {
+            console.error(error);
+          }
+        }
+
+        getStatistics();
+      });
+    </script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", async (e) => {
+    const reportTypeElement = document.getElementById('reportType');
+
+    reportTypeElement.addEventListener("change", () => {
+      const selectedReportType = reportTypeElement.value;
+      console.log(selectedReportType);
+
+      const reportDownload = document.getElementById('download-report').addEventListener("click", async (e) => {
+        const response = await axios.get(`/admin/sales-report?reportType=${selectedReportType}`);
+        const salesReport = response.data.salesReport;
+
+        // Create and download Excel file
+
+        console.log(salesReport);
+        createAndDownloadExcel(salesReport);
+      });
+    });
+
+    function createAndDownloadExcel(data) {
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('Sales Report');
+
+      // Add headers
+      worksheet.addRow(['Product Name', 'Quantity', 'Payment Mode', 'Total Amount']);
+
+      // Add data
+      data.forEach(entry => {
+        worksheet.addRow([entry.productName, entry.quantity, entry.paymentMode, entry.totalAmount]);
+      });
+
+      // Save the workbook to a buffer
+      workbook.xlsx.writeBuffer().then(buffer => {
+        // Create a Blob from the buffer
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+        // Create a link element and trigger a click event to download the file
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = 'sales_report.xlsx';
+        link.click();
+      });
+    }
   });
 </script>
 
-<%- include('../layout/adminFooter.ejs') %>
+    <%- include('../layout/adminFooter.ejs') %>

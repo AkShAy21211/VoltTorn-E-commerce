@@ -20,7 +20,7 @@
   <div class="container-fluid mt-4">
     <div class="row d-flex justify-content-end  ">
       <div class=" col-md-10 col-lg-10 ">
-        <h1 class="text-bg-info  rounded"
+        <h1 class=" rounded"
           style="font-size: 30px; width: 230px; text-align: center;  font-family:Arial, Helvetica, sans-serif;">Customer List</h1>
         <div class="table-responsive">
 
@@ -34,7 +34,7 @@
                    
 
 <table class="table  ">
-            <thead class="table-dark">
+            <thead >
               <tr>
                 <th> Name</th>
                 <th>Email</th>
@@ -44,14 +44,14 @@
                 <th style="text-align: center;">Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="customer-table">
               <% customers.forEach(customer=> { %>
                 <tr>
                   <td>
                     <%= customer.first_name +' '+ customer.last_name%></td>
           <td><%= customer.email %></td>
           <td><%= customer.mobile %></td>
-          <td><img src="<%= customer.image %>" alt="Customer Image" width="50"></td>
+          <td><img src="/images/userImages/<%=customer.image %>" class="border rounded-circle" alt="Customer Image" width="50"></td>
           <td style="font-weight:bold;"><%= customer.status %>
                   </td>
                   <td style="text-align: center; ">
@@ -88,3 +88,51 @@
  <script src="/js/alertPopUp.js"></script>
 
     <%- include('../layout/adminFooter.ejs') %>
+
+    
+<script>
+  const search_bar = document.getElementById("search-bar");
+  const customer_table = document.getElementById("customer-table");
+  const search_type = document.getElementById("search-type");
+
+  document.addEventListener("DOMContentLoaded", () => {
+    search_bar.addEventListener("input", async (e) => {
+      const searchValue = e.target.value;
+      const searchType = search_type.value; // Get the selected search type
+
+      console.log(searchType);
+
+      try {
+        const response = await axios.get(
+          `/admin/search?type=${searchType}&value=${searchValue}`
+        );
+        console.log("Response:", response);
+
+        const results = response.data.searchItem;
+        console.log("Results:", results);
+
+        if(searchValue){
+        results.forEach(customer => {
+          customer_table.innerHTML = `
+            <td>${customer.first_name + ' ' + customer.last_name}</td>
+            <td>${customer.email}</td>
+            <td>${customer.mobile}</td>
+            <td><img src="/images/userImages/${customer.image}" class="border rounded-circle" alt="Customer Image" width="50"></td>
+            <td style="font-weight:bold;">${customer.status}</td>
+            <td style="text-align: center; ">
+              <a href="javascript:void(0);" 
+                 class="btn ${customer.status.toString() === 'true' ? 'btn-outline-danger' : 'btn-outline-success'}"
+                 onclick="confirmBlockUnblock('${customer._id}', '${customer.status.toString()}')">
+                 ${customer.status.toString() === 'true' ? 'Block' : 'Unblock'}
+              </a>
+              <a href="javascript:void(0);" class="btn btn-danger" onclick="confirmDelete('${customer._id}','/admin/delete-user?id=','You will not be able to recover this user!')">Delete</a>
+            </td>
+          `;
+        });
+      }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    });
+  });
+</script>

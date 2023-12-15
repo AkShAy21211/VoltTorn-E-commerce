@@ -59,9 +59,8 @@
 <main class="pb-5">
     <div class="container ">
         <div class="row justify-content-between   d-flex">
-            <% if (userCart && userCart.cart.length > 0) { %>
-
-            <h6 class="text-center mt-4"><b style="color: #3bb0ca;" data-item-quantity="userCartCount"><%=userCartCount%> </b> Items in your cart</h6>
+            <% if (userCart && userCart.cart && userCart.cart.length > 0) { %>
+                <h6 class="text-center mt-4"><b style="color: #3bb0ca;" data-item-quantity="userCartCount"><%=userCartCount%> </b> Items in your cart</h6>
                 <!-- Shopping Cart Table -->
 
                 <div class="col-lg-8 col-md-12 col-12 mt-3 left-column ">
@@ -162,7 +161,13 @@
    
     </div>
 </main>
-
+<script>
+    document.addEventListener("DOMContentLoaded",(e)=>{
+        const cart = document.getElementById('cart-count');
+        const count = document.getElementById('user-cart');
+        cart.innerText = count.value; 
+    })
+</script>
 <script src="/js/addTOcart.js"></script>
 <!-- Include SweetAlert2 via CDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

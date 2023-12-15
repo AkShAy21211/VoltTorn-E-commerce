@@ -73,11 +73,11 @@ body {
                     <% oders.forEach(oder => { %>
                         <!-- Iterate through each product in the order -->
                         <% oder.products.forEach((product, index) => { %>
-                            <tr>
-                                <td>
-                                    <img src="/images/productImages/<%= product.image %>" alt="Product Image" style="width: 100px; height: 100px;">
+                            <tr  >
+                                <td >
+                                    <img src="/images/productImages/<%= product.image %>" class="d-none  d-md-none d-lg-block d-xl-block" alt="Product Image" style="width: 100px; height: 100px;">
                                 </td>
-                                <td class="align-middle text-wrap w-25">
+                                <td class="align-middle text-wrap w-25 ">
                                     <%= product.name.substring(0, 50, product.name.length / 2) %>
                                 </td>
                                 <% if (index === 0) { %>

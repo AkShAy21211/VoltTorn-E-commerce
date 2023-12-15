@@ -1,3 +1,6 @@
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
 <aside>
   <div id="wrapper" class="active  ">
       <!-- Sidebar -->
@@ -6,7 +9,7 @@
               <a id="menu-toggle" href="#"><span style="font-size: 25px; margin-left: 80px; font-size: 40px;" id="main_icon" class="bi bi-list "></span></a>
           </ul>
           <ul class="sidebar-nav" id="sidebar">
-            <li class="tooltip-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Dashboard"><a href="/admin/dashboard"><i style="font-size: 25px;" class="bi bi-speedometer2"></i></a></li>
+            <li  style="background-color: black;" class="tooltip-item " data-bs-toggle="tooltip" data-bs-placement="right" title="Dashboard"><a href="/admin/dashboard"><i style="font-size: 25px;" class="bi bi-speedometer2"></i></a></li>
             <li class="tooltip-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Customers"><a href="/admin/customers"><i style="font-size: 25px;" class="bi bi-people"></i></a></li>
             <li class="tooltip-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Products"><a href="/admin/products"><i style="font-size: 25px;" class="bi bi-cart-check"></i></a></li>
             <li class="tooltip-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Category"><a href="/admin/category"><i style="font-size: 25px;" class="bi bi-ui-checks-grid"></i></a></li>
@@ -33,26 +36,42 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
+
+
 <style>
-  .tooltip-inner {
+    .tooltip-inner {
       max-width: 300px;  /* Adjust the maximum width as needed */
       font-size: 20px;  /* Adjust the font size as needed */
-  }
-</style>
-
-<script>
-  $(document).ready(function () {
+    }
+  
+  </style>
+  <script>
+    $(document).ready(function () {
+      $('.tooltip-item').click(function () {
+        // Toggle the 'active-menu-item' class for the clicked item
+        $(this).toggleClass('active-menu-item');
+  
+        // Remove 'active-menu-item' class from other siblings
+        $(this).siblings().removeClass('active-menu-item');
+  
+        // Remove 'active-link' class from other siblings
+        $(this).siblings().removeClass('active-link');
+  
+        // Add 'active-link' class to the clicked link's parent li
+        $(this).parent().addClass('active-link');
+      });
+  
       $('.tooltip-item').mouseover(function (e) {
-          var tooltip = $(this).find('[data-toggle="tooltip"]');
-          tooltip.css({
-              top: e.clientY + 10,  // 10 pixels below the mouse pointer
-              left: e.clientX + 10,
-          });
-          tooltip.tooltip('show');
+        var tooltip = $(this).find('[data-toggle="tooltip"]');
+        tooltip.css({
+          top: e.clientY + 10,  // 10 pixels below the mouse pointer
+          left: e.clientX + 10,
+        });
+        tooltip.tooltip('show');
       });
-
+  
       $('.tooltip-item').mouseout(function () {
-          $(this).find('[data-toggle="tooltip"]').tooltip('hide');
+        $(this).find('[data-toggle="tooltip"]').tooltip('hide');
       });
-  });
-</script>
+    });
+  </script>

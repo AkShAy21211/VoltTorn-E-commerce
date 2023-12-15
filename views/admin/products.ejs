@@ -30,13 +30,13 @@
     <div class="row d-flex justify-content-end">
       <div class="col-md-10 col-lg-10">
         <div class="d-flex justify-content-between">
-          <h1 class="text-bg-info rounded" style="font-size: 30px; width: 230px; text-align: center; font-family: Arial, Helvetica, sans-serif;">Product List</h1>
+          <h1 class=" rounded" style="font-size: 30px; width: 230px; text-align: center; font-family: Arial, Helvetica, sans-serif;">Product List</h1>
           <a href="/admin/products/add" class="btn btn-success mb-2">Add Products</a>
 
         </div>
         <div class="table-responsive">
           <table class="table">
-            <thead class="table-dark">
+            <thead class="">
               <tr>
                 <th>#</th>
                 <th>Image</th>
@@ -45,7 +45,7 @@
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="product-table" >
               <% ProductData.forEach((product, index) => { %>
                 <tr>
                   <td><%= index + 1 %></td>
@@ -79,7 +79,7 @@
 <% if (messages.success) { %>
   <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000" style="background-color: rgba(74, 205, 74, 0.679); position:  absolute; top: 80px; right: 10px; min-width: 200px;">
     <div class="toast-body">
-      <%= messages.success %>
+      <%=messages.success %>
     </div>
   </div>
 <% } %>
@@ -97,3 +97,48 @@
 
 
 </script>
+<script>
+  const search_bar = document.getElementById('search-bar');
+  const product_table = document.getElementById('product-table');
+  const search_type = document.getElementById('search-type');
+
+  document.addEventListener("DOMContentLoaded", () => {
+    search_bar.addEventListener("input", async (e) => {
+      const searchValue = e.target.value;
+      const searchType = search_type.value; // Get the selected search type
+
+
+      console.log(searchType);
+  
+      try {
+        const response = await axios.get(`/admin/search?type=${searchType}&value=${searchValue}`);
+  
+        const results = response.data.searchItem;
+  
+        // Clear previous search results
+        product_table.innerHTML = '';
+  
+        // Populate the product table with the new search results
+        results.forEach((product, index) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${index + 1}</td>
+            ${product.images.length > 0 ? `<td><img width="50px" height="50px" src="/images/productImages/${product.images[0]}" alt=""></td>` : '<td>No image</td>'}
+            <td><span class="small-text" data-toggle="tooltip" data-placement="top" title="${product.name.substring(0, 100, product.name.length / 2)}" data-container="body" class="custom-tooltip">${product.name}</span></td>
+            <td><span class="small-text" data-toggle="tooltip" data-placement="top" title="${product.description.substring(0, 100, product.description.length / 2)}" data-container="body" class="custom-tooltip">${product.description}</span></td>
+            <td>
+              <a href="/admin/products/view/${product._id}" class="btn btn-outline-info" type="button">View</a>
+              <a href="/admin/products/edit/${product._id}" class="btn btn-outline-primary" type="button">Edit</a>
+              <a href="javascript:void(0);" onclick="confirmDelete('${product._id}','/admin/products/delete/','You will not be able to recover this product!')" class="btn btn-outline-danger" type="button">Delete</a>
+            </td>
+          `;
+          product_table.appendChild(row);
+        });
+  
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    });
+  });
+  </script>
+  

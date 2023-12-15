@@ -220,7 +220,16 @@ const deleteCartItem = async (req, res) => {
     const userCartCount =
       updatedCart && updatedCart.cart ? updatedCart.cart.length : 0;
 
-    res.status(200).json({
+      delete req.session.user.cart.cart;
+      req.session.save(err => {
+        if (err) {
+          console.error('Error saving session:', err);
+        }
+      });
+      
+      
+      
+      res.status(200).json({
       success: true,
       updatedCart,
       total_price,
@@ -253,6 +262,7 @@ const loadCheckOutPage = async (req, res) => {
     console.error(error);
   }
 };
+
 
 const stateCityLoad = async (req, res) => {
   try {

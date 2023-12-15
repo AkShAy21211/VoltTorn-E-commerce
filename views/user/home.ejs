@@ -1,242 +1,382 @@
 <%- include('../layout/header.ejs') %>
 
-<style>
-  .card {
-    max-height: 550px;
-    max-width: 400px;
-  }
+  <style>
+    .card {
+      max-height: 550px;
+      max-width: 400px;
+    }
 
-  .card img {
-    height: 230px;
-  }
-  .card-img-top {
-    transition: transform 0.3s ease-in-out;
-  }
+    .card img {
+      height: 230px;
+    }
 
-   .card-img-top:hover {
-    transform: scale(0.9); /* You can adjust the scale value for the desired zoom level */
-  }
-  .card-title {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 200px; /* Adjust the value based on your design */
-  }
-  #myCarousel .carousel-item {
-    min-height: 350px;
-    min-height: 450px; /* Minimum height for visibility */
-}
-.zoom-out-effect:hover {
-    transform: scale(0.9); /* Adjust the scale value to control the zoom-out effect */
-    transition: transform 2s ease; /* Add a smooth transition effect */
-  }
+    .card-img-top {
+      transition: transform 0.3s ease-in-out;
+    }
 
+    .card-img-top:hover {
+      transform: scale(0.9);
+      /* You can adjust the scale value for the desired zoom level */
+    }
 
-.form-subscribe
-{
-  max-width:600px;
-  margin:0 auto
-}
-.form-subscribe .form-control
-{
-  padding-left:24px;
-  padding-right:24px;
-  letter-spacing:1px;
-  border:none;
-  border-top-left-radius:36px;
-  border-bottom-left-radius:36px
-}
-.form-subscribe .form-control.focus,.form-subscribe .form-control:focus
-{
-  z-index:2;
-  background-color:hsla(0,0%,100%,.8)
-}
-.form-subscribe .btn
-{
-  border-top-right-radius:36px;
-  border-bottom-right-radius:36px;
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  font-size: 15px;
-  background:#7ec855;
-  border-color:#7ec855;
-  height:38px;
-}
+    .card-title {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 200px;
+      /* Adjust the value based on your design */
+    }
 
-</style>
-<script>
-  // Check if the user is blocked and show a pop-up message
-   if (locals.userSessionData && locals.userSessionData.status === false) { 
-    alert("You have been blocked by the admin");
-    window.location.href = '/login';
-  }
-</script>
+    #myCarousel .carousel-item {
+      min-height: 350px;
+      min-height: 450px;
+      /* Minimum height for visibility */
+    }
 
-<title>VoltTron an online electronics shoping site</title>
-<main >
-  
-
-  <div id="carouselExampleFade" class="carousel slide border  carousel-fade" data-ride="carousel">
-    <div class="carousel-inner">
-
-      <% banner.forEach((banner, index) => { %>
-        <div class="<%= index === 0 ? 'carousel-item active' : 'carousel-item' %> d-flex justify-content-center">
-          <img height="500" style="-webkit-user-drag: none; background-size: cover;width: 95%;" data-ride="1000" data-slide="carsoul" class="d-block  mt-4" src="/images/bannerImages/<%= banner.image %>" alt="Banner <%= index + 1 %>">
-        </div>
-      <% }); %>
-    </div>
-    <a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#carouselExampleFade" role="button" data-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="sr-only">Next</span>
-    </a>
-  </div>
-
-  <div class="container text-center">
-    <div class="row">
-      <h3 class="mt-5 fs-5 text-start">Top Categories</h3>
-      <% category.forEach(category => { %>
-        <div class="col-md-5 col-lg-4 col-xl-3 col-xxl-3 mb-lg mb-md-6 col-sm-6 col-12  ">
-          <div style="border-radius: 5%; background-color: #18ACFE; width: 100%; min-width: 250px; height: 250px;" class="zoom-out-effect card border shadow p-2  mt-sm-5  mt-md-5 mt-lg-3 mt-xl-0 mt-xxl-0 mt-4">
-            <a style="-webkit-user-drag: none;" href="/home/products/<%=category.category%>"> <!-- Add your actual link in the href attribute -->
-              <% for (let i = 0; i <= 0; i++) { %>
-                <img
-                  style="margin-bottom: 5px;
-                  -webkit-user-drag: none;
-                "
-                  class="card-img-top"
-                  src="/images/categoryImages/<%= category.image%>"
-                  alt="Product Image <%= i + 1 %>"
-                />
-              <% } %>
-            </a>
-            <p style="font-weight: bold; margin-top: 5px;"><%= category.category %></p>
-          </div>
-        </div>
-      <% }); %>
-    </div>
-  </div>
-  
-  
-  <section id="featured-brand" class="mb-5"> <!-- Add margin-bottom here -->
-    <div class="container-fluid mt-5 mb-5">
-      <div class="row">
-        <h1 class="col-12 text-center" style="font-size: 30px;">Featured Brands</h1>
-        <div class="col-sm-12 col-md-12 col-lg-12 d-flex flex-wrap justify-content-evenly mt-5">
-          <img class="mb-3" style="width: 40px; height: 40px; -webkit-user-drag: none; " src="/images/apple.png" alt="">
-          <img class="mb-3" style="width: 40px; height: 40px; -webkit-user-drag: none; " src="/images/hp.png" alt="">
-          <img class="mb-3" style="width: 40px; height: 40px; -webkit-user-drag: none; " src="/images/dell.png" alt="">
-          <img class="mb-3" style="width: 80px; height: 30px; margin-top: 10px; -webkit-user-drag: none; " src="/images/lenovo.png" alt="">
-          <img class="mb-3" style="width: 100px; height: 30px; margin-top: 10px; -webkit-user-drag: none; " src="/images/samsung.png" alt="">
-        </div>
-      </div>
-    </div>
-    </section>
+    .zoom-out-effect:hover {
+      transform: scale(0.9);
+      /* Adjust the scale value to control the zoom-out effect */
+      transition: transform 2s ease;
+      /* Add a smooth transition effect */
+    }
 
 
+    .form-subscribe {
+      max-width: 600px;
+      margin: 0 auto
+    }
 
-<%if(ProductData !== 'undefined') {%>
+    .form-subscribe .form-control {
+      padding-left: 24px;
+      padding-right: 24px;
+      letter-spacing: 1px;
+      border: none;
+      border-top-left-radius: 36px;
+      border-bottom-left-radius: 36px
+    }
+
+    .form-subscribe .form-control.focus,
+    .form-subscribe .form-control:focus {
+      z-index: 2;
+      background-color: hsla(0, 0%, 100%, .8)
+    }
+
+    .form-subscribe .btn {
+      border-top-right-radius: 36px;
+      border-bottom-right-radius: 36px;
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      font-size: 15px;
+      background: #7ec855;
+      border-color: #7ec855;
+      height: 38px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgb(255, 255, 255);
+      padding: 20px;
+      text-align: center;
+      max-width: 400px;
+      /* Adjust the maximum width as needed */
+      width: 100%;
+      /* Ensure the width is responsive */
+    }
+
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .button-container {
+      margin-top: 20px;
+    }
+
+    /* Style the buttons as needed */
+    button {
+      padding: 10px;
+      margin: 0 10px;
+      cursor: pointer;
+    }
+  </style>
+  <script>
+    // Check if the user is blocked and show a pop-up message
+    if (locals.userSessionData && locals.userSessionData.status === false) {
+      alert("You have been blocked by the admin");
+      window.location.href = '/login';
+    }
+  </script>
+
+  <title>VoltTron an online electronics shoping site</title>
+  <main>
 
 
-    <div class="container text-center mb-5">
-      <div class="row">
-        <h3 class="mt-5 fs-5 text-start">Top Products</h3>
-          <% ProductData.forEach(product => { %>
-
-          <div class="col-md-5 col-lg-4 col-xl-3 col-xxl-3 mb-lg mb-md-6 col-sm-6 col-12  ">
-                <!-- Use col-lg-4 to include three cards in one row -->
-                <a href="/home/product/details/<%=product._id%>" class="text-decoration-none text-dark">
-                  <div class="card border-0 h-100 p-2 " id="product-card">
-                      <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px" class="card-img-top"
-                        src="/images/productImages/<%=product.images[0]  %>" alt="Product Image " />
-                    <div class="card-body" style="height: 130px;">
-                      <div style="display: flex; justify-content: start; margin-bottom: 10px; text-align: start;">
-
-                      <h6><%= product.name.substring(0, 40, product.name.length / 2) %></h6>
-                      </div>
-                      <div style="display: flex; justify-content: start; margin-bottom: 10px;">
-                        <p class="card-text " data-price="<%= Number(product.price - (product.price * (product.discount / 100)))%>" >Price: <b>Rs:<%= Number(product.price - (product.price * (product.discount / 100))).toLocaleString() %></b></p>
-
-                      </div>
-                      <div class="d-flex justify-content-between">
-                        <p class="card-text text-success"><%= product.discount %>% off</p>
-                        <p class="small text-danger"><s>Rs<%= product.price %></s></p>
-                      </div>
-                    </div>
-                </a>
-           
-                
-                
-<!-- Inside the loop where you render product details -->
-        <button class=" btn btn-outline-primary addToCartButton" data-product-id="<%= product._id %>" data-product-price="<%= Number(product.price - (product.price * (product.discount / 100))) %>">Add to Cart</button>
-
-                  
-               
-             
-              </div>
+    <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
+      <div class="carousel-inner">
+        <% banner.forEach((banner, index)=> { %>
+          <div class="<%= index === 0 ? 'carousel-item active' : 'carousel-item' %> d-flex justify-content-center">
+            <img style="-webkit-user-drag: none; height: 400px; width: 70%;" data-ride="1000" data-slide="carousel"
+              class="mt-4" src="/images/bannerImages/<%= banner.image %>" alt="Banner <%= index + 1 %>">
           </div>
           <% }); %>
+      </div>
+      <a class="carousel-control-prev " href="#carouselExampleFade" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon " aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselExampleFade" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
 
+
+
+    </div>
+
+    <div class="container text-center">
+      <div class="row">
+        <h3 class="mt-5 fs-5 text-start">Top Categories</h3>
+        <% category.forEach(category=> { %>
+          <div class="col-md-5 col-lg-4 col-xl-3 col-xxl-3 mb-lg mb-md-6 col-sm-6 col-12  ">
+            <div style="border-radius: 5%; background-color: #18ACFE; width: 100%; min-width: 250px; height: 250px;"
+              class="zoom-out-effect card border shadow p-2  mt-sm-5  mt-md-5 mt-lg-3 mt-xl-0 mt-xxl-0 mt-4">
+              <a style="-webkit-user-drag: none;" href="/home/products/<%=category.category%>">
+                <!-- Add your actual link in the href attribute -->
+                <% for (let i=0; i <=0; i++) { %>
+                  <img style="margin-bottom: 5px;
+                  -webkit-user-drag: none;
+                " class="card-img-top" src="/images/categoryImages/<%= category.image%>"
+                    alt="Product Image <%= i + 1 %>" />
+                  <% } %>
+              </a>
+              <p style="font-weight: bold; margin-top: 5px;">
+                <%= category.category %>
+              </p>
+            </div>
+          </div>
+          <% }); %>
       </div>
     </div>
-    
-    <%} %>
 
-    
 
-    <section class="bg-img text-center">
-      <div class="container" style="background-color: #18ACFE; height: 300px; border-radius: 20px;">
-        <h2 class="pt-4">
-          NEWSLETTER
-        </h2>
-        <h6 class="font-alt mt-2">subscribe to our newsletter get latest updates</h6>
-        <br><br>
-        <form class="form-subscribe" action="#">
-          <div class="input-group">
-            <input type="text" class="form-control input-lg" placeholder="Your email address" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Enter a valid email address" required>
-            <span class="input-group-btn">
-              <button class="btn btn-success btn-lg" type="submit" >Subscribe</button>
-            </span>
+    <section id="featured-brand" class="mb-5"> <!-- Add margin-bottom here -->
+      <div class="container-fluid mt-5 mb-5">
+        <div class="row">
+          <h1 class="col-12 text-center" style="font-size: 30px;">Featured Brands</h1>
+          <div class="col-sm-12 col-md-12 col-lg-12 d-flex flex-wrap justify-content-evenly mt-5">
+            <img class="mb-3" style="width: 40px; height: 40px; -webkit-user-drag: none; " src="/images/apple.png"
+              alt="">
+            <img class="mb-3" style="width: 40px; height: 40px; -webkit-user-drag: none; " src="/images/hp.png" alt="">
+            <img class="mb-3" style="width: 40px; height: 40px; -webkit-user-drag: none; " src="/images/dell.png"
+              alt="">
+            <img class="mb-3" style="width: 80px; height: 30px; margin-top: 10px; -webkit-user-drag: none; "
+              src="/images/lenovo.png" alt="">
+            <img class="mb-3" style="width: 100px; height: 30px; margin-top: 10px; -webkit-user-drag: none; "
+              src="/images/samsung.png" alt="">
           </div>
-        </form>
+        </div>
       </div>
     </section>
 
 
 
+    <%if(ProductData !=='undefined' ) {%>
+
+
+      <div class="container text-center mb-5">
+        <div class="row">
+          <h3 class="mt-5 fs-5 text-start">Top Products</h3>
+          <% ProductData.forEach(product=> { %>
+
+            <div class="col-md-5 col-lg-4 col-xl-3 col-xxl-3 mb-lg mb-md-6 col-sm-6 col-12  ">
+              <!-- Use col-lg-4 to include three cards in one row -->
+              <a href="/home/product/details/<%=product._id%>" class="text-decoration-none text-dark">
+                <div class="card border-0 h-100 p-2 " id="product-card">
+                  <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px"
+                    class="card-img-top" src="/images/productImages/<%=product.images[0]  %>" alt="Product Image " />
+                  <div class="card-body" style="height: 130px;">
+                    <div style="display: flex; justify-content: start; margin-bottom: 10px; text-align: start;">
+
+                      <h6>
+                        <%= product.name.substring(0, 40, product.name.length / 2) %>
+                      </h6>
+                    </div>
+                    <div style="display: flex; justify-content: start; margin-bottom: 10px;">
+                      <p class="card-text "
+                        data-price="<%= Number(product.price - (product.price * (product.discount / 100)))%>">Price:
+                        <b>Rs:<%= Number(product.price - (product.price * (product.discount / 100))).toLocaleString() %>
+                        </b>
+                      </p>
+
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <p class="card-text text-success">
+                        <%= product.discount %>% off
+                      </p>
+                      <p class="small text-danger"><s>Rs<%= product.price %></s></p>
+                    </div>
+                  </div>
+              </a>
+
+
+
+              <!-- Inside the loop where you render product details -->
+              <button class=" btn btn-outline-primary addToCartButton" data-product-id="<%= product._id %>"
+                data-product-price="<%= Number(product.price - (product.price * (product.discount / 100))) %>">Add to
+                Cart</button>
 
 
 
 
+            </div>
+        </div>
+        <% }); %>
 
-    
+      </div>
+      </div>
+
+      <%} %>
+
+
+
+        <section class="bg-img text-center">
+          <div class="container" style="background-color: #18ACFE; height: 300px; border-radius: 20px;">
+            <h2 class="pt-4">
+              NEWSLETTER
+            </h2>
+            <h6 class="font-alt mt-2">subscribe to our newsletter get latest updates</h6>
+            <br><br>
+            <div class="input-group form-subscribe">
+              <input type="text" class="form-control input-lg" placeholder="Your email address" id="newsletter"
+                name="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2}" title="Enter a valid email address"
+                required>
+              <span class="input-group-btn">
+                <button type="submit" id="subscribe" class="btn btn-success btn-lg">Subscribe</button>
+              </span>
+            </div>
+          </div>
+        </section>
+
   </main>
-
-  <div id="cart-toast" class="toast " role="alert"  aria-live="assertive" aria-atomic="true" style= "position: absolute; top: 0; right: 0; margin-top: 100px;">
+  <div id="cart-toast" class="toast " role="alert" aria-live="assertive" aria-atomic="true"
+    style="position: absolute; top: 0; right: 0; margin-top: 100px;">
     <div class="toast-header">
-        <strong class="mr-auto">Cart</strong>
-<!-- Assuming you want to display the current time in the <small> tag -->
-<small><%= new Date().toLocaleTimeString() %></small>
-        
+      <strong class="mr-auto">Cart</strong>
+      <!-- Assuming you want to display the current time in the <small> tag -->
+      <small>
+        <%= new Date().toLocaleTimeString() %>
+      </small>
+
     </div>
-    <div style="background-color: rgb(165, 229, 165);" class="toast-body" id="cart-message"></div>
-</div>
+    <div class="toast-body" id="cart-message"></div>
+  </div>
 
-<script src="/js/addTOcart.js"></script>
 
-<script>
-  $(document).ready(function(){
-    
-    $('#myCarousel').carousel({
-    interval: 3000,
- }) 
-    
-});
-</script>
-  
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeLoginModal()">&times;</span>
+      <p>You need to login to proceed.</p>
+      <div class="button-container">
+        <button class="btn btn-outline-primary" onclick="redirectLogin()">Login</button>
+        <button class="btn btn-outline-danger" onclick="closeLoginModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
 
-<%- include('../layout/footer.ejs') %>
+
+
+  <!-- Add this modal structure at the end of your HTML body -->
+  <div class="modal fade" id="subscriptionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 400px; height: 400px;">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-center">
+          <h5 id="newsletter-modal-title" class="modal-title" id="exampleModalLabel">Subscription Successful</h5>
+        </div>
+        <div class="modal-body d-flex justify-content-center" id="newsletter-modal-body">
+          Thank you for subscribing to our newsletter! You will receive the latest updates.
+        </div>
+        <div class="modal-footer d-flex justify-content-center">
+          <a onclick="redirect()" class="btn btn-outline-primary" id="modal-close" data-bs-dismiss="modal">Close</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/addTOcart.js"></script>
+
+  <script>
+    // You can use JavaScript to dynamically set the margin-top property if needed
+    const cartToast = document.getElementById('cart-toast');
+    const screenHeight = window.innerHeight;
+
+    // Set the margin-top to center the element vertically
+    cartToast.style.marginTop = `-${cartToast.clientHeight / 2}px`;
+
+    $(document).ready(function () {
+
+      $('#myCarousel').carousel({
+        interval: 3000,
+      })
+
+    });
+    function redirect(){
+
+      window.location.href ='/home'
+    }
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const newsletterForm = document.getElementById('subscribe');
+      const newsletter_modal_title = document.getElementById('newsletter-modal-title');
+      const newsletter_modal_body = document.getElementById('newsletter-modal-title');
+      const modal_close = document.getElementById('modal-close');
+      newsletterForm.addEventListener("click", async function (event) {
+
+
+        console.log("cilcked");
+        const emailInput = document.getElementById('newsletter');
+        const email = emailInput.value;
+
+        console.log(email);
+        // Assuming you have the server endpoint for subscription
+        try {
+
+          const response = await axios.post('/send-newsletter', { email })
+
+          if (response.data) {
+
+            setTimeout(() => {
+              $('#subscriptionModal').modal('show');
+              emailInput.value = '';
+
+            }, 3000);
+
+          }
+
+        } catch (error) {
+          console.error(error);
+        }
+
+
+      });
+    });
+  </script>
+  <%- include('../layout/footer.ejs') %>
