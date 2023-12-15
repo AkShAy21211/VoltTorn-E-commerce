@@ -18,8 +18,8 @@ const sendEmail = async (email, otpCode) => {
     secure: false,
     requireTLS: true,
     auth: {
-      user: "pa080633@gmail.com",
-      pass: "szchhdrguntezzsr",
+      user: "",
+      pass: "",
     },
   });
 
