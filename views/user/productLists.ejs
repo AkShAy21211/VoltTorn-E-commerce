@@ -84,15 +84,22 @@
   <main>
     <div class="container-fluid">
       <div class="row">
-        <aside class="col-md-3">
+        <aside class="col-md-3 ">
 
-          <div class="card mt-5">
+          <div class="card mt-5 pb-2">
             <article class="filter-group">
               <header class="card-header">
-                <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
-                  <i class="icon-control fa fa-chevron-down"></i>
-                  <h6 class="title">Sub Category</h6>
-                </a>
+                <div class="d-flex justify-content-between">
+                  <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
+                    <i class="icon-control fa fa-chevron-down"></i>
+                    <h6 class="title">Sub Category</h6>
+                  </a>
+
+                  <a href="/home/products/<%=cat_name  %>"
+                    style="width: 60px; height: 25px;  font-size: 13px; text-align: center; line-height: 10px; margin-right: 20px;"
+                    class="pr-3 btn btn-outline-primary">clear</a>
+                </div>
+
               </header>
               <div class="filter-content collapse show" id="collapse_1" style="color: black;">
                 <div class="card-body">
@@ -101,13 +108,14 @@
                       <% categoryItem.sub_Category.forEach(subCategory=> { %>
                         <li>
                           <label>
-                            <input type="checkbox" name="selectedCategories" value="<%= subCategory %>">
+                            <input type="checkbox" name="selectedSubCategories" value="<%= subCategory %>">
                             <%= subCategory %>
                           </label>
                         </li>
                         <% }) %>
                           <% }) %>
                   </ul>
+
                 </div>
               </div>
 
@@ -119,25 +127,65 @@
                 <a href="#" data-toggle="collapse" data-target="#collapse_2" aria-expanded="true" class="">
                   <i class="icon-control fa fa-chevron-down"></i>
                   <h6 class="title">Brands </h6>
+
                 </a>
               </header>
 
-              <div class="filter-content collapse show" id="collapse_2" style="">
+              <div class="filter-content collapse show" id="collapse_2">
                 <div class="card-body">
-                  <% brands.forEach((brand, index)=> { %>
-                    <label class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" id="<%= 'checkbox_' + index %>">
-                      <div class="custom-control-label">
-                        <%= brand %>
-                      </div>
-                    </label>
-                    <% }) %>
+                  <ul class="list-menu">
+                    <% brands.forEach((brand, index)=> { %>
+                      <li>
+                        <label>
+                          <input type="checkbox" name="selectedBrands" value="<%= brand %>">
+                          <%= brand %>
+                        </label>
+                      </li>
+                      <% }) %>
+                  </ul>
+
                 </div>
               </div>
+
             </article> <!-- filter-group .// -->
 
+                <article class="filter-group">
+              <header class="card-header">
+                <a href="#" data-toggle="collapse" data-target="#collapse_2" aria-expanded="true" class="">
+                  <i class="icon-control fa fa-chevron-down"></i>
+                  <h6 class="title">Price </h6>
+
+                </a>
+              </header>
+
+              <div class="filter-content collapse show" id="collapse_2">
+                <div class="card-body">
+                  <ul class="list-menu">
+                    <li>
+                        <label>
+                            <input type="radio" value="-1" name="selectedPrice">
+                            High To Low
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" value="1" name="selectedPrice">
+                            Low To High
+                        </label>
+                    </li>
+                </ul>
+                
+
+                </div>
+              </div>
+
+            </article> <!-- filter-group .// -->
+
+            <a href="#" id="applyFilterBtn" data-category="<%=cat_name  %>" class="btn btn-primary mt-3">Apply
+              Filter</a>
 
           </div>
+
         </aside>
 
 
@@ -274,7 +322,7 @@
         }
       });
 
- 
+
       function renderProducts(products) {
         const productContainer = $('#product-container');
 
@@ -315,6 +363,91 @@
         });
       }
 
+    });
+
+  </script>
+  <script>
+    $(document).ready(function () {
+      let category;
+      const productContainer = $('#product-container');
+
+      $('#applyFilterBtn').on('click', async function () {
+        category = $(this).data("category");
+        var selectedSubCategories = $('input[name="selectedSubCategories"]:checked').map(function () {
+          return $(this).val();
+        }).get();
+
+        var selectedBrands = $('input[name="selectedBrands"]:checked').map(function () {
+          return $(this).val();
+        }).get();
+
+
+        var selectedPrice = $('input[name="selectedPrice"]:checked').val();
+
+        let Product;
+
+        try {
+
+
+          console.log(selectedPrice);
+
+          const response = await axios.get(`/home/products/${category}/filter?subCategory=${selectedSubCategories}&brand=${selectedBrands}&price=${selectedPrice}`)
+            .then((response) => {
+              Product = response.data.ProductData;
+              if (response.data.ProductData.length) {
+                renderProducts(Product);
+
+                console.log(response.data.ProductData);
+              }
+
+            })
+            .catch(err => console.error(err));
+
+        } catch (error) {
+          console.error(error);
+        }
+
+
+        function renderProducts(Product) {
+
+          // Clear existing product container content
+          productContainer.empty();
+
+          // Render each product card and append to the container
+          Product.forEach(product => {
+            const productCard = `
+      <div class="col-lg-4 col-md-6 col-sm-6  mt-xl-0 mt-lg-4 mt-md-5 mb-4 mt-sm-5 mt-5">
+        <a href="/home/product/details/${product._id}" class="text-decoration-none text-dark">
+          <div class="card border-0 h-100 p-2" id="product-card">
+            ${product.images.slice(0, 1).map(image => `
+              <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px"
+                class="card-img-top" src="/images/productImages/${image}"
+                alt="Product Image 1" />
+            `).join('')}
+            <div class="card-body" style="height: 130px;">
+              <h6>${product.name.substring(0, 40, product.name.length / 2)}</h6>
+              <p class="card-text" data-price="${Number(product.price - (product.price * (product.discount / 100)))}">
+                Price: <b>Rs:${Number(product.price - (product.price * (product.discount / 100))).toLocaleString()}</b>
+              </p>
+              <div class="d-flex justify-content-between">
+                <p class="card-text text-success">${product.discount}% off</p>
+                <p class="small text-danger"><s>Rs${product.price}</s></p>
+              </div>
+            </div>
+          </a>
+          <button class="btn btn-outline-primary w-750 addToCartButton" data-product-id="${product._id}"
+          data-product-price="${Number(product.price - (product.price * (product.discount / 100)))}">Add to Cart</button>
+    
+          </div>
+        
+        
+      </div>`;
+
+            productContainer.append(productCard);
+          });
+        }
+
+      });
     });
 
   </script>

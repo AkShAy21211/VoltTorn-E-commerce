@@ -1,5 +1,6 @@
 <%- include('../layout/adminHeader.ejs') %>
   <%- include('../layout/adminSideBar.ejs') %>
+  <link rel="stylesheet" href="/css/dataTable.css">
 
   <!-- Your existing HTML code -->
   
@@ -14,6 +15,7 @@
         background-color: #333;
         color: white;
       }
+
     </style>
 <title>Customers</title>
 <main>
@@ -33,7 +35,7 @@
           <div class="overflow-auto p-3 bg-light" style="max-width: 1500px; max-height: 600px;">
                    
 
-<table class="table  ">
+<table class="table" id="myTable">
             <thead >
               <tr>
                 <th> Name</th>
@@ -86,11 +88,12 @@
 </main>
    
  <script src="/js/alertPopUp.js"></script>
+ <script src="/js/DataTable.js"></script>
 
     <%- include('../layout/adminFooter.ejs') %>
 
     
-<script>
+<!-- <script>
   const search_bar = document.getElementById("search-bar");
   const customer_table = document.getElementById("customer-table");
   const search_type = document.getElementById("search-type");
@@ -135,4 +138,4 @@
       }
     });
   });
-</script>
+</script> -->

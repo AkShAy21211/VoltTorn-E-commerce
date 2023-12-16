@@ -66,7 +66,10 @@
           <div class="text-end position-relative">
             <a class="text-black" href="/home/cart" id="cart-icon">
               <span style="font-size: 20px;" class="bi bi-cart"></span>
-              <span id="cart-item-count" class="badge" id="cart-count"></span>
+              <%if(locals.userSessionData !== 'undefined') {%>
+              <span id="cart-item-count" class="badge" id="cart-count"><%=locals.userSessionData.cartCount%></span>
+
+             <% } %>
             </a>
           </div>
         </div>

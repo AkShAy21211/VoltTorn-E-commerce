@@ -11,6 +11,8 @@ const loadHome = async (req, res) => {
     const ProductData = await productModel.find({}).limit(4);
     const banner = await bannerModel.find({ endDate: { $gt: currentDate } });
     res.render("home", { category,banner,ProductData});
+
+  
   } catch (error) {
     console.log(error.message);
   }
@@ -38,14 +40,9 @@ const loaadProductListsByCategory = async(req,res)=>{
 ]);
 
 const brands = result.map((entry) => entry._id);
-const brandCount =  await productModel.aggregate([{$match: {category: cat_name, },},{
-  $group: {
-    _id: "$brand",
-    count: { $sum: 1 }, // Count the number of products for each brand
-  },
-},]);
 
-    res.render("productLists",{ProductData,ProductCount,category,cat_name,brands,brandCount});
+
+    res.render("productLists",{ProductData,ProductCount,category,cat_name,brands});
 
   }catch(error){
     console.error(error);
@@ -84,7 +81,6 @@ const sortProductByUserPreference = async (req, res) => {
       // Aggregate pipeline
       const aggregationPipeline = [matchStage, sortStage];
 
-      // Your MongoDB aggregation query here
 
       // Example: Assuming you have a 'products' collection
       const products = await productModel.aggregate(aggregationPipeline);
@@ -98,6 +94,37 @@ const sortProductByUserPreference = async (req, res) => {
       res.status(500).send('Internal Server Error');
   }
 };
+const filterProductsByUser = async (req, res) => {
+  try {
+    console.log("nwfubniuwbnfibefbnkw");
+const {subCategory,brand,selectedPrice,price} = req.query;
+const sortOption = selectedPrice === -1 ? { price: -1 } : { price: 1 };
+
+const selectedSubCategories = subCategory ? subCategory.split(',') : [];
+const selectedBrands = brand ? brand.split(',') : [];
+const category = req.params.cat_name;
+
+
+const ProductData = await productModel.find({
+  category: category,
+  $or: [
+    { sub_Category: { $in: selectedSubCategories } },
+    { brand: { $in: selectedBrands } },
+  ],
+
+}).sort(sortOption);
+
+
+
+
+    res.status(200).json({ProductData});
+  } catch (error) {
+    console.error(error);
+    // Handle errors and send an error response if necessary
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 
 const sendEmailNewsLetter = async(req,res)=>{
 
@@ -107,12 +134,8 @@ const sendEmailNewsLetter = async(req,res)=>{
         email_address: email,
         status: "subscribed",
       }).then(response=>{
-
-        res.status(200).json({response})
-
+      res.status(200).json({response})
       });
-
-   
 
   }catch(error){
     res.status(400);
@@ -125,5 +148,6 @@ module.exports = {
   loaadProductListsByCategory,
   sortProductByUserPreference,
   sendEmailNewsLetter,
+  filterProductsByUser,
 
 };

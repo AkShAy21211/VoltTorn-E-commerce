@@ -1,6 +1,7 @@
 <!-- views/banners.ejs -->
 
 <%- include('../layout/adminHeader.ejs') %>
+<link rel="stylesheet" href="/css/dataTable.css">
 <title>Banners</title>
 <aside>
   <a href="/admin/products" style="color: rgb(45, 81, 172); position: absolute; left: 50px; top: 80px; font-size: 15px; font-weight: bold; " class="btn"> <-Back</a>
@@ -33,7 +34,7 @@
     <div class="col-md-9">
         <h2>Banner List</h2>
         <% if (banner.length > 0) { %>
-          <table class="table col-12">
+          <table class="table col-12" id="myTable">
             <thead>
               <tr>
                 <th>Name</th>
@@ -67,6 +68,7 @@
       
   </div>
 </div>
+<script src="/js/DataTable.js"></script>
 <script src="/js/alertPopUp.js"></script>
 
 <%- include('../layout/adminFooter.ejs') %>

@@ -93,17 +93,12 @@ const editCategory = async (req, res) => {
 //ADMIN DELETE CATEGORY ROUTE
 
 const deleteCategory  = async(req,res)=>{
-
   try{
-
     const {id} = req.params;
     const deleteCategory = await categoryModel.deleteOne({_id:id}); 
     if(deleteCategory){
       res.redirect('/admin/category');
     }
-
-    
-
   }catch(error){
     console.log(error.message);
   }

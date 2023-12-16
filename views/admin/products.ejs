@@ -1,5 +1,6 @@
 <%- include('../layout/adminHeader.ejs') %>
 <%- include('../layout/adminSideBar.ejs') %>
+<link rel="stylesheet" href="/css/dataTable.css">
 
 <style>
   .table tbody tr:hover {
@@ -21,6 +22,7 @@
     max-width: 200px; /* Adjust the max-width as needed */
     white-space: normal;
   }
+
 </style>
 
 <title>Products</title>
@@ -35,7 +37,7 @@
 
         </div>
         <div class="table-responsive">
-          <table class="table">
+          <table class="table" id="myTable">
             <thead class="">
               <tr>
                 <th>#</th>
@@ -85,6 +87,8 @@
 <% } %>
 <script src="/js/search.js"></script>
 <script src="/js/alertPopUp.js"></script>
+<script src="/js/DataTable.js"></script>
+
 <%- include('../layout/adminFooter.ejs') %>
 
 <script>
@@ -95,9 +99,8 @@
     $('.toast').toast('show');
   });
 
-
 </script>
-<script>
+<!-- <script>
   const search_bar = document.getElementById('search-bar');
   const product_table = document.getElementById('product-table');
   const search_type = document.getElementById('search-type');
@@ -141,4 +144,4 @@
     });
   });
   </script>
-  
+   -->

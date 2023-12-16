@@ -1,6 +1,6 @@
 <%- include('../layout/adminHeader.ejs') %> <%-
 include('../layout/adminSideBar.ejs') %>
-
+<link rel="stylesheet" href="/css/dataTable.css">
 <style>
   .table tbody tr:hover {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -15,6 +15,7 @@ include('../layout/adminSideBar.ejs') %>
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
 </style>
 <title>Category</title>
 <main>
@@ -46,7 +47,7 @@ include('../layout/adminSideBar.ejs') %>
           class="overflow-auto p-3 bg-light"
           style="max-width: 1500px; max-height: 550px"
         >
-          <table class="table">
+          <table class="table" id="myTable">
             <thead class="text-center">
               <tr>
                 <th>Category</th>
@@ -223,11 +224,12 @@ include('../layout/adminSideBar.ejs') %>
     return true;
   }
 </script>
+<script src="/js/DataTable.js"></script>
 
 <script src="/js/alertPopUp.js"></script>
 <%- include('../layout/adminFooter.ejs') %>
 
-<script>
+<!-- <script>
   const search_bar = document.getElementById("search-bar");
   const category_table = document.getElementById("category-table");
   const search_type = document.getElementById("search-type");
@@ -262,4 +264,4 @@ include('../layout/adminSideBar.ejs') %>
       }
     });
   });
-</script>
+</script> -->

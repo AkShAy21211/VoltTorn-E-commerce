@@ -1,4 +1,5 @@
 <%- include('../layout/adminHeader.ejs') %>
+<link rel="stylesheet" href="/css/dataTable.css">
   <title>Oders</title>
   <aside>
     <a href="/admin"
@@ -42,7 +43,7 @@
       </section>
       <div class="jumbotron jumbotron-fluid rounded bg-white border-0 shadow-sm border-left px-4">
         <div class="container">
-          <table class="table table-responsive-md">
+          <table class="table table-responsive-md" id="myTable">
             <thead>
               <tr>
                 <th scope="col">Oder Id</th>
@@ -132,5 +133,5 @@
       });
   });
 </script>
-
+<script src="/js/DataTable.js"></script>
   <%- include('../layout/adminFooter.ejs') %>

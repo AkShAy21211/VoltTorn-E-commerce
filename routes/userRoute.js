@@ -56,11 +56,11 @@ userRoute.get('/home/product/details/:id',auth.isUserBlocked,homeController.prod
 
 userRoute.get('/home/products/:cat_name',auth.isUserBlocked,homeController.loaadProductListsByCategory);
 
-//product sort by filter route
+//product sort /  filter route
+userRoute.get('/home/products/:cat_name/filter',auth.isUserBlocked,homeController.filterProductsByUser)
 userRoute.get('/home/products/sort/:category/:sortOption',auth.isUserBlocked,homeController.sortProductByUserPreference)
 
 //user settings page route
-userRoute.get('/home/product/details/:id/filter/:color',auth.isUserBlocked,homeController.productDetail)
 
 //USER shoppingCart
 userRoute.get('/home/cart',auth.isUserBlocked,userCartController.userShoppingCartPageLoad);

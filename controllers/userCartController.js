@@ -13,7 +13,7 @@ const userShoppingCartPageLoad = async (req, res) => {
       const userCart = await CartModel.findOne({ _id: user_id }).populate(
         "cart.product_id"
       );
-
+      req.session.user.cartCount = userCart && userCart.cart ? userCart.cart.length : 0;
       // Check if userCart is defined and has the cart property
       const userCartCount =
         userCart && userCart.cart ? userCart.cart.length : 0;
@@ -198,7 +198,6 @@ const deleteCartItem = async (req, res) => {
     // Assuming CartModel has a 'cart' array and 'total_price' field
     const cart = await CartModel.findById(id);
 
-    console.log("product id  ", product_id);
 
     const updatedCart = await CartModel.findOneAndUpdate(
       { _id: id },
@@ -219,7 +218,7 @@ const deleteCartItem = async (req, res) => {
     console.log(updatedCart);
     const userCartCount =
       updatedCart && updatedCart.cart ? updatedCart.cart.length : 0;
-
+      req.session.user.cartCount -= 1;
       delete req.session.user.cart.cart;
       req.session.save(err => {
         if (err) {
