@@ -45,6 +45,22 @@
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
+    .quantity-container {
+    display: flex;
+    align-items: center;
+}
+
+.quantity-btn {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.quantity-input {
+    flex: 1;
+    margin: 0 5px;
+    width: 100px;
+    text-align: center;
+}
 
     /* Make the columns responsive */
     @media (max-width: 768px) {
@@ -78,14 +94,20 @@
                                             <img src="/images/productImages/<%=cart.image %>" alt="" width="100" height="100"   class="img-fluid d-none d-md-block rounded mb-2 shadow ">
                                         </div>
                                         <div class="col-md-9 text-left mt-sm-2">
-                                            <h6 style="height: 20px; width: 350px; overflow: hidden; text-overflow: ellipsis;"> <%= cart.product_id.name %> </h6>
+                                            <h6 style="height: 20px; width: 300px; overflow: hidden; text-overflow: ellipsis;"> <%= cart.product_id.name %> </h6>
                                             <p class="font-weight-light">Brand: <b><%=cart.product_id.brand  %></b></p>
                                         </div>
                                     </div>
                                 </td>
                                 <td data-th="Quantity">
-                                  <input type="number"  min="1" oninput="if(this.value == 0) this.value = 1; this.value = Math.abs(this.value)" data-product-price="<%=parseFloat(cart.product_id.price - (cart.product_id.price * (cart.product_id.discount / 100)))*cart.quantity %>" data-product-id="<%= userCart._id %>" data-product="<%= cart.product_id._id %>" class="form-control text-center quantity-input" value="<%= cart.quantity %>">
-                              </td>
+                                    <div class="quantity-container">
+                                        <button class="quantity-btn minus-btn btn border border-primary text-dark" type="button">-</button>
+                                        <input type="number" min="1"  data-error="<%=cart._id  %>" oninput="if(this.value == 0) this.value = 1; this.value = Math.abs(this.value)" data-product-price="<%=parseFloat(cart.product_id.price - (cart.product_id.price * (cart.product_id.discount / 100)))*cart.quantity %>" data-product-id="<%= userCart._id %>" data-product="<%= cart.product_id._id %>" class="form-control text-center quantity-input border border-primary" value="<%= cart.quantity %>">
+                                        <button class="quantity-btn plus-btn btn border border-primary text-dark" type="button">+</button>
+                                    </div>
+                                    <p  class="text-danger badge stock-error" data-product-id="<%= cart._id %>"></p>
+                                </td>
+                                
                                 <td class="actions" data-th="">
                                     <div class="text-right">
                                         <button class="btn btn-white border-secondary bg-white btn-md mb-2">
@@ -109,7 +131,7 @@
 
                 
                 <!-- Summary on the right side -->
-                <div class="col-lg-3 col-md-12 col-12 ">
+                <div class="col-lg-4 col-md-12 col-12 ">
                     <div style="" class="summary ">
                         <!-- Add your summary content here -->
                         <h5 class="mb-5">Price Details</h5>
@@ -168,6 +190,7 @@
         cart.innerText = count.value; 
     })
 </script>
+
 <script src="/js/addTOcart.js"></script>
 <!-- Include SweetAlert2 via CDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

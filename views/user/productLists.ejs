@@ -148,7 +148,7 @@
               </div>
 
             </article> <!-- filter-group .// -->
-
+<!-- 
                 <article class="filter-group">
               <header class="card-header">
                 <a href="#" data-toggle="collapse" data-target="#collapse_2" aria-expanded="true" class="">
@@ -179,9 +179,9 @@
                 </div>
               </div>
 
-            </article> <!-- filter-group .// -->
+            </article> filter-group .// -->
 
-            <a href="#" id="applyFilterBtn" data-category="<%=cat_name  %>" class="btn btn-primary mt-3">Apply
+            <a href="#" id="applyFilterBtn" data-category="<%=cat_name  %>" class="btn me-2 ml-2 btn-primary mt-3">Apply
               Filter</a>
 
           </div>
@@ -193,7 +193,7 @@
 
           <header class="border-bottom mb-4 pb-3">
             <div class="form-inline">
-              <span style="padding-top: 10px;" class="mr-md-auto">
+              <span style="padding-top: 10px;" id="filterCount" class="mr-md-auto">
                 <%=ProductCount%> Items found
               </span>
               <select data-category="<%=cat_name%>" data-product="<%=ProductData  %>" id="sortDropdown"
@@ -203,7 +203,7 @@
                 <option value="Low to High">Low to High</option>
               </select>
             </div>
-          </header><!-- sect-heading -->
+          </header>
 
 
           <div class="row">
@@ -397,7 +397,8 @@
               if (response.data.ProductData.length) {
                 renderProducts(Product);
 
-                console.log(response.data.ProductData);
+                $("#filterCount").html(`${response.data.productCount} Items found`)
+              
               }
 
             })
@@ -412,7 +413,6 @@
 
           // Clear existing product container content
           productContainer.empty();
-
           // Render each product card and append to the container
           Product.forEach(product => {
             const productCard = `
@@ -442,7 +442,6 @@
         
         
       </div>`;
-
             productContainer.append(productCard);
           });
         }

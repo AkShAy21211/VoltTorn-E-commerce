@@ -143,8 +143,15 @@ const updateQuantity = async (req, res) => {
     const cartId = req.params.product_id;
     const newQuantity = req.body.quantity;
     const product = req.params.product;
+    
 
+    
     const productDetails = await productModel.findById(product);
+
+    if(newQuantity > productDetails.stock){
+
+      return res.status(400).json({ error: `Quantity exceeds available stock` });
+    }
 
     const newProductPrice =
       parseFloat(

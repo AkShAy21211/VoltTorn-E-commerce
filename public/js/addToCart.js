@@ -78,19 +78,34 @@ function displayLoginModal() {
 
 // Add event listener to all quantity inputs with the class 'quantity-input'
 
-
 const quantityInputs = document.querySelectorAll(".quantity-input");
 
 quantityInputs.forEach((input) => {
+  const productId = input.dataset.productId;
+  const product = input.dataset.product;
+  const productPrice = parseFloat(input.dataset.productPrice);
+  const error_id = input.dataset.error;
+
+
+  const plusBtn = input.nextElementSibling;
+  const minusBtn = input.previousElementSibling;
+
+  plusBtn.addEventListener("click", async () => {
+    input.stepUp();
+    handleQuantityChange(input.value);
+  });
+
+  minusBtn.addEventListener("click", async () => {
+    input.stepDown();
+    handleQuantityChange(input.value);
+  });
+
   input.addEventListener("change", async () => {
-    const productId = input.dataset.productId;
-    const product = input.dataset.product;
-    const productPrice = parseFloat(input.dataset.productPrice);
-    const newQuantity = input.value;
+    handleQuantityChange(input.value);
+  });
 
+  async function handleQuantityChange(newQuantity) {
     try {
-
-      
       const response = await axios.patch(
         `/home/products/cart/updateQuantity/${productId}/${product}`,
         { quantity: newQuantity, productPrice }
@@ -102,23 +117,29 @@ quantityInputs.forEach((input) => {
       const totalPriceElement = document.querySelector('[data-total-price="total-price"]');
       const quantityElement = document.querySelector(`.quantity[data-product-id="${product}"]`);
       const priceDetailElement = document.querySelector(`.price[data-product-id="${product}"]`);
-      
 
-      if ( totalPriceElement && quantityElement && priceDetailElement) {
 
+      if (totalPriceElement && quantityElement && priceDetailElement) {
+        const errorElement = document.querySelector(`.stock-error[data-product-id="${error_id}"]`);
+
+        console.log(errorElement);
+        errorElement.textContent = "";
         setTimeout(() => {
           totalPriceElement.textContent = totalPrice.toFixed(2);
           quantityElement.textContent = newQuantity;
           priceDetailElement.textContent = updatedPrice.toFixed(2);
         }, 1000);
-       
       }
 
       console.log("Response:", response.data);
     } catch (error) {
-      console.error("Error:", error);
+      const errorElement = document.querySelector(`.stock-error[data-product-id="${error_id}"]`);
+
+      console.log(errorElement);
+      errorElement.textContent = error.response.data.error;
+    
     }
-  });
+  }
 });
 
 // Assuming you have a delete button with the class "delete-item"

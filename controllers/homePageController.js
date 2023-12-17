@@ -112,12 +112,13 @@ const ProductData = await productModel.find({
     { brand: { $in: selectedBrands } },
   ],
 
-}).sort(sortOption);
+});
 
 
+const productCount = ProductData.length;
 
 
-    res.status(200).json({ProductData});
+    res.status(200).json({ProductData,productCount});
   } catch (error) {
     console.error(error);
     // Handle errors and send an error response if necessary

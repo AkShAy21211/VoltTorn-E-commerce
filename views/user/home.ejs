@@ -132,7 +132,7 @@
       <div class="carousel-inner">
         <% banner.forEach((banner, index)=> { %>
           <div class="<%= index === 0 ? 'carousel-item active' : 'carousel-item' %> d-flex justify-content-center">
-            <img style="-webkit-user-drag: none; height: 400px; width: 70%;" data-ride="1000" data-slide="carousel"
+            <img style="-webkit-user-drag: none; height: 450px; width: 70%;" data-ride="1000" data-slide="carousel"
               class="mt-4" src="/images/bannerImages/<%= banner.image %>" alt="Banner <%= index + 1 %>">
           </div>
           <% }); %>
@@ -152,7 +152,7 @@
 
     <div class="container text-center">
       <div class="row">
-        <h3 class="mt-5 fs-5 text-start">Top Categories</h3>
+        <h3 class="mt-5 fs-4 text-start">Top Categories</h3>
         <% category.forEach(category=> { %>
           <div class="col-md-5 col-lg-4 col-xl-3 col-xxl-3 mb-lg mb-md-6 col-sm-6 col-12  ">
             <div style="border-radius: 5%; background-color: #18ACFE; width: 100%; min-width: 250px; height: 250px;"
@@ -179,7 +179,7 @@
     <section id="featured-brand" class="mb-5"> <!-- Add margin-bottom here -->
       <div class="container-fluid mt-5 mb-5">
         <div class="row">
-          <h1 class="col-12 text-center" style="font-size: 30px;">Featured Brands</h1>
+          <h3 class="col-12 text-center mt-5 fs-3 text-start">Featured Brands</h3>
           <div class="col-sm-12 col-md-12 col-lg-12 d-flex flex-wrap justify-content-evenly mt-5">
             <img class="mb-3" style="width: 40px; height: 40px; -webkit-user-drag: none; " src="/images/apple.png"
               alt="">
@@ -276,7 +276,7 @@
 
   </main>
   <div id="cart-toast" class="toast " role="alert" aria-live="assertive" aria-atomic="true"
-    style="position: absolute; top: 0; right: 0; margin-top: 100px;">
+    style="position: absolute; top: 0; right: 0; margin-top: 100px; z-index: 10;">
     <div class="toast-header">
       <strong class="mr-auto">Cart</strong>
       <!-- Assuming you want to display the current time in the <small> tag -->
