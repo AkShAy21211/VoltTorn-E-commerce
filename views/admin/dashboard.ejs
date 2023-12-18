@@ -179,6 +179,7 @@
 
             let Revenue = response.data.formattedMonthlyRevenue;
 
+
             let Sales = response.data.formattedMonthlySales;
 
 
@@ -270,7 +271,6 @@
 
         // Create and download Excel file
 
-        console.log(salesReport);
         createAndDownloadExcel(salesReport);
       });
     });

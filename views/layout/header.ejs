@@ -26,8 +26,8 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-
-
+<!-- //notify -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 
 <body>
@@ -52,8 +52,8 @@
 
         <form class="col-5 col-lg-4 mb-3 mb-lg-0 me-lg-0" role="search">
           <div class="input-group position-relative">
-            <input type="search" style="border: 1px solid black; border-radius:  20px; padding-right: 40px;"
-              name="search" class="form-control" placeholder="Search..." aria-label="Search">
+            <input type="search" id="search-bar" style="border: 1px solid black; border-radius: 20px; padding-right: 40px;"
+            name="search" class="form-control" placeholder="Search..." aria-label="Search">
             <div class="position-absolute top-50 end-10 translate-middle-y" style="right: 15px;">
               <a href=""> <i class="bi bi-search text-primary"></i></a>
             </div>
@@ -66,7 +66,7 @@
           <div class="text-end position-relative">
             <a class="text-black" href="/home/cart" id="cart-icon">
               <span style="font-size: 20px;" class="bi bi-cart"></span>
-              <%if(typeof locals.userSessionData != 'undefined' && locals.userSessionData.cartCount.length>0) {%>
+              <%if(typeof locals.userSessionData != 'undefined') {%>
               <span id="cart-item-count" class="badge" id="cart-count"><%=locals.userSessionData.cartCount%></span>
 
              <% } %>

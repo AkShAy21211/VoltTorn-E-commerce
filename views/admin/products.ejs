@@ -62,10 +62,10 @@
                   <td>
                     <span class="small-text" data-toggle="tooltip" data-placement="top" title="<%= product.description.substring(0,100, product.description.length / 2) %>" data-container="body" class="custom-tooltip"><%= product.description %></span>
                   </td>
-                  <td>
-                    <a href="/admin/products/view/<%= product._id %>" class="btn btn-outline-info" type="button">View</a>
-                    <a href="/admin/products/edit/<%= product._id %>" class="btn btn-outline-primary" type="button">Edit</a>
-                    <a href="javascript:void(0);" onclick="confirmDelete('<%= product._id %>','/admin/products/delete/','You will not be able to recover this product!')" class="btn btn-outline-danger" type="button">Delete</a>
+                  <td >
+                    <a href="/admin/products/view/<%= product._id %>" class="bi bi-eye-fill text-info p-1" type="button"></a>
+                    <a href="/admin/products/edit/<%= product._id %>" class="bi bi-pencil-fill text-warning p-1" type="button"></a>
+                    <a href="javascript:void(0);" onclick="confirmDelete('<%= product._id %>','/admin/products/delete/','You will not be able to recover this product!')" class="bi bi-trash3-fill text-danger p-1" type="button"></a>
                   </td>
                 </tr>
               <% }); %>
@@ -100,48 +100,3 @@
   });
 
 </script>
-<!-- <script>
-  const search_bar = document.getElementById('search-bar');
-  const product_table = document.getElementById('product-table');
-  const search_type = document.getElementById('search-type');
-
-  document.addEventListener("DOMContentLoaded", () => {
-    search_bar.addEventListener("input", async (e) => {
-      const searchValue = e.target.value;
-      const searchType = search_type.value; // Get the selected search type
-
-
-      console.log(searchType);
-  
-      try {
-        const response = await axios.get(`/admin/search?type=${searchType}&value=${searchValue}`);
-  
-        const results = response.data.searchItem;
-  
-        // Clear previous search results
-        product_table.innerHTML = '';
-  
-        // Populate the product table with the new search results
-        results.forEach((product, index) => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${index + 1}</td>
-            ${product.images.length > 0 ? `<td><img width="50px" height="50px" src="/images/productImages/${product.images[0]}" alt=""></td>` : '<td>No image</td>'}
-            <td><span class="small-text" data-toggle="tooltip" data-placement="top" title="${product.name.substring(0, 100, product.name.length / 2)}" data-container="body" class="custom-tooltip">${product.name}</span></td>
-            <td><span class="small-text" data-toggle="tooltip" data-placement="top" title="${product.description.substring(0, 100, product.description.length / 2)}" data-container="body" class="custom-tooltip">${product.description}</span></td>
-            <td>
-              <a href="/admin/products/view/${product._id}" class="btn btn-outline-info" type="button">View</a>
-              <a href="/admin/products/edit/${product._id}" class="btn btn-outline-primary" type="button">Edit</a>
-              <a href="javascript:void(0);" onclick="confirmDelete('${product._id}','/admin/products/delete/','You will not be able to recover this product!')" class="btn btn-outline-danger" type="button">Delete</a>
-            </td>
-          `;
-          product_table.appendChild(row);
-        });
-  
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    });
-  });
-  </script>
-   -->

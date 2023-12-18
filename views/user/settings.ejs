@@ -32,6 +32,7 @@ body {
       background-color: #3498db;
       color: #fff;
     }
+    
     .inactive {
       background-color: #fff;
       color: #333;
@@ -70,6 +71,7 @@ body {
 <main>
   <div class="container">
     <div class="row d-flex justify-content-arround">
+      
       <div class="setting-options  col-md-4 col-lg-4 col-xl-3 col-xxl-3  mb-2 min-height-div1 mb-md-4">
         <ul class="list-group " id="myList">
            <a class="options" href="/home/settings/profile"><li class="list-group-item inactive list-item">
@@ -78,10 +80,7 @@ body {
            <a  class="options" href="/home/settings/oders"><li class="list-group-item inactive list-item">
               <i class="bi bi-box"></i> Orders
             </li></a> 
-            <a  class="options" href=""><li class="list-group-item inactive list-item">
-              <i class="bi bi-cart"></i> Cart
-            </li></a>
-           <a   class="options" href=""><li class="list-group-item  inactive list-item">
+           <a  class="options" href="/home/settings/wishlist"><li class="list-group-item  inactive list-item">
               <i class="bi bi-heart"></i> Wishlist
             </li></a> 
            <a  class="options" href=""><li class="list-group-item  inactive list-item">
@@ -89,6 +88,7 @@ body {
             </li></a> 
           </ul>
       </div>
+      
       <div class="view-settings col-md-8 col-lg-8 col-xl-9 col-xxl-8 border min-height-div1 mb-md-4">
       <%if(typeof user !== 'undefined'){%>
 
@@ -131,13 +131,13 @@ body {
             </div>
             <div class="col-md-6">
               <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="mobile" name="mobile" placeholder=" "value="<%=user.mobile%>">
+                <input type="text" class="form-control" id="mobile" name="mobile" value="<%=user.email%>">
                 <label for="mobile" class="form-label">Mobile</label>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-floating mb-2">
-                <input type="password" class="form-control" id="mobile" name="mobile" placeholder=" "value="<%=user.password.slice(0,6)%>">
+                <input type="password" class="form-control" id="password" name="password" placeholder=" "value="<%=user.password.slice(0,6)%>">
                 <label for="mobile" class="form-label">Password</label>
               </div>
               <a style="font-size: 13px; padding: 3px;" href="/forget-password" >Change Password</a>

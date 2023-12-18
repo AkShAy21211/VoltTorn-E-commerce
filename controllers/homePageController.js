@@ -64,30 +64,12 @@ const sortProductByUserPreference = async (req, res) => {
   try {
       const { category, sortOption } = req.params;
 
-      // Match stage to filter by category
-      const matchStage = {
-          $match: {
-              category: category,
-          },
-      };
+      const priceDirection = sortOption === "High to Low"?-1:1;
 
-      // Sort stage based on sortOption
-      const sortStage = {
-          $sort: {
-              price: sortOption === 'High to Low' ? -1 : 1,
-          },
-      };
+      const products = await productModel
+      .find({ category: category })
+      .sort({ price: priceDirection }); 
 
-      // Aggregate pipeline
-      const aggregationPipeline = [matchStage, sortStage];
-
-
-      // Example: Assuming you have a 'products' collection
-      const products = await productModel.aggregate(aggregationPipeline);
-
-      console.log('Sorted products:', products);
-
-      // Your response logic here
       res.status(200).json({ products });
   } catch (error) {
       console.error(error);
@@ -96,7 +78,6 @@ const sortProductByUserPreference = async (req, res) => {
 };
 const filterProductsByUser = async (req, res) => {
   try {
-    console.log("nwfubniuwbnfibefbnkw");
 const {subCategory,brand,selectedPrice,price} = req.query;
 const sortOption = selectedPrice === -1 ? { price: -1 } : { price: 1 };
 
@@ -126,6 +107,18 @@ const productCount = ProductData.length;
   }
 };
 
+const searchProducts = async(req,res)=>{
+
+  try{
+   const {value} = req.query;
+   const {cat_name} = req.params;
+   const products = await productModel.find({category:cat_name, name: { $regex: value, $options: 'i' } });
+   res.status(200).json({products});
+
+  }catch(error){
+    console.error(error);
+  }
+}
 
 const sendEmailNewsLetter = async(req,res)=>{
 
@@ -150,5 +143,6 @@ module.exports = {
   sortProductByUserPreference,
   sendEmailNewsLetter,
   filterProductsByUser,
+  searchProducts,
 
 };

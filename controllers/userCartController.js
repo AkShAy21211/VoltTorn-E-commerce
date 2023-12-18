@@ -52,6 +52,8 @@ const userAddToCartButton = async (req, res) => {
           return res.status(200).json({
             success: true,
             redirectTo: "/home/cart",
+            message: "Product already added to cart",
+
           });
 
         } else {
@@ -88,7 +90,7 @@ const userAddToCartButton = async (req, res) => {
           return res.status(200).json({
             success: true,
             total_price,
-            message: "Item added to cart",
+            message: "Product added to cart",
             redirectTo: "/home/cart",
           });
         }
@@ -116,7 +118,7 @@ const userAddToCartButton = async (req, res) => {
 
         return res.status(200).json({
           success: true,
-          message: "Item added to cart",
+          message: "Product added to cart",
           redirectTo: "/home/cart",
         });
       }

@@ -1,0 +1,117 @@
+<%- include('../layout/header.ejs') %>
+  <style>
+    .container {
+      margin-top: 80px;
+    }
+
+    .min-height-div1 {
+      min-height: 200px;
+      /* Adjust the height as needed */
+    }
+
+    .min-height-div2 {
+      min-height: 500px;
+      /* Adjust the height as needed */
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .list-item {
+      padding: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+
+    .list-item i {
+      font-size: 24px;
+      /* Adjust the icon size */
+      margin-right: 10px;
+      /* Add space between icon and text */
+    }
+
+    .options {
+      text-decoration: none;
+    }
+
+    .options:hover {
+      text-decoration: none;
+    }
+
+    .active {
+      background-color: #3498db;
+      color: #fff;
+    }
+
+    .inactive {
+      background-color: #fff;
+      color: #333;
+    }
+  </style>
+
+  <title>Settings | Wishlists</title>
+  <main>
+    <div class="container">
+      <div class="row d-flex justify-content-arround">
+        <div class="setting-options  col-md-4 col-lg-4 col-xl-3 col-xxl-3  mb-2 min-height-div1 mb-md-4">
+          <ul class="list-group " id="myList">
+            <a class="options" href="/home/settings/profile">
+              <li class="list-group-item inactive list-item">
+                <i class="bi bi-person"></i> Profile
+              </li>
+            </a>
+            <a class="options" href="/home/settings/oders">
+              <li class="list-group-item inactive list-item">
+                <i class="bi bi-box"></i> Orders
+              </li>
+            </a>
+            <a class="options" href="/home/settings/wishlist">
+              <li class="list-group-item  inactive list-item">
+                <i class="bi bi-heart"></i> Wishlist
+              </li>
+            </a>
+            <a class="options" href="">
+              <li class="list-group-item  inactive list-item">
+                <i class="bi bi-geo-alt"></i> Address
+              </li>
+            </a>
+          </ul>
+        </div>
+        <div class="view-settings col-md-8 col-lg-8 col-xl-9 col-xxl-8 min-height-div1 mb-md-4">
+          <!-- Iterate through each order -->
+          <% if (products && typeof products.product !== 'undefined' && products.product.length > 0) { %>
+            <table class="table">
+              <tbody>
+                <% products.product.forEach(product => { %>
+                  <!-- Iterate through each product in the order -->
+        
+                  <tr>
+                    <td>
+                      <img src="/images/productImages/<%= product.images[0] %>"
+                        class="d-none d-md-none d-lg-block d-xl-block" alt="Product Image"
+                        style="width: 100px; height: 100px;">
+                    </td>
+                    <td class="align-middle text-wrap ">
+                      <%= product.name.length > 50 ? product.name.slice(0, 50) + '...' : product.name %>
+                    </td>
+                    <td class="align-middle text-wrap ">
+                      <a class="text-danger text-decoration-none" href="">remove</a>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          <% }  %>
+           
+   
+          
+
+      </div>
+    </div>
+  </main>
+
+
+
+  <%- include('../layout/footer.ejs') %>

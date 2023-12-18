@@ -138,7 +138,7 @@ const editProduct = async (req, res) => {
     const id = req.params.id;
     const product = await productModel.findById(id);
     const categoryData = await categoryModel.findOne({category:category});
-    const existingProduct = await productModel.findOne({ name: { $ne: name } }); // Check for existing product with the same name excluding the current product
+    const existingProduct = await productModel.findOne({ _id: { $ne: id }, name: name });
     if(!name || !description || !category|| !subCategory || !price || !brand || !discount || !status || !colors || !stock){
 
       req.flash('error','All Feilds Required');

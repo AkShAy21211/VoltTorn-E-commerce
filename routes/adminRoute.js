@@ -134,7 +134,7 @@ adminRoute.patch('/oders/change-oder-status/:status/:id',adminOderController.adm
 
 //admin dashboard statictics
 adminRoute.get('/dashboard/statistics',dashBoardController.getProductStatistics);
-adminRoute.get('/search',dashBoardController.searchItem);
+// adminRoute.get('/search',dashBoardController.searchItem);
 
 
 //admin sales report downlode

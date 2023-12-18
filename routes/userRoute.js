@@ -57,10 +57,16 @@ userRoute.get('/home/product/details/:id',auth.isUserBlocked,homeController.prod
 userRoute.get('/home/products/:cat_name',auth.isUserBlocked,homeController.loaadProductListsByCategory);
 
 //product sort /  filter route
-userRoute.get('/home/products/:cat_name/filter',auth.isUserBlocked,homeController.filterProductsByUser)
 userRoute.get('/home/products/sort/:category/:sortOption',auth.isUserBlocked,homeController.sortProductByUserPreference)
+userRoute.get('/home/products/:cat_name/filter',auth.isUserBlocked,homeController.filterProductsByUser)
+userRoute.get('/home/products/:cat_name/search',auth.isUserBlocked,homeController.searchProducts)
 
-//user settings page route
+
+//user wishlists page route
+userRoute.get('/home/products/wishlist/:product_id',auth.isUserBlocked,userSettingController.userWishlistLoadProductAdd);
+userRoute.get('/home/settings/wishlist',auth.isUserBlocked,userSettingController.userWishlistLoad);
+
+
 
 //USER shoppingCart
 userRoute.get('/home/cart',auth.isUserBlocked,userCartController.userShoppingCartPageLoad);
@@ -71,6 +77,8 @@ userRoute.delete('/home/cart/:product_id',auth.isUserBlocked,userCartController.
 
 userRoute.get('/home/cart/checkout',auth.isUserBlocked,auth.in_cart, userCartController.loadCheckOutPage);
 userRoute.post('/home/cart/checkout',auth.isUserBlocked,userCartController.stateCityLoad);
+
+
 
 //user address add
 userRoute.post('/home/cart/add-address',auth.isUserBlocked,userCartController.addUserBellingAddress)

@@ -115,6 +115,16 @@
       margin: 0 10px;
       cursor: pointer;
     }
+    .heart {
+         color: rgb(231, 152, 152);
+         cursor: pointer;
+         
+
+        }
+        .heart:hover{
+          color: red;
+        }
+
   </style>
   <script>
     // Check if the user is blocked and show a pop-up message
@@ -128,12 +138,12 @@
   <main>
 
 
-    <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
+    <div id="carouselExampleFade" class="carousel slide carousel-fade " data-ride="carousel">
       <div class="carousel-inner">
         <% banner.forEach((banner, index)=> { %>
           <div class="<%= index === 0 ? 'carousel-item active' : 'carousel-item' %> d-flex justify-content-center">
-            <img style="-webkit-user-drag: none; height: 450px; width: 70%;" data-ride="1000" data-slide="carousel"
-              class="mt-4" src="/images/bannerImages/<%= banner.image %>" alt="Banner <%= index + 1 %>">
+            <a href="/home/products/<%=banner.name%>"><img style="-webkit-user-drag: none; height: 450px; width: 100%;" data-ride="1000" data-slide="carousel"
+              class="mt-4 " src="/images/bannerImages/<%= banner.image %>" alt="Banner <%= index + 1 %>"></a>
           </div>
           <% }); %>
       </div>
@@ -145,16 +155,13 @@
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="sr-only">Next</span>
       </a>
-
-
-
     </div>
 
     <div class="container text-center">
       <div class="row">
         <h3 class="mt-5 fs-4 text-start">Top Categories</h3>
         <% category.forEach(category=> { %>
-          <div class="col-md-5 col-lg-4 col-xl-3 col-xxl-3 mb-lg mb-md-6 col-sm-6 col-12  ">
+          <div class="col-md-5  col-lg-4 col-xl-3 col-xxl-3 mb-lg mb-md-5 col-sm-6 col-12  ">
             <div style="border-radius: 5%; background-color: #18ACFE; width: 100%; min-width: 250px; height: 250px;"
               class="zoom-out-effect card border shadow p-2  mt-sm-5  mt-md-5 mt-lg-3 mt-xl-0 mt-xxl-0 mt-4">
               <a style="-webkit-user-drag: none;" href="/home/products/<%=category.category%>">
@@ -207,7 +214,10 @@
 
             <div class="col-md-5 col-lg-4 col-xl-3 col-xxl-3 mb-lg mb-md-6 col-sm-6 col-12  ">
               <!-- Use col-lg-4 to include three cards in one row -->
-              <a href="/home/product/details/<%=product._id%>" class="text-decoration-none text-dark">
+              <a data-product-id="<%=product._id%> "  style="position: absolute; top: 0; left: 0; z-index: 10; font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart p-2"></a>
+
+              <a href="/home/product/details/<%=product._id%>" class="text-decoration-none text-dark ">
+                
                 <div class="card border-0 h-100 p-2 " id="product-card">
                   <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px"
                     class="card-img-top" src="/images/productImages/<%=product.images[0]  %>" alt="Product Image " />
@@ -248,7 +258,6 @@
             </div>
         </div>
         <% }); %>
-
       </div>
       </div>
 
@@ -274,19 +283,7 @@
           </div>
         </section>
 
-  </main>
-  <div id="cart-toast" class="toast " role="alert" aria-live="assertive" aria-atomic="true"
-    style="position: absolute; top: 0; right: 0; margin-top: 100px; z-index: 10;">
-    <div class="toast-header">
-      <strong class="mr-auto">Cart</strong>
-      <!-- Assuming you want to display the current time in the <small> tag -->
-      <small>
-        <%= new Date().toLocaleTimeString() %>
-      </small>
 
-    </div>
-    <div class="toast-body" id="cart-message"></div>
-  </div>
 
 
   <div id="loginModal" class="modal">
@@ -379,4 +376,7 @@
       });
     });
   </script>
+  <script src="/js/wishlists.js"></script>
+
+
   <%- include('../layout/footer.ejs') %>

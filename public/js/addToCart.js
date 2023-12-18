@@ -1,6 +1,4 @@
 const addToCartButtons = document.querySelectorAll(".addToCartButton");
-const cartToast = document.getElementById("cart-toast");
-const cartMessage = document.getElementById("cart-message");
 
 
 
@@ -21,16 +19,36 @@ addToCartButtons.forEach((button) => {
       if (response.data.success) {
         // Display JSON message only if it exists and is not "undefined"
         if (response.data.message && response.data.message !== "undefined") {
-          cartMessage.innerHTML = response.data.message;
-          cartToast.classList.add("show");
+          const blueGradients = [
+            "linear-gradient(to right, #0074cc, #0076cc)",
+            "linear-gradient(to right, #004080, #0066cc)",
+            "linear-gradient(to right, #006080, #0080cc)",
+            "linear-gradient(to right, #003366, #0055b2)",
+            "linear-gradient(to right, #005080, #0070cc)",
+            // Add more color combinations as needed
+          ];
+          
+          // Select a random gradient from the array
+          const randomGradient = blueGradients[Math.floor(Math.random() * blueGradients.length)];
+          
+          Toastify({
+            text: response.data.message,
+            duration: 3000,
+            newWindow: true,
+            close: true,
+            gravity: "top", // `top` or `bottom`
+            position: "right", // `left`, `center`, or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+              background: randomGradient,
+              marginTop: "60px", // Add margin-top as needed
+            },
+            onClick: function(){} // Callback after click
+          }).showToast();
         }
 
         // Hide the toast after a delay (e.g., 3000 milliseconds or 3 seconds)
-        setTimeout(() => {
-          cartToast.classList.remove("show");
-          // Redirect after the delay
-          window.location.href = "/home/cart";
-        }, 2000);
+      
       } else {
 
         //display login model if user is not logged in while trying to add to cart

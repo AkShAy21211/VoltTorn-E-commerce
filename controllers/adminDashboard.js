@@ -74,7 +74,7 @@ const getProductStatistics = async (req, res) => {
     ]);
 
     // Format the result as an array with 12 elements, where each index corresponds to a month
-    const formattedMonthlyRevenue = Array.from({ length: 12 }, (_, index) => {
+    let formattedMonthlyRevenue = Array.from({ length: 12 }, (_, index) => {
       const monthData = monthlyRevenue.find((data) => data.month === index + 1);
       return monthData ? monthData.monthlyRevenue : 0;
     });
@@ -84,7 +84,6 @@ const getProductStatistics = async (req, res) => {
       { $unwind: "$oders" },
       // Unwind the products array to get a separate document for each product in the order
       { $unwind: "$oders.products" },
-      // Project to extract necessary fields
       {
         $match: {
           "oders.status": "Delivered",
@@ -119,6 +118,8 @@ const getProductStatistics = async (req, res) => {
       return monthData ? monthData.totalSales : 0;
     });
 
+
+
     const totalRevenue = amount.map((amount) => amount.totalAmount);
     res.status(200).json({
         totalProducts,
@@ -133,41 +134,41 @@ const getProductStatistics = async (req, res) => {
   }
 };
 
-const searchItem = async (req, res) => {
-  try {
-    const { value, type } = req.query;
+// const searchItem = async (req, res) => {
+//   try {
+//     const { value, type } = req.query;
 
-    let searchResults;
+//     let searchResults;
 
-    if (type === "product") {
-      const regexPattern = new RegExp(value, "i");
-      searchResults = await productModel.find({
-        name: { $regex: regexPattern },
-      });
+//     if (type === "product") {
+//       const regexPattern = new RegExp(value, "i");
+//       searchResults = await productModel.find({
+//         name: { $regex: regexPattern },
+//       });
 
-      res.status(200).json({ searchItem: searchResults });
-    } else if (type === "customer") {
-      const regexPattern = new RegExp(value, "i");
-      searchResults = await userModel.find({
-        first_name: { $regex: regexPattern },
-      });
+//       res.status(200).json({ searchItem: searchResults });
+//     } else if (type === "customer") {
+//       const regexPattern = new RegExp(value, "i");
+//       searchResults = await userModel.find({
+//         first_name: { $regex: regexPattern },
+//       });
 
-      console.log(searchResults);
-      res.status(200).json({ searchItem: searchResults });
-    } else {
-      const regexPattern = new RegExp(value, "i");
-      searchResults = await categoryModel.find({
-        category: { $regex: regexPattern },
-      });
-      console.log(searchResults);
+//       console.log(searchResults);
+//       res.status(200).json({ searchItem: searchResults });
+//     } else {
+//       const regexPattern = new RegExp(value, "i");
+//       searchResults = await categoryModel.find({
+//         category: { $regex: regexPattern },
+//       });
+//       console.log(searchResults);
 
-      res.status(200).json({ searchItem: searchResults });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
+//       res.status(200).json({ searchItem: searchResults });
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// };
 
 const downlodeSalesReport = async (req, res) => {
   const { reportType } = req.query;
@@ -226,6 +227,6 @@ const downlodeSalesReport = async (req, res) => {
 
 module.exports = {
   getProductStatistics,
-  searchItem,
+  // searchItem,
   downlodeSalesReport,
 };

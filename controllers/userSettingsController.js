@@ -1,4 +1,6 @@
+const productModel = require("../models/productModel");
 const userModel = require("../models/userModel");
+const {WishListModel} = require("../models/cart&WishlistModel");
 
 //USER SETTINGS PAGE
 
@@ -26,6 +28,8 @@ const editUserProfile = async (req, res) => {
     const { firstName, lastName, mobile, email } = req.body;
     const image = req.file ? req.file.filename : null;
     
+    console.log(mobile);
+
     const updateObject = {
       first_name: firstName,
       last_name: lastName,
@@ -33,7 +37,6 @@ const editUserProfile = async (req, res) => {
       mobile: mobile,
     };
 
-    console.log(updateObject);
 
     if (image) {
       updateObject.image = image;
@@ -126,7 +129,7 @@ const forCancelUserOders = async (req, res) => {
           },
           { new: true }
         )
-        .exec();
+      
 
       console.log(updatedUserOder);
       // Assuming `order_id` is the ID you're searching for
@@ -137,6 +140,56 @@ const forCancelUserOders = async (req, res) => {
     console.error(error);
   }
 };
+
+
+const userWishlistLoad = async(req,res)=>{
+
+  try{
+    const id = req.session.user.userId;
+    const products = await WishListModel.findById(id)
+
+    res.render('wishLists',{products});
+
+  }catch(error){
+    console.error(error);
+  }
+}
+const userWishlistLoadProductAdd = async (req, res) => {
+  try {
+    const id = req.params.product_id;
+    const user_id = req.session.user.userId;
+    const product = await productModel.findById(id);
+    const existingWishlist = await WishListModel.findById(user_id);
+    const existingProduct = await WishListModel.findOne({ _id: user_id, product:product });
+
+    if (existingWishlist) {
+      if (existingProduct) {
+        res.status(200).json({ success: "Product already added to wishlist" });
+      }else{
+     
+        existingWishlist.product.push(product);
+        await existingWishlist.save();
+        res.status(200).json({ success: "Product added to wishlist" });
+      }
+    
+    } else {
+      const wishlist = new WishListModel({
+        _id: user_id,
+        product: [product],
+      });
+
+      await wishlist.save();
+      res.status(200).json({ success: "Product added to wishlist" });
+
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
+
 module.exports = {
   loadUserSettings,
   editUserProfile,
@@ -144,4 +197,6 @@ module.exports = {
   loadUserOdersPage,
   forCancelUserOders,
   deleteUserAddress,
+  userWishlistLoad,
+  userWishlistLoadProductAdd
 };

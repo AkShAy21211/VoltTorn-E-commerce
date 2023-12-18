@@ -1,5 +1,6 @@
 const session = require("express-session");
 const userModel = require("../models/userModel");
+const {CartModel} = require("../models/cart&WishlistModel");
 
 const is_Login = async (req, res, next) => {
     try {
@@ -63,7 +64,8 @@ const isUserBlocked = async (req, res, next) => {
 const in_cart = async(req,res,next)=>{
 
     try {
-        if (req.session.user && req.session.user.cart) {
+        const cart = await CartModel.findById(req.session.user.userId);
+        if (req.session.user && cart) {
             next();
         } else {
             res.redirect('/home');

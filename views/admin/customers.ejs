@@ -58,14 +58,14 @@
                   </td>
                   <td style="text-align: center; ">
                     <a href="javascript:void(0);" 
-   class="btn <%= customer.status.toString() === 'true' ? 'btn-outline-danger' : 'btn-outline-success' %>"
+   class="btn <%= customer.status.toString() === 'true' ? 'bi bi-ban text-danger' : 'bi bi-arrow-counterclockwise text-success' %>"
    onclick="confirmBlockUnblock('<%= customer._id %>', '<%= customer.status.toString() %>')">
    <%= customer.status.toString() === 'true' ? 'Block' : 'Unblock' %>
 </a>
 
                  
                    
-                   <a href="javascript:void(0);" class="btn btn-danger" onclick="confirmDelete('<%= customer._id %>','/admin/delete-user?id=','You will not be able to recover this user!')">Delete</a>
+                   <a href="javascript:void(0);" class="bi bi-trash3-fill text-danger" onclick="confirmDelete('<%= customer._id %>','/admin/delete-user?id=','You will not be able to recover this user!')"></a>
                   </td>
 
                 </tr>
@@ -93,49 +93,3 @@
     <%- include('../layout/adminFooter.ejs') %>
 
     
-<!-- <script>
-  const search_bar = document.getElementById("search-bar");
-  const customer_table = document.getElementById("customer-table");
-  const search_type = document.getElementById("search-type");
-
-  document.addEventListener("DOMContentLoaded", () => {
-    search_bar.addEventListener("input", async (e) => {
-      const searchValue = e.target.value;
-      const searchType = search_type.value; // Get the selected search type
-
-      console.log(searchType);
-
-      try {
-        const response = await axios.get(
-          `/admin/search?type=${searchType}&value=${searchValue}`
-        );
-        console.log("Response:", response);
-
-        const results = response.data.searchItem;
-        console.log("Results:", results);
-
-        if(searchValue){
-        results.forEach(customer => {
-          customer_table.innerHTML = `
-            <td>${customer.first_name + ' ' + customer.last_name}</td>
-            <td>${customer.email}</td>
-            <td>${customer.mobile}</td>
-            <td><img src="/images/userImages/${customer.image}" class="border rounded-circle" alt="Customer Image" width="50"></td>
-            <td style="font-weight:bold;">${customer.status}</td>
-            <td style="text-align: center; ">
-              <a href="javascript:void(0);" 
-                 class="btn ${customer.status.toString() === 'true' ? 'btn-outline-danger' : 'btn-outline-success'}"
-                 onclick="confirmBlockUnblock('${customer._id}', '${customer.status.toString()}')">
-                 ${customer.status.toString() === 'true' ? 'Block' : 'Unblock'}
-              </a>
-              <a href="javascript:void(0);" class="btn btn-danger" onclick="confirmDelete('${customer._id}','/admin/delete-user?id=','You will not be able to recover this user!')">Delete</a>
-            </td>
-          `;
-        });
-      }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    });
-  });
-</script> -->

@@ -49,15 +49,7 @@ const WishListSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    item: [
-
-        {    
-            product_id: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Product", // You can reference a Product schema if you have one
-            },
-        }
-    ]
+    product:[]
 });
 
 // Exporting each model with a distinct name
