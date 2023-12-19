@@ -65,7 +65,7 @@ userRoute.get('/home/products/:cat_name/search',auth.isUserBlocked,homeControlle
 //user wishlists page route
 userRoute.get('/home/products/wishlist/:product_id',auth.isUserBlocked,userSettingController.userWishlistLoadProductAdd);
 userRoute.get('/home/settings/wishlist',auth.isUserBlocked,userSettingController.userWishlistLoad);
-
+userRoute.get('/home/settings/wishlist/remove/:index',auth.isUserBlocked,userSettingController.removeWishlistsItems);
 
 
 //USER shoppingCart
@@ -96,7 +96,7 @@ userRoute.get('/home/setting/edit-profile/delete-address/:address_id',auth.isUse
 
 //user oder page eroutes
 userRoute.get('/home/settings/oders',auth.isUserBlocked,userSettingController.loadUserOdersPage);
-userRoute.get('/home/settings/cancel-oders/:oder_id',auth.isUserBlocked,userSettingController.forCancelUserOders);
+userRoute.get('/home/settings/cancel-oders/:oder_id/:product_id/:oder_index/:product_index',auth.isUserBlocked,userSettingController.forCancelUserOders);
 
 
 

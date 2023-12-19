@@ -104,42 +104,50 @@ const loadUserOdersPage = async (req, res) => {
     console.error(error);
   }
 };
-
 const forCancelUserOders = async (req, res) => {
   try {
-    const id =
-      req.session.user && req.session.user.userId
-        ? req.session.user.userId
-        : undefined;
-    const oder_id = req.params.oder_id;
+    const id = req.session.user && req.session.user.userId ? req.session.user.userId : undefined;
+    const { oder_id, product_id, oder_index, product_index } = req.params;
+    const product = await productModel.findById(product_id);
 
-    console.log(oder_id);
+    console.log(product);
 
-    if (oder_id) {
-      const updatedUserOder = await userModel
-        .findOneAndUpdate(
-          {
-            _id: id,
-            "oders._id": oder_id,
+    if (product) {
+      console.log('ID:', id);
+      console.log('Order ID:', oder_id);
+      console.log('Product ID:', product_id);
+
+      const userOder = await userModel.updateOne(
+        {
+          "_id": id,
+          "oders.order_id": oder_id,
+          "oders.products.product_id": product._id
+        },
+        {
+          $set: {
+            "oders.$.products.$[product].cancelled": true,
           },
-          {
-            $set: {
-              "oders.$.is_cancelled": true,
-            },
-          },
-          { new: true }
-        )
+        },
+        {
+          arrayFilters: [{"product.product_id": product._id}],
+        }
+      );
       
-
-      console.log(updatedUserOder);
-      // Assuming `order_id` is the ID you're searching for
+      // Log the updated userOder
+      console.log('Updated userOrder:', userOder);
+      
+      // Redirect to the specified route
+      res.redirect('/home/settings/oders');
+      
+    } else {
+      res.json({ success: false, message: 'Invalid order ID' });
     }
-
-    res.redirect("/home/settings/oders");
   } catch (error) {
-    console.error(error);
+    console.error('Error in updating products.cancelled:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
+
 
 
 const userWishlistLoad = async(req,res)=>{
@@ -157,11 +165,12 @@ const userWishlistLoad = async(req,res)=>{
 const userWishlistLoadProductAdd = async (req, res) => {
   try {
     const id = req.params.product_id;
-    const user_id = req.session.user.userId;
+    const user_id = req.session.user?req.session.user.userId:undefined;
     const product = await productModel.findById(id);
     const existingWishlist = await WishListModel.findById(user_id);
     const existingProduct = await WishListModel.findOne({ _id: user_id, product:product });
 
+    if(user_id){ 
     if (existingWishlist) {
       if (existingProduct) {
         res.status(200).json({ success: "Product already added to wishlist" });
@@ -182,12 +191,43 @@ const userWishlistLoadProductAdd = async (req, res) => {
       res.status(200).json({ success: "Product added to wishlist" });
 
     }
+  }else{
+    res.status(400).json({ error: "You need to login to proceed"})
+
+  }
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
+const removeWishlistsItems = async(req,res)=>{
+
+  try{
+
+    const index = req.params.index;
+    const user_id = req.session.user?req.session.user.userId:undefined;
+    if(user_id){
+      const wishlist = await WishListModel.findById(user_id);
+
+      if(wishlist && wishlist.product.length > 0){
+
+        wishlist.product.splice(index, 1);
+        await wishlist.save();
+        res.redirect('/home/settings/wishlist')
+
+      }
+
+    }else{
+      res.status(403).json({ success: false, message: 'User not authenticated' });
+
+    }
+
+
+  }catch(error){
+    console.error(error);
+  }
+}
 
 
 module.exports = {
@@ -198,5 +238,6 @@ module.exports = {
   forCancelUserOders,
   deleteUserAddress,
   userWishlistLoad,
-  userWishlistLoadProductAdd
+  userWishlistLoadProductAdd,
+  removeWishlistsItems
 };

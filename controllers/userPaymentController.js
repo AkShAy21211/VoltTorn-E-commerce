@@ -2,6 +2,7 @@ const { CartModel } = require("../models/cart&WishlistModel");
 const { generateOrderID } = require("../helpers/oderIdHelper");
 const userModel = require("../models/userModel");
 const Razorpay = require("razorpay");
+const productModal = require("../models/productModel");
 const {createRazorpayOrder,verifyPayment} = require("../helpers/razorPayHelper");
 var instance = new Razorpay({
   key_id: process.env.RAZORPAY_ID_KEY,
@@ -27,6 +28,7 @@ const verfyUserPaymentOption = async (req, res) => {
         paymentMethod,
         userCart
       );
+      await decrementProductStock(userCart);
 
       await userCart.deleteOne({ _id: id });
       delete req.session.user.cart;
@@ -82,6 +84,7 @@ const verifyOnlinePayment = async (req, res) => {
           console.error("Order not placed");
         }
       });
+      await decrementProductStock(userCart);
       await userCart.deleteOne({ _id: id });
       delete req.session.user.cart;
       return res.status(201).redirect('/home/settings/oders');
@@ -119,6 +122,26 @@ async function createOder(id, selectedAddress, user, paymentMethod, userCart) {
   return true;
 }
 
+const decrementProductStock = async (userCart) => {
+  try {
+    // Iterate through each item in the user's cart
+    for (const cartItem of userCart.cart) {
+      const productId = cartItem.product_id;
+
+      // Find and update the product's stock
+      const updatedProduct = await productModal.findOneAndUpdate(
+        { _id: productId },
+        { $inc: { stock: -cartItem.quantity } },
+        { new: true }
+      );
+
+      // Log the updated product's stock (optional)
+    }
+  } catch (error) {
+    console.error('Error decrementing product stock:', error);
+    throw error; // Propagate the error if needed
+  }
+};
 module.exports = {
   verfyUserPaymentOption,
   verifyOnlinePayment,

@@ -1,23 +1,20 @@
-const addToCartButtons = document.querySelectorAll(".addToCartButton");
-
-
-
-addToCartButtons.forEach((button) => {
-  button.addEventListener("click", async () => {
+// Add an event listener to the common ancestor (e.g., document or a specific container)
+document.addEventListener("click", async (event) => {
+  // Check if the clicked element is an "Add to Cart" button
+  if (event.target.classList.contains("addToCartButton")) {
+    // Get the clicked button and its data attributes
+    const button = event.target;
     const productId = button.dataset.productId;
     const productPrice = parseFloat(button.dataset.productPrice);
-    // ...
 
     try {
-
-
       const response = await axios.post(
         `http://localhost:3000/home/products/cart/${productId}`,
         { productPrice }
       );
 
       if (response.data.success) {
-        // Display JSON message only if it exists and is not "undefined"
+        // Display toast message
         if (response.data.message && response.data.message !== "undefined") {
           const blueGradients = [
             "linear-gradient(to right, #0074cc, #0076cc)",
@@ -25,42 +22,33 @@ addToCartButtons.forEach((button) => {
             "linear-gradient(to right, #006080, #0080cc)",
             "linear-gradient(to right, #003366, #0055b2)",
             "linear-gradient(to right, #005080, #0070cc)",
-            // Add more color combinations as needed
           ];
-          
-          // Select a random gradient from the array
+
           const randomGradient = blueGradients[Math.floor(Math.random() * blueGradients.length)];
-          
+
           Toastify({
             text: response.data.message,
             duration: 3000,
             newWindow: true,
             close: true,
-            gravity: "top", // `top` or `bottom`
-            position: "right", // `left`, `center`, or `right`
-            stopOnFocus: true, // Prevents dismissing of toast on hover
+            gravity: "top",
+            position: "right",
+            stopOnFocus: true,
             style: {
               background: randomGradient,
-              marginTop: "60px", // Add margin-top as needed
+              marginTop: "60px",
             },
-            onClick: function(){} // Callback after click
+            onClick: function () {},
           }).showToast();
         }
-
-        // Hide the toast after a delay (e.g., 3000 milliseconds or 3 seconds)
-      
       } else {
-
-        //display login model if user is not logged in while trying to add to cart
+        // Display login modal if the user is not logged in while trying to add to cart
         displayLoginModal();
-
       }
     } catch (error) {
       console.error("Error:", error);
     }
-
-    // ...
-  });
+  }
 });
 
 function closeLoginModal() {

@@ -66,64 +66,63 @@ body {
         <% if (typeof oders !== 'undefined' && oders.length >0) { %>
             <table class="table">
                 
-                <tbody>
-                    <% oders.forEach(oder => { %>
-                        <!-- Iterate through each product in the order -->
-                        <% oder.products.forEach((product, index) => { %>
-                            <tr  >
-                                <td >
-                                    <img src="/images/productImages/<%= product.image %>" class="d-none  d-md-none d-lg-block d-xl-block" alt="Product Image" style="width: 100px; height: 100px;">
-                                </td>
-                                <td class="align-middle text-wrap w-25 ">
-                                    <%= product.name.substring(0, 50, product.name.length / 2) %>
-                                </td>
-                                <% if (index === 0) { %>
-                                    <!-- Display Total Price, Order Status, and Action Buttons for the first product in the order -->
-                                    <td class="align-middle text-center" rowspan="<%= oder.products.length %>">
-                                        <b>Total</b>: <%= oder.totalAmount %>
+              <tbody>
+                <% oders.forEach((oder,i) => { %>
+                    <!-- Iterate through each product in the order -->
+                    <% oder.products.forEach((product, index) => { %>
+                        <tr>
+                            <td>
+                                <img src="/images/productImages/<%= product.image %>" class="d-none  d-md-none d-lg-block d-xl-block" alt="Product Image" style="width: 100px; height: 100px;">
+                            </td>
+                            <td class="align-middle text-wrap w-25">
+                                <%= product.name.substring(0, 50, product.name.length / 2) %>
+                            </td>
+                            <td class="align-middle text-center">
+                                <b>Total</b>: <%= oder.totalAmount %>
+                            </td>
+            
+                            <% if (!product.cancelled) { %>
+                                <% if (oder.status === 'Pending') { %>
+                                    <td class="align-middle text-center text-warning">
+                                        <%= oder.status %>
                                     </td>
-
-                                    <%if(!oder.is_cancelled){%>
-
-                                    <% if (oder.status === 'Pending') { %>
-                                      <td class="align-middle text-center text-warning" rowspan="<%= oder.products.length %>">
-                                          <%= oder.status %>
-                                      </td>
-                                  <% } else if (oder.status === 'Shipped' || oder.status === 'Delivered') { %>
+                                <% } else if (oder.status === 'Shipped' || oder.status === 'Delivered') { %>
                                     <% if (oder.status === 'Delivered') { %>
-                                      <td class="align-middle text-center">
-                                          <%= new Date().toLocaleString() %>
-                                      </td>
-                                  <% } %>
-                                  
-                                      <td class="align-middle text-center text-success" rowspan="<%= oder.products.length %>">
-                                          <%= oder.status %>
-                                      </td>
-                                  <% } else { %>
-                                      <!-- Handle other cases or set a default class -->
-                                      <td class="align-middle text-center" rowspan="<%= oder.products.length %>">
-                                          <%= oder.status %>
-                                      </td>
-                                  <% } %>
-                                  
-                                  <%}  %>
-
-                                  
-                                    <td class="align-middle text-center" rowspan="<%= oder.products.length %>">
-                                      <% if (!oder.is_cancelled && (oder.status === 'Pending' || oder.status === 'Shipped')) { %>
-                                        <a type="button" href="/home/settings/cancel-oders/<%= oder._id %>" class="btn btn-danger btn-sm">
-                                            Cancel Order
-                                        </a>
-                                    <% } else if (oder.is_cancelled) { %>
-                                        <span class="text-info">Cancelled</span>
+                                        <td class="align-middle text-center">
+                                            <%= new Date().toLocaleString() %>
+                                        </td>
                                     <% } %>
-                                    
+            
+                                    <td class="align-middle text-center text-success">
+                                        <%= oder.status %>
+                                    </td>
+                                <% } else { %>
+                                    <!-- Handle other cases or set a default class -->
+                                    <td class="align-middle text-center">
+                                        <%= oder.status %>
                                     </td>
                                 <% } %>
-                            </tr>
-                        <% }); %>
+            
+                                <td class="align-middle text-center">
+                                    <% if (!product.cancelled && (oder.status === 'Pending' || oder.status === 'Shipped')) { %>
+                        
+                                        <a type="button" onclick="return showCancelOrderAlert('<%=oder.order_id %>', '<%=product.product_id%>', '<%=i %>', '<%=index %>')" class="btn btn-danger btn-sm text-white">Cancel Order</a>
+
+                                    <% } else if (product.cancelled) { %>
+                                        <span class="text-info">Cancelled</span>
+                                    <% } %>
+                                </td>
+                            <% } else { %>
+                                <!-- Add handling for cancelled orders -->
+                                <td class="align-middle text-center">
+                                    <span class="text-info">Cancelled</span>
+                                </td>
+                            <% } %>
+                        </tr>
                     <% }); %>
-                </tbody>
+                <% }); %>
+            </tbody>
+            
             </table>
             <% } else { %>
               <table class="table">
@@ -142,5 +141,34 @@ body {
 </main>
 
 
-
+<script>
+  function showCancelOrderAlert(orderId, productId, productIndex, orderIndex) {
+      $.confirm({
+          title: 'Cancel Order',
+          content: 'Are you sure you want to cancel this order?',
+          type: 'blue',
+          typeAnimated: true,
+          buttons: {
+              confirm: {
+                  text: 'Yes',
+                  btnClass: 'btn-danger',
+                  action: function () {
+                      // If the user confirms, navigate to the specified URL
+                      window.location.href = `/home/settings/cancel-oders/${orderId}/${productId}/${productIndex}/${orderIndex}`;
+                  }
+              },
+              cancel: {
+                  text: 'No',
+                  btnClass: 'btn-secondary',
+                  action: function () {
+                      // If the user cancels, do nothing or provide additional logic
+                  }
+              }
+          }
+      });
+  
+      // Prevent the default behavior of the anchor tag
+      return false;
+  }
+  </script>
 <%- include('../layout/footer.ejs') %>

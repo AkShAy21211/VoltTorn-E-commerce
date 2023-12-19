@@ -77,16 +77,17 @@
       margin: 0 10px;
       cursor: pointer;
     }
+
     .heart {
-         color: rgb(231, 152, 152);
-         cursor: pointer;
-         
+      color: rgb(231, 152, 152);
+      cursor: pointer;
 
-        }
-        .heart:hover{
-          color: red;
-        }
 
+    }
+
+    .heart:hover {
+      color: red;
+    }
   </style>
 
   <title>VoltTron | Categories</title>
@@ -105,7 +106,7 @@
                     <h6 class="title">Sub Category</h6>
                   </a>
 
-                  <input type="hidden" id="category_name" name="category"  value="<%=cat_name  %>">
+                  <input type="hidden" id="category_name" name="category" value="<%=cat_name  %>">
                   <a href="/home/products/<%=cat_name  %>"
                     style="width: 60px; height: 25px;  font-size: 13px; text-align: center; line-height: 10px; margin-right: 20px;"
                     class="pr-3 btn btn-outline-primary">clear</a>
@@ -192,44 +193,60 @@
               <div class="container">
                 <div id="product-container" class="row">
                   <% ProductData.forEach(product=> { %>
-                    <div class="col-lg-4 col-md-6 col-sm-6 mt-xl-0 mt-lg-2 mt-md-3 mb-4 mt-sm-4 mt-4">
+                    <div class="col-lg-4 col-md-6 col-sm-6 mt-xl-0 mt-lg-2 mt-md-3 mb-4 mt-sm-4 mt-4 p-3">
                       <!-- Use col-lg-4 to include three cards in one row -->
-                      <a data-product-id="<%=product._id%> " class="text-decoration-none text-dark">
-                        <div class="card border-0 h-100 p-2" id="product-card">
-                          <a data-product-id="<%=product._id%> "  style="position: absolute; top: 0; left: 0; z-index: 10; font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart p-2"></a>
 
-                          <% for (let i=0; i <=0; i++) { %>
-                            
-                            <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px"
-                              class="card-img-top" src="/images/productImages/<%=product.images[0]  %>"
-                              alt="Product Image <%= i + 1 %>" />
-                              
-                            <% } %>
-                              <div class="card-body" style="height: 130px;">
-                                
-                                <h6>
-                                  
-                                  <%= product.name.substring(0, 40, product.name.length / 2) %>
-                                </h6>
-                                <p class="card-text"
-                                  data-price="<%= Number(product.price - (product.price * (product.discount / 100)))%>">
-                                  Price: <b>Rs:<%= Number(product.price - (product.price * (product.discount /
-                                      100))).toLocaleString() %></b></p>
-                                <div class="d-flex justify-content-between">
-                                  <p class="card-text text-success">
-                                    <%= product.discount %>% off
-                                  </p>
-                                  <p class="small text-danger"><s>Rs<%= product.price %></s></p>
-                                </div>
-                              </div>
+                      <a href="/home/product/details/<%=product._id%>" class="text-decoration-none text-dark ">
+
+                        <div class="card border-0 h-100 p-2 " id="product-card">
+                          <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px"
+                            class="card-img-top" src="/images/productImages/<%=product.images[0]  %>"
+                            alt="Product Image " />
+                          <div class="card-body" style="height: 130px;">
+                            <div style="display: flex; justify-content: start; margin-bottom: 10px; text-align: start;">
+
+                              <h6>
+                                <%= product.name.substring(0, 40, product.name.length / 2) %>
+                              </h6>
+                            </div>
+                            <div style="display: flex; justify-content: start; margin-bottom: 10px;">
+                              <p class="card-text "
+                                data-price="<%= Number(product.price - (product.price * (product.discount / 100)))%>">
+                                Price:
+                                <b>Rs:<%= Number(product.price - (product.price * (product.discount /
+                                    100))).toLocaleString() %>
+                                </b>
+                              </p>
+
+                            </div>
+                            <div class="d-flex justify-content-between">
+                              <p class="card-text text-success">
+                                <%= product.discount %>% off
+                              </p>
+                              <p class="small text-danger"><s>Rs<%= product.price %></s></p>
+                            </div>
+                          </div>
                       </a>
 
 
 
                       <!-- Inside the loop where you render product details -->
-                      <button class=" btn btn-outline-primary addToCartButton" data-product-id="<%= product._id %>"
-                        data-product-price="<%= Number(product.price - (product.price * (product.discount / 100))) %>">Add
-                        to Cart</button>
+
+                      <div class="d-flex justify-content-between">
+                        <button style="font-size: 25px;" class=" btn addToCartButton bi bi-cart4 text-primary"
+                          data-product-id="<%= product._id %>"
+                          data-product-price="<%= Number(product.price - (product.price * (product.discount / 100))) %>">
+                        </button>
+                        <button data-product-id="<%=product._id%>"
+                          style=" font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);"
+                          class="bi bi-suit-heart-fill heart btn"></button>
+
+
+                      </div>
+
+
+
+
 
                     </div>
 
@@ -306,33 +323,48 @@
         // Render each product card and append to the container
         products.forEach(product => {
           const productCard = `
-      <div class="col-lg-4 col-md-6 col-sm-6  mt-xl-0 mt-lg-4 mt-md-5 mb-4 mt-sm-5 mt-5">
-        <a href="/home/product/details/${product._id}" class="text-decoration-none text-dark">
-          <div class="card border-0 h-100 p-2" id="product-card">
-            <a data-product-id="=${product._id}"  style="position: absolute; top: 0; left: 0; z-index: 10; font-size: 25px; text-decoration: none;color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart p-2"></a>
-            ${product.images.slice(0, 1).map(image => `
-              <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px"
-                class="card-img-top" src="/images/productImages/${image}"
-                alt="Product Image 1" />
-            `).join('')}
-            <div class="card-body" style="height: 130px;">
-              <h6>${product.name.substring(0, 40, product.name.length / 2)}</h6>
-              <p class="card-text" data-price="${Number(product.price - (product.price * (product.discount / 100)))}">
-                Price: <b>Rs:${Number(product.price - (product.price * (product.discount / 100))).toLocaleString()}</b>
-              </p>
-              <div class="d-flex justify-content-between">
-                <p class="card-text text-success">${product.discount}% off</p>
-                <p class="small text-danger"><s>Rs${product.price}</s></p>
-              </div>
-            </div>
-          </a>
-          <button class="btn btn-outline-primary w-750 addToCartButton" data-product-id="${product._id}"
-          data-product-price="${Number(product.price - (product.price * (product.discount / 100)))}">Add to Cart</button>
-    
-          </div>
+          <div class="col-lg-4 col-md-6 col-sm-6 mt-xl-0 mt-lg-2 mt-md-3 mb-4 mt-sm-4 mt-4 p-3">
+                      <!-- Use col-lg-4 to include three cards in one row -->
         
+                      <a href="/home/product/details/${product._id}" class="text-decoration-none text-dark ">
+                        
+                        <div class="card border-0 h-100 p-2 " id="product-card">
+                          <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px"
+                            class="card-img-top" src="/images/productImages/${product.images[0]}" alt="Product Image " />
+                          <div class="card-body" style="height: 130px;">
+                            <div style="display: flex; justify-content: start; margin-bottom: 10px; text-align: start;">
         
-      </div>`;
+                              <h6>
+                                ${product.name.substring(0, 40, product.name.length / 2)}
+                              </h6>
+                            </div>
+                            <div style="display: flex; justify-content: start; margin-bottom: 10px;">
+                              <p class="card-text "
+                                data-price="${Number(product.price - (product.price * (product.discount / 100)))}">Price:
+                                <b>Rs:${Number(product.price - (product.price * (product.discount / 100))).toLocaleString()}
+                                </b>
+                              </p>
+        
+                            </div>
+                            <div class="d-flex justify-content-between">
+                              <p class="card-text text-success">
+                                ${product.discount}% off
+                              </p>
+                              <p class="small text-danger"><s>Rs${product.price}</s></p>
+                            </div>
+                          </div>
+                      </a>
+        
+                 
+                      <div class="d-flex justify-content-between">
+                        <button style="font-size: 25px;" class=" btn addToCartButton bi bi-cart4 text-primary" data-product-id="${product._id}"
+                        data-product-price="${Number(product.price - (product.price * (product.discount / 100)))}">
+                        </button>
+                        <button data-product-id="${product._id}" style=" font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart btn"></button>
+
+                      
+                      </div>
+                    </div>`;
 
           productContainer.append(productCard);
         });
@@ -373,7 +405,7 @@
                 renderProducts(Product);
 
                 $("#filterCount").html(`${response.data.productCount} Items found`)
-              
+
               }
 
             })
@@ -395,7 +427,6 @@
         <a href="/home/product/details/${product._id}" class="text-decoration-none text-dark">
           
           <div class="card border-0 h-100 p-2" id="product-card">
-            <a href="/home/wishlist/${product._id}"  style="position: absolute; top: 0; left: 0; z-index: 10; font-size: 25px; text-decoration: none;color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart p-2"></a>
 
             ${product.images.slice(0, 1).map(image => `
               <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px"
@@ -412,9 +443,16 @@
                 <p class="small text-danger"><s>Rs${product.price}</s></p>
               </div>
             </div>
-          </a>
-          <button class="btn btn-outline-primary w-750 addToCartButton" data-product-id="${product._id}"
-          data-product-price="${Number(product.price - (product.price * (product.discount / 100)))}">Add to Cart</button>
+          </a> 
+          
+          <div class="d-flex justify-content-between">
+                        <button style="font-size: 25px;" class=" btn addToCartButton bi bi-cart4 text-primary" data-product-id="${product._id}"
+                        data-product-price="${Number(product.price - (product.price * (product.discount / 100)))}">
+                        </button>
+                        <button data-product-id="${product._id}" style=" font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart btn"></button>
+
+                      
+                      </div>
     
           </div>
         

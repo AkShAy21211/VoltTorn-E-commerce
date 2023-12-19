@@ -50,7 +50,8 @@
                 <th scope="col">User Name</th>
                 <th scope="col">Order Date</th>
                 <th scope="col">Payment</th>
-                <th scope="col">Order Status</th>
+                <th scope="col">Order status</th>
+                <th scope="col">Deivery Status</th>
                 <!-- <th scope="col">Actions</th> -->
               </tr>
             </thead>
@@ -79,26 +80,39 @@
 
                     <%}  %>
                   </td>
+                  <td  class="d-flex flex-column justify-content-between">
+                    <%oder.products.forEach(product=>{%>
+                      <%if(!product.cancelled)  {%>
+
+                        <p class="badge bg-success">Active</p>
+
+                      <%}else{%>
+                        <p class="badge bg-danger">Cancelled</p>
+
+
+                      <%}%>
+
+                    <%})  %>
+                  </td>
                   <td>
                     <!-- Replace 'statusSelect' ID with 'statusDropdown' class -->
-                    <%if(!oder.is_cancelled){%>
-
-                    <select class="statusDropdown form-select form-select-sm" data-order-id="<%= oder._id %>">
-                      <option value="<%= oder.status %>">
-                        <%= oder.status %>
-                      </option>
-                      <option value="Pending">Pending</option>
-                      <option value="Shipped">Shipped</option>
-                      <option value="Delivered">Delivered</option>
-                      <!-- Add more status options as needed -->
-                    </select>
-                    <%} else{%>
-
+                    <% if (!oder.is_cancelled && oder.status !== 'Delivered') { %>
+                      <select class="statusDropdown form-select form-select-sm" data-order-id="<%= oder._id %>">
+                        <option value="<%= oder.status %>">
+                          <%= oder.status %>
+                        </option>
+                        <option value="Pending">Pending</option>
+                        <option value="Shipped">Shipped</option>
+                        <option value="Delivered">Delivered</option>
+                        <!-- Add more status options as needed -->
+                      </select>
+                    <% } else if (oder.status === 'Delivered') { %>
+                      <p class="text-success">Delivered</p>
+                    <% } else { %>
                       <p class="text-danger">Cancelled</p>
-
-                    <%} %>
+                    <% } %>
                   </td>
-
+                  
 
                   <!-- <td>
                     <button type="button" class="btn btn-primary btn-sm">View</button>

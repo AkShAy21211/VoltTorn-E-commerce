@@ -29,7 +29,12 @@ const CartSchema = new mongoose.Schema({
                 type: Number,
                 required: false,
                 default: 0,
+            },
+            cancelled:{
+                type:Boolean,
+                default:false,
             }
+            
         }
     ],
     total_price: {

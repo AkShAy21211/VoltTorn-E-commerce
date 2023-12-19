@@ -84,7 +84,7 @@
           <% if (products && typeof products.product !== 'undefined' && products.product.length > 0) { %>
             <table class="table">
               <tbody>
-                <% products.product.forEach(product => { %>
+                <% products.product.forEach((product,index) => { %>
                   <!-- Iterate through each product in the order -->
         
                   <tr>
@@ -97,7 +97,7 @@
                       <%= product.name.length > 50 ? product.name.slice(0, 50) + '...' : product.name %>
                     </td>
                     <td class="align-middle text-wrap ">
-                      <a class="text-danger text-decoration-none" href="">remove</a>
+                      <a  class="text-danger text-decoration-none" href="/home/settings/wishlist/remove/<%=index%>">remove</a>
                     </td>
                   </tr>
                 <% }); %>

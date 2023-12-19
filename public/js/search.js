@@ -43,8 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
           product._id
         }" class="text-decoration-none text-dark">
           <div class="card border-0 h-100 p-2" id="product-card">
-          <a  data-product-id="${product._id}" style="position: absolute; top: 0; left: 0; z-index: 10; font-size: 25px; text-decoration: none;color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart p-2"></a>
-            ${product.images
+          ${product.images
               .slice(0, 1)
               .map(
                 (image) => `
@@ -69,12 +68,14 @@ document.addEventListener("DOMContentLoaded", function () {
               </div>
             </div>
           </a>
-          <button class="btn btn-outline-primary w-750 addToCartButton" data-product-id="${
-            product._id
-          }"
-          data-product-price="${Number(
-            product.price - product.price * (product.discount / 100)
-          )}">Add to Cart</button>
+          <div class="d-flex justify-content-between">
+          <button style="font-size: 25px;" class=" btn addToCartButton bi bi-cart4 text-primary" data-product-id="${ product._id }"
+          data-product-price="${ Number(product.price - (product.price * (product.discount / 100))) }">
+          </button>
+          <button data-product-id="${product._id}" style=" font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart btn"></button>
+
+        
+        </div>
     
           </div>
         
