@@ -106,6 +106,11 @@ userRoute.get('/home/settings/cancel-oders/:oder_id/:product_id/:oder_index/:pro
 userRoute.post('/home/cart/checkout/verify-payment/:id',auth.isUserBlocked,paymentController.verfyUserPaymentOption);
 userRoute.post('/home/cart/checkout/verify',auth.isUserBlocked,paymentController.verifyOnlinePayment);
 
+
+
+//user downlode invoice
+userRoute.get('/home/settings/oders/download-invoice/:order_id',auth.isUserBlocked,paymentController.downloadInvoice)
+
 //user checkout page complete transcation online  payment
 userRoute.get('/forget-password',userController.loadForgetPasswordPage);
 userRoute.post('/forget-password',userController.resetPasswordByEmail);

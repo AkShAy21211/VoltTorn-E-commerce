@@ -1,17 +1,18 @@
 const productModel = require("../models/productModel");
 const bannerModel = require("../models/bannerModel");
 const categoryModel = require("../models/categoryModel");
+const offerModal = require("../models/offerModal");
 const mailchimp = require("@mailchimp/mailchimp_marketing");
 
 const loadHome = async (req, res) => {
   try {
     const category = await categoryModel.find({});
+    const offers = await offerModal.find({isActive:true})
     const currentDate = new Date();
     console.log(currentDate);
     const ProductData = await productModel.find({}).limit(4);
     const banner = await bannerModel.find({ endDate: { $gt: currentDate } });
-    res.render("home", { category,banner,ProductData});
-
+    res.render("home", { category,banner,ProductData,offers});
   
   } catch (error) {
     console.log(error.message);
@@ -24,6 +25,7 @@ const loaadProductListsByCategory = async(req,res)=>{
 
     const  {cat_name} = req.params;
     const ProductData = await productModel.find({category:cat_name});
+    const offers = await offerModal.find({isActive:true})
     const ProductCount = await productModel.find({category:cat_name}).countDocuments();
     const category = await categoryModel.find({category:cat_name});
     const result = await productModel.aggregate([
@@ -42,7 +44,7 @@ const loaadProductListsByCategory = async(req,res)=>{
 const brands = result.map((entry) => entry._id);
 
 
-    res.render("productLists",{ProductData,ProductCount,category,cat_name,brands});
+    res.render("productLists",{ProductData,ProductCount,category,cat_name,brands,offers});
 
   }catch(error){
     console.error(error);
@@ -52,8 +54,9 @@ const brands = result.map((entry) => entry._id);
 const productDetail = async (req, res) => {
   try {
     const {id,color} = req.params;
+    const offers = await offerModal.find({});
     const ProductData = await productModel.findById({_id:id});
-    res.render("productDetail",{ProductData});
+    res.render("productDetail",{ProductData,offers});
   } catch (error) {
     console.log(error.message);
   }

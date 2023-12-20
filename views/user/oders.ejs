@@ -1,174 +1,328 @@
 <%- include('../layout/header.ejs') %>
-<style>
-    .container{
-        margin-top: 80px;
+  <style>
+    .container {
+      margin-top: 80px;
     }
-.min-height-div1 {
-  min-height: 200px; /* Adjust the height as needed */
-}
-.min-height-div2 {
-  min-height: 500px; /* Adjust the height as needed */
-}
-body {
+
+    .min-height-div1 {
+      min-height: 200px;
+      /* Adjust the height as needed */
+    }
+
+    .min-height-div2 {
+      min-height: 500px;
+      /* Adjust the height as needed */
+    }
+
+    body {
       font-family: Arial, sans-serif;
     }
+
     .list-item {
       padding: 10px;
       margin-bottom: 10px;
       display: flex;
       align-items: center;
     }
+
     .list-item i {
-      font-size: 24px; /* Adjust the icon size */
-      margin-right: 10px; /* Add space between icon and text */
+      font-size: 24px;
+      /* Adjust the icon size */
+      margin-right: 10px;
+      /* Add space between icon and text */
     }
-    .options{
+
+    .options {
       text-decoration: none;
     }
-    .options:hover{
+
+    .options:hover {
       text-decoration: none;
     }
+
     .active {
       background-color: #3498db;
       color: #fff;
     }
+
     .inactive {
       background-color: #fff;
       color: #333;
     }
-    
- 
+  </style>
 
-</style>
-
-<title>Settings | Oders</title>
-<main>
-  <div class="container">
-    <div class="row d-flex justify-content-arround">
-      <div class="setting-options  col-md-4 col-lg-4 col-xl-3 col-xxl-3  mb-2 min-height-div1 mb-md-4">
-        <ul class="list-group " id="myList">
-           <a class="options" href="/home/settings/profile"><li class="list-group-item inactive list-item">
-              <i class="bi bi-person"></i> Profile
-            </li></a> 
-           <a  class="options" href="/home/settings/oders"><li class="list-group-item inactive list-item">
-              <i class="bi bi-box"></i> Orders
-            </li></a> 
-           <a   class="options" href="/home/settings/wishlist"><li class="list-group-item  inactive list-item">
-              <i class="bi bi-heart"></i> Wishlist
-            </li></a> 
-           <a  class="options" href=""><li class="list-group-item  inactive list-item">
-              <i class="bi bi-geo-alt"></i> Address
-            </li></a> 
+  <title>Settings | Oders</title>
+  <main>
+    <div class="container">
+      <div class="row d-flex justify-content-arround">
+        <div class="setting-options  col-md-4 col-lg-4 col-xl-3 col-xxl-3  mb-2 min-height-div1 mb-md-4 ">
+          <ul class="list-group shadow-sm bg-body " id="myList">
+            <a class="options" href="/home/settings/profile">
+              <li class="list-group-item inactive list-item">
+                <i class="bi bi-person"></i> Profile
+              </li>
+            </a>
+            <a class="options" href="/home/settings/oders">
+              <li class="list-group-item inactive list-item">
+                <i class="bi bi-box"></i> Orders
+              </li>
+            </a>
+            <a class="options" href="/home/settings/wishlist">
+              <li class="list-group-item  inactive list-item">
+                <i class="bi bi-heart"></i> Wishlist
+              </li>
+            </a>
+            <a class="options" href="">
+              <li class="list-group-item  inactive list-item">
+                <i class="bi bi-geo-alt"></i> Address
+              </li>
+            </a>
           </ul>
-      </div>
-      <div class="view-settings col-md-8 col-lg-8 col-xl-9 col-xxl-8 min-height-div1 mb-md-4">
-        <!-- Iterate through each order -->
-        <% if (typeof oders !== 'undefined' && oders.length >0) { %>
-            <table class="table">
-                
-              <tbody>
-                <% oders.forEach((oder,i) => { %>
-                    <!-- Iterate through each product in the order -->
-                    <% oder.products.forEach((product, index) => { %>
-                        <tr>
-                            <td>
-                                <img src="/images/productImages/<%= product.image %>" class="d-none  d-md-none d-lg-block d-xl-block" alt="Product Image" style="width: 100px; height: 100px;">
-                            </td>
-                            <td class="align-middle text-wrap w-25">
-                                <%= product.name.substring(0, 50, product.name.length / 2) %>
-                            </td>
-                            <td class="align-middle text-center">
-                                <b>Total</b>: <%= oder.totalAmount %>
-                            </td>
-            
-                            <% if (!product.cancelled) { %>
-                                <% if (oder.status === 'Pending') { %>
-                                    <td class="align-middle text-center text-warning">
-                                        <%= oder.status %>
-                                    </td>
-                                <% } else if (oder.status === 'Shipped' || oder.status === 'Delivered') { %>
-                                    <% if (oder.status === 'Delivered') { %>
-                                        <td class="align-middle text-center">
-                                            <%= new Date().toLocaleString() %>
-                                        </td>
-                                    <% } %>
-            
-                                    <td class="align-middle text-center text-success">
-                                        <%= oder.status %>
-                                    </td>
-                                <% } else { %>
-                                    <!-- Handle other cases or set a default class -->
-                                    <td class="align-middle text-center">
-                                        <%= oder.status %>
-                                    </td>
-                                <% } %>
-            
-                                <td class="align-middle text-center">
-                                    <% if (!product.cancelled && (oder.status === 'Pending' || oder.status === 'Shipped')) { %>
-                        
-                                        <a type="button" onclick="return showCancelOrderAlert('<%=oder.order_id %>', '<%=product.product_id%>', '<%=i %>', '<%=index %>')" class="btn btn-danger btn-sm text-white">Cancel Order</a>
+        </div>
+        <div class="view-settings col-md-8 col-lg-8 col-xl-9 col-xxl-8 min-height-div1 mb-md-4 ">
+          <!-- Iterate through each order -->
+          <% if (typeof oders !=='undefined' && oders.length>0) { %>
+            <table class="table shadow-sm bg-body ">
 
-                                    <% } else if (product.cancelled) { %>
+              <tbody class="">
+                <% oders.forEach((oder,i)=> { %>
+                  <!-- Iterate through each product in the order -->
+                  <% oder.products.forEach((product, index)=> { %>
+                    <tr>
+                      <td>
+                        <img src="/images/productImages/<%= product.image %>"
+                          class="d-none  d-md-none d-lg-block d-xl-block" alt="Product Image"
+                          style="width: 100px; height: 100px;">
+                      </td>
+                      <td class="align-middle text-wrap w-25">
+                        <%= product.name.substring(0, 50, product.name.length / 2) %>
+                      </td>
+                      <td class="align-middle text-center">
+                        <b>Total</b>: <%= oder.totalAmount %>
+                      </td>
+
+                      <% if (!product.cancelled) { %>
+                        <% if (oder.status==='Pending' ) { %>
+                          <td class="align-middle text-center text-warning">
+                            <%= oder.status %>
+                          </td>
+                          <% } else if (oder.status==='Shipped') { %>
+                            <td class="align-middle text-center text-success">
+                              <%= oder.status %>
+                            </td>
+                                <% } else { %>
+                                  <!-- Handle other cases or set a default class -->
+                                  <td class="align-middle text-center">
+                                    <%= oder.status %>
+                                  </td>
+                                  <% } %>
+
+                                    <td class="align-middle text-center">
+                                      <% if (!product.cancelled && (oder.status==='Pending' || oder.status==='Shipped'
+                                        )) { %>
+
+                                        <a type="button"
+                                          onclick="return showCancelOrderAlert('<%=oder.order_id %>', '<%=product.product_id%>', '<%=i %>', '<%=index %>')"
+                                          class="btn btn-danger btn-sm text-white">Cancel Order</a>
+
+                                        <% } else if (product.cancelled) { %>
+                                          <span class="text-info">Cancelled</span>
+                                          <% } %>
+                                    </td>
+                                    <% } else { %>
+                                      <td class="align-middle text-center">
                                         <span class="text-info">Cancelled</span>
+                                      </td>
                                     <% } %>
+                                     </tr>
+                                      
+                                    <% }); %>
+                                    <% if (oder.status==='Delivered' ) { %>
+
+                                    <tr style="height: 20px;">
+                                      <td>
+                              <td class="">
+                                <%= new Date().toLocaleString() %>
+                              </td>
+                                <td
+                                  class=" text-success d-flex  justify-content-end gap-3"
+                                  style="border-bottom: white;">
+                                  <%= oder.status %>
+                                    <a type="button" data-order-id="<%=oder._id  %>"
+                                      class="btn btn-primary btn-sm text-white invoice-download">Downlode invoice</a>
+
                                 </td>
-                            <% } else { %>
-                                <!-- Add handling for cancelled orders -->
-                                <td class="align-middle text-center">
-                                    <span class="text-info">Cancelled</span>
                                 </td>
-                            <% } %>
-                        </tr>
-                    <% }); %>
-                <% }); %>
-            </tbody>
-            
+                                </tr>
+                                <% } %>
+
+                              <% }); %>
+
+                          
+              </tbody>
+
             </table>
             <% } else { %>
               <table class="table">
-                  <tbody>
-                      <tr>      
-                          <h5 class="text-dark text-center">No Orders Available</h5>
-                      </tr>
-                  </tbody>
+                <tbody>
+                  <tr>
+                    <h5 class="text-dark text-center">No Orders Available</h5>
+                  </tr>
+                </tbody>
               </table>
-          <% } %>
+              <% } %>
+        </div>
+
+
+      </div>
     </div>
-    
-      
-          </div>
-  </div>
-</main>
+  </main>
 
 
-<script>
-  function showCancelOrderAlert(orderId, productId, productIndex, orderIndex) {
+  <script>
+    function showCancelOrderAlert(orderId, productId, productIndex, orderIndex) {
       $.confirm({
-          title: 'Cancel Order',
-          content: 'Are you sure you want to cancel this order?',
-          type: 'blue',
-          typeAnimated: true,
-          buttons: {
-              confirm: {
-                  text: 'Yes',
-                  btnClass: 'btn-danger',
-                  action: function () {
-                      // If the user confirms, navigate to the specified URL
-                      window.location.href = `/home/settings/cancel-oders/${orderId}/${productId}/${productIndex}/${orderIndex}`;
-                  }
-              },
-              cancel: {
-                  text: 'No',
-                  btnClass: 'btn-secondary',
-                  action: function () {
-                      // If the user cancels, do nothing or provide additional logic
-                  }
-              }
+        title: 'Cancel Order',
+        content: 'Are you sure you want to cancel this order?',
+        type: 'blue',
+        typeAnimated: true,
+        buttons: {
+          confirm: {
+            text: 'Yes',
+            btnClass: 'btn-danger',
+            action: function () {
+              // If the user confirms, navigate to the specified URL
+              window.location.href = `/home/settings/cancel-oders/${orderId}/${productId}/${productIndex}/${orderIndex}`;
+            }
+          },
+          cancel: {
+            text: 'No',
+            btnClass: 'btn-secondary',
+            action: function () {
+              // If the user cancels, do nothing or provide additional logic
+            }
           }
+        }
       });
-  
+
       // Prevent the default behavior of the anchor tag
       return false;
-  }
+    }
   </script>
-<%- include('../layout/footer.ejs') %>
+
+
+  <script>
+    const invoiceBtn = document.querySelectorAll('.invoice-download');
+
+    invoiceBtn.forEach((invoiceBtn) => {
+      invoiceBtn.addEventListener('click', async (e) => {
+        const orderId = invoiceBtn.dataset.orderId;
+
+        try {
+          const response = await axios.get(`/home/settings/oders/download-invoice/${orderId}`);
+
+          if (response.data) {
+            const res = response.data.order;
+            const { oders } = res;
+            const findOrder = oders.filter((oder) => oder._id === orderId);
+            const [order] = findOrder;
+
+
+            const pdfElement = document.createElement('div');
+
+            pdfElement.innerHTML = `
+          <table class="table">
+                  <!-- Invoice Heading -->
+                  <tr>
+                    <td class="text-center">
+                      <h2>Invoice</h2>
+                    </td>
+                    <td class="text-center">
+                      <img src="/images/logo.png" width="50" height="50" alt="logo" class="img-responsive" />
+                    </td>
+
+                  </tr>
+                  <!-- Sender Information -->
+                  <tr>
+                    <td>
+                      <div class="col-md-6">
+                      </div>
+                      <p class="">VoltTron</p>
+                      <p class="">Eranakulam,Kochi,maradu</p>
+                      <p class="">67493</p>
+                      <p class="">India</p>
+                    </td>
+                  </tr>
+                  <!--  Client Information -->
+                  <tr>
+                    <td>
+                      <div class="col-md-6">
+                        <p class="text-left">
+                          Hello ${order.customerName}, <br>
+                          <p class="">
+                          Thank you for shopping with Volttron! If you have any questions or concerns,
+                           please contact our customer support.
+                           </p>
+                           </p>
+                        <p class="text-left">
+                          <small>Order Id: </small>#01${order.order_id}<br />
+                          <small>Date: ${order.date}</small>
+                        </p>
+                      </div>
+                  
+                    </td>
+                  </tr>
+                  <!-- Product Table -->
+                  <tr>
+                    <td>
+    <div class="table">
+      <!-- Header row with dark background -->
+      <div class="row bg-dark text-white">
+        <div class="col-8 text-left">Item</div>
+        <div class="col text-left">Quantity</div>
+        <div class="col text-left">Price</div>
+      </div>
+      <!-- Loop through each product in orders.product array -->
+      ${order.products.map(product => `
+        <div class="row mb-4">
+          <div class="col-8 text-left">${product.name}</div>
+          <div class="col text-left">${product.quantity}</div>
+          <div class="col text-left">${product.price}</div>
+        </div>
+      `).join('')}
+    </div>
+  </td>
+</tr>
+
+                  <!-- Last Subtotal Table -->
+                  <tr>
+                    <td>
+                      <div class="col-md-12">
+
+                        <p class="text-right">Tax &amp; Fees (7%)</p>
+                        <p class="text-right">$0.35</p>
+                        <p class="text-right"><strong>Grand Total (Incl.Tax)</strong></p>
+                        <p class="text-right"><strong>Rs${order.totalAmount}</strong></p>
+                      </div>
+                    </td>
+                  </tr>
+                </table>`;
+
+            // Use html2pdf to generate and download the PDF
+            html2pdf(pdfElement, {
+              margin: 10,
+              filename: `invoice_${orderId}.pdf`,
+              image: { type: 'jpeg', quality: 0.98 },
+              html2canvas: { scale: 2 },
+              jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            });
+
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      });
+    });
+  </script>
+
+  <%- include('../layout/footer.ejs') %>

@@ -1,0 +1,127 @@
+<!-- views/banners.ejs -->
+
+<%- include('../layout/adminHeader.ejs') %>
+<link rel="stylesheet" href="/css/dataTable.css">
+<title>Offers</title>
+<aside>
+  <a href="/admin/products" style="color: rgb(45, 81, 172); position: absolute; left: 50px; top: 80px; font-size: 15px; font-weight: bold; " class="btn"> <-Back</a>
+</aside>
+<div class="container mt-5 mb-3">
+  <div class="row">
+    <div class="col-md-2">
+      <h4>Add Offers</h4>
+      <form action="/admin/offer/add" method="post">
+        <div class="form-group">
+          <label for="title">Offer Title</label>
+          <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+          <label for="offerType">Offer Type</label>
+          <select class="form-control" id="offerType" name="offerType" onchange="toggleFields()" required>
+            <option value="Category">Category</option>
+            <option value="Product">Product</option>
+            <option value="Referral">Referral</option>
+          </select>
+        </div>
+        <div class="form-group" id="categoryField" style="display: none;">
+          <label for="category">Category</label>
+          <select class="form-control" id="category" name="category">
+            <% category.forEach(category => { %>
+              <option value="<%= category.category %>"><%= category.category %></option>
+            <% }); %>
+          </select>
+        </div>
+        
+        <div class="form-group" id="productField" style="display: none;">
+          <label for="productName">Product Name</label>
+          <input type="text" class="form-control" id="productName" name="productName">
+        </div>
+        <div class="form-group" id="referralField" style="display: none;">
+          <label for="referral">Referral Name</label>
+          <input type="text" class="form-control" id="referral" name="referral">       
+         </div>
+        <div class="form-group">
+          <label for="percentage">Percentage%</label>
+          <input type="text" class="form-control" id="percentage" name="percentage" required>
+        </div>
+        <div class="form-group">
+          <label for="status">Status</label>
+          <select class="form-control" id="status" name="status" required>
+            <option value="Select">Select</option>
+            <option value="False">False</option>
+            <option value="True">True</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="startDate">Start Date</label>
+          <input type="date" class="form-control" id="startDate" name="startDate" required>
+        </div>
+        <div class="form-group">
+          <label for="endDate">End Date</label>
+          <input type="date" class="form-control" id="endDate" name="endDate" required>
+        </div>
+    
+        <button type="submit" class="btn btn-primary">Add Offer</button>
+      </form>
+    </div>
+
+    <div class="col-md-10">
+        <h2>Offers List</h2>
+          <table class="table col-12" id="myTable">
+            <thead>
+              
+              <tr>
+                <th>Title</th>
+                <th>Offer Type</th>
+                <th>Offer</th>
+                <th>Percentage</th>
+                <th>Active</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <%if(offers !== 'undefined'){%>
+
+            <tbody>
+
+              <%offers.forEach(offer => {%>
+                
+                <tr>
+                  <td><%=offer.title  %></td>
+                  <td><%=offer.offerType  %></td>
+                  <td><%=offer.offer  %></td>
+                  <td><%=offer.percentage  %></td>
+                  <td><%=offer.isActive  %></td>
+                  <td><%= offer.startDate.toDateString() %></td>
+                  <td><%= offer.endDate.toDateString() %></td>
+                  
+
+                  <td>
+                    <a href="/admin/offer/edit/<%=offer._id  %>" class="bi bi-pencil-fill text-warning "></a>
+                    <a href="javascript:void(0);" class=" bi bi-trash3-fill text-danger" onclick="confirmDelete('<%=offer._id%>','/admin/offer/delete?id=','You will not be able to recover this offer')"></a>
+                </td>
+                </tr>
+                <% });  %>
+
+            </tbody>
+         <% }else{%>
+          <p>No Offers available.</p>
+
+         <%}%>
+          </table>
+      </div>
+      
+  </div>
+</div>
+<script src="/js/DataTable.js"></script>
+<script src="/js/alertPopUp.js"></script>
+<script>
+  function toggleFields() {
+    var offerType = document.getElementById('offerType').value;
+    document.getElementById('categoryField').style.display = offerType === 'Category' ? 'block' : 'none';
+    document.getElementById('productField').style.display = offerType === 'Product' ? 'block' : 'none';
+    document.getElementById('referralField').style.display = offerType === 'Referral' ? 'block' : 'none';
+  }
+</script>
+<%- include('../layout/adminFooter.ejs') %>

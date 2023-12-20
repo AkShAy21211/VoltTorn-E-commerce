@@ -27,11 +27,11 @@ const productSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    ref:'Category',  // You can reference a product schema if you have one
+    required: true,
   },
   sub_Category: {
     type: String,
-    ref:'Category', // You can reference a product schema if you have one
+    required: true,
   },
   brand: {
     type: String,

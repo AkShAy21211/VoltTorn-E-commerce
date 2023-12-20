@@ -73,8 +73,8 @@ body {
     <div class="row d-flex justify-content-arround">
       
       <div class="setting-options  col-md-4 col-lg-4 col-xl-3 col-xxl-3  mb-2 min-height-div1 mb-md-4">
-        <ul class="list-group " id="myList">
-           <a class="options" href="/home/settings/profile"><li class="list-group-item inactive list-item">
+        <ul class="list-group shadow-sm bg-body " id="myList">
+          <a class="options" href="/home/settings/profile"><li class="list-group-item inactive list-item">
               <i class="bi bi-person"></i> Profile
             </li></a> 
            <a  class="options" href="/home/settings/oders"><li class="list-group-item inactive list-item">
@@ -89,7 +89,7 @@ body {
           </ul>
       </div>
       
-      <div class="view-settings col-md-8 col-lg-8 col-xl-9 col-xxl-8 border min-height-div1 mb-md-4">
+      <div class="view-settings col-md-8 col-lg-8 col-xl-9 col-xxl-8 border min-height-div1 mb-md-4 shadow-sm bg-body">
       <%if(typeof user !== 'undefined'){%>
 
     
@@ -138,7 +138,7 @@ body {
             <div class="col-md-6">
               <div class="form-floating mb-2">
                 <input type="password" class="form-control" id="password" name="password" placeholder=" "value="<%=user.password.slice(0,6)%>">
-                <label for="mobile" class="form-label">Password</label>
+                <label for="password" class="form-label">Password</label>
               </div>
               <a style="font-size: 13px; padding: 3px;" href="/forget-password" >Change Password</a>
             </div>
@@ -229,4 +229,5 @@ body {
     }
   });
 </script>
+
 <%- include('../layout/footer.ejs') %>

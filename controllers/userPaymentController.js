@@ -142,7 +142,28 @@ const decrementProductStock = async (userCart) => {
     throw error; // Propagate the error if needed
   }
 };
+
+
+const downloadInvoice = async(req,res)=>{
+
+  try{
+
+    const {order_id} = req.params;
+    const user_id = req.session.user?req.session.user.userId:undefined;
+
+    if(user_id){
+    const order = await userModel.findById(user_id);
+
+    res.status(200).json({order});
+    }
+
+  }catch(error){
+    console.error(error);
+    res.status(500).json({message:"Internal server error"})
+  }
+}
 module.exports = {
   verfyUserPaymentOption,
   verifyOnlinePayment,
+  downloadInvoice
 };

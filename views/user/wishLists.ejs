@@ -56,7 +56,7 @@
     <div class="container">
       <div class="row d-flex justify-content-arround">
         <div class="setting-options  col-md-4 col-lg-4 col-xl-3 col-xxl-3  mb-2 min-height-div1 mb-md-4">
-          <ul class="list-group " id="myList">
+          <ul class="list-group shadow-sm bg-body " id="myList">
             <a class="options" href="/home/settings/profile">
               <li class="list-group-item inactive list-item">
                 <i class="bi bi-person"></i> Profile
@@ -82,7 +82,7 @@
         <div class="view-settings col-md-8 col-lg-8 col-xl-9 col-xxl-8 min-height-div1 mb-md-4">
           <!-- Iterate through each order -->
           <% if (products && typeof products.product !== 'undefined' && products.product.length > 0) { %>
-            <table class="table">
+            <table class="table shadow-sm bg-body">
               <tbody>
                 <% products.product.forEach((product,index) => { %>
                   <!-- Iterate through each product in the order -->

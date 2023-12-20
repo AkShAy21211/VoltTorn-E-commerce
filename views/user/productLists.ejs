@@ -199,9 +199,31 @@
                       <a href="/home/product/details/<%=product._id%>" class="text-decoration-none text-dark ">
 
                         <div class="card border-0 h-100 p-2 " id="product-card">
+
+                  <%if(offers !=='undefined' ) {%>
+                    <%offers.forEach(offer=>{%>
+
+
+
+                      <%if(offer.offer===product.category || offer.offer === product.name) {%>
+                        <span
+                          style="position: relative; z-index: 10px; border-radius: 20px; font-size: 13px; color: white; box-shadow: 1px 1px 10px rgb(77, 145, 240);"
+                          class="badge  bg-primary float-right"><span>
+                            <%=offer.percentage %>% off
+                          </span></span>
+
+                        <%} %>
+
+                         <% })%>
+
+
+
+                          <%} %>
+
                           <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px"
                             class="card-img-top" src="/images/productImages/<%=product.images[0]  %>"
                             alt="Product Image " />
+                            
                           <div class="card-body" style="height: 130px;">
                             <div style="display: flex; justify-content: start; margin-bottom: 10px; text-align: start;">
 

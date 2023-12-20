@@ -9,6 +9,7 @@ const productController = require("../controllers/productColtroller");
 const bannerController = require("../controllers/bannerController");
 const adminOderController = require("../controllers/oderControllers");
 const dashBoardController = require("../controllers/adminDashboard");
+const adminOfferController = require("../controllers/adminOfferController");
 const path = require("path");
 const multer = require("multer");
 // Define storage for product images
@@ -116,12 +117,7 @@ adminRoute.get("/products/delete/:id",adminAuth.is_Login, productController.dele
 adminRoute.get('/banners',adminAuth.is_Login,bannerController.loadBannerPage)
 adminRoute.post('/banners/add', uploadBannerImage.single('image'),bannerController.addNewBannerByAdmin)
 
-
-//delete banner
 adminRoute.get('/banners/delete/:id',bannerController.deleteBannerByAdmin)
-
-
-//edit banner
 adminRoute.get('/banners/edit/:id',bannerController.editeBannerByAdminGet)
 adminRoute.post('/banners/edit/:id',uploadBannerImage.single('image'),bannerController.editBannerByAdminPost)
 
@@ -140,7 +136,13 @@ adminRoute.get('/dashboard/statistics',dashBoardController.getProductStatistics)
 //admin sales report downlode
 adminRoute.get('/sales-report',dashBoardController.downlodeSalesReport);
 
+//admin offer route
 
+adminRoute.get("/offer",adminOfferController.loadOfferPage);
+adminRoute.post("/offer/add",adminOfferController.addNewOffer);
+adminRoute.get("/offer/delete",adminOfferController.deleteOffer);
+adminRoute.get("/offer/edit/:id",adminOfferController.loadOfferEdit);
+adminRoute.post("/offer/edit/:id",adminOfferController.editOffer);
 
 //send newsLetter for subscribed User
 adminRoute.get("*", function (req, res) {

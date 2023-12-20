@@ -84,10 +84,17 @@
                     <%oder.products.forEach(product=>{%>
                       <%if(!product.cancelled)  {%>
 
-                        <p class="badge bg-success">Active</p>
+
+                        <%if(oder.status === "Delivered" ){%>
+                          <p class=" text-success">Completed</p>
+
+                        <%}else{%>
+                          <p class=" text-success">Active</p>
+
+                        <%} %>
 
                       <%}else{%>
-                        <p class="badge bg-danger">Cancelled</p>
+                        <p class=" text-danger">Cancelled</p>
 
 
                       <%}%>
