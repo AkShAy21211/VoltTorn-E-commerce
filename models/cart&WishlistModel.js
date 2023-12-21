@@ -30,6 +30,10 @@ const CartSchema = new mongoose.Schema({
                 required: false,
                 default: 0,
             },
+            discountApplied:{
+                type:Boolean,
+                default:false
+            },
             cancelled:{
                 type:Boolean,
                 default:false,

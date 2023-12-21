@@ -233,26 +233,47 @@
                   <h6 class="mb-5">Delivery Charges: <p class="text-success " style="float: right;">Free</p>
                   </h6>
 
-                  <hr />
+
+                  <hr>
+                  <%if(purchaseCount !== 'undefined' && purchaseCount>0){%>
+                    <div class="">
+                      <h6 class="mb-2">Avaliable offers</h6>
+                        <a href="#" style="text-decoration: none; color: white;" class=" rounded badge bg-success" id="offerAvailButton"><%=purchaseCount%>x Referral offer</a>
+                        <a data-user-id="<%=cart._id%>" id="referalOffer" style="color: rgb(67, 155, 223);" class="btn" href="#">Apply</a>
+                        <a data-user-id="<%=cart._id%>" id="cancelOffer" style="color: rgb(67, 155, 223); display: none;" class="btn" href="#">Cancel</a>
+
+                    </div>
+  
+                    <hr>
+                  <%}  %>
+              
+
+       
+
                   <div class="d-flex justify-content-start">
                     <p class="mb-2 text-success">You can save Rs:<b class="text-success">
                         <%=total_discount %>
                       </b> on this order</p>
                   </div>
+
                   <div class="d-flex justify-content-between">
                     <p class="mb-2">Total price:</p>
 
-
-
-
-                    <p class="mb-2 fw-bold">RS:<%=cart.total_price %>
+                    <p id="total-price" class="mb-2 fw-bold">RS:<%=cart.total_price %>
                     </p>
                   </div>
+
+
+             
+                 
 
                   <!-- <div class="input-group mt-3 mb-4">
                       <input type="text" class="form-control border" name="" placeholder="Promo code" />
                       <button class="btn btn-light text-primary border">Apply</button>
                     </div> -->
+
+
+               
 
                   <hr />
 
@@ -326,6 +347,58 @@
     </div>
   </section>
 
+
+  <script>
+    const offerBtn = document.getElementById('referalOffer');
+    const cancelBtn = document.getElementById('cancelOffer');
+    const userId = offerBtn.dataset.userId;
+    const totalPrice = document.getElementById('total-price');
+  
+    offerBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const response = await toggleAndApplyReferralOffer(`/home/cart/applay-referral-offer/${userId}`);
+      handleOfferResponse(response);
+    });
+  
+    cancelBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const response = await toggleAndApplyReferralOffer(`/home/cart/cancel-referral-offer/${userId}`);
+      totalPrice.innerHTML = response.data.updatedCart.total_price;
+    });
+  
+    async function toggleAndApplyReferralOffer(url) {
+      offerBtn.style.display = offerBtn.style.display === 'none' ? 'inline' : 'none';
+      cancelBtn.style.display = cancelBtn.style.display === 'none' ? 'inline' : 'none';
+  
+      try {
+        return await axios.get(url);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  
+    function handleOfferResponse(response) {
+      console.log(response.data.updatedCart);
+      if (response.data.updatedCart) {
+        totalPrice.innerText = response.data.updatedCart.total_price;
+        Toastify({
+          text: response.data.message,
+          duration: 4000,
+          newWindow: true,
+          close: true,
+          gravity: 'top',
+          position: 'right',
+          stopOnFocus: true,
+          style: {
+            background: 'linear-gradient(to right, #0074cc, #0076cc)',
+            marginTop: '60px',
+          },
+          onClick: function () {},
+        }).showToast();
+      }
+    }
+  </script>
+  
 
 
   <script>
@@ -468,9 +541,6 @@
     }
 
 
-
-
-
   </script>
 
 
@@ -555,7 +625,6 @@
       // Get the data-state attribute value
       const dataState = this.options[this.selectedIndex].getAttribute('data-state');
 
-      console.log(dataState);
       try {
         const response = await axios.post(`/home/cart/checkout`, { dataState });
         const cities = response.data.city;

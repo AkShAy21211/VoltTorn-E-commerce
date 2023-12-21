@@ -16,44 +16,47 @@ const loadOfferPage = async(req,res)=>{
 }
 
 
-const addNewOffer = async(req,res)=>{
+const addNewOffer = async (req, res) => {
+    try {
+        const { title, offerType, percentage, status, startDate, endDate } = req.body;
 
-    try{
+        // Input validation (you may need more validation based on your requirements)
+        if (!title || !offerType || !percentage || !startDate || !endDate) {
+            return res.status(400).send("Bad Request: Missing required fields");
+        }
 
-        const {title,offerType,percentage,status,startDate,endDate} = req.body;
-        let offer;
+        let offer = "";
         switch (offerType) {
             case 'Category':
                 offer = req.body.category;
-              break;
+                break;
             case 'Product':
                 offer = req.body.productName;
-              break;
+                break;
             case 'Referral':
                 offer = req.body.referral;
-              break;
+                break;
             default:
-                offer = "";
+                // Handle unexpected offerType
+                return res.status(400).send("Bad Request: Invalid offerType");
+        }
 
-          }
+        const offers = new offerModal({
+            title: title,
+            offerType: offerType,
+            offer: offer,
+            percentage: parseInt(percentage),
+            isActive: status=='true' ? true : false,
+            startDate: startDate,
+            endDate: endDate,
+        });
 
-          const offers = new offerModal({
-            title:title,
-            offerType:offerType,
-            offer:offer,
-            percentage:percentage,
-            isActive:!status?false:true,
-            startDate:startDate,
-            endDate:endDate,
-
-          });
-
-          await offers.save();
-      
-          res.redirect('/admin/offer')
-  
-    }catch(error){
+        await offers.save();
+        req.flash('success', 'Offer Added Successfully');
+        res.redirect('/admin/offer');
+    } catch (error) {
         console.error(error);
+        res.status(500).send("Internal Server Error");
     }
 }
 
@@ -84,44 +87,56 @@ const loadOfferEdit =  async(req,res)=>{
         console.error(error);
     }
 }
-const editOffer =  async(req,res)=>{
-
-    try{
+const editOffer = async (req, res) => {
+    try {
         const id = req.params.id;
-        const {title,offerType,percentage,status,startDate,endDate} = req.body;
-        let offer;
+        const { title, offerType, percentage, status, startDate, endDate } = req.body;
+
+        // Input validation (you may need more validation based on your requirements)
+        if (!id || !title || !offerType || !percentage || !startDate || !endDate) {
+            return res.status(400).send("Bad Request: Missing required fields");
+        }
+
+        let offer = "";
         switch (offerType) {
             case 'Category':
                 offer = req.body.category;
-              break;
+                break;
             case 'Product':
                 offer = req.body.productName;
-              break;
+                break;
             case 'Referral':
                 offer = req.body.referral;
-              break;
+                break;
             default:
-                offer = "";
+                // Handle unexpected offerType
+                return res.status(400).send("Bad Request: Invalid offerType");
+        }
 
-          }
-          const updatedOfferData = {
-            title:title,
-            offerType:offerType,
-            offer:offer,
-            percentage:percentage,
-            status:status,
-            startDate:startDate,
-            endDate:endDate,
+        const updatedOfferData = {
+            title: title,
+            offerType: offerType,
+            offer: offer,
+            percentage: percentage,
+            isActive: status=='true' ? true : false,
+            startDate: startDate,
+            endDate: endDate,
+        }
 
+        const Offer = await offerModal.findOneAndUpdate({ _id: id }, updatedOfferData, { new: true });
 
-          }
-        const Offer = await offerModal.findOneAndUpdate({_id:id},updatedOfferData,{new:true});
-        res.redirect('/admin/offer')
-
-    }catch(error){
+        if (!Offer) {
+            return res.status(404).send("Not Found: Offer not found");
+        }
+        
+        req.flash('success', 'Offer edited Successfully');
+        res.redirect('/admin/offer');
+    } catch (error) {
         console.error(error);
+        res.status(500).send("Internal Server Error");
     }
 }
+
 module.exports={
 
     loadOfferPage,

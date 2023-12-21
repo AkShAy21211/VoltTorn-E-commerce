@@ -147,7 +147,19 @@ const userSchema = new mongoose.Schema({
   token:{
     type:String,
     default:"",
-  }
+  },
+  referralCode: {
+    type:String,
+    required:true,
+  },
+  referredBy: { 
+    type: mongoose.Schema.Types.ObjectId, ref: 'user',
+    required:false,
+   },
+  referredPurchases: {
+     type: Number,
+      default: 0 
+    },
 });
 
 module.exports = mongoose.model("user", userSchema);

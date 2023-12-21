@@ -10,7 +10,19 @@ const generateOTP = () => {
   // Generate a random 6-digit OTP
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
+function generateReferralCode() {
+  const characters = '0123456789';
+  const codeLength = 6;
 
+  let referralCode = '';
+
+  for (let i = 0; i < codeLength; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    referralCode += characters.charAt(randomIndex);
+  }
+
+  return referralCode;
+}
 const sendEmail = async (email, otpCode) => {
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -70,7 +82,7 @@ const loadRegister = async (req, res) => {
 //POST REQUEST FOR LOAD USER REGISTRATION TO INSERT NEW USER
 const insertUser = async (req, res) => {
   try {
-    const { first_name, last_name, email, mobile, password, confirmPassword } =
+    const { first_name, last_name, email, mobile, password, confirmPassword ,refferal} =
       req.body;
     const hashPassword = await securePassword(password);
 
@@ -80,6 +92,13 @@ const insertUser = async (req, res) => {
       });
     }
 
+    let referredBy = null;
+    if (refferal) {
+      const referrer = await userModel.findOne({ referralCode:refferal });
+      if (referrer) {
+        referredBy = referrer._id;
+      }
+    }
     const userExist = await userModel.findOne({
       $or: [{ email: email }, { mobile: mobile }],
     });
@@ -100,6 +119,8 @@ const insertUser = async (req, res) => {
       is_admin: 0,
       status: true,
       isDelete: false,
+      referralCode:generateReferralCode(),
+      referredBy:referredBy,
     });
 
     const userData = await User.save();

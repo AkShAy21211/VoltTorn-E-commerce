@@ -1,10 +1,10 @@
-const { CartModel, WishListModel } = require("../models/cart&WishlistModel");
+const { CartModel } = require("../models/cart&WishlistModel");
 const productModel = require("../models/productModel");
 const countryState = require("country-state-city");
 const { calculateTotalDiscount } = require("../helpers/totalDiscountHelper");
 const { generateOrderID } = require("../helpers/oderIdHelper");
 const userModel = require("../models/userModel");
-
+const offerModel = require("../models/offerModal");
 const userShoppingCartPageLoad = async (req, res) => {
   try {
     // Check if the user is logged in
@@ -13,7 +13,8 @@ const userShoppingCartPageLoad = async (req, res) => {
       const userCart = await CartModel.findOne({ _id: user_id }).populate(
         "cart.product_id"
       );
-      req.session.user.cartCount = userCart && userCart.cart ? userCart.cart.length : 0;
+      req.session.user.cartCount =
+        userCart && userCart.cart ? userCart.cart.length : 0;
       // Check if userCart is defined and has the cart property
       const userCartCount =
         userCart && userCart.cart ? userCart.cart.length : 0;
@@ -53,9 +54,7 @@ const userAddToCartButton = async (req, res) => {
             success: true,
             redirectTo: "/home/cart",
             message: "Product already added to cart",
-
           });
-
         } else {
           //when new item added in existing cart
 
@@ -145,14 +144,13 @@ const updateQuantity = async (req, res) => {
     const cartId = req.params.product_id;
     const newQuantity = req.body.quantity;
     const product = req.params.product;
-    
 
-    
     const productDetails = await productModel.findById(product);
 
-    if(newQuantity > productDetails.stock){
-
-      return res.status(400).json({ error: `Quantity exceeds available stock` });
+    if (newQuantity > productDetails.stock) {
+      return res
+        .status(400)
+        .json({ error: `Quantity exceeds available stock` });
     }
 
     const newProductPrice =
@@ -185,7 +183,6 @@ const updateQuantity = async (req, res) => {
       { $set: { total_price: total_price } }
     );
 
-
     res.status(200).json({
       success: true,
       message: "Quantity updated successfully",
@@ -207,7 +204,6 @@ const deleteCartItem = async (req, res) => {
     // Assuming CartModel has a 'cart' array and 'total_price' field
     const cart = await CartModel.findById(id);
 
-
     const updatedCart = await CartModel.findOneAndUpdate(
       { _id: id },
       { $pull: { cart: { _id: product_id } } },
@@ -221,23 +217,22 @@ const deleteCartItem = async (req, res) => {
 
     await CartModel.findOneAndUpdate(
       { _id: id },
-      { $set: { total_price: total_price } }
+      { $set: { total_price: total_price } },
+      { new: true }
     );
 
     console.log(updatedCart);
     const userCartCount =
       updatedCart && updatedCart.cart ? updatedCart.cart.length : 0;
-      req.session.user.cartCount -= 1;
-      delete req.session.user.cart.cart;
-      req.session.save(err => {
-        if (err) {
-          console.error('Error saving session:', err);
-        }
-      });
-      
-      
-      
-      res.status(200).json({
+    req.session.user.cartCount -= 1;
+    delete req.session.user.cart.cart;
+    req.session.save((err) => {
+      if (err) {
+        console.error("Error saving session:", err);
+      }
+    });
+
+    res.status(200).json({
       success: true,
       updatedCart,
       total_price,
@@ -258,19 +253,185 @@ const deleteCartItem = async (req, res) => {
 
 const loadCheckOutPage = async (req, res) => {
   try {
-    const user = await userModel.findById(req.session.user.userId);
+    const id = req.session.user.userId || null;
+    let purchaseCount;
+    const user = await userModel.findById(id);
     const dataState = req.body.dataState;
     const states = countryState.State.getStatesOfCountry("IN");
-    const cart = await CartModel.findById(req.session.user.userId);
+    const cart = await CartModel.findById(req.session.user.userId).populate(
+      "cart.product_id"
+    );
+    const referralOffer = await offerModel.findOne({
+      offerType: "Referral",
+      isActive: true,
+      endDate: { $gt: new Date() },
+    });
+    const categoryOffer = await offerModel.find({
+      offerType: "Category",
+      isActive: true,
+      endDate: { $gt: new Date() },
+    });
+    const productOffer = await offerModel.find({
+      offerType: "Product",
+      isActive: true,
+      endDate: { $gt: new Date() },
+    });
+
+    if (referralOffer) {
+      purchaseCount = user.referredPurchases > 0 ? user.referredPurchases : null;
+    }
+
+    if (!categoryOffer || !productOffer) {
+      console.log("Category or product offer not found");
+      return;
+    }
+
+    const matchedCategoryProducts = cart.cart.filter(
+      (product) => categoryOffer.some((offer) => offer.offer === product.product_id.category)
+    );
+
+    const matchedOfferProducts = cart.cart.filter(
+      (product) => productOffer.some((offer) => offer.offer === product.name)
+    );
+    
+    console.log(matchedOfferProducts);
+
+    console.log(matchedOfferProducts);
+    const categoryDiscount = categoryOffer.map((offer) => offer.percentage / 100);
+    console.log(categoryDiscount);
+    
+
+    if(matchedOfferProducts.length>0){
+    const productDiscount = productOffer.map((offer) => offer.percentage / 100);
+    }
+    
+
+    const isDiscountApplied = (product) => product.discountApplied === true;
+
+    if (matchedCategoryProducts.length > 0) {
+      console.log("category offer");
+    
+      // Update prices for products in matchedCategoryProducts
+      matchedCategoryProducts.forEach((product, index) => {
+        if (!isDiscountApplied(product)) {
+          const discount = categoryDiscount[index];
+          product.price -= product.price * discount;
+          product.price = parseInt(product.price); // Convert to integer
+          product.discountApplied = true; // Mark the discount as applied
+        }
+      });
+    }
+    
+    if (matchedOfferProducts.length > 0) {
+      console.log("product offer");
+      // Update prices for products in matchedOfferProducts
+      matchedOfferProducts.forEach((product, index) => {
+        if (!isDiscountApplied(product)) {
+          const discount = productDiscount[index];
+          product.price -= product.price * discount;
+          product.price = parseInt(product.price); // Convert to integer
+          product.discountApplied = true; // Mark the discount as applied
+        }
+      });
+    }
+    const total_price = cart.cart.reduce((total, item) => total + item.price, 0);
+    cart.total_price = parseInt(total_price); // Convert total_price to integer
+
+    // Save the updated cart to the database
+    await cart.save();
 
     const total_discount = await calculateTotalDiscount(cart.cart);
-
-    res.render("checkout", { states, user, cart, total_discount });
+    res.render("checkout", {
+      states,
+      user,
+      cart,
+      total_discount,
+      purchaseCount,
+      referralOffer,
+    });
   } catch (error) {
     console.error(error);
   }
 };
 
+
+const applayReferralOffer = async (req, res) => {
+  try {
+    let { id } = req.params;
+
+    const cart = await CartModel.findById(id);
+
+    const user = await userModel.findById(id);
+
+    if (user) {
+      const offer = await offerModel.findOne({
+        offerType: "Referral",
+        isActive: true,
+        endDate: { $gt: new Date() },
+      });
+      const offerDiscount = (offer.percentage / 100) * cart.total_price;
+      const previousPurchaseCount = user.referredPurchases;
+
+      if (
+        user.referredPurchases <= 5 &&
+        user.referredPurchases >= previousPurchaseCount
+      ) {
+        const updatedCart = await CartModel.findOneAndUpdate(
+          { _id: id },
+          { $inc: { total_price: -offerDiscount } },
+          { new: true }
+        );
+        res.status(200).json({ updatedCart, message: "Offer applied" });
+      }
+    } else {
+      console.log("User not found.");
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+const cancelReferralOffer = async (req, res) => {
+  try {
+    let { id } = req.params;
+
+    const cart = await CartModel.findById(id);
+
+    const user = await userModel.findById(id);
+    const total_price = cart.cart.reduce(
+      (total, item) => total + item.price,
+      0
+    );
+    if (user) {
+      const offer = await offerModel.findOne({
+        offerType: "Referral",
+        isActive: true,
+        endDate: { $gt: new Date() },
+      });
+      const offerDiscount = (offer.percentage / 100) * cart.total_price;
+      const previousPurchaseCount = user.referredPurchases;
+
+      if (
+        user.referredPurchases <= 5 &&
+        user.referredPurchases >= previousPurchaseCount
+      ) {
+        const updatedCart = await CartModel.findOneAndUpdate(
+          { _id: id },
+          { $set: { total_price: total_price } },
+          { new: true }
+        );
+        res.status(200).json({ updatedCart });
+      }
+    } else {
+      console.log("User not found.");
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 
 const stateCityLoad = async (req, res) => {
   try {
@@ -317,20 +478,20 @@ const editUserBillingAddress = async (req, res) => {
     const { address, country, state, city, postalCode } = req.body;
     const addressId = req.params.id;
 
-       const result = await userModel.findOneAndUpdate(
+    const result = await userModel.findOneAndUpdate(
       { "addresses._id": addressId },
       {
         $set: {
           "addresses.$.address": address,
           "addresses.$.country": country,
-          "addresses.$.state":state,
+          "addresses.$.state": state,
           "addresses.$.city": city,
-          "addresses.$.zip":postalCode,
+          "addresses.$.zip": postalCode,
         },
       },
       { new: true }
     );
-    
+
     res.redirect("/home/cart/checkout");
   } catch (error) {
     console.error(error);
@@ -350,4 +511,6 @@ module.exports = {
   addUserBellingAddress,
   stateCityLoad,
   editUserBillingAddress,
+  applayReferralOffer,
+  cancelReferralOffer,
 };

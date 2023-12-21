@@ -72,12 +72,12 @@ userRoute.get('/home/settings/wishlist/remove/:index',auth.isUserBlocked,userSet
 userRoute.get('/home/cart',auth.isUserBlocked,userCartController.userShoppingCartPageLoad);
 userRoute.post('/home/products/cart/:product_id',auth.isUserBlocked,auth.is_Login,userCartController.userAddToCartButton);
 userRoute.patch('/home/products/cart/updateQuantity/:product_id/:product',auth.isUserBlocked,userCartController.updateQuantity)
-
 userRoute.delete('/home/cart/:product_id',auth.isUserBlocked,userCartController.deleteCartItem);
 
 userRoute.get('/home/cart/checkout',auth.isUserBlocked,auth.in_cart, userCartController.loadCheckOutPage);
+userRoute.get('/home/cart/applay-referral-offer/:id',auth.isUserBlocked,auth.in_cart, userCartController.applayReferralOffer);
+userRoute.get('/home/cart/cancel-referral-offer/:id',auth.isUserBlocked,auth.in_cart, userCartController.cancelReferralOffer);
 userRoute.post('/home/cart/checkout',auth.isUserBlocked,userCartController.stateCityLoad);
-
 
 
 //user address add

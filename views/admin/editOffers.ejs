@@ -4,8 +4,8 @@
   <h2>Edit Offer</h2>
   <form method="POST" action="/admin/offer/edit/<%=Offer._id  %>" >
     <div class="mb-3">
-      <label for="name" class="form-label">Offer title</label>
-      <input type="text" class="form-control" id="name" name="name" value="<%= Offer.title %>" required>
+      <label for="title" class="form-label">Offer title</label>
+      <input type="text" class="form-control" id="title" name="title" value="<%= Offer.title %>" required>
     </div>
     <div class="form-group">
         <label for="offerType">Offer Type</label>
@@ -20,7 +20,7 @@
       <div class="form-group" id="categoryField" style="display: none;">
         <label for="category">Category</label>
         <select class="form-control" id="category" name="category">
-            <input type="text" value="<%=Offer.offer  %>" class="form-control" id="referral" name="referral">       
+            <option value="<%= Offer.offer %>"><%= Offer.offer  %></option>
           <% category.forEach(category => { %>
             <option value="<%= category.category %>"><%= category.category %></option>
           <% }); %>
@@ -42,9 +42,9 @@
       <div class="form-group">
         <label for="status">Status</label>
         <select class="form-control" id="status" name="status" required>
-          <option value="Select"><%=Offer.isActive%></option>
-          <option value="False">False</option>
-          <option value="True">True</option>
+          <option value="<%=Offer.isActive%>"><%=Offer.isActive  %></option>
+          <option value="false">false</option>
+          <option value="true">true</option>
         </select>
       </div>
     <div class="mb-3">
@@ -58,6 +58,7 @@
     <button type="submit" class="btn btn-primary">Update Offer</button>
   </form>
 </div>
+
 <script>
     function toggleFields() {
       var offerType = document.getElementById('offerType').value;

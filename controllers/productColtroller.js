@@ -132,8 +132,7 @@ const editProductLoad = async (req, res) => {
 
 const editProduct = async (req, res) => {
   try {
-    const { name, description, category, subCategory, price, brand, discount, status, colors, stock } =
-      req.body;
+    const { name, description, category, subCategory, price, brand, discount, status, colors, stock } = req.body;
      
     const id = req.params.id;
     const product = await productModel.findById(id);

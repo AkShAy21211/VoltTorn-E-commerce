@@ -42,14 +42,13 @@
          </div>
         <div class="form-group">
           <label for="percentage">Percentage%</label>
-          <input type="text" class="form-control" id="percentage" name="percentage" required>
+          <input type="number" class="form-control" id="percentage" name="percentage" required>
         </div>
         <div class="form-group">
           <label for="status">Status</label>
           <select class="form-control" id="status" name="status" required>
-            <option value="Select">Select</option>
-            <option value="False">False</option>
-            <option value="True">True</option>
+            <option value="false">false</option>
+            <option value="true">true</option>
           </select>
         </div>
         <div class="form-group">
@@ -66,7 +65,7 @@
     </div>
 
     <div class="col-md-10">
-        <h2>Offers List</h2>
+        <h4>Offers List</h4>
           <table class="table col-12" id="myTable">
             <thead>
               
@@ -114,6 +113,18 @@
       
   </div>
 </div>
+<% if (messages.success) { %>
+  <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000" style="background-color: rgba(74, 205, 74, 0.679); position:  absolute; top: 80px; right: 10px; min-width: 200px;">
+    <div class="toast-body">
+      <%=messages.success %>
+    </div>
+  </div>
+<% } %>
+<% if (messages.success) { %>
+  <div class="success-message">
+      <%= messages.success %>
+  </div>
+<% } %>
 <script src="/js/DataTable.js"></script>
 <script src="/js/alertPopUp.js"></script>
 <script>
@@ -123,5 +134,8 @@
     document.getElementById('productField').style.display = offerType === 'Product' ? 'block' : 'none';
     document.getElementById('referralField').style.display = offerType === 'Referral' ? 'block' : 'none';
   }
+  $(document).ready(function(){
+    $('.toast').toast('show');
+  });
 </script>
 <%- include('../layout/adminFooter.ejs') %>

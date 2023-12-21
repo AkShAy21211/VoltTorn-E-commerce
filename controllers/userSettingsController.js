@@ -1,6 +1,7 @@
 const productModel = require("../models/productModel");
 const userModel = require("../models/userModel");
 const {WishListModel} = require("../models/cart&WishlistModel");
+const offerModal = require("../models/offerModal");
 
 //USER SETTINGS PAGE
 
@@ -10,10 +11,11 @@ const loadUserSettings = async (req, res) => {
       req.session.user && req.session.user.userId
         ? req.session.user.userId
         : undefined;
+        const referralOffer = await offerModal.findOne({offerType:"Referral"})||undefined;
 
     if (id) {
       const user = await userModel.findById(id);
-      res.render("settings", { user });
+      res.render("settings", { user,referralOffer });
     } else {
       res.render("settings");
     }

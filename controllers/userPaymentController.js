@@ -19,7 +19,12 @@ const verfyUserPaymentOption = async (req, res) => {
       { "addresses.$": 1 }
     );
     const selectedAddress = address.addresses[0];
-
+    const referredUser = await userModel.findById(user.referredBy).populate('referredBy');
+    const previousPurchaseCount = user.referredPurchases;
+    if (referredUser && !referredUser.referredBy) {
+      referredUser.referredPurchases += 1;
+      await referredUser.save();
+    }
     if (paymentMethod && paymentMethod === "COD") {
       const order = createOder(
         id,
