@@ -43,6 +43,7 @@ const getProductStatistics = async (req, res) => {
         $match: {
           "oders.date": {
             $gte: startDate,
+            
           },
           "oders.status": "Delivered",
         },
@@ -79,6 +80,8 @@ const getProductStatistics = async (req, res) => {
       return monthData ? monthData.monthlyRevenue : 0;
     });
 
+
+
     const monthlySales = await userModel.aggregate([
       // Unwind the orders array to get a separate document for each order
       { $unwind: "$oders" },
@@ -113,11 +116,39 @@ const getProductStatistics = async (req, res) => {
         },
       },
     ]);
+
+
+
+
+    const pipeline = [
+      {
+        $lookup: {
+          from: "products", // Replace "products" with the actual name of your product collection
+          localField: "category",
+          foreignField: "category",
+          as: "products",
+        },
+      },
+      {
+        $group: {
+          _id: "$category",
+          productCount: { $sum: { $size: "$products" } },
+        },
+      },
+   
+    ];
+    
+    // Execute the aggregate pipeline
+    const result = await categoryModel.aggregate(pipeline);
+    const productCounts = result.map(category => category.productCount);
+    const categoryNames = result.map(category => category._id);
+
+
+
     const formattedMonthlySales = Array.from({ length: 12 }, (_, index) => {
       const monthData = monthlySales.find((data) => data.month === index + 1);
       return monthData ? monthData.totalSales : 0;
     });
-
 
 
     const totalRevenue = amount.map((amount) => amount.totalAmount);
@@ -128,47 +159,16 @@ const getProductStatistics = async (req, res) => {
         totalRevenue,
         formattedMonthlyRevenue,
         formattedMonthlySales,
+        productCounts,
+        categoryNames
       });
   } catch (error) {
     console.error(error);
   }
 };
 
-// const searchItem = async (req, res) => {
-//   try {
-//     const { value, type } = req.query;
 
-//     let searchResults;
 
-//     if (type === "product") {
-//       const regexPattern = new RegExp(value, "i");
-//       searchResults = await productModel.find({
-//         name: { $regex: regexPattern },
-//       });
-
-//       res.status(200).json({ searchItem: searchResults });
-//     } else if (type === "customer") {
-//       const regexPattern = new RegExp(value, "i");
-//       searchResults = await userModel.find({
-//         first_name: { $regex: regexPattern },
-//       });
-
-//       console.log(searchResults);
-//       res.status(200).json({ searchItem: searchResults });
-//     } else {
-//       const regexPattern = new RegExp(value, "i");
-//       searchResults = await categoryModel.find({
-//         category: { $regex: regexPattern },
-//       });
-//       console.log(searchResults);
-
-//       res.status(200).json({ searchItem: searchResults });
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// };
 
 const downlodeSalesReport = async (req, res) => {
   const { reportType } = req.query;

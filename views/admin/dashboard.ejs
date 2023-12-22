@@ -1,5 +1,7 @@
-<%- include('../layout/adminHeader.ejs') %> <%- include('../layout/adminSideBar.ejs') %>
+<%- include('../layout/adminHeader.ejs') %>
+  <%- include('../layout/adminSideBar.ejs') %>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
 
     <style>
@@ -15,7 +17,7 @@
 
 
     <title>Dashboard</title>
-    <main class="ml-5" >
+    <main class="ml-5">
       <section class="content-main container">
         <div class="content-header d-flex justify-content-between">
           <div>
@@ -26,22 +28,24 @@
             <div>
               <span for="reportType" class="form-label">Select Report Type:</span>
               <div style="display: inline-flex; gap: 10px;">
-                <select style="width: 100px; height: 40px; "class="form-select" id="reportType">
+                <select style="width: 100px; height: 40px; " class="form-select" id="reportType">
                   <option value="weekly">Weekly</option>
                   <option value="monthly">Monthly</option>
                   <option value="yearly">Yearly</option>
                 </select>
-                <butotn id="download-report"  style="width: 100px; height: 30px; text-align: center; padding: 10px; line-height: 10px;" class="btn btn-primary" >Download</button>
+                <butotn id="download-report"
+                  style="width: 100px; height: 30px; text-align: center; padding: 10px; line-height: 10px;"
+                  class="btn btn-primary">Download</button>
 
               </div>
 
 
             </div>
-          
+
           </div>
-          
+
         </div>
-        
+
 
 
 
@@ -105,7 +109,12 @@
             <div class="card mb-4 shadow-sm">
               <article class="card-body">
                 <h5 class="card-title">Revnue statistics</h5>
-                <canvas id="productsChart" width="100%" height="80"></canvas>
+                <label for="dateInput">Select range:</label>
+                <select class="form-control w-25" id="revenueRange">
+                  <option value="monthly">Monthly</option>
+                  <option value="yearly">Yearly</option>
+                </select>
+                <canvas id="revenueChart" width="100%" height="80"></canvas>
               </article>
             </div>
           </div>
@@ -114,7 +123,22 @@
             <div class="card mb-4 shadow-sm">
               <article class="card-body">
                 <h5 class="card-title">Sale statistics</h5>
+                <label for="dateInput">Select range:</label>
+                <select class="form-control w-25" id="saleRange">
+                  <option value="monthly">Monthly</option>
+                  <option value="yearly">Yearly</option>
+                </select>
                 <canvas id="saleChart" width="100%" height="80"></canvas>
+              </article>
+            </div>
+          </div>
+
+          <div class="col-xl-6 col-lg-12">
+            <div class="card mb-4 shadow-sm">
+              <article class="card-body">
+                <h5 class="card-title">Category statistics</h5>
+                <label for="dateInput">Select range:</label>
+                <canvas id="categoryChart" width="100%" height="80"></canvas>
               </article>
             </div>
           </div>
@@ -123,183 +147,414 @@
 
         </div>
 
-        <!-- <div class="card mb-4 shadow-sm">
-          <div class="card-body">
-            <h5 class="card-title">Latest orders</h5>
-            <div class="table-responsive">
-              <table class="table">
-                <tbody>
-                  <tr>
-                    <td><b>User</b></td>
-                    <td>user@example.com</td>
-                    <td>$345</td>
-                    <td>
-                      <span class="badge rounded-pill alert-success">Paid At Today at 10:13 AM</span>
-                    </td>
-                    <td>Today at 10:13 AM</td>
-                    <td class="d-flex justify-content-end align-item-center">
-                      <a class="text-success" href="/order"><i class="fas fa-eye"></i></a>
-                    </td>
-                  </tr>
-                  
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div> -->
+
       </section>
     </main>
 
-    <script>
 
 
-      // Create Products Statistics Chart
 
 
-    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        const productsCanvas = document.getElementById("productsChart").getContext("2d");
-        const saleCanvas = document.getElementById("saleChart").getContext("2d");
-
         const totalProduct = document.getElementById('totalProduct');
         const totalOders = document.getElementById('totalOders');
         const totalCustomers = document.getElementById('totalCustomers');
         const totalRevenue = document.getElementById('totalRevenue');
+        let statisticsResponse;
+        let revenueArray;
+        let salesArray;
+        let categoryArray;
+        let categoryNames;
         async function getStatistics() {
           try {
-            const response = await axios.get("/admin/dashboard/statistics");
-
-
-            totalProduct.innerText = response.data.totalProducts;
-            totalOders.innerText = response.data.oderCount;
-            totalCustomers.innerText = response.data.totalCustomers;
-            totalRevenue.innerText = response.data.totalRevenue;
-
-            let Revenue = response.data.formattedMonthlyRevenue;
-
-
-            let Sales = response.data.formattedMonthlySales;
-
-
-            console.log(response.data.latestOders);
-
-
-
-            const productsData = {
-              labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-              datasets: [
-                {
-                  label: "Revenue",
-                  data: Revenue,
-                  backgroundColor: "rgba(255, 99, 132, 0.2)",
-                  borderColor: "rgba(255, 99, 132, 1)",
-                  borderWidth: 1,
-                },
-              ],
-            };
-
-            // Create Products Statistics Chart
-            const productsChart = new Chart(productsCanvas, {
-              type: "bar",
-              data: productsData,
-              options: {
-                scales: {
-                  yAxes: [{
-                    ticks: {
-                      stepSize: 1
-                    },
-
-                  }]
-                },
-              },
-            });
-
-            const saleData = {
-              labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-              datasets: [
-                {
-                  label: "Sales",
-                  data: Sales,
-                  backgroundColor: "rgba(75, 192, 192, 0.2)",
-                  borderColor: "rgba(75, 192, 192, 1)",
-                  borderWidth: 1,
-                },
-              ],
-            };
-            const saleChart = new Chart(saleCanvas, {
-              type: "bar",
-              data: saleData,
-              options: {
-                scales: {
-                  y: {
-                    beginAtZero: true,
-                    ticks: {
-                      stepSize: 1,
-                    },
-                  },
-                },
-              },
-            });
-
+            statisticsResponse = await axios.get("/admin/dashboard/statistics");
+            totalProduct.innerText = statisticsResponse.data.totalProducts;
+            totalOders.innerText = statisticsResponse.data.oderCount;
+            totalCustomers.innerText = statisticsResponse.data.totalCustomers;
+            totalRevenue.innerText = statisticsResponse.data.totalRevenue;
 
 
           } catch (error) {
             console.error(error);
           }
+
+        }
+        async function getRevenueData() {
+          try {
+            statisticsResponse = await axios.get("/admin/dashboard/statistics");
+
+            revenueArray = statisticsResponse.data.formattedMonthlyRevenue;
+            categoryNames = statisticsResponse.data.categoryNames;
+
+            const revenueData = {
+              labels: categoryNames,
+              datasets: [{
+                label: "Revenue",
+                data: revenueArray,
+                backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(255, 159, 64, 0.2)',
+                  'rgba(255, 205, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(201, 203, 207, 0.2)'
+                ],
+                hoverBackgroundColor: [
+                  'rgb(255, 99, 132)',
+                  'rgb(255, 159, 64)',
+                  'rgb(255, 205, 86)',
+                  'rgb(75, 192, 192)',
+                  'rgb(54, 162, 235)',
+                  'rgb(153, 102, 255)',
+                  'rgb(201, 203, 207)'
+                ],
+                borderColor: [
+                  'rgb(255, 99, 132)',
+                  'rgb(255, 159, 64)',
+                  'rgb(255, 205, 86)',
+                  'rgb(75, 192, 192)',
+                  'rgb(54, 162, 235)',
+                  'rgb(153, 102, 255)',
+                  'rgb(201, 203, 207)'
+                ],
+
+                borderWidth: 1
+              }]
+            };
+
+
+
+            var revenue = new Chart(document.getElementById('revenueChart'), revenueConfig);
+
+            revenue.update()
+
+          } catch (error) {
+            console.error(error);
+          }
+
         }
 
+        async function getSalesData() {
+          try {
+            statisticsResponse = await axios.get("/admin/dashboard/statistics");
+
+            salesArray = statisticsResponse.data.formattedMonthlySales;
+
+
+            const salesData = {
+              labels: ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"],
+              datasets: [{
+                label: "Sales",
+                data: salesArray,
+                backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(255, 159, 64, 0.2)',
+                  'rgba(255, 205, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(201, 203, 207, 0.2)'
+                ],
+                hoverBackgroundColor: [
+                  'rgb(255, 99, 132)',
+                  'rgb(255, 159, 64)',
+                  'rgb(255, 205, 86)',
+                  'rgb(75, 192, 192)',
+                  'rgb(54, 162, 235)',
+                  'rgb(153, 102, 255)',
+                  'rgb(201, 203, 207)'
+                ],
+                borderColor: [
+                  'rgb(255, 99, 132)',
+                  'rgb(255, 159, 64)',
+                  'rgb(255, 205, 86)',
+                  'rgb(75, 192, 192)',
+                  'rgb(54, 162, 235)',
+                  'rgb(153, 102, 255)',
+                  'rgb(201, 203, 207)'
+                ],
+
+                borderWidth: 1
+              }]
+            };
+
+            // sales Chart  configuration
+            const salesConfig = {
+              type: 'bar',
+              data: salesData,
+              options: {
+                scales: {
+                  yAxes: [{
+                    stacked: true,
+                    gridLines: {
+                      display: true,
+                      color: "rgba(255,99,132,0.2)"
+                    },
+                    ticks: {
+                      min: 0,
+                      callback: function (value, index, values) {
+                        if (Math.floor(value) === value) {
+                          return value;
+                        }
+                      }
+                    }
+                  }],
+                  y: {
+                    beginAtZero: true
+                  },
+
+                }
+              },
+            };
+
+            var sales = new Chart(document.getElementById('saleChart'), salesConfig);
+            sales.update();
+
+          } catch (error) {
+            console.error(error);
+
+          }
+
+        }
+        async function getSalesData() {
+          try {
+            statisticsResponse = await axios.get("/admin/dashboard/statistics");
+
+            salesArray = statisticsResponse.data.formattedMonthlySales;
+
+
+            const salesData = {
+              labels: ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"],
+              datasets: [{
+                label: "Sales",
+                data: salesArray,
+                backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(255, 159, 64, 0.2)',
+                  'rgba(255, 205, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(201, 203, 207, 0.2)'
+                ],
+                hoverBackgroundColor: [
+                  'rgb(255, 99, 132)',
+                  'rgb(255, 159, 64)',
+                  'rgb(255, 205, 86)',
+                  'rgb(75, 192, 192)',
+                  'rgb(54, 162, 235)',
+                  'rgb(153, 102, 255)',
+                  'rgb(201, 203, 207)'
+                ],
+                borderColor: [
+                  'rgb(255, 99, 132)',
+                  'rgb(255, 159, 64)',
+                  'rgb(255, 205, 86)',
+                  'rgb(75, 192, 192)',
+                  'rgb(54, 162, 235)',
+                  'rgb(153, 102, 255)',
+                  'rgb(201, 203, 207)'
+                ],
+
+                borderWidth: 1
+              }]
+            };
+
+            // sales Chart  configuration
+            const salesConfig = {
+              type: 'bar',
+              data: salesData,
+              options: {
+                scales: {
+                  yAxes: [{
+                    stacked: true,
+                    gridLines: {
+                      display: true,
+                      color: "rgba(255,99,132,0.2)"
+                    },
+                    ticks: {
+                      min: 0,
+                      callback: function (value, index, values) {
+                        if (Math.floor(value) === value) {
+                          return value;
+                        }
+                      }
+                    }
+                  }],
+                  y: {
+                    beginAtZero: true
+                  },
+
+                }
+              },
+            };
+
+            var sales = new Chart(document.getElementById('saleChart'), salesConfig);
+            sales.update();
+
+          } catch (error) {
+            console.error(error);
+
+          }
+
+        }
+
+        async function getCategoryData() {
+          try {
+            statisticsResponse = await axios.get("/admin/dashboard/statistics");
+
+            categoryArray = statisticsResponse.data.productCounts;
+            const categorydata = {
+              labels: categoryNames,
+              datasets: [{
+                data: categoryArray,
+                backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(255, 159, 64, 0.2)',
+                  'rgba(255, 205, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(201, 203, 207, 0.2)'
+                ],
+                borderColor: [
+                  'rgb(255, 99, 132)',
+                  'rgb(255, 159, 64)',
+                  'rgb(255, 205, 86)',
+                  'rgb(75, 192, 192)',
+                  'rgb(54, 162, 235)',
+                  'rgb(153, 102, 255)',
+                  'rgb(201, 203, 207)'
+                ],
+                radius: 200,
+                borderWidth: 1
+              }]
+            };
+
+            //category chart configuration
+            const categoryConfig = {
+              type: 'pie',
+              data: categorydata,
+            };
+
+            var category = new Chart(document.getElementById('categoryChart'), categoryConfig);
+
+
+
+            category.update()
+
+          } catch (error) {
+            console.error(error);
+
+          }
+
+        }
+        getRevenueData();
+
         getStatistics();
+
+        getSalesData();
+
+        getCategoryData()
+
+
+
+
+
+
+
+
+        //sales chart data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       });
     </script>
 
 
-<script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
 
-<script>
-  document.addEventListener("DOMContentLoaded", async (e) => {
-    const reportTypeElement = document.getElementById('reportType');
 
-    reportTypeElement.addEventListener("change", () => {
-      const selectedReportType = reportTypeElement.value;
-      console.log(selectedReportType);
 
-      const reportDownload = document.getElementById('download-report').addEventListener("click", async (e) => {
-        const response = await axios.get(`/admin/sales-report?reportType=${selectedReportType}`);
-        const salesReport = response.data.salesReport;
 
-        // Create and download Excel file
 
-        createAndDownloadExcel(salesReport);
+
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async (e) => {
+        const reportTypeElement = document.getElementById('reportType');
+
+        reportTypeElement.addEventListener("change", () => {
+          const selectedReportType = reportTypeElement.value;
+          console.log(selectedReportType);
+
+          const reportDownload = document.getElementById('download-report').addEventListener("click", async (e) => {
+            const response = await axios.get(`/admin/sales-report?reportType=${selectedReportType}`);
+            const salesReport = response.data.salesReport;
+
+            // Create and download Excel file
+
+            createAndDownloadExcel(salesReport);
+          });
+        });
+
+        function createAndDownloadExcel(data) {
+          const workbook = new ExcelJS.Workbook();
+          const worksheet = workbook.addWorksheet('Sales Report');
+
+          // Add headers
+          worksheet.addRow(['Product Name', 'Quantity', 'Payment Mode', 'Total Amount']);
+
+          // Add data
+          data.forEach(entry => {
+            worksheet.addRow([entry.productName, entry.quantity, entry.paymentMode, entry.totalAmount]);
+          });
+
+          // Save the workbook to a buffer
+          workbook.xlsx.writeBuffer().then(buffer => {
+            // Create a Blob from the buffer
+            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+            // Create a link element and trigger a click event to download the file
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'sales_report.xlsx';
+            link.click();
+          });
+        }
       });
-    });
-
-    function createAndDownloadExcel(data) {
-      const workbook = new ExcelJS.Workbook();
-      const worksheet = workbook.addWorksheet('Sales Report');
-
-      // Add headers
-      worksheet.addRow(['Product Name', 'Quantity', 'Payment Mode', 'Total Amount']);
-
-      // Add data
-      data.forEach(entry => {
-        worksheet.addRow([entry.productName, entry.quantity, entry.paymentMode, entry.totalAmount]);
-      });
-
-      // Save the workbook to a buffer
-      workbook.xlsx.writeBuffer().then(buffer => {
-        // Create a Blob from the buffer
-        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-
-        // Create a link element and trigger a click event to download the file
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = 'sales_report.xlsx';
-        link.click();
-      });
-    }
-  });
-</script>
+    </script>
 
     <%- include('../layout/adminFooter.ejs') %>

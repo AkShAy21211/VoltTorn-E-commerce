@@ -290,19 +290,24 @@ const loadCheckOutPage = async (req, res) => {
       (product) => categoryOffer.some((offer) => offer.offer === product.product_id.category)
     );
 
+    console.log(matchedCategoryProducts);
+
     const matchedOfferProducts = cart.cart.filter(
       (product) => productOffer.some((offer) => offer.offer === product.name)
     );
     
     console.log(matchedOfferProducts);
+let categoryDiscount;
+    if(matchedCategoryProducts.length>0){
+       categoryDiscount = categoryOffer.map((offer) => offer.percentage / 100);
+      console.log(categoryDiscount);
+      
+    }
 
-    console.log(matchedOfferProducts);
-    const categoryDiscount = categoryOffer.map((offer) => offer.percentage / 100);
-    console.log(categoryDiscount);
-    
-
+let productDiscount;
     if(matchedOfferProducts.length>0){
-    const productDiscount = productOffer.map((offer) => offer.percentage / 100);
+     productDiscount = productOffer.map((offer) => offer.percentage / 100);
+    console.log(productDiscount);
     }
     
 

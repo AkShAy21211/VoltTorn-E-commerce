@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Get the search bar element
   var searchInput = document.getElementById("search-bar");
   const category = document.getElementById("category_name").value;
+  let offer;
 
   console.log(category);
   // Add an input event listener to track changes
@@ -16,15 +17,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (response.data) {
         ProductData = response.data.products;
+        offer = response.data.offer;
+        console.log(offer);
         renderProducts(ProductData);
         if (response.data.products.length == 0) {
-          document.getElementById("filterCount").innerHTML = `${response.data.products.length} Items found`;
-        }else{
-            document.getElementById("filterCount").innerHTML= `${response.data.products.length} Items found`;
-
+          document.getElementById(
+            "filterCount"
+          ).innerHTML = `${response.data.products.length} Items found`;
+        } else {
+          document.getElementById(
+            "filterCount"
+          ).innerHTML = `${response.data.products.length} Items found`;
         }
       }
-    } catch (erorr) {
+    } catch (error) {
       console.error(error);
     }
   });
@@ -36,53 +42,85 @@ document.addEventListener("DOMContentLoaded", function () {
     productContainer.empty();
 
     // Render each product card and append to the container
-    products.forEach((product) => {
+    products.forEach((product, index) => {
       const productCard = `
-      <div class="col-lg-4 col-md-6 col-sm-6  mt-xl-0 mt-lg-4 mt-md-5 mb-4 mt-sm-5 mt-5">
-        <a href="/home/product/details/${
-          product._id
-        }" class="text-decoration-none text-dark">
-          <div class="card border-0 h-100 p-2" id="product-card">
-          ${product.images
-              .slice(0, 1)
-              .map(
-                (image) => `
+      <div class="col-lg-4 col-md-6 col-sm-6 mt-xl-0 mt-lg-2 mt-md-3 mb-4 mt-sm-4 mt-4 p-3">
+          <!-- Use col-lg-4 to include three cards in one row -->
+
+          <a href="/home/product/details/${
+            product._id
+          }" class="text-decoration-none text-dark ">
+
+            <div class="card border-0 h-100 p-2 " id="product-card-${index}">
+
+              <div class="offer-container" id="offer-container-${index}"></div>
+
               <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px"
-                class="card-img-top" src="/images/productImages/${image}"
-                alt="Product Image 1" />
-            `
-              )
-              .join("")}
-            <div class="card-body" style="height: 130px;">
-              <h6>${product.name.substring(0, 40, product.name.length / 2)}</h6>
-              <p class="card-text" data-price="${Number(
+                class="card-img-top" src="/images/productImages/${
+                  product.images[0]
+                }" alt="Product Image " />
+              <div class="card-body" style="height: 130px;">
+                <div style="display: flex; justify-content: start; margin-bottom: 10px; text-align: start;">
+
+                  <h6>
+                    ${product.name.substring(0, 40, product.name.length / 2)}
+                  </h6>
+                </div>
+                <div style="display: flex; justify-content: start; margin-bottom: 10px;">
+                  <p class="card-text "
+                    data-price="${Number(
+                      product.price - product.price * (product.discount / 100)
+                    )}">Price:
+                    <b>Rs:${Number(
+                      product.price - product.price * (product.discount / 100)
+                    ).toLocaleString()}
+                    </b>
+                  </p>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <p class="card-text text-success">
+                    ${product.discount}% off
+                  </p>
+                  <p class="small text-danger"><s>Rs${product.price}</s></p>
+                </div>
+              </div>
+          </a>
+
+          <div class="d-flex justify-content-between">
+            <button style="font-size: 25px;" class=" btn addToCartButton bi bi-cart4 text-primary" data-product-id="${
+              product._id
+            }"
+              data-product-price="${Number(
                 product.price - product.price * (product.discount / 100)
               )}">
-                Price: <b>Rs:${Number(
-                  product.price - product.price * (product.discount / 100)
-                ).toLocaleString()}</b>
-              </p>
-              <div class="d-flex justify-content-between">
-                <p class="card-text text-success">${product.discount}% off</p>
-                <p class="small text-danger"><s>Rs${product.price}</s></p>
-              </div>
-            </div>
-          </a>
-          <div class="d-flex justify-content-between">
-          <button style="font-size: 25px;" class=" btn addToCartButton bi bi-cart4 text-primary" data-product-id="${ product._id }"
-          data-product-price="${ Number(product.price - (product.price * (product.discount / 100))) }">
-          </button>
-          <button data-product-id="${product._id}" style=" font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart btn"></button>
-
-        
-        </div>
-    
+            </button>
+            <button data-product-id="${
+              product._id
+            }" style=" font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart btn"></button>
           </div>
-        
-        
-      </div>`;
+        </div>`;
 
       productContainer.append(productCard);
+    });
+    products.forEach((product, i) => {
+      const Offer = offer.filter(
+        (offer) =>
+          (offer.offerType === "Category" &&
+            offer.offer === product.category) ||
+          offer.offer === product.name
+      );
+
+      const [matchingOffer] = Offer;
+      console.log(matchingOffer);
+
+      if (matchingOffer) {
+        const offerBadge = `
+<span style="position: relative; z-index: 10px; border-radius: 20px; font-size: 13px; color: white; box-shadow: 1px 1px 10px rgb(77, 145, 240);" class="badge bg-primary float-right">
+  <span>${matchingOffer.percentage}% off</span>
+</span>`;
+
+        productContainer.find(`#offer-container-${i}`).append(offerBadge);
+      }
     });
   }
 });

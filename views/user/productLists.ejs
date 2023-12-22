@@ -162,7 +162,7 @@
             </article> <!-- filter-group .// -->
 
 
-            <a href="#" id="applyFilterBtn" data-category="<%=cat_name  %>" class="btn me-2 ml-2 btn-primary mt-3">Apply
+            <a href="#" id="applyFilterBtn" data-offer="<%=offers  %>" data-category="<%=cat_name  %>" class="btn me-2 ml-2 btn-primary mt-3">Apply
               Filter</a>
 
           </div>
@@ -177,8 +177,8 @@
               <span style="padding-top: 10px;" id="filterCount" class="mr-md-auto">
                 <%=ProductCount%> Items found
               </span>
-              <select data-category="<%=cat_name%>" data-product="<%=ProductData  %>" id="sortDropdown"
-                style="text-align: center;" class="me-3 mt-3 form-control">
+              <select data-category="<%=cat_name%>" data-offer="<%=offers%>" data-product="<%=ProductData  %>"
+                id="sortDropdown" style="text-align: center;" class="me-3 mt-3 form-control">
                 <option value="">Sort By</option>
                 <option value="High to Low">High to Low</option>
                 <option value="Low to High">Low to High</option>
@@ -200,30 +200,33 @@
 
                         <div class="card border-0 h-100 p-2 " id="product-card">
 
-                  <%if(offers !=='undefined' ) {%>
-                    <%offers.forEach(offer=>{%>
+                          <div id="offer-container">
+                            <%if(offers !=='undefined' ) {%>
+                              <%offers.forEach(offer=>{%>
 
 
 
-                      <%if(offer.offer===product.category || offer.offer === product.name) {%>
-                        <span
-                          style="position: relative; z-index: 10px; border-radius: 20px; font-size: 13px; color: white; box-shadow: 1px 1px 10px rgb(77, 145, 240);"
-                          class="badge  bg-primary float-right"><span>
-                            <%=offer.percentage %>% off
-                          </span></span>
+                                <%if(offer.offer===product.category || offer.offer===product.name) {%>
+                                  <span
+                                    style="position: relative; z-index: 10px; border-radius: 20px; font-size: 13px; color: white; box-shadow: 1px 1px 10px rgb(77, 145, 240);"
+                                    class="badge  bg-primary float-right"><span>
+                                      <%=offer.percentage %>% off
+                                    </span></span>
 
-                        <%} %>
+                                  <%} %>
 
-                         <% })%>
+                                    <% })%>
 
 
 
-                          <%} %>
+                                      <%} %>
+
+                          </div>
 
                           <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px"
                             class="card-img-top" src="/images/productImages/<%=product.images[0]  %>"
                             alt="Product Image " />
-                            
+
                           <div class="card-body" style="height: 130px;">
                             <div style="display: flex; justify-content: start; margin-bottom: 10px; text-align: start;">
 
@@ -308,13 +311,13 @@
   <script src="/js/addTOcart.js"></script>
   <script src="/js/search.js"></script>
   <script src="/js/wishlists.js"></script>
-
   <script>
-    $(document).ready(function () {
+    $(document).ready(async function () {
       const select = $('#sortDropdown').on('change', async function () {
         var sortOption = $(this).val();
         var category = $(this).data('category');
         let ProductData = $(this).data('product');
+        let offer = $(this).data('offer');
 
         try {
           if (sortOption && category !== '') {
@@ -323,11 +326,12 @@
             if (response.data) {
               // Assuming 'products' is the key in the response containing the sorted products
               ProductData = response.data.products;
+              offer = response.data.offer;
 
               // Clear existing product container content
 
               // Append the new sorted products to the container
-              renderProducts(ProductData);
+              renderProducts(ProductData, offer);
             }
           }
         } catch (error) {
@@ -335,63 +339,83 @@
         }
       });
 
-
-      function renderProducts(products) {
+      function renderProducts(products, offer) {
         const productContainer = $('#product-container');
 
         // Clear existing product container content
         productContainer.empty();
 
         // Render each product card and append to the container
-        products.forEach(product => {
+        products.forEach((product, index) => {
           const productCard = `
-          <div class="col-lg-4 col-md-6 col-sm-6 mt-xl-0 mt-lg-2 mt-md-3 mb-4 mt-sm-4 mt-4 p-3">
-                      <!-- Use col-lg-4 to include three cards in one row -->
-        
-                      <a href="/home/product/details/${product._id}" class="text-decoration-none text-dark ">
-                        
-                        <div class="card border-0 h-100 p-2 " id="product-card">
-                          <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px"
-                            class="card-img-top" src="/images/productImages/${product.images[0]}" alt="Product Image " />
-                          <div class="card-body" style="height: 130px;">
-                            <div style="display: flex; justify-content: start; margin-bottom: 10px; text-align: start;">
-        
-                              <h6>
-                                ${product.name.substring(0, 40, product.name.length / 2)}
-                              </h6>
-                            </div>
-                            <div style="display: flex; justify-content: start; margin-bottom: 10px;">
-                              <p class="card-text "
-                                data-price="${Number(product.price - (product.price * (product.discount / 100)))}">Price:
-                                <b>Rs:${Number(product.price - (product.price * (product.discount / 100))).toLocaleString()}
-                                </b>
-                              </p>
-        
-                            </div>
-                            <div class="d-flex justify-content-between">
-                              <p class="card-text text-success">
-                                ${product.discount}% off
-                              </p>
-                              <p class="small text-danger"><s>Rs${product.price}</s></p>
-                            </div>
-                          </div>
-                      </a>
-        
-                 
-                      <div class="d-flex justify-content-between">
-                        <button style="font-size: 25px;" class=" btn addToCartButton bi bi-cart4 text-primary" data-product-id="${product._id}"
-                        data-product-price="${Number(product.price - (product.price * (product.discount / 100)))}">
-                        </button>
-                        <button data-product-id="${product._id}" style=" font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart btn"></button>
+        <div class="col-lg-4 col-md-6 col-sm-6 mt-xl-0 mt-lg-2 mt-md-3 mb-4 mt-sm-4 mt-4 p-3">
+          <!-- Use col-lg-4 to include three cards in one row -->
 
-                      
-                      </div>
-                    </div>`;
+          <a href="/home/product/details/${product._id}" class="text-decoration-none text-dark ">
+
+            <div class="card border-0 h-100 p-2 " id="product-card-${index}">
+
+              <div class="offer-container" id="offer-container-${index}"></div>
+
+              <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px"
+                class="card-img-top" src="/images/productImages/${product.images[0]}" alt="Product Image " />
+              <div class="card-body" style="height: 130px;">
+                <div style="display: flex; justify-content: start; margin-bottom: 10px; text-align: start;">
+
+                  <h6>
+                    ${product.name.substring(0, 40, product.name.length / 2)}
+                  </h6>
+                </div>
+                <div style="display: flex; justify-content: start; margin-bottom: 10px;">
+                  <p class="card-text "
+                    data-price="${Number(product.price - (product.price * (product.discount / 100)))}">Price:
+                    <b>Rs:${Number(product.price - (product.price * (product.discount / 100))).toLocaleString()}
+                    </b>
+                  </p>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <p class="card-text text-success">
+                    ${product.discount}% off
+                  </p>
+                  <p class="small text-danger"><s>Rs${product.price}</s></p>
+                </div>
+              </div>
+          </a>
+
+          <div class="d-flex justify-content-between">
+            <button style="font-size: 25px;" class=" btn addToCartButton bi bi-cart4 text-primary" data-product-id="${product._id}"
+              data-product-price="${Number(product.price - (product.price * (product.discount / 100)))}">
+            </button>
+            <button data-product-id="${product._id}" style=" font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart btn"></button>
+          </div>
+        </div>`;
 
           productContainer.append(productCard);
-        });
-      }
 
+
+        });
+
+        products.forEach((product, i) => {
+
+          const Offer = offer.filter(offer => offer.offerType === 'Category' && offer.offer === product.category || offer.offer === product.name);
+
+          const [matchingOffer] = Offer;
+          console.log(matchingOffer);
+
+          if (matchingOffer) {
+            const offerBadge = `
+    <span style="position: relative; z-index: 10px; border-radius: 20px; font-size: 13px; color: white; box-shadow: 1px 1px 10px rgb(77, 145, 240);" class="badge bg-primary float-right">
+      <span>${matchingOffer.percentage}% off</span>
+    </span>`;
+
+            productContainer.find(`#offer-container-${i}`).append(offerBadge);
+          }
+        })
+
+
+
+
+      }
     });
 
   </script>
@@ -411,20 +435,21 @@
         }).get();
 
 
-        var selectedPrice = $('input[name="selectedPrice"]:checked').val();
 
         let Product;
+        let offer = $(this).data('offer');
+
 
         try {
 
 
-          console.log(selectedPrice);
 
-          const response = await axios.get(`/home/products/${category}/filter?subCategory=${selectedSubCategories}&brand=${selectedBrands}&price=${selectedPrice}`)
+          const response = await axios.get(`/home/products/${category}/filter?subCategory=${selectedSubCategories}&brand=${selectedBrands}`)
             .then((response) => {
               Product = response.data.ProductData;
-              if (response.data.ProductData.length) {
-                renderProducts(Product);
+              offer = response.data.offer;
+              if (response.data.ProductData) {
+                renderProducts(Product,offer);
 
                 $("#filterCount").html(`${response.data.productCount} Items found`)
 
@@ -438,50 +463,75 @@
         }
 
 
-        function renderProducts(Product) {
+        function renderProducts(Product,offer) {
 
           // Clear existing product container content
           productContainer.empty();
           // Render each product card and append to the container
-          Product.forEach(product => {
+          Product.forEach((product, index) => {
             const productCard = `
-      <div class="col-lg-4 col-md-6 col-sm-6  mt-xl-0 mt-lg-4 mt-md-5 mb-4 mt-sm-5 mt-5">
-        <a href="/home/product/details/${product._id}" class="text-decoration-none text-dark">
-          
-          <div class="card border-0 h-100 p-2" id="product-card">
+            <div class="col-lg-4 col-md-6 col-sm-6 mt-xl-0 mt-lg-2 mt-md-3 mb-4 mt-sm-4 mt-4 p-3">
+          <!-- Use col-lg-4 to include three cards in one row -->
 
-            ${product.images.slice(0, 1).map(image => `
+          <a href="/home/product/details/${product._id}" class="text-decoration-none text-dark ">
+
+            <div class="card border-0 h-100 p-2 " id="product-card-${index}">
+
+              <div class="offer-container" id="offer-container-${index}"></div>
+
               <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px"
-                class="card-img-top" src="/images/productImages/${image}"
-                alt="Product Image 1" />
-            `).join('')}
-            <div class="card-body" style="height: 130px;">
-              <h6>${product.name.substring(0, 40, product.name.length / 2)}</h6>
-              <p class="card-text" data-price="${Number(product.price - (product.price * (product.discount / 100)))}">
-                Price: <b>Rs:${Number(product.price - (product.price * (product.discount / 100))).toLocaleString()}</b>
-              </p>
-              <div class="d-flex justify-content-between">
-                <p class="card-text text-success">${product.discount}% off</p>
-                <p class="small text-danger"><s>Rs${product.price}</s></p>
-              </div>
-            </div>
-          </a> 
-          
-          <div class="d-flex justify-content-between">
-                        <button style="font-size: 25px;" class=" btn addToCartButton bi bi-cart4 text-primary" data-product-id="${product._id}"
-                        data-product-price="${Number(product.price - (product.price * (product.discount / 100)))}">
-                        </button>
-                        <button data-product-id="${product._id}" style=" font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart btn"></button>
+                class="card-img-top" src="/images/productImages/${product.images[0]}" alt="Product Image " />
+              <div class="card-body" style="height: 130px;">
+                <div style="display: flex; justify-content: start; margin-bottom: 10px; text-align: start;">
 
-                      
-                      </div>
-    
+                  <h6>
+                    ${product.name.substring(0, 40, product.name.length / 2)}
+                  </h6>
+                </div>
+                <div style="display: flex; justify-content: start; margin-bottom: 10px;">
+                  <p class="card-text "
+                    data-price="${Number(product.price - (product.price * (product.discount / 100)))}">Price:
+                    <b>Rs:${Number(product.price - (product.price * (product.discount / 100))).toLocaleString()}
+                    </b>
+                  </p>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <p class="card-text text-success">
+                    ${product.discount}% off
+                  </p>
+                  <p class="small text-danger"><s>Rs${product.price}</s></p>
+                </div>
+              </div>
+          </a>
+
+          <div class="d-flex justify-content-between">
+            <button style="font-size: 25px;" class=" btn addToCartButton bi bi-cart4 text-primary" data-product-id="${product._id}"
+              data-product-price="${Number(product.price - (product.price * (product.discount / 100)))}">
+            </button>
+            <button data-product-id="${product._id}" style=" font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart btn"></button>
           </div>
-        
-        
-      </div>`;
+        </div>`;
             productContainer.append(productCard);
           });
+
+
+          Product.forEach((product, i) => {
+
+            const Offer = offer.filter(offer => offer.offerType === 'Category' && offer.offer === product.category || offer.offer === product.name);
+
+            const [matchingOffer] = Offer;
+
+            console.log(matchingOffer);
+
+            if (matchingOffer) {
+              const offerBadge = `
+<span style="position: relative; z-index: 10px; border-radius: 20px; font-size: 13px; color: white; box-shadow: 1px 1px 10px rgb(77, 145, 240);" class="badge bg-primary float-right">
+<span>${matchingOffer.percentage}% off</span>
+</span>`;
+
+              productContainer.find(`#offer-container-${i}`).append(offerBadge);
+            }
+          })
         }
 
       });

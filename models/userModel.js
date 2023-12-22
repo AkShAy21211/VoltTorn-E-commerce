@@ -153,7 +153,8 @@ const userSchema = new mongoose.Schema({
     required:true,
   },
   referredBy: { 
-    type: mongoose.Schema.Types.ObjectId, ref: 'user',
+    type: mongoose.Schema.Types.ObjectId,
+     ref: 'user',
     required:false,
    },
   referredPurchases: {

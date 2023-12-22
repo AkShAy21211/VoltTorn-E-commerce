@@ -66,14 +66,18 @@ const productDetail = async (req, res) => {
 const sortProductByUserPreference = async (req, res) => {
   try {
       const { category, sortOption } = req.params;
-
-      const priceDirection = sortOption === "High to Low"?-1:1;
+      const offer = await offerModal.find({
+        $or: [
+          { offerType: 'Product' }, { offer: category },
+        ],
+      });     
+       const priceDirection = sortOption === "High to Low"?-1:1;
 
       const products = await productModel
       .find({ category: category })
       .sort({ price: priceDirection }); 
 
-      res.status(200).json({ products });
+      res.status(200).json({ products,offer });
   } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');
@@ -81,14 +85,16 @@ const sortProductByUserPreference = async (req, res) => {
 };
 const filterProductsByUser = async (req, res) => {
   try {
-const {subCategory,brand,selectedPrice,price} = req.query;
-const sortOption = selectedPrice === -1 ? { price: -1 } : { price: 1 };
-
+const {subCategory,brand} = req.query;
 const selectedSubCategories = subCategory ? subCategory.split(',') : [];
 const selectedBrands = brand ? brand.split(',') : [];
 const category = req.params.cat_name;
 
-
+const offer = await offerModal.find({
+  $or: [
+    { offerType: 'Product' }, { offer: category },
+  ],
+});     
 const ProductData = await productModel.find({
   category: category,
   $or: [
@@ -102,7 +108,7 @@ const ProductData = await productModel.find({
 const productCount = ProductData.length;
 
 
-    res.status(200).json({ProductData,productCount});
+    res.status(200).json({ProductData,productCount,offer});
   } catch (error) {
     console.error(error);
     // Handle errors and send an error response if necessary
@@ -116,7 +122,12 @@ const searchProducts = async(req,res)=>{
    const {value} = req.query;
    const {cat_name} = req.params;
    const products = await productModel.find({category:cat_name, name: { $regex: value, $options: 'i' } });
-   res.status(200).json({products});
+   const offer = await offerModal.find({
+    $or: [
+      { offerType: 'Product' }, { offer: cat_name },
+    ],
+  });  
+   res.status(200).json({products,offer});
 
   }catch(error){
     console.error(error);
