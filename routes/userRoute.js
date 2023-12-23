@@ -82,8 +82,6 @@ userRoute.post('/home/cart/checkout',auth.isUserBlocked,userCartController.state
 
 //user address add
 userRoute.post('/home/cart/add-address',auth.isUserBlocked,userCartController.addUserBellingAddress)
-
-//user address edit
 userRoute.post('/home/cart/edit-address/:id',auth.isUserBlocked,userCartController.editUserBillingAddress);
 
 
@@ -98,6 +96,8 @@ userRoute.get('/home/setting/edit-profile/delete-address/:address_id',auth.isUse
 userRoute.get('/home/settings/oders',auth.isUserBlocked,userSettingController.loadUserOdersPage);
 userRoute.get('/home/settings/cancel-oders/:oder_id/:product_id/:oder_index/:product_index',auth.isUserBlocked,userSettingController.forCancelUserOders);
 
+//user post product review
+userRoute.post('/home/settings/oders/add-review',auth.isUserBlocked,userSettingController.addProductReview)
 
 
 
@@ -121,8 +121,6 @@ userRoute.post('/send-newsletter',homeController.sendEmailNewsLetter);
 
 
 userRoute.get('/logout',auth.is_Login,userController.userLogout)
-
-
 
 
 

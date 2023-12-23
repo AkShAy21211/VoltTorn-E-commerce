@@ -14,6 +14,36 @@ const getProductStatistics = async (req, res) => {
       .find({ is_admin: 0 })
       .countDocuments();
 
+      //get online and cod payment statictits
+      const paymentModeCounts = await userModel.aggregate([
+        { $unwind: "$oders" },
+        {
+          $match: {
+            "oders.payment_mode": { $in: ["online", "COD"] },
+          },
+        },
+        {
+          $group: {
+            _id: "$oders.payment_mode",
+            count: { $sum: 1 },
+          },
+        },
+        {
+          $project: {
+            paymentMode: "$_id",
+            count: 1,
+            _id: 0,
+          },
+        },
+      ]);
+      
+      
+      
+      
+
+
+
+
     const amount = await userModel.aggregate([
       {
         $unwind: "$oders", // Deconstruct the orders array
@@ -33,6 +63,7 @@ const getProductStatistics = async (req, res) => {
 
     const currentYear = new Date().getFullYear();
     const startDate = new Date(currentYear, new Date().getMonth() - 11, 1);
+
 
     const monthlyRevenue = await userModel.aggregate([
       // Unwind the orders array to flatten it
@@ -80,6 +111,58 @@ const getProductStatistics = async (req, res) => {
       return monthData ? monthData.monthlyRevenue : 0;
     });
 
+    
+
+    const yearlyRevenue = await userModel.aggregate([
+      // Unwind the orders array to flatten it
+      { $unwind: "$oders" },
+    
+      // Match orders within the desired date range
+      {
+        $match: {
+          "oders.date": {
+            $lte: new Date(currentYear, 11, 31), // End of the current year
+          },
+          "oders.status": "Delivered",
+        },
+      },
+    
+      // Group by year, calculate the total revenue
+      {
+        $group: {
+          _id: {
+            year: { $year: "$oders.date" },
+          },
+          yearlyRevenue: { $sum: "$oders.totalAmount" },
+        },
+      },
+    
+      // Project to rename the fields
+      {
+        $project: {
+          _id: 0,
+          year: "$_id.year",
+          yearlyRevenue: 1,
+        },
+      },
+    
+      // Sort by year
+      { $sort: { year: 1 } },
+    ]);
+    
+    
+    const yearsSinceStart = currentYear - 2022 + 1;
+
+    // Format the result as an array
+    let formattedYearlyRevenue = Array.from({ length: yearsSinceStart }, (_, index) => {
+      const yearlyData = yearlyRevenue.find((data) => data.year === currentYear - index);
+      return yearlyData ? yearlyData.yearlyRevenue : 0;
+    });
+    
+    formattedYearlyRevenue.reverse()
+
+
+    
 
 
     const monthlySales = await userModel.aggregate([
@@ -89,6 +172,9 @@ const getProductStatistics = async (req, res) => {
       { $unwind: "$oders.products" },
       {
         $match: {
+          "oders.date": {
+            $lte: new Date(currentYear, 11, 31), // End of the current year
+          },
           "oders.status": "Delivered",
         },
       },
@@ -116,9 +202,64 @@ const getProductStatistics = async (req, res) => {
         },
       },
     ]);
+    const formattedMonthlySales = Array.from({ length: 12 }, (_, index) => {
+      const monthData = monthlySales.find((data) => data.month === index + 1);
+      return monthData ? monthData.totalSales : 0;
+    });
+    
 
 
 
+
+    const yearlySales = await userModel.aggregate([
+      // Unwind the orders array to get a separate document for each order
+      { $unwind: "$oders" },
+      // Unwind the products array to get a separate document for each product in the order
+      { $unwind: "$oders.products" },
+      {
+        $match: {
+          "oders.status": "Delivered",
+        },
+      },
+      {
+        $project: {
+          year: { $year: "$oders.date" }, // Extract year from the order date
+          quantity: "$oders.products.quantity",
+        },
+      },
+      // Group by year and sum the quantities
+      {
+        $group: {
+          _id: {
+            year: "$year",
+          },
+          totalSales: { $sum: "$quantity" },
+        },
+      },
+      // Sort by year
+      { $sort: { "_id.year": 1 } },
+      // Project to rename the _id field to year
+      {
+        $project: {
+          year: "$_id.year",
+          totalSales: 1,
+          _id: 0,
+        },
+      },
+    ]);
+    
+
+
+
+
+    
+    const formattedYearlySales = Array.from({ length: yearsSinceStart }, (_, index) => {
+      const yearData = yearlySales.find((data) => data.year === currentYear - index);
+      return yearData ? yearData.totalSales : 0;
+    });
+    
+    
+     formattedYearlySales.reverse()
 
     const pipeline = [
       {
@@ -145,11 +286,7 @@ const getProductStatistics = async (req, res) => {
 
 
 
-    const formattedMonthlySales = Array.from({ length: 12 }, (_, index) => {
-      const monthData = monthlySales.find((data) => data.month === index + 1);
-      return monthData ? monthData.totalSales : 0;
-    });
-
+    
 
     const totalRevenue = amount.map((amount) => amount.totalAmount);
     res.status(200).json({
@@ -158,9 +295,13 @@ const getProductStatistics = async (req, res) => {
         totalCustomers,
         totalRevenue,
         formattedMonthlyRevenue,
+        formattedYearlyRevenue,
         formattedMonthlySales,
+        formattedYearlySales,
         productCounts,
-        categoryNames
+        categoryNames,
+        paymentModeCounts
+    
       });
   } catch (error) {
     console.error(error);
@@ -224,6 +365,8 @@ const downlodeSalesReport = async (req, res) => {
     console.error(error);
   }
 };
+
+
 
 module.exports = {
   getProductStatistics,

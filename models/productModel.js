@@ -58,10 +58,6 @@ const productSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  reviews:{
-    type:[Object],
-    require:false,
-  }
 });
 
 

@@ -166,7 +166,7 @@ deleteCartItemButtons.forEach((deleteButton) => {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Remove',
-      cancelButtonText: 'Move to Wishlist',
+      cancelButtonText: 'Cancel',
       width:"300px",
     });
 

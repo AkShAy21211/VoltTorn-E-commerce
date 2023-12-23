@@ -2,6 +2,7 @@ const productModel = require("../models/productModel");
 const userModel = require("../models/userModel");
 const {WishListModel} = require("../models/cart&WishlistModel");
 const offerModal = require("../models/offerModal");
+const reviewModal = require("../models/reviewModel");
 
 //USER SETTINGS PAGE
 
@@ -232,6 +233,29 @@ const removeWishlistsItems = async(req,res)=>{
 }
 
 
+const addProductReview = async(req,res)=>{
+
+  try{
+    const {rating,review,product} = req.query;
+    const userId = req.session.user?req.session.user.userId:undefined;
+    const reviewData  =  new reviewModal({
+
+      user:userId,
+      product:product,
+      review:review,
+      rating:rating,
+      
+    });
+
+    await reviewData.save();
+
+    res.status(200).json({reviewData})
+
+  }catch(error){
+    console.error(error);
+  }
+}
+
 module.exports = {
   loadUserSettings,
   editUserProfile,
@@ -241,5 +265,6 @@ module.exports = {
   deleteUserAddress,
   userWishlistLoad,
   userWishlistLoadProductAdd,
-  removeWishlistsItems
+  removeWishlistsItems,
+  addProductReview
 };

@@ -1,11 +1,16 @@
 const mongoose = require("mongoose");
 
 const reviewSchema = new mongoose.Schema({
-    reviews: [
-        {
+        
           user: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User", // You can reference a User schema if you have one
+            ref: "user",
+            
+          },
+          product: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Product",
+            
           },
           rating: {
             type: Number,
@@ -14,17 +19,13 @@ const reviewSchema = new mongoose.Schema({
           },
           review: {
             type: String,
+            required:false,
           },
           created_at: {
             type: Date,
             default: Date.now,
           },
-          updated_at: {
-            type: Date,
-            default: Date.now,
-          },
-        },
-      ],
+ 
 
 });
 

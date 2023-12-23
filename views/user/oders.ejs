@@ -49,6 +49,70 @@
       background-color: #fff;
       color: #333;
     }
+    .rating-stars-container {
+    text-align: center;
+}
+  
+.rating-stars {
+    display: inline-block;
+	margin: 20px;
+}
+.rating-star {
+	font-size: 44px;
+	cursor: pointer
+}
+
+.fa-star {
+	color: #00A8CC;
+}
+
+
+.bottom-message {
+	font-size: 0.85em;
+}
+
+.sr-navigator-container.visible-sm-block {
+  margin-top: 30px;
+}
+
+.notes-container {
+  margin: auto;
+  margin-top: 20px;
+  width: 50%;
+}
+#myNotesView {
+	display: block;
+}
+
+.notes-buttons {
+	margin-top: 10px;
+}
+
+@media (max-width: 767px) { 
+  .notes-container {
+    width: 100%;
+  }
+}
+
+.btn-ls-blue {
+	background-color: #4984a3;
+	border: none;
+    -o-transition: background-color 0.215s;
+    -moz-transition: background-color 0.215s;
+    -webkit-transition: background-color 0.215s;
+    transition: background-color 0.215s;
+}
+
+.btn-ls-blue:hover,
+.btn-ls-blue:active,
+.btn-ls-blue:focus,
+.btn-ls-blue.active {
+    background-color: #00A8CC;
+}
+
+.hide { 
+  display: none;
+}
   </style>
 
   <title>Settings | Oders</title>
@@ -106,59 +170,69 @@
                           <td class="align-middle text-center text-warning">
                             <%= oder.status %>
                           </td>
-                          <% } else if (oder.status==='Shipped') { %>
+                          <% } else if (oder.status==='Shipped' ) { %>
                             <td class="align-middle text-center text-success">
                               <%= oder.status %>
                             </td>
+                            <% } else { %>
+                              <!-- Handle other cases or set a default class -->
+                              <td class="align-middle text-center">
+                                <%= oder.status %>
+                              </td>
+                              <% } %>
+
+                                <td class="align-middle text-center">
+                                  <% if (!product.cancelled && (oder.status==='Pending' || oder.status==='Shipped' )) {
+                                    %>
+
+                                    <a type="button"
+                                      onclick="return showCancelOrderAlert('<%=oder.order_id %>', '<%=product.product_id%>', '<%=i %>', '<%=index %>')"
+                                      class="btn btn-danger btn-sm text-white">Cancel Order</a>
+
+                                    <% } else if (product.cancelled) { %>
+                                      <span class="text-info">Cancelled</span>
+                                      <% } %>
+                                </td>
                                 <% } else { %>
-                                  <!-- Handle other cases or set a default class -->
                                   <td class="align-middle text-center">
-                                    <%= oder.status %>
+                                    <span class="text-info">Cancelled</span>
                                   </td>
                                   <% } %>
+                   
 
-                                    <td class="align-middle text-center">
-                                      <% if (!product.cancelled && (oder.status==='Pending' || oder.status==='Shipped'
-                                        )) { %>
-
-                                        <a type="button"
-                                          onclick="return showCancelOrderAlert('<%=oder.order_id %>', '<%=product.product_id%>', '<%=i %>', '<%=index %>')"
-                                          class="btn btn-danger btn-sm text-white">Cancel Order</a>
-
-                                        <% } else if (product.cancelled) { %>
-                                          <span class="text-info">Cancelled</span>
-                                          <% } %>
-                                    </td>
-                                    <% } else { %>
-                                      <td class="align-middle text-center">
-                                        <span class="text-info">Cancelled</span>
-                                      </td>
-                                    <% } %>
-                                     </tr>
-                                      
-                                    <% }); %>
-                                    <% if (oder.status==='Delivered' ) { %>
-
-                                    <tr style="height: 20px;">
-                                      <td>
-                              <td class="">
-                                <%= new Date().toLocaleString() %>
-                              </td>
-                                <td
-                                  class=" text-success d-flex  justify-content-end gap-3"
-                                  style="border-bottom: white;">
-                                  <%= oder.status %>
-                                    <a type="button" data-order-id="<%=oder._id  %>"
-                                      class="btn btn-primary btn-sm text-white invoice-download">Downlode invoice</a>
-
+                                  <%if(oder.status==='Delivered'){%>
+                                    <td>
+                                <button data-product="<%=product.product_id%>" class="btn text-warning" id="rateProductBtn">Rate this?</button>
                                 </td>
-                                </td>
-                                </tr>
-                                <% } %>
+                                  <%}%>
+                             
+                         
 
-                              <% }); %>
+                    </tr>
 
+                    <% }); %>
+                      <% if (oder.status==='Delivered' ) { %>
+
+                        <tr style="height: 20px;">
                           
+                          <td>
+                           
+                          <td class="">
+                            <%= new Date().toLocaleString() %>
+                          </td>
+                          <td class=" text-success d-flex  justify-content-end gap-3" style="border-bottom: white;">
+                              <a type="button" data-order-id="<%=oder._id  %>"
+                                class="btn btn-primary btn-sm text-white invoice-download">Downlode invoice</a>
+
+                          </td>
+                          
+                          </td>
+                        </tr>
+                        <% } %>
+
+                          <% }); %>
+
+
               </tbody>
 
             </table>
@@ -178,6 +252,38 @@
     </div>
   </main>
 
+  <style>
+    /* Add this CSS */
+    .rating-stars .bi-star-fill {
+        color: gray; /* Default star color */
+    }
+
+    .rating-stars .bi-star-fill.selected {
+        color: rgba(219, 219, 12, 0.822); /* Selected star color */
+    }
+</style>
+  <div class="modal fade" id="candidateRatingModal" tabindex="-1" role="dialog" aria-labelledby="candidateRatingModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="rating-stars-container">
+                    <div class="rating-stars">
+                        <i class="rating-star bi bi-star-fill" data-rating="1"></i>
+                        <i class="rating-star bi bi-star-fill" data-rating="2"></i>
+                        <i class="rating-star bi bi-star-fill" data-rating="3"></i>
+                        <i class="rating-star bi bi-star-fill" data-rating="4"></i>
+                        <i class="rating-star bi bi-star-fill" data-rating="5"></i>
+                    </div>
+                </div>
+                <textarea class="form-control" placeholder="Type your review" name="reviewText" id="reviewText" cols="30" rows="5"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" id="crCancelBtn" data-dismiss="modal">Cancel</button>
+                <button id="crSubmitBtn" type="button" class="btn btn-primary " >Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
 
   <script>
     function showCancelOrderAlert(orderId, productId, productIndex, orderIndex) {
@@ -324,5 +430,59 @@
       });
     });
   </script>
+
+  <script>
+  $(document).ready(function () {
+    let selectedRating;
+
+    $('.rating-star').click(function () {
+      selectedRating = parseInt($(this).data('rating'));
+      $('.rating-star').removeClass('selected');
+      for (var i = 1; i <= selectedRating; i++) {
+        $('.rating-star[data-rating="' + i + '"]').addClass('selected');
+      }
+
+      console.log(selectedRating);
+    });
+
+    // Handle button click event
+    $('#rateProductBtn').on('click', function () {
+      $('#candidateRatingModal').modal('show');
+    });
+
+    // Handle modal submit button click event
+    $('#crSubmitBtn').on('click', async function () {
+      var reviewText = $('#reviewText').val();
+      $('#candidateRatingModal').modal('hide');
+      const productId = $("#rateProductBtn").data('product');
+
+      console.log(productId);
+
+
+      try {
+        const response = await axios.post(`/home/settings/oders/add-review?review=${reviewText}&rating=${selectedRating}&product=${productId}`);
+
+        // Check if the review submission was successful
+        if (response.status === 200) {
+          // Log a message to the console to check if this block is reached
+          console.log('Review submitted successfully');
+          
+          // Review submitted successfully, hide the modal
+        } else {
+          // Handle the case where the review submission failed
+          console.error('Failed to submit review');
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    // Handle modal cancel button click event
+    $('#crCancelBtn').on('click', function () {
+      $('#candidateRatingModal').modal('hide');
+    });
+  });
+</script>
+
 
   <%- include('../layout/footer.ejs') %>

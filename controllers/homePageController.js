@@ -3,6 +3,8 @@ const bannerModel = require("../models/bannerModel");
 const categoryModel = require("../models/categoryModel");
 const offerModal = require("../models/offerModal");
 const mailchimp = require("@mailchimp/mailchimp_marketing");
+const reviewModal = require("../models/reviewModel");
+
 
 const loadHome = async (req, res) => {
   try {
@@ -53,10 +55,13 @@ const brands = result.map((entry) => entry._id);
 
 const productDetail = async (req, res) => {
   try {
-    const {id,color} = req.params;
+    const {id} = req.params;
     const offers = await offerModal.find({});
     const ProductData = await productModel.findById({_id:id});
-    res.render("productDetail",{ProductData,offers});
+    const reviews = await reviewModal.find({product:id}).populate('user');
+
+    console.log(reviews);
+    res.render("productDetail",{ProductData,offers,reviews});
   } catch (error) {
     console.log(error.message);
   }

@@ -18,7 +18,8 @@ const store = MongoSessionStore({
   uri:'mongodb://127.0.0.1:27017/VOLTTRON',
   collection:'sessions'
 })
-
+app.set("view engine", "ejs");
+app.set("views", "./views/user");
 const userSession = session({
   secret: config.userSessionSecreat,
   resave: false,
@@ -62,6 +63,10 @@ app.use("/", userRoute);
 // FOR ADMIN ROUTE
 const adminRoute = require("./routes/adminRoute");
 app.use("/admin", adminRoute);
+
+app.use((req, res) => {
+  res.status(404).render("error"); // Assuming 'user/error' is your error page
+});
 
 app.listen(PORT, () => {
   console.log(`server is running on port ${PORT}`);
