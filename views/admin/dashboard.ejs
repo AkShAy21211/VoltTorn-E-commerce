@@ -441,7 +441,7 @@
             payment = statisticsResponse.data.paymentModeCounts;
 
             const paymentData = {
-              labels: ["Online", "Cash",],
+              labels: [payment[0].paymentMode,payment[1].paymentMode],
               datasets: [{
                 data: [payment[0].count, payment[1].count],
                 backgroundColor: [

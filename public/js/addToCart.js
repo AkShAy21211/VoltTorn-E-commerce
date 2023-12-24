@@ -9,7 +9,7 @@ document.addEventListener("click", async (event) => {
 
     try {
       const response = await axios.post(
-        `http://localhost:3000/home/products/cart/${productId}`,
+        `/home/products/cart/${productId}`,
         { productPrice }
       );
 
@@ -41,6 +41,54 @@ document.addEventListener("click", async (event) => {
             onClick: function () {},
           }).showToast();
         }
+      } else {
+        // Display login modal if the user is not logged in while trying to add to cart
+        displayLoginModal();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }else if(event.target.classList.contains("buyNowButton")){
+    const button = event.target;
+    const productId = button.dataset.productId;
+    const productPrice = parseFloat(button.dataset.productPrice);
+
+    try {
+      const response = await axios.post(
+        `/home/products/buy-now/${productId}`,
+        { productPrice }
+      );
+
+      if (response.data.success) {
+
+        window.location.href='/home/cart'
+        // Display toast message
+        // if (response.data.message && response.data.message !== "undefined") {
+        //   const blueGradients = [
+        //     "linear-gradient(to right, #0074cc, #0076cc)",
+        //     "linear-gradient(to right, #004080, #0066cc)",
+        //     "linear-gradient(to right, #006080, #0080cc)",
+        //     "linear-gradient(to right, #003366, #0055b2)",
+        //     "linear-gradient(to right, #005080, #0070cc)",
+        //   ];
+
+        //   const randomGradient = blueGradients[Math.floor(Math.random() * blueGradients.length)];
+
+        //   Toastify({
+        //     text: response.data.message,
+        //     duration: 3000,
+        //     newWindow: true,
+        //     close: true,
+        //     gravity: "top",
+        //     position: "right",
+        //     stopOnFocus: true,
+        //     style: {
+        //       background: randomGradient,
+        //       marginTop: "60px",
+        //     },
+        //     onClick: function () {},
+        //   }).showToast();
+        // }
       } else {
         // Display login modal if the user is not logged in while trying to add to cart
         displayLoginModal();

@@ -71,6 +71,7 @@ userRoute.get('/home/settings/wishlist/remove/:index',auth.isUserBlocked,userSet
 //USER shoppingCart
 userRoute.get('/home/cart',auth.isUserBlocked,userCartController.userShoppingCartPageLoad);
 userRoute.post('/home/products/cart/:product_id',auth.isUserBlocked,auth.is_Login,userCartController.userAddToCartButton);
+userRoute.post('/home/products/buy-now/:product_id',auth.isUserBlocked,auth.is_Login,userCartController.userBuyNowButton);
 userRoute.patch('/home/products/cart/updateQuantity/:product_id/:product',auth.isUserBlocked,userCartController.updateQuantity)
 userRoute.delete('/home/cart/:product_id',auth.isUserBlocked,userCartController.deleteCartItem);
 

@@ -291,7 +291,7 @@
                 class="btn btn-primary d-flex align-items-center justify-content-center me-2 mb-2 addToCartButton">Add
                 To Cart</a>
               <a style="width: 500px; height: 60px"
-                class="btn btn-warning d-flex align-items-center justify-content-center mb-2">Buy Now</a>
+              data-product-id="<%= ProductData._id %>" data-product-price="<%= Number(ProductData.price - (ProductData.price * (ProductData.discount / 100))) %>"  class="btn btn-warning  d-flex align-items-center justify-content-center mb-2 buyNowButton">Buy Now</a>
             </div>
           </div>
 

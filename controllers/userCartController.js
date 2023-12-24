@@ -29,6 +29,7 @@ const userShoppingCartPageLoad = async (req, res) => {
   }
 };
 
+
 const userAddToCartButton = async (req, res) => {
   try {
     const product_id = req.params.product_id;
@@ -138,6 +139,117 @@ const userAddToCartButton = async (req, res) => {
     });
   }
 };
+
+const userBuyNowButton = async (req, res) => {
+  try {
+    const product_id = req.params.product_id;
+    const productPrice = req.body.productPrice;
+
+    const product = await productModel.findById(product_id);
+
+    const user_id = req.session.user.userId;
+
+    if (user_id) {
+      const existingCart = await CartModel.findOne({ _id: user_id });
+
+      if (existingCart) {
+        const existingProduct = existingCart.cart.find((item) =>
+          item.product_id.equals(product_id)
+        );
+
+        if (existingProduct) {
+          // Return a JSON response with redirectTo property
+          req.session.user.cart = existingProduct;
+
+          return res.status(200).json({
+            success: true,
+            redirectTo: "/home/cart",
+            message: "Product already added to cart",
+          });
+        } else {
+          //when new item added in existing cart
+
+          const updatedCart = await CartModel.findOneAndUpdate(
+            { _id: user_id },
+            {
+              $push: {
+                cart: {
+                  product_id: product_id,
+                  quantity: 1,
+                  name: product.name,
+                  image: product.variants.images[0],
+                  price: parseFloat(productPrice),
+                },
+              },
+            },
+            { new: true }
+          );
+
+          const total_price = updatedCart.cart.reduce(
+            (total, item) => total + item.price,
+            0
+          );
+
+          await CartModel.findOneAndUpdate(
+            { _id: user_id },
+            { $set: { total_price: total_price } }
+          );
+          // Return a JSON response with message and redirectTo properties
+          req.session.user.cart = updatedCart;
+
+          return res.status(200).json({
+            success: true,
+            total_price,
+            message: "Product added to cart",
+            redirectTo: "/home/cart",
+          });
+        }
+      } else {
+        //when new cart is created
+
+        const newCart = new CartModel({
+          _id: user_id,
+          cart: [
+            {
+              product_id: product_id,
+              quantity: 1,
+              name: product.name,
+              image: product.images[0],
+              price: parseFloat(productPrice),
+            },
+          ],
+          total_price: parseFloat(productPrice),
+        });
+
+        const cartData = await newCart.save();
+
+        // Return a JSON response with message and redirectTo properties
+        req.session.user.cart = newCart;
+
+        return res.status(200).json({
+          success: true,
+          message: "Product added to cart",
+          redirectTo: "/home/cart",
+        });
+      }
+    } else {
+      // Redirect if the user is not authenticated
+      return res.status(301).json({
+        success: false,
+        message: "User not authenticated",
+        redirectTo: "/login",
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    // Handle internal server error
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
 
 const updateQuantity = async (req, res) => {
   try {
@@ -510,6 +622,7 @@ const editUserBillingAddress = async (req, res) => {
 module.exports = {
   userShoppingCartPageLoad,
   userAddToCartButton,
+  userBuyNowButton,
   updateQuantity,
   deleteCartItem,
   loadCheckOutPage,

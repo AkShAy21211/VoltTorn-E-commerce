@@ -39,7 +39,6 @@ const getProductStatistics = async (req, res) => {
       
       
       
-      
 
 
 
