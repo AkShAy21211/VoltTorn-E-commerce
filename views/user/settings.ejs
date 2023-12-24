@@ -106,9 +106,9 @@
                 <i class="bi bi-heart"></i> Wishlist
               </li>
             </a>
-            <a class="options" href="">
+            <a class="options" href="/home/settings/reviews">
               <li class="list-group-item  inactive list-item">
-                <i class="bi bi-geo-alt"></i> Address
+                <i class="bi bi-star"></i>Ratings
               </li>
             </a>
           </ul>
@@ -177,7 +177,7 @@
                   <a style="font-size: 13px; padding: 3px;" href="/forget-password">Change Password</a>
                 </div>
                 <div class="col-md-6">
-                  <%if(referralOffer !== 'undefined'){%>
+                  <%if( typeof referralOffer !== 'undefined'){%>
                   <p class="text-success"><%=referralOffer.title  %></p>
 
                  <% }  %>

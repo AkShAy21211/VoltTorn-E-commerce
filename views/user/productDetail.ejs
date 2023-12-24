@@ -176,8 +176,8 @@
 
               <%if(reviews !== 'undefined'&& reviews.length >0){%>
             <div
-              class="container review-container position-relative mt-5 mt-lg-0 d-xl-block d-lg-block d-md-none d-none ">
-              <div class="row">
+              class="container review-container position-relative mt-5 mt-lg-5 d-xl-block d-lg-block d-md-none d-none ">
+              <div class="row mt-5">
                 <div class="bg-white rounded  p-4 mb-4 product-detaled-rating">
                   <h5 class="mb-1">All Ratings and Reviews</h5>
 
@@ -268,7 +268,7 @@
                   <%if(offer.offer===ProductData.category || offer.offer===ProductData.name) {%>
                     <span
                       style="position: relative; z-index: 10px; font-size: 13px; float: right; font-size: 15px; color: green; text-shadow: 2px 2px 4px  grid-row-end;">
-                      Special offer <%= offer.percentage %>% off
+                      Special offer extra <%= offer.percentage %>% off
                     </span>
 
 
@@ -324,6 +324,7 @@
           </ul>
           <%if(reviews !== 'undefined'&& reviews.length >0){%>
 
+
           <div
             class="container review-container position-relative mt-4 mt-lg-0 d-xl-none d-lg-none d-md-block d-block ">
             <div class="row">
@@ -369,6 +370,8 @@
               </div>
             </div>
             <%}%>
+
+
           </div>
 
         </div>

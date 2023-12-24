@@ -233,6 +233,22 @@ const removeWishlistsItems = async(req,res)=>{
 }
 
 
+const loadUserReviews = async(req,res)=>{
+
+  try{
+
+    const userId = req.session.user?req.session.user.userId:undefined;
+    const reviews = await reviewModal.find({user:userId}).populate('user').populate('product');
+    res.render('ratings',{reviews});
+
+
+  }catch(error){
+    console.error(error);
+  }
+}
+
+
+
 const addProductReview = async(req,res)=>{
 
   try{
@@ -256,6 +272,21 @@ const addProductReview = async(req,res)=>{
   }
 }
 
+const deleteUserReviews = async(req,res)=>{
+
+  try{
+
+    const {id} = req.params;
+    const reviews = await reviewModal.findByIdAndDelete(id);
+    res.redirect('/home/settings/reviews');
+
+
+
+  }catch(error){
+    console.error(error);
+  }
+}
+
 module.exports = {
   loadUserSettings,
   editUserProfile,
@@ -266,5 +297,7 @@ module.exports = {
   userWishlistLoad,
   userWishlistLoadProductAdd,
   removeWishlistsItems,
-  addProductReview
+  addProductReview,
+  loadUserReviews,
+  deleteUserReviews,
 };

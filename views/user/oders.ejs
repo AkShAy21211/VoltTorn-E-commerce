@@ -136,9 +136,9 @@
                 <i class="bi bi-heart"></i> Wishlist
               </li>
             </a>
-            <a class="options" href="">
+            <a class="options" href="/home/settings/reviews">
               <li class="list-group-item  inactive list-item">
-                <i class="bi bi-geo-alt"></i> Address
+                <i class="bi bi-star"></i>Ratings
               </li>
             </a>
           </ul>
@@ -176,7 +176,7 @@
                             </td>
                             <% } else { %>
                               <!-- Handle other cases or set a default class -->
-                              <td class="align-middle text-center">
+                              <td class="align-middle text-center text-success">
                                 <%= oder.status %>
                               </td>
                               <% } %>
@@ -202,7 +202,7 @@
 
                                   <%if(oder.status==='Delivered'){%>
                                     <td>
-                                <button data-product="<%=product.product_id%>" class="btn text-warning" id="rateProductBtn">Rate this?</button>
+                                <button data-product="<%=product.product_id%>" class="btn text-warning rateProductBtn" >Rate this?</button>
                                 </td>
                                   <%}%>
                              
@@ -218,7 +218,7 @@
                           <td>
                            
                           <td class="">
-                            <%= new Date().toLocaleString() %>
+                            <%= oder.date.toLocaleString() %>
                           </td>
                           <td class=" text-success d-flex  justify-content-end gap-3" style="border-bottom: white;">
                               <a type="button" data-order-id="<%=oder._id  %>"
@@ -434,7 +434,7 @@
   <script>
   $(document).ready(function () {
     let selectedRating;
-
+    let productId;
     $('.rating-star').click(function () {
       selectedRating = parseInt($(this).data('rating'));
       $('.rating-star').removeClass('selected');
@@ -442,11 +442,14 @@
         $('.rating-star[data-rating="' + i + '"]').addClass('selected');
       }
 
-      console.log(selectedRating);
+
+
     });
 
     // Handle button click event
-    $('#rateProductBtn').on('click', function () {
+    $('.rateProductBtn').on('click', function () {
+      productId = $(this).data('product');
+
       $('#candidateRatingModal').modal('show');
     });
 
@@ -454,7 +457,6 @@
     $('#crSubmitBtn').on('click', async function () {
       var reviewText = $('#reviewText').val();
       $('#candidateRatingModal').modal('hide');
-      const productId = $("#rateProductBtn").data('product');
 
       console.log(productId);
 
@@ -466,6 +468,12 @@
         if (response.status === 200) {
           // Log a message to the console to check if this block is reached
           console.log('Review submitted successfully');
+
+            // Review submitted successfully, hide the modal
+            $('#reviewText').val(''); // Clear the text area
+                $('.rating-star').removeClass('selected'); // Clear selected stars
+                $('#candidateRatingModal').modal('hide');
+
           
           // Review submitted successfully, hide the modal
         } else {
@@ -482,6 +490,7 @@
       $('#candidateRatingModal').modal('hide');
     });
   });
+
 </script>
 
 

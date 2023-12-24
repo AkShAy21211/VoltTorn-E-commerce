@@ -97,7 +97,9 @@ userRoute.get('/home/settings/oders',auth.isUserBlocked,userSettingController.lo
 userRoute.get('/home/settings/cancel-oders/:oder_id/:product_id/:oder_index/:product_index',auth.isUserBlocked,userSettingController.forCancelUserOders);
 
 //user post product review
+userRoute.get('/home/settings/reviews',auth.isUserBlocked,userSettingController.loadUserReviews)
 userRoute.post('/home/settings/oders/add-review',auth.isUserBlocked,userSettingController.addProductReview)
+userRoute.get('/home/settings/reviews/remove/:id',auth.isUserBlocked,userSettingController.deleteUserReviews)
 
 
 

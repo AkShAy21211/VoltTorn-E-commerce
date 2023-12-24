@@ -51,7 +51,7 @@
     }
   </style>
 
-  <title>Settings | Wishlists</title>
+  <title>Settings | Ratings</title>
   <main>
     <div class="container">
       <div class="row d-flex justify-content-arround">
@@ -79,25 +79,39 @@
             </a>
           </ul>
         </div>
+
         <div class="view-settings col-md-8 col-lg-8 col-xl-9 col-xxl-8 min-height-div1 mb-md-4">
           <!-- Iterate through each order -->
-          <% if (products && typeof products.product !== 'undefined' && products.product.length > 0) { %>
+          <% if (reviews && typeof reviews !== 'undefined' && reviews.length > 0) { %>
             <table class="table shadow-sm bg-body">
               <tbody>
-                <% products.product.forEach((product,index) => { %>
+                <% reviews.forEach((review,index) => { %>
                   <!-- Iterate through each product in the order -->
-        
                   <tr>
                     <td>
-                      <img src="/images/productImages/<%= product.images[0] %>"
+                      <img src="/images/productImages/<%= review.product.images[0] %>"
                         class="d-none d-md-none d-lg-block d-xl-block" alt="Product Image"
                         style="width: 100px; height: 100px;">
                     </td>
-                    <td class="align-middle text-wrap ">
-                      <%= product.name.length > 50 ? product.name.slice(0, 50) + '...' : product.name %>
+                    <td class="text-wrap w-25">
+                  <%=review.product.name.length > 0 ? review.product.name.slice(0, 50) + '...' : review.product.name%>
                     </td>
                     <td class="align-middle text-wrap ">
-                      <a  class="text-danger text-decoration-none" href="/home/settings/wishlist/remove/<%=index%>">remove</a>
+                        <h6 class="fw-bold">Review</h6>
+                      <%= review.review %>
+                    </td>
+                    <td class="align-middle text-wrap ">
+                        <h6 class="fw-bold">Ratings</h6>
+                        <% for (let i=0; i < 5; i++) { %>
+                            <% if (i < review.rating) { %>
+                              <i class="bi bi-star-fill text-warning"></i>
+                              <% } else { %>
+                                <i class="bi bi-star"></i>
+                                <% } %>
+                                  <% } %>
+                      </td>
+                    <td class="align-middle text-wrap ">
+                      <a  class="text-danger text-decoration-none" href="/home/settings/reviews/remove/<%=review._id%>">remove</a>
                     </td>
                   </tr>
                 <% }); %>
