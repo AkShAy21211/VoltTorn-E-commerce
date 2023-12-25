@@ -73,7 +73,6 @@ const verifyOnlinePayment = async (req, res) => {
     );
     const selectedAddress = address?.addresses?.[0];
 
-    console.log(req.body);
 
     verifyPayment(req.body)
       .then((response) => {
@@ -155,7 +154,6 @@ const downloadInvoice = async(req,res)=>{
 
     const {order_id} = req.params;
     const user_id = req.session.user?req.session.user.userId:undefined;
-
     if(user_id){
     const order = await userModel.findById(user_id);
 
@@ -167,8 +165,103 @@ const downloadInvoice = async(req,res)=>{
     res.status(500).json({message:"Internal server error"})
   }
 }
+
+const userAddFundWallet = async(req,res)=>{
+
+  try{
+
+    const userId = req.session.user?req.session.user.userId:undefined;
+    const amount = req.body;
+    console.log(userId,"",amount.amount);
+    if(!userId){
+
+      res.status(400).json({message:"no user found"});
+    }
+
+    
+    const oderId = generateOrderID();
+
+    var options = {
+      amount: amount.amount * 100, // amount in the smallest currency unit
+      currency: "INR",
+      receipt: "" + oderId,
+    };
+
+    createRazorpayOrder(instance, options, async (err, order) => {
+      if (order) {
+        res.status(201).json({ order });
+      } else {
+        console.log(err);
+      }
+    });
+
+
+  }catch(error){
+    console.error(error);
+  }
+}
+const userAddFundWalletVerify = async(req,res)=>{
+
+  try {
+    const id = req.session.user.userId;
+    const {  order,amount } = req.body;
+
+    const user = await userModel.findById(id);
+
+
+    verifyPayment(req.body)
+    .then((response) => {
+      if (response) {
+        const order = createWalletOrder(
+          id,
+          amount,
+        ); 
+
+      }else{
+        console.error("Order not placed");
+      }
+    });
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+async function createWalletOrder(id,amount) {
+
+  try{
+    const updatedUser = await userModel.findOneAndUpdate(
+      { _id: id },
+      {
+        $inc: { 'wallet.balance':amount}, // Subtract totalAmount from the balance
+        $push: {
+          'wallet.transactions': {
+            type: 'credit',
+            amount: parseInt(amount),
+            timestamp: Date.now().toString(),
+            description: 'Amount credited successfully',
+          },
+        },
+      },
+      { new: true } // Return the updated document
+    );
+    if (!updatedUser) {
+
+      console.log('User not found');
+
+      return false;
+    }
+  console.log("Payment successfull");
+  }catch(error){
+   console.error(error);
+  }
+
+}
+
+
 module.exports = {
   verfyUserPaymentOption,
   verifyOnlinePayment,
-  downloadInvoice
+  downloadInvoice,
+  userAddFundWallet,
+  userAddFundWalletVerify,
 };

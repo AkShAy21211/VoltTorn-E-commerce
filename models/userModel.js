@@ -130,6 +130,40 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Wishlist",
   },
+  wallet: {
+  balance:{
+    type:Number,
+    require:true,
+    default:0,
+  },
+  currency: {
+    type:String,
+    required:true,
+  },
+  transactions: [
+      {
+        type: {
+          type:String,
+          required:false,
+          default:""
+        },
+        amount:{
+          type:Number,
+          required:false,
+          default:0,
+        },
+        timestamp: {
+          type: Date,
+          default: Date.now,
+        },
+        description: {
+          type:String,
+          required:false,
+          default:""
+        },
+      },
+    ],
+  },
   addresses: [addressSchema], // Array of addresses
   oders:[orderSchema],
   createdAt: {

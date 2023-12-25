@@ -1,0 +1,303 @@
+<%- include('../layout/header.ejs') %>
+    <style>
+        .container {
+            margin-top: 80px;
+        }
+
+        .min-height-div1 {
+            min-height: 200px;
+            /* Adjust the height as needed */
+        }
+
+        .min-height-div2 {
+            min-height: 500px;
+            /* Adjust the height as needed */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .list-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .list-item i {
+            font-size: 24px;
+            /* Adjust the icon size */
+            margin-right: 10px;
+            /* Add space between icon and text */
+        }
+
+        .options {
+            text-decoration: none;
+        }
+
+        .options:hover {
+            text-decoration: none;
+        }
+
+        .active {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        .inactive {
+            background-color: #fff;
+            color: #333;
+        }
+    </style>
+
+    <title>Settings | Wishlists</title>
+    <main>
+        <div class="container">
+            <div class="row d-flex justify-content-arround">
+                <div class="setting-options  col-md-4 col-lg-4 col-xl-3 col-xxl-3  mb-2 min-height-div1 mb-md-4">
+                    <ul class="list-group shadow-sm bg-body " id="myList">
+                        <a class="options" href="/home/settings/profile">
+                            <li class="list-group-item inactive list-item">
+                                <i class="bi bi-person"></i> Profile
+                            </li>
+                        </a>
+                        <a class="options" href="/home/settings/oders">
+                            <li class="list-group-item inactive list-item">
+                                <i class="bi bi-box"></i> Orders
+                            </li>
+                        </a>
+                        <a class="options" href="/home/settings/wishlist">
+                            <li class="list-group-item  inactive list-item">
+                                <i class="bi bi-heart"></i> Wishlist
+                            </li>
+                        </a>
+                        <a class="options" href="/home/settings/reviews">
+                            <li class="list-group-item  inactive list-item">
+                                <i class="bi bi-star"></i>Ratings
+                            </li>
+                        </a>
+                        <a class="options" href="/home/settings/wallet">
+                            <li class="list-group-item  inactive list-item">
+                                <i class="bi bi-wallet2"></i> Wallet
+                            </li>
+                        </a>
+                    </ul>
+                </div>
+                <div class="view-settings col-md-8 col-lg-8 col-xl-9 col-xxl-8 min-height-div1 mb-md-4">
+                    <!-- Iterate through each order -->
+                    <% if (userData && typeof userData !=='undefined' ) { %>
+
+                        <div class="shadow-sm"
+                            style="height: 150px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative;">
+                            <a class="mb-2 btn btn-primary text-white m-2" type="button" data-bs-toggle="modal"
+                                id="AddFund" data-bs-target="#addFundModal"
+                                style=" position: absolute; top: 0; right: 0;">Add
+                                fund</a>
+
+                            <i style="font-size: 50px;" class="bi bi-cash-stack text-success"></i>
+                            <p>Rs: <%= userData.wallet.balance %>
+                            </p>
+                        </div>
+
+
+                        <table class="table shadow-sm bg-body">
+
+                            <thead>
+                                <tr>
+                                    <td class="fw-bold">
+                                        Type
+                                    </td>
+                                    <td class="fw-bold">
+                                        Amount
+                                    </td>
+                                    <td class="fw-bold">
+                                        Date
+                                    </td>
+                                    <td class="fw-bold">
+                                        Description
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Iterate through each product in the order -->
+                                <% userData.wallet.transactions.forEach(transaction=>{%>
+                                    <tr>
+                                        <td class="align-middle text-wrap text-success">
+                                            <%if(transaction.type ==='credit'){%>
+                                                <p><%=transaction.type %></p>
+
+                                        </td>
+                                            <%}else{%>
+                                                <p class="text-danger"><%=transaction.type %></p>
+
+                                            <%}%>
+                                        </td>
+                                        <td class="align-middle text-wrap ">
+                                            <%=transaction.amount %>
+
+                                        </td>
+                                        <td class="align-middle text-wrap ">
+                                            <%=transaction.timestamp.toLocaleString() %>
+
+                                        </td>
+                                        <td class="align-middle text-wrap ">
+                                            <%=transaction.description %>
+
+                                        </td>
+                                    </tr>
+                                    <%}) %>
+                            </tbody>
+                        </table>
+                        <% } %>
+
+
+
+
+                </div>
+            </div>
+    </main>
+
+    <div class="modal fade" id="addFundModal" tabindex="-1" aria-labelledby="addFundModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addFundModalLabel">Add Fund</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addFundForm">
+                        <div class="mb-3">
+                            <label for="fundAmount" class="form-label">Enter Amount</label>
+                            <input type="number" class="form-control" id="fundAmount" min="1" placeholder="Enter amount"
+                                required>
+                        </div>
+
+                        <button type="submit" id="addFund" class="btn btn-primary w-100">Add</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get the modal element
+            var addFundModal = new bootstrap.Modal(document.getElementById('addFundModal'));
+
+            // Add an event listener for modal shown event
+            addFundModal._element.addEventListener('shown.bs.modal', function () {
+                // Get the form element
+                var addFundForm = document.getElementById('addFundForm');
+
+                // Add an event listener for form submission
+                addFundForm.addEventListener('submit', async function (event) {
+                    // Prevent the default form submission behavior
+                    event.preventDefault();
+
+                    // Get the entered amount from the form
+                    var amount = document.getElementById('fundAmount').value;
+
+                    console.log('Entered amount:', amount);
+                    try {
+
+                        const response = await axios.post('/home/settings/wallet/add-fund', { amount });
+
+                        const order = response.data.order;
+
+                        console.log(order);
+                        initializeRazopay(order,amount)
+
+
+
+
+                    } catch (error) {
+
+                        console.error(error);
+
+                    }
+
+                    // Close the modal
+                    addFundModal.hide();
+
+                });
+
+            });
+
+        });
+
+
+
+        function initializeRazopay(order,amount) {
+
+
+
+            console.log(amount);
+
+            var options = {
+                "key": "rzp_test_IqLBbBfcC14Mtr", // Enter the Key ID generated from the Dashboard
+                "amount": amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                "currency": "INR",
+                "name": "VoltTron",
+                "description": "Test Transaction",
+                "image": "/images/logo.png",
+                "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                "handler": function (response) {
+                    alert(response.razorpay_payment_id);
+                    alert(response.razorpay_order_id);
+                    alert(response.razorpay_signature);
+                    verifyPayment(response, order,amount);
+                    window.location.href="/home/settings/wallet"
+
+
+                },
+                "prefill": {
+                    "name": "Gaurav Kumar",
+                    "email": "gaurav.kumar@example.com",
+                    "contact": "9000090000"
+                },
+                "notes": {
+                    "address": "Razorpay Corporate Office"
+                },
+                "theme": {
+                    "color": "#3399cc"
+                }
+            };
+
+
+            var rzp1 = new Razorpay(options);
+              rzp1.on('payment.failed', function (response) {
+                alert(response.error.code);
+                alert(response.error.description);
+                alert(response.error.source);
+                alert(response.error.step);
+                alert(response.error.reason);
+                alert(response.error.metadata.order_id);
+                alert(response.error.metadata.payment_id);
+              });
+            document.getElementById('addFund').onclick = function (e) {
+                rzp1.open();
+                e.preventDefault();
+            }
+        }
+
+
+        function verifyPayment(response, order,amount) {
+
+
+
+                $.ajax({
+                    url: "/home/settings/wallet/add-fund/verify",
+                    data:{
+                        response,
+                        order,
+                        amount,
+
+                    },
+                    method:'post'
+                    
+
+                })
+        }
+
+    </script>
+    <%- include('../layout/footer.ejs') %>

@@ -109,6 +109,11 @@ userRoute.get('/home/settings/reviews/remove/:id',auth.isUserBlocked,userSetting
 userRoute.post('/home/cart/checkout/verify-payment/:id',auth.isUserBlocked,paymentController.verfyUserPaymentOption);
 userRoute.post('/home/cart/checkout/verify',auth.isUserBlocked,paymentController.verifyOnlinePayment);
 
+//user wallet
+
+userRoute.get('/home/settings/wallet',auth.isUserBlocked,userSettingController.loadUserWallet)
+userRoute.post('/home/settings/wallet/add-fund',auth.isUserBlocked,paymentController.userAddFundWallet)
+userRoute.post('/home/settings/wallet/add-fund/verify',auth.isUserBlocked,paymentController.userAddFundWalletVerify)
 
 
 //user downlode invoice

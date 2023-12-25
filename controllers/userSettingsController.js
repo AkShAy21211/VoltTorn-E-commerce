@@ -287,6 +287,21 @@ const deleteUserReviews = async(req,res)=>{
   }
 }
 
+const loadUserWallet = async(req,res)=>{
+
+  try{
+
+    const userId = req.session.user?req.session.user.userId:undefined;
+    
+    const userData  = await userModel.findById(userId);
+
+    res.render('wallet',{userData});
+
+  }catch(error){
+    console.error(error);
+  }
+}
+
 module.exports = {
   loadUserSettings,
   editUserProfile,
@@ -300,4 +315,5 @@ module.exports = {
   addProductReview,
   loadUserReviews,
   deleteUserReviews,
+  loadUserWallet
 };
