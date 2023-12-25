@@ -116,6 +116,10 @@ userRoute.post('/home/settings/wallet/add-fund',auth.isUserBlocked,paymentContro
 userRoute.post('/home/settings/wallet/add-fund/verify',auth.isUserBlocked,paymentController.userAddFundWalletVerify)
 
 
+//user faq and about and contact route
+userRoute.get('/home/frequently-asked-questions',homeController.loadFaqPage)
+userRoute.get('/home/about-us',homeController.loadAboutUs)
+
 //user downlode invoice
 userRoute.get('/home/settings/oders/download-invoice/:order_id',auth.isUserBlocked,paymentController.downloadInvoice)
 

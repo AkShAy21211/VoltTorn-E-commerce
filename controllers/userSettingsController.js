@@ -116,7 +116,7 @@ const forCancelUserOders = async (req, res) => {
     const order = userOrder.oders[oder_index];
     const orderProduct = order.products[product_index];
     const productPrice = orderProduct.price;
-
+    const productQuantity = orderProduct.quantity;
 
 
     if (product) {
@@ -153,7 +153,8 @@ const forCancelUserOders = async (req, res) => {
         },
         { new: true } // Return the updated document
       );
-      // Redirect to the specified route
+
+     await incrementProductStock(product,productQuantity);
       res.redirect('/home/settings/oders');
       
     } else {
@@ -315,7 +316,21 @@ const loadUserWallet = async(req,res)=>{
     console.error(error);
   }
 }
+const incrementProductStock = async (product,productQuantity) => {
+  try {
 
+      const updatedProduct = await productModel.findOneAndUpdate(
+        { _id: product },
+        { $inc: { stock: productQuantity } },
+        { new: true }
+      );
+
+      // Log the updated product's stock (optional)
+  } catch (error) {
+    console.error('Error decrementing product stock:', error);
+    throw error; // Propagate the error if needed
+  }
+};
 module.exports = {
   loadUserSettings,
   editUserProfile,

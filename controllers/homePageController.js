@@ -155,6 +155,27 @@ const sendEmailNewsLetter = async(req,res)=>{
     console.error(error);
   }
 }
+
+const loadFaqPage = async(req,res)=>{
+  try{
+
+    res.render('faq');
+
+  }catch(error){
+    console.error(error);
+  }
+}
+
+
+const loadAboutUs = async(req,res)=>{
+  try{
+
+    res.render('aboutUs');
+
+  }catch(error){
+    console.error(error);
+  }
+}
 module.exports = { 
   loadHome,
   productDetail,
@@ -163,5 +184,7 @@ module.exports = {
   sendEmailNewsLetter,
   filterProductsByUser,
   searchProducts,
+  loadFaqPage,
+  loadAboutUs
 
 };

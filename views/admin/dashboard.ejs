@@ -400,7 +400,7 @@
 
                 ],
                 hoverBackgroundColor: [
-                'rgb(255, 99, 132)',
+                  'rgb(255, 99, 132)',
                   'rgb(255, 159, 64)',
                   'rgb(255, 205, 86)',
                   'rgb(75, 192, 192)',
@@ -436,14 +436,15 @@
           try {
             statisticsResponse = await axios.get("/admin/dashboard/statistics");
 
-            onlinePayment = statisticsResponse.data.onlinePayment;
-            cashPayment = statisticsResponse.data.cashPayment;
+
             payment = statisticsResponse.data.paymentModeCounts;
+            const paymentMethood = payment.map(item => item.paymentMode);
+            const paymentMethoodCount = payment.map(item => item.count || 0);
 
             const paymentData = {
-              labels: [payment[0].paymentMode,payment[1].paymentMode,payment[2].paymentMode],
+              labels: paymentMethood,
               datasets: [{
-                data: [payment[0].count, payment[1].count,payment[2].count],
+                data: paymentMethoodCount,
                 backgroundColor: [
                   'rgba(255, 99, 132, 0.2)',
                   'rgba(255, 159, 64, 0.2)',
@@ -457,13 +458,13 @@
 
                 ],
                 hoverBackgroundColor: [
-                'rgb(255, 99, 132)',
+                  'rgb(255, 99, 132)',
                   'rgb(255, 159, 64)',
                   'rgb(255, 205, 86)',
 
 
                 ],
-                
+
                 radius: 200,
                 borderWidth: 1
               }]
@@ -592,11 +593,11 @@
 
         function downloadPdfReport(data) {
           const pdfElement = document.createElement('div');
-        const amountArray =  data.map((data)=>data.totalAmount);
-        const subTotal = amountArray.reduce((pVal,cVal)=>pVal+cVal);
+          const amountArray = data.map((data) => data.totalAmount);
+          const subTotal = amountArray.reduce((pVal, cVal) => pVal + cVal);
 
 
-        pdfElement.innerHTML = `
+          pdfElement.innerHTML = `
   <table class="table">
     <tr>
       <td colspan="4" class="text-center">

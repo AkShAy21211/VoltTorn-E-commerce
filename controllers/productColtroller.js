@@ -196,7 +196,39 @@ const editProduct = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 };
+const editProductImages = async(req,res)=>{
 
+  try{
+    const { id, index, image } = req.params;
+    console.log(id, index, image);
+    const product = await productModel.findById(id);
+    const images = product.images.filter(images=> images === image);
+    const variants = product.variants.images.filter(images=> images === image);
+
+    console.log(variants);
+
+    if(images){
+    const updateProductImage = await productModel.findByIdAndUpdate(
+      { _id: id },
+      { $pull: { images: { $eq: image } } }
+    );
+    }else if(variants){
+      const updateProductImage = await productModel.findByIdAndUpdate(
+        { _id: id },
+        { $pull: { "variants.$.images": { $eq: image } } }
+      );
+      
+      
+        
+    }
+
+    res.redirect(`/admin/products/edit/${id}`)
+    
+  }catch(error){
+    console.error(error);
+
+  }
+}
 
 const deleteProduct = async (req, res) => {
   const productId = req.params.id;
@@ -251,4 +283,5 @@ module.exports = {
   editProduct,
   deleteProduct,
   adminSingleProductView,
+  editProductImages
 };

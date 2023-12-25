@@ -384,8 +384,10 @@
             </div>
 
             <div class="col-md-6">
-              <div class="d-flex justify-content-between">
-                <% ProductData.images.forEach(image => { %>
+              <div class="d-flex justify-content-start gap-2">
+                <% ProductData.images.forEach((image,index) => { %>
+                  <a href="/admin/products/edit-images/<%-ProductData._id%>/<%=image  %>/<%=index  %>"><i class="bi bi-trash-fill text-danger"></i></a>
+
                 <img
                   width="80"
                   height="80"
@@ -413,8 +415,10 @@
                 <div id="images1Warning" class="text-danger"></div>
               <%}  %>
 
-              <div class="d-flex justify-content-between">
-                <% ProductData.variants.images.forEach(image => { %>
+              <div class="d-flex justify-content-start gap-2">
+                <% ProductData.variants.images.forEach((image,index) => { %>
+                  <a href="/admin/products/edit-images/<%=ProductData._id%>/<%=image  %>/<%=index  %>"><i class="bi bi-trash-fill text-danger"></i></a>
+
                 <img
                   width="80"
                   height="80"

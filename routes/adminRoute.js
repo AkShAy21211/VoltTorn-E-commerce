@@ -108,6 +108,8 @@ adminRoute.post(
   ]),
   productController.editProduct
 );
+adminRoute.get("/products/edit-images/:id/:image/:index",adminAuth.is_Login, productController.editProductImages);
+
 adminRoute.get("/products/delete/:id",adminAuth.is_Login, productController.deleteProduct);
 
 
