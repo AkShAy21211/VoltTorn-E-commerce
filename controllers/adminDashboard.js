@@ -19,7 +19,7 @@ const getProductStatistics = async (req, res) => {
         { $unwind: "$oders" },
         {
           $match: {
-            "oders.payment_mode": { $in: ["online", "COD"] },
+            "oders.payment_mode": { $in: ["online", "COD","wallet"] },
           },
         },
         {
@@ -38,7 +38,7 @@ const getProductStatistics = async (req, res) => {
       ]);
       
       
-      
+      console.log(paymentModeCounts);
 
 
 

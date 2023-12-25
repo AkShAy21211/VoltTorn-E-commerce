@@ -235,79 +235,91 @@
 
 
                   <hr>
-                  <%if(purchaseCount !== 'undefined' && purchaseCount>0){%>
+                  <%if(purchaseCount !=='undefined' && purchaseCount>0){%>
                     <div class="">
                       <h6 class="mb-2">Avaliable offers</h6>
-                        <a href="#" style="text-decoration: none; color: white;" class=" rounded badge bg-success" id="offerAvailButton"><%=purchaseCount%>x Referral offer</a>
-                        <a data-user-id="<%=cart._id%>" id="referalOffer" style="color: rgb(67, 155, 223);" class="btn" href="#">Apply</a>
-                        <a data-user-id="<%=cart._id%>" id="cancelOffer" style="color: rgb(67, 155, 223); display: none;" class="btn" href="#">Cancel</a>
+                      <a href="#" style="text-decoration: none; color: white;" class=" rounded badge bg-success"
+                        id="offerAvailButton">
+                        <%=purchaseCount%>x Referral offer
+                      </a>
+                      <a data-user-id="<%=cart._id%>" id="referalOffer" style="color: rgb(67, 155, 223);" class="btn"
+                        href="#">Apply</a>
+                      <a data-user-id="<%=cart._id%>" id="cancelOffer" style="color: rgb(67, 155, 223); display: none;"
+                        class="btn" href="#">Cancel</a>
 
                     </div>
-  
+
                     <hr>
-                  <%}  %>
-              
-
-       
-
-                  <div class="d-flex justify-content-start">
-                    <p class="mb-2 text-success">You can save Rs:<b class="text-success">
-                        <%=total_discount %>
-                      </b> on this order</p>
-                  </div>
-
-                  <div class="d-flex justify-content-between">
-                    <p class="mb-2">Total price:</p>
-
-                    <p id="total-price" class="mb-2 fw-bold">RS:<%=cart.total_price %>
-                    </p>
-                  </div>
+                    <%} %>
 
 
-             
-                 
 
-                  <!-- <div class="input-group mt-3 mb-4">
+
+                      <div class="d-flex justify-content-start">
+                        <p class="mb-2 text-success">You can save Rs:<b class="text-success">
+                            <%=total_discount %>
+                          </b> on this order</p>
+                      </div>
+
+                      <div class="d-flex justify-content-between">
+                        <p class="mb-2">Total price:</p>
+
+                        <p id="total-price" class="mb-2 fw-bold">RS:<%=cart.total_price %>
+                        </p>
+                      </div>
+
+
+
+
+
+                      <!-- <div class="input-group mt-3 mb-4">
                       <input type="text" class="form-control border" name="" placeholder="Promo code" />
                       <button class="btn btn-light text-primary border">Apply</button>
                     </div> -->
 
 
-               
-
-                  <hr />
 
 
-                  <form action="" class="form" method="">
+                      <hr />
 
 
-                    <legend>Payment Method</legend>
-
-                    <div class="form__radios">
+                      <form action="" class="form" method="">
 
 
-                      <div class="form__radio">
-                        <label for="paypal"><svg class="icon">
-                          </svg>Razorpay</label>
-                        <input id="razorpay" name="paymentMethod" value="online" type="radio" />
-                      </div>
-                      <div class="form__radio">
-                        <label for="cash"><svg class="icon">
-                            <use xlink:href="#icon-sales" />
-                          </svg>Cash On Delivery</label>
-                        <input id="cash" name="paymentMethod" type="radio" value="COD" />
-                      </div>
-                    </div>
+                        <legend>Payment Method</legend>
+
+                        <div class="form__radios">
+
+                          <div class="form__radio">
+                            <label for="wallet"><svg class="icon">
+                                <use xlink:href="#icon-sales" />
+                              </svg>Wallet</label>
+                            <input id="wallet" name="paymentMethod" type="radio" value="wallet" />
+                          </div>
+                          <div class="form__radio">
+                            <label for="paypal"><svg class="icon">
+                              </svg>Razorpay</label>
+                            <input id="razorpay" name="paymentMethod" value="online" type="radio" />
+                          </div>
+                          <div class="form__radio">
+                            <label for="cash"><svg class="icon">
+                                <use xlink:href="#icon-sales" />
+                              </svg>Cash On Delivery</label>
+                            <input id="cash" name="paymentMethod" type="radio" value="COD" />
+                          </div>
+
+                        </div>
 
 
-                    <div>
-                      <button data-email="<%user.email  %>" data-mobile="<%user.mobile  %>" data-name="<%user.name  %>"
-                        data-oder-Id="<%=user._id  %>" data-total-amount="<%=cart.total_price  %>"
-                        class="button button--full" type="button" id="buyNowBtn">Buy
-                        Now</button>
+                        <div>
+                          <button data-email="<%user.email  %>" data-mobile="<%user.mobile  %>"
+                            data-name="<%user.name  %>" data-oder-Id="<%=user._id  %>"
+                            data-total-amount="<%=cart.total_price  %>" class="button button--full" type="button"
+                            id="buyNowBtn">Buy
+                            Now</button>
 
-                    </div>
-                  </form>
+                        </div>
+                      </form>
 
             </div>
 
@@ -353,30 +365,30 @@
     const cancelBtn = document.getElementById('cancelOffer');
     const userId = offerBtn.dataset.userId;
     const totalPrice = document.getElementById('total-price');
-  
+
     offerBtn.addEventListener('click', async (e) => {
       e.preventDefault();
       const response = await toggleAndApplyReferralOffer(`/home/cart/applay-referral-offer/${userId}`);
       handleOfferResponse(response);
     });
-  
+
     cancelBtn.addEventListener('click', async (e) => {
       e.preventDefault();
       const response = await toggleAndApplyReferralOffer(`/home/cart/cancel-referral-offer/${userId}`);
       totalPrice.innerHTML = response.data.updatedCart.total_price;
     });
-  
+
     async function toggleAndApplyReferralOffer(url) {
       offerBtn.style.display = offerBtn.style.display === 'none' ? 'inline' : 'none';
       cancelBtn.style.display = cancelBtn.style.display === 'none' ? 'inline' : 'none';
-  
+
       try {
         return await axios.get(url);
       } catch (error) {
         console.error(error);
       }
     }
-  
+
     function handleOfferResponse(response) {
       console.log(response.data.updatedCart);
       if (response.data.updatedCart) {
@@ -393,12 +405,12 @@
             background: 'linear-gradient(to right, #0074cc, #0076cc)',
             marginTop: '60px',
           },
-          onClick: function () {},
+          onClick: function () { },
         }).showToast();
       }
     }
   </script>
-  
+
 
 
   <script>
@@ -443,9 +455,47 @@
           response = await axios.post(`/home/cart/checkout/verify-payment/${oderId}`, { selectedAddressId, paymentMethod });
           const order = response.data.order;
 
-          initializeRazorpayPayment(order,selectedAddressId,paymentMethod)
+          initializeRazorpayPayment(order, selectedAddressId, paymentMethod)
 
 
+
+        } else if (selectedPaymentMethod && selectedPaymentMethod.value === 'wallet') {
+
+          try {
+            response = await axios.post(`/home/cart/checkout/verify-payment/${oderId}`, { selectedAddressId, paymentMethod });
+
+            orderSuccessModal.show();
+            viewOrderBtn.addEventListener('click', function () {
+              window.location.href = '/home/settings/oders';
+            });
+
+
+
+          } catch (error) {
+
+            console.error(error);
+            if ( error.response) {
+              Toastify({
+                text: error.response.data.error,
+                duration: 6000,
+                newWindow: true,
+                close: true,
+                gravity: 'top',
+                position: 'right',
+                stopOnFocus: true,
+                style: {
+                  background: 'linear-gradient(to right, #0074cc, #0076cc)',
+                  marginTop: '60px',
+                },
+                onClick: function () { },
+              }).showToast();
+
+            }
+          }
+
+
+
+        } else {
 
         }
       });
@@ -454,7 +504,7 @@
 
 
 
-    function initializeRazorpayPayment(order,selectedAddressId,paymentMethod) {
+    function initializeRazorpayPayment(order, selectedAddressId, paymentMethod) {
       const orderSuccessModal = new bootstrap.Modal(document.getElementById('orderSuccessModal'));
       const viewOrderBtn = document.getElementById('viewOrderBtn');
 
@@ -474,7 +524,7 @@
           // alert(response.razorpay_payment_id);
           // alert(response.razorpay_order_id);
           // alert(response.razorpay_signature);
-          verifyPayment(response, order,selectedAddressId,paymentMethod);
+          verifyPayment(response, order, selectedAddressId, paymentMethod);
           orderSuccessModal.show();
           viewOrderBtn.addEventListener('click', function () {
             window.location.href = '/home/settings/oders';
@@ -496,7 +546,7 @@
 
 
 
-      function verifyPayment(response, order,selectedAddressId,paymentMethod) {
+      function verifyPayment(response, order, selectedAddressId, paymentMethod) {
         var orderId;
         $(document).ready(function () {
           var settings = {
@@ -509,7 +559,7 @@
               order,
               selectedAddressId,
               paymentMethod,
-              
+
             },
           };
 

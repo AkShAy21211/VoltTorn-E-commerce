@@ -112,13 +112,15 @@ const forCancelUserOders = async (req, res) => {
     const id = req.session.user && req.session.user.userId ? req.session.user.userId : undefined;
     const { oder_id, product_id, oder_index, product_index } = req.params;
     const product = await productModel.findById(product_id);
+    const userOrder = await userModel.findById(id);
+    const order = userOrder.oders[oder_index];
+    const orderProduct = order.products[product_index];
+    const productPrice = orderProduct.price;
 
-    console.log(product);
+
 
     if (product) {
-      console.log('ID:', id);
-      console.log('Order ID:', oder_id);
-      console.log('Product ID:', product_id);
+
 
       const userOder = await userModel.updateOne(
         {
@@ -136,9 +138,21 @@ const forCancelUserOders = async (req, res) => {
         }
       );
       
-      // Log the updated userOder
-      console.log('Updated userOrder:', userOder);
-      
+      const updatedUser = await userModel.findOneAndUpdate(
+        { _id: id },
+        {
+          $inc: { 'wallet.balance': productPrice}, // Subtract totalAmount from the balance
+          $push: {
+            'wallet.transactions': {
+              type: 'credit',
+              amount: productPrice,
+              timestamp: Date.now().toString(),
+              description: 'Amount for cancelled order credited successfully',
+            },
+          },
+        },
+        { new: true } // Return the updated document
+      );
       // Redirect to the specified route
       res.redirect('/home/settings/oders');
       

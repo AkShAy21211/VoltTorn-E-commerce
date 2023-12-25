@@ -38,7 +38,7 @@ const verfyUserPaymentOption = async (req, res) => {
       await userCart.deleteOne({ _id: id });
       delete req.session.user.cart;
       return res.status(201).json({});
-    } else {
+    } else if(paymentMethod && paymentMethod === 'online'){
       const oderId = generateOrderID();
 
       var options = {
@@ -55,6 +55,41 @@ const verfyUserPaymentOption = async (req, res) => {
           console.log(err);
         }
       });
+    }else if(paymentMethod && paymentMethod=== 'wallet'){
+
+      const balance = user.wallet.balance;
+      const totalPurchaseAmout = userCart.total_price;
+
+      if(balance>totalPurchaseAmout){
+      const order = createOder(
+        id,
+        selectedAddress,
+        user,
+        paymentMethod,
+        userCart
+      );
+      await decrementProductStock(userCart);
+      await userCart.deleteOne({ _id: id });
+      delete req.session.user.cart;
+      const updatedUser = await userModel.findOneAndUpdate(
+        { _id: id },
+        {
+          $inc: { 'wallet.balance': -totalPurchaseAmout}, // Subtract totalAmount from the balance
+          $push: {
+            'wallet.transactions': {
+              type: 'debit',
+              amount: totalPurchaseAmout,
+              timestamp: Date.now().toString(),
+              description: 'Amount paid successfully for your order',
+            },
+          },
+        },
+        { new: true } // Return the updated document
+      );
+      res.status(200).json({})
+      }else{
+        res.status(400).json({error:"Insufficent amount in your wallet"});
+      }
     }
   } catch (error) {
     console.error(error);
@@ -101,7 +136,7 @@ async function createOder(id, selectedAddress, user, paymentMethod, userCart) {
   const userOder = {
     order_id: generateOrderID(),
     customerName: user.first_name + " " + user.last_name,
-    payment: paymentMethod=='COD'?false:true,
+    payment: paymentMethod === 'COD' ? false : paymentMethod === 'wallet' ? false : true,
     payment_mode: paymentMethod,
     address: {
       address: selectedAddress.address,
@@ -238,7 +273,7 @@ async function createWalletOrder(id,amount) {
             type: 'credit',
             amount: parseInt(amount),
             timestamp: Date.now().toString(),
-            description: 'Amount credited successfully',
+            description: 'Amount Added  successfully',
           },
         },
       },

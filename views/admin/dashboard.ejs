@@ -441,24 +441,26 @@
             payment = statisticsResponse.data.paymentModeCounts;
 
             const paymentData = {
-              labels: [payment[0].paymentMode,payment[1].paymentMode],
+              labels: [payment[0].paymentMode,payment[1].paymentMode,payment[2].paymentMode],
               datasets: [{
-                data: [payment[0].count, payment[1].count],
+                data: [payment[0].count, payment[1].count,payment[2].count],
                 backgroundColor: [
                   'rgba(255, 99, 132, 0.2)',
                   'rgba(255, 159, 64, 0.2)',
-                  // 'rgba(255, 205, 86, 0.2)',
+                  'rgba(255, 205, 86, 0.2)',
 
                 ],
                 borderColor: [
                   'rgb(255, 99, 132)',
                   'rgb(255, 159, 64)',
-                  // 'rgb(255, 205, 86)',
+                  'rgb(255, 205, 86)',
 
                 ],
                 hoverBackgroundColor: [
                 'rgb(255, 99, 132)',
                   'rgb(255, 159, 64)',
+                  'rgb(255, 205, 86)',
+
 
                 ],
                 
