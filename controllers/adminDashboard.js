@@ -332,38 +332,128 @@ const downlodeSalesReport = async (req, res) => {
   }
 
   try {
-    // Fetch users with orders within the specified time range
     const users = await userModel
       .find({
         "oders.date": { $gte: startDate, $lte: currentTime },
       })
       .populate("oders");
 
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Users');
+
+    worksheet.columns = [
+      { header: 'Username', key: 'username', width: 20 },
+      { header: 'Email', key: 'email', width: 20 },
+      { header: 'Mobile', key: 'mobile', width: 20 },
+      { header: 'Order ID', key: 'orderId', width: 20 },
+      { header: 'Order Date', key: 'orderDate', width: 20 },
+      { header: 'Product Name', key: 'productName', width: 20 },
+      { header: 'Product Quantity', key: 'productQuantity', width: 20 },
+      { header: 'Total Amount', key: 'Amount', width: 20 },
+      // Add more columns as needed
+    ];
+
+    // Populate the worksheet with data
+    users.forEach((user) => {
+      user.oders.forEach((order) => {
+        order.products.forEach((product) => {
+          worksheet.addRow({
+            username: user.first_name + ' ' + user.last_name,
+            email: user.email,
+            mobile: user.mobile,
+            orderId: order._id.toString(),
+            orderDate: order.date.toISOString(), // You may need to format the date appropriately
+            productName: product.name,
+            productQuantity: product.quantity,
+            Amount: order.totalAmount,
+            // Add more columns as needed
+          });
+        });
+      });
+    });
+
+    // Set the response headers for file download
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', 'attachment; filename=sales_report.xlsx');
+
+    // Write the workbook to the response
+    await workbook.xlsx.write(res);
+
+    // End the response
+    res.end();
+
+    console.log('Excel file sent for download successfully.');
+  } catch (error) {
+    res.status(500).send('Internal Server Error');
+    console.error(error);
+  }
+};
+
+
+
+const downlodeSalesReportPdf = async (req, res) => {
+  const { reportType } = req.query;
+
+  console.log(reportType);
+  const currentTime = new Date();
+  let startDate;
+
+  // Calculate the start date based on the report type
+  if (reportType === "weekly") {
+    startDate = new Date(currentTime);
+    startDate.setDate(currentTime.getDate() - 7);
+  } else if (reportType === "monthly") {
+    startDate = new Date(currentTime);
+    startDate.setMonth(currentTime.getMonth() - 1);
+  } else if (reportType === "yearly") {
+    startDate = new Date(currentTime);
+    startDate.setFullYear(currentTime.getFullYear() - 1);
+  } else {
+    throw new Error("Invalid report type");
+  }
+
+  try {
+    const users = await userModel
+      .find({
+        "oders.date": { $gte: startDate, $lte: currentTime },
+      })
+      .populate("oders");
+
+    
     const salesReport = [];
 
-    // Iterate over users and their orders to generate the report
+    // Populate the worksheet with data
     users.forEach((user) => {
       user.oders.forEach((order) => {
         order.products.forEach((product) => {
           if (order.date >= startDate && order.date <= currentTime) {
-            const reportEntry = {
-              productName: product.name,
-              quantity: product.quantity,
-              paymentMode: order.payment_mode, // Replace with the actual property path for product name
-              totalAmount: order.totalAmount,
-            };
 
-            salesReport.push(reportEntry);
-          }
+            const reportEntry = {
+        username: user.first_name + ' ' + user.last_name,
+            email: user.email,
+            mobile: user.mobile,
+            orderId: order._id.toString(),
+            orderDate: order.date.toISOString(), // You may need to format the date appropriately
+            productName: product.name,
+            productQuantity: product.quantity,
+            price:product.price,
+            Amount: order.totalAmount,
+            // Add more columns as needed
+          };
+          salesReport.push(reportEntry)
+
+        };
         });
       });
     });
+
     res.status(200).json({ salesReport });
   } catch (error) {
-    res.status(500);
+    res.status(500).send('Internal Server Error');
     console.error(error);
   }
 };
+
 
 
 
@@ -371,4 +461,5 @@ module.exports = {
   getProductStatistics,
   // searchItem,
   downlodeSalesReport,
+  downlodeSalesReportPdf
 };

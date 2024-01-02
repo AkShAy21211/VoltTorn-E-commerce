@@ -1,0 +1,87 @@
+<!-- views/banners.ejs -->
+
+<%- include('../layout/adminHeader.ejs') %>
+<link rel="stylesheet" href="/css/dataTable.css">
+<title>Banners</title>
+<aside>
+  <a href="/admin/products" style="color: rgb(45, 81, 172); position: absolute; left: 50px; top: 80px; font-size: 15px; font-weight: bold; " class="btn"> <-Back</a>
+</aside>
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-3">
+      <h2>Add Coupon</h2>
+      <form action="/admin/coupon/add" method="post" >
+        <div class="form-group">
+          <label for="name">Code</label>
+          <input type="text" class="form-control" id="code" name="code" required>
+        </div>
+        <div class="form-group">
+            <label for="name">percentage</label>
+            <input type="number" class="form-control" id="percentage" name="percentage" required>
+          </div>
+        <div class="form-group">
+          <label for="endDate">End Date</label>
+          <input type="date" class="form-control" id="endDate" name="endDate" required>
+        </div>
+        <div class="form-group">
+          <label for="minAmount">minAmount</label>
+          <input type="number" class="form-control" id="minAmount" name="minAmount" required>
+        </div>
+          <div class="mb-3">
+            <label for="status">Status</label>
+            <select class="form-control" id="status" name="status" required>
+              <option value=""></option>
+              <option value="false">false</option>
+              <option value="true">true</option>
+            </select>
+            </div>
+        <button type="submit" class="btn btn-primary">Add Coupon</button>
+      </form>
+    </div>
+
+    <div class="col-md-9">
+        <h2>Coupon List</h2>
+          <table class="table col-12" id="myTable">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Percentage</th>
+                <th>End Date</th>
+                <th>minAmount</th>
+                <th>isActive</th>
+                <th>Action</th>
+
+              </tr>
+            </thead>
+            <tbody>
+                <%if(typeof coupon !== 'undefined'){%>
+                
+                    <%coupon.forEach(coupon => {%>
+                        <tr>
+                            <td><%=coupon.code  %></td>
+                            <td><%=coupon.discountPercentage  %></td>
+                            <td><%=coupon.expiry.toLocaleString()  %></td>
+                            <td><%=coupon.minOrderAmount  %></td>
+                            <td><%=coupon.isActive  %></td>
+
+                            <td>
+                              <a href="/admin/coupon/edit/<%=coupon._id  %>" class=" ">Edit</a>
+                              <a href="javascript:void(0);" class=" text-danger" onclick="confirmDelete('<%=coupon._id%>','/admin/coupon/delete/','You will not be able to recover this coupon')">Delete</a>
+                          </td>
+                          </tr>
+                   <% });  %>
+
+                   
+                <%}  %>
+               
+            </tbody>
+          </table>
+          <p>No banners available.</p>
+      </div>
+      
+  </div>
+</div>
+<script src="/js/DataTable.js"></script>
+<script src="/js/alertPopUp.js"></script>
+
+<%- include('../layout/adminFooter.ejs') %>

@@ -49,70 +49,73 @@
       background-color: #fff;
       color: #333;
     }
+
     .rating-stars-container {
-    text-align: center;
-}
-  
-.rating-stars {
-    display: inline-block;
-	margin: 20px;
-}
-.rating-star {
-	font-size: 44px;
-	cursor: pointer
-}
+      text-align: center;
+    }
 
-.fa-star {
-	color: #00A8CC;
-}
+    .rating-stars {
+      display: inline-block;
+      margin: 20px;
+    }
+
+    .rating-star {
+      font-size: 44px;
+      cursor: pointer
+    }
+
+    .fa-star {
+      color: #00A8CC;
+    }
 
 
-.bottom-message {
-	font-size: 0.85em;
-}
+    .bottom-message {
+      font-size: 0.85em;
+    }
 
-.sr-navigator-container.visible-sm-block {
-  margin-top: 30px;
-}
+    .sr-navigator-container.visible-sm-block {
+      margin-top: 30px;
+    }
 
-.notes-container {
-  margin: auto;
-  margin-top: 20px;
-  width: 50%;
-}
-#myNotesView {
-	display: block;
-}
+    .notes-container {
+      margin: auto;
+      margin-top: 20px;
+      width: 50%;
+    }
 
-.notes-buttons {
-	margin-top: 10px;
-}
+    #myNotesView {
+      display: block;
+    }
 
-@media (max-width: 767px) { 
-  .notes-container {
-    width: 100%;
-  }
-}
+    .notes-buttons {
+      margin-top: 10px;
+    }
 
-.btn-ls-blue {
-	background-color: #4984a3;
-	border: none;
-    -o-transition: background-color 0.215s;
-    -moz-transition: background-color 0.215s;
-    -webkit-transition: background-color 0.215s;
-    transition: background-color 0.215s;
-}
+    @media (max-width: 767px) {
+      .notes-container {
+        width: 100%;
+      }
+    }
 
-.btn-ls-blue:hover,
-.btn-ls-blue:active,
-.btn-ls-blue:focus,
-.btn-ls-blue.active {
-    background-color: #00A8CC;
-}
+    .btn-ls-blue {
+      background-color: #4984a3;
+      border: none;
+      -o-transition: background-color 0.215s;
+      -moz-transition: background-color 0.215s;
+      -webkit-transition: background-color 0.215s;
+      transition: background-color 0.215s;
+    }
 
-.hide { 
-  display: none;
-}
+    .btn-ls-blue:hover,
+    .btn-ls-blue:active,
+    .btn-ls-blue:focus,
+    .btn-ls-blue.active {
+      background-color: #00A8CC;
+    }
+
+    .hide {
+      display: none;
+    }
   </style>
 
   <title>Settings | Oders</title>
@@ -143,24 +146,40 @@
             </a>
             <a class="options" href="/home/settings/wallet">
               <li class="list-group-item  inactive list-item">
-                <i class="bi bi-wallet2"></i> Wallet         
-                </li>
+                <i class="bi bi-wallet2"></i> Wallet
+              </li>
             </a>
           </ul>
         </div>
-        <div class="view-settings col-md-8 col-lg-8 col-xl-9 col-xxl-8 min-height-div1 mb-md-4 ">
+        <div class="view-settings col-md-8 col-lg-8 col-xl-9 col-xxl-8 min-height-div1 mb-md-4">
           <!-- Iterate through each order -->
-          <% if (typeof oders !=='undefined' && oders.length>0) { %>
-            <table class="table shadow-sm bg-body ">
+          <% if (typeof oders !=='undefined' && oders.length> 0) { %>
+            <% oders.forEach((oder, i)=> { %>
+              <table class="table shadow-sm bg-body">
+                <thead>
+                  <tr>
+                    <div class="d-flex  justify-content-between shadow border-0" style="height: 40px; ">
+                      <p class="m-2">#<%=i+1 %>
+                      </p>
+                      <% if (oder.status==='Delivered' || oder.status==='Returned' ) { %>
 
-              <tbody class="">
-                <% oders.forEach((oder,i)=> { %>
-                  <!-- Iterate through each product in the order -->
-                  <% oder.products.forEach((product, index)=> { %>
+                        <a type="button" data-order-id="<%= oder._id %>"
+                          class="btn-sm text-info invoice-download">Download invoice</a>
+                        <% } %>
+                    </div>
+                  </tr>
+                </thead>
+
+                <% oder.products.forEach((product, index)=> { %>
+
+
+                  <tbody class="">
+                    <!-- Iterate through each product in the order -->
+
                     <tr>
                       <td>
                         <img src="/images/productImages/<%= product.image %>"
-                          class="d-none  d-md-none d-lg-block d-xl-block" alt="Product Image"
+                          class="d-none d-md-none d-lg-block d-xl-block" alt="Product Image"
                           style="width: 100px; height: 100px;">
                       </td>
                       <td class="align-middle text-wrap w-25">
@@ -179,78 +198,87 @@
                             <td class="align-middle text-center text-success">
                               <%= oder.status %>
                             </td>
-                            <% } else { %>
+                            <% } else if(oder.status==='Delivered' ){ %>
                               <!-- Handle other cases or set a default class -->
                               <td class="align-middle text-center text-success">
                                 <%= oder.status %>
                               </td>
-                              <% } %>
+                              <% }%>
+
+
 
                                 <td class="align-middle text-center">
                                   <% if (!product.cancelled && (oder.status==='Pending' || oder.status==='Shipped' )) {
                                     %>
-
                                     <a type="button"
-                                      onclick="return showCancelOrderAlert('<%=oder.order_id %>', '<%=product.product_id%>', '<%=i %>', '<%=index %>')"
+                                      onclick="return showCancelOrderAlert('<%= oder.order_id %>', '<%= product.product_id %>', '<%= i %>', '<%= index %>')"
                                       class="btn btn-danger btn-sm text-white">Cancel Order</a>
-
                                     <% } else if (product.cancelled) { %>
                                       <span class="text-info">Cancelled</span>
                                       <% } %>
                                 </td>
+
+
+
                                 <% } else { %>
                                   <td class="align-middle text-center">
                                     <span class="text-info">Cancelled</span>
                                   </td>
                                   <% } %>
-                   
+                                    <% if (oder.status==='Delivered' ) { %>
+                                      <td class="align-middle text-center">
+                                        <button data-product="<%= product.product_id %>"
+                                          class="btn border-0 rateProductBtn">Rate
+                                          this?</button>
 
-                                  <%if(oder.status==='Delivered'){%>
-                                    <td>
-                                <button data-product="<%=product.product_id%>" class="btn text-warning rateProductBtn" >Rate this?</button>
-                                </td>
-                                  <%}%>
-                             
-                         
+                                      </td>
+
+                                      <% } %>
+
+
+                                        <% if(returnData !=='undefined' && returnData.length>= 0 && oder.status ===
+                                          'Delivered' && product.returned === '') { %>
+
+
+                                          <td class="align-middle text-center">
+                                            <a type="button" id="returnBtn" style="height: 40px;"
+                                              onclick="return showReturnOrderPrompt('<%= oder.order_id %>', '<%= product.product_id %>', '<%= i %>', '<%= index %>')"
+                                              class=" text-info ">Return</a>
+                                          </td>
+                                          <% }else if(product.returned==='Pending' ){%>
+
+                                            <td class="align-middle text-center">
+                                              <span class="badge badge-info">Return initiated</span>
+                                            </td>
+
+                                            <%} else if(product.returned==='Approved' ){%>
+                                              <td class="align-middle text-center">
+                                                <span class="badge badge-success">Return Approved</span>
+                                                <span class="badge text-info">Pick-up date <%= oder.pickDate.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' }) %></span>
+
+                                              </td>
+                                              <%}%>
 
                     </tr>
 
+
+
                     <% }); %>
-                      <% if (oder.status==='Delivered' ) { %>
-
-                        <tr style="height: 20px;">
-                          
-                          <td>
-                           
-                          <td class="">
-                            <%= oder.date.toLocaleString() %>
-                          </td>
-                          <td class=" text-success d-flex  justify-content-end gap-3" style="border-bottom: white;">
-                              <a type="button" data-order-id="<%=oder._id  %>"
-                                class="btn btn-primary btn-sm text-white invoice-download">Downlode invoice</a>
-
-                          </td>
-                          
-                          </td>
-                        </tr>
-                        <% } %>
-
-                          <% }); %>
-
-
-              </tbody>
-
-            </table>
-            <% } else { %>
-              <table class="table">
-                <tbody>
-                  <tr>
-                    <h5 class="text-dark text-center">No Orders Available</h5>
-                  </tr>
-                </tbody>
+                  </tbody>
               </table>
-              <% } %>
+              <% }); %>
+
+                    <% } else { %>
+                      <table class="table">
+                        <tbody>
+                          <tr>
+                            <h5 class="text-dark text-center">No Orders Available</h5>
+                          </tr>
+                        </tbody>
+                      </table>
         </div>
+        <% } %>
+
 
 
       </div>
@@ -260,35 +288,92 @@
   <style>
     /* Add this CSS */
     .rating-stars .bi-star-fill {
-        color: gray; /* Default star color */
+      color: gray;
+      /* Default star color */
     }
 
     .rating-stars .bi-star-fill.selected {
-        color: rgba(219, 219, 12, 0.822); /* Selected star color */
+      color: rgba(219, 219, 12, 0.822);
+      /* Selected star color */
     }
-</style>
-  <div class="modal fade" id="candidateRatingModal" tabindex="-1" role="dialog" aria-labelledby="candidateRatingModalLabel">
+  </style>
+  <div class="modal fade" id="candidateRatingModal" tabindex="-1" role="dialog"
+    aria-labelledby="candidateRatingModalLabel">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="rating-stars-container">
-                    <div class="rating-stars">
-                        <i class="rating-star bi bi-star-fill" data-rating="1"></i>
-                        <i class="rating-star bi bi-star-fill" data-rating="2"></i>
-                        <i class="rating-star bi bi-star-fill" data-rating="3"></i>
-                        <i class="rating-star bi bi-star-fill" data-rating="4"></i>
-                        <i class="rating-star bi bi-star-fill" data-rating="5"></i>
-                    </div>
-                </div>
-                <textarea class="form-control" placeholder="Type something" name="reviewText" id="reviewText" cols="30" rows="5"></textarea>
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="rating-stars-container">
+            <div class="rating-stars">
+              <i class="rating-star bi bi-star-fill" data-rating="1"></i>
+              <i class="rating-star bi bi-star-fill" data-rating="2"></i>
+              <i class="rating-star bi bi-star-fill" data-rating="3"></i>
+              <i class="rating-star bi bi-star-fill" data-rating="4"></i>
+              <i class="rating-star bi bi-star-fill" data-rating="5"></i>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-default" id="crCancelBtn" data-dismiss="modal">Cancel</button>
-                <button id="crSubmitBtn" type="button" class="btn btn-primary " >Submit</button>
-            </div>
+          </div>
+          <textarea class="form-control" placeholder="Type something" name="reviewText" id="reviewText" cols="30"
+            rows="5"></textarea>
         </div>
+        <div class="modal-footer">
+          <button class="btn btn-default" id="crCancelBtn" data-dismiss="modal">Cancel</button>
+          <button id="crSubmitBtn" type="button" class="btn btn-primary ">Submit</button>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
+
+  <script>
+    function showReturnOrderPrompt(orderId, productId, productIndex, orderIndex) {
+
+      const returnBtn = document.getElementById('returnBtn');
+      $.confirm({
+        title: 'Return order!',
+        content: '' +
+          '<form action="" class="formName">' +
+          '<div class="form-group d-flex flex-column">' +
+          '<label>Enter your reason for return</label>' +
+          '<input type="text" placeholder="Your reason" class="name form-control" required />' +
+          '<label>Quantity</label>' +
+          '<input type="number" placeholder="Quantity" class="quantity form-control w-25" required />' +
+          '</div>' +
+          '</form>',
+        buttons: {
+          formSubmit: {
+            text: 'Submit',
+            btnClass: 'btn-blue',
+            action: function () {
+              var reason = this.$content.find('.name').val();
+              var quantity = this.$content.find('.quantity').val();
+              if (!reason && !quantity) {
+                $.alert('provide a valid reson');
+                return false;
+              }
+              window.location.href = `/home/settings/return-oders/${orderId}/${productId}/${productIndex}/${orderIndex}/${reason}/${quantity}`;
+
+
+
+            }
+          },
+          cancel: function () {
+            //close
+          },
+        },
+        onContentReady: function () {
+          // bind to events
+          var jc = this;
+          this.$content.find('form').on('submit', function (e) {
+            // if the user submits the form by pressing enter in the field.
+            e.preventDefault();
+            jc.$$formSubmit.trigger('click'); // reference the button and click it
+          });
+        }
+      });
+
+      // Prevent the default behavior of the anchor tag
+      return false;
+    }
+  </script>
+
 
   <script>
     function showCancelOrderAlert(orderId, productId, productIndex, orderIndex) {
@@ -323,6 +408,7 @@
 
 
   <script>
+
     const invoiceBtn = document.querySelectorAll('.invoice-download');
 
     invoiceBtn.forEach((invoiceBtn) => {
@@ -437,66 +523,66 @@
   </script>
 
   <script>
-  $(document).ready(function () {
-    let selectedRating;
-    let productId;
-    $('.rating-star').click(function () {
-      selectedRating = parseInt($(this).data('rating'));
-      $('.rating-star').removeClass('selected');
-      for (var i = 1; i <= selectedRating; i++) {
-        $('.rating-star[data-rating="' + i + '"]').addClass('selected');
-      }
+    $(document).ready(function () {
+      let selectedRating;
+      let productId;
+      $('.rating-star').click(function () {
+        selectedRating = parseInt($(this).data('rating'));
+        $('.rating-star').removeClass('selected');
+        for (var i = 1; i <= selectedRating; i++) {
+          $('.rating-star[data-rating="' + i + '"]').addClass('selected');
+        }
 
 
 
-    });
+      });
 
-    // Handle button click event
-    $('.rateProductBtn').on('click', function () {
-      productId = $(this).data('product');
+      // Handle button click event
+      $('.rateProductBtn').on('click', function () {
+        productId = $(this).data('product');
 
-      $('#candidateRatingModal').modal('show');
-    });
+        $('#candidateRatingModal').modal('show');
+      });
 
-    // Handle modal submit button click event
-    $('#crSubmitBtn').on('click', async function () {
-      var reviewText = $('#reviewText').val();
-      $('#candidateRatingModal').modal('hide');
+      // Handle modal submit button click event
+      $('#crSubmitBtn').on('click', async function () {
+        var reviewText = $('#reviewText').val();
+        $('#candidateRatingModal').modal('hide');
 
-      console.log(productId);
+        console.log(productId);
 
 
-      try {
-        const response = await axios.post(`/home/settings/oders/add-review?review=${reviewText}&rating=${selectedRating}&product=${productId}`);
+        try {
+          const response = await axios.post(`/home/settings/oders/add-review?review=${reviewText}&rating=${selectedRating}&product=${productId}`);
 
-        // Check if the review submission was successful
-        if (response.status === 200) {
-          // Log a message to the console to check if this block is reached
-          console.log('Review submitted successfully');
+          // Check if the review submission was successful
+          if (response.status === 200) {
+            // Log a message to the console to check if this block is reached
+            console.log('Review submitted successfully');
 
             // Review submitted successfully, hide the modal
             $('#reviewText').val(''); // Clear the text area
-                $('.rating-star').removeClass('selected'); // Clear selected stars
-                $('#candidateRatingModal').modal('hide');
+            $('.rating-star').removeClass('selected'); // Clear selected stars
+            $('#candidateRatingModal').modal('hide');
 
-          
-          // Review submitted successfully, hide the modal
-        } else {
-          // Handle the case where the review submission failed
-          console.error('Failed to submit review');
+
+            // Review submitted successfully, hide the modal
+          } else {
+            // Handle the case where the review submission failed
+            console.error('Failed to submit review');
+          }
+        } catch (error) {
+          console.error(error);
         }
-      } catch (error) {
-        console.error(error);
-      }
+      });
+
+      // Handle modal cancel button click event
+      $('#crCancelBtn').on('click', function () {
+        $('#candidateRatingModal').modal('hide');
+      });
     });
 
-    // Handle modal cancel button click event
-    $('#crCancelBtn').on('click', function () {
-      $('#candidateRatingModal').modal('hide');
-    });
-  });
-
-</script>
+  </script>
 
 
   <%- include('../layout/footer.ejs') %>

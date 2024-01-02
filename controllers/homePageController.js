@@ -88,6 +88,8 @@ const sortProductByUserPreference = async (req, res) => {
       res.status(500).send('Internal Server Error');
   }
 };
+
+
 const filterProductsByUser = async (req, res) => {
   try {
 const {subCategory,brand} = req.query;

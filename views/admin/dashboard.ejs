@@ -536,25 +536,34 @@
 
             const formatType = reportFormat.value;
 
-
+            console.log(formatType);
 
             if (formatType === 'excel') {
 
               const reportDownload = document.getElementById('download-report').addEventListener("click", async (e) => {
-                const response = await axios.get(`/admin/sales-report?reportType=${selectedReportType}`);
-                const salesReport = response.data.salesReport;
+                const response = await axios.get(`/admin/sales-report?reportType=${selectedReportType}`, {
+                  responseType: 'blob',
+                });
 
-                createAndDownloadExcel(salesReport);
 
+                if (response.status === 200) {
+                  const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                  const link = document.createElement('a');
+                  link.href = window.URL.createObjectURL(blob);
+                  link.download = 'sales_report.xlsx';
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                } else {
+                  console.error('Failed to download the sales report');
+                }
               });
             } else {
 
 
               const reportDownload = document.getElementById('download-report').addEventListener("click", async (e) => {
-                const response = await axios.get(`/admin/sales-report?reportType=${selectedReportType}`);
+                const response = await axios.get(`/admin/sales-report-pdf?reportType=${selectedReportType}`);
                 const salesReport = response.data.salesReport;
-
-
 
                 downloadPdfReport(salesReport);
 
@@ -563,86 +572,75 @@
           })
         });
 
-        function createAndDownloadExcel(data) {
-          const workbook = new ExcelJS.Workbook();
-          const worksheet = workbook.addWorksheet('Sales Report');
-
-          // Add headers
-          worksheet.addRow(['Product Name', 'Quantity', 'Payment Mode', 'Total Amount']);
-
-          // Add data
-          data.forEach(entry => {
-            worksheet.addRow([entry.productName, entry.quantity, entry.paymentMode, entry.totalAmount]);
-          });
-
-          // Save the workbook to a buffer
-          workbook.xlsx.writeBuffer().then(buffer => {
-            // Create a Blob from the buffer
-            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-
-            // Create a link element and trigger a click event to download the file
-            const link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.download = 'sales_report.xlsx';
-            link.click();
-          });
-        }
 
 
 
 
         function downloadPdfReport(data) {
-          const pdfElement = document.createElement('div');
-          const amountArray = data.map((data) => data.totalAmount);
-          const subTotal = amountArray.reduce((pVal, cVal) => pVal + cVal);
+  // Calculate subtotal
+  const amountArray = data.map((entry) => entry.Amount);
+  const subTotal = amountArray.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
-
-          pdfElement.innerHTML = `
-  <table class="table">
-    <tr>
-      <td colspan="4" class="text-center">
-        <h4>Sales Report</h4>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="4">
-        <div class="table">
-          <!-- Header row with dark background -->
-          <div class="row bg-dark text-white">
-            <div class="col-5 text-left">Item</div>
-            <div class="col-2 text-left">Quantity</div>
-            <div class="col-2 text-left">PaymentMode</div>
-            <div class="col text-left">Total</div>
-          </div>
-
-          <!-- Loop through each entry in the data -->
-          ${data.map(entry => `
-            <div class="row mb-4">
-              <div class="col-5 text-left">${entry.productName}</div>
-              <div class="col-2 text-left">${entry.quantity}</div>
-              <div class="col-2 text-left">${entry.paymentMode}</div>
-              <div class="col text-left">${entry.totalAmount}</div>
+  // Create HTML structure
+  const pdfContent = `
+    <table class="table">
+      <tr>
+        <td colspan="4" class="text-center">
+          <h4>Sales Report</h4>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="4">
+          <div class="table-responsive">
+            <!-- Header row with dark background -->
+            <div class="row bg-dark text-white">
+              <div class="col-2 text-left">CustomerName</div>
+              <div class="col-2 text-left">Email</div>
+              <div class="col-2 text-left">Order ID</div>
+              <div class="col-2 text-left">Order Date</div>
+              <div class="col-2 text-left">Product Name</div>
+              <div class="col-1 text-left">Quantity</div>
+              <div class="col-1 text-left">Total</div>
             </div>
-          `).join('')}
 
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="4" class="text-right">
-        <h5>Subtotal: ${subTotal}</h5>
-      </td>
-    </tr>
-  </table>`;
+            <!-- Loop through each entry in the data -->
+            ${data.map((entry) => `
+              <div class="row mb-4">
+                <div class="col-2 text-left">${entry.username}</div>
+                <div class="col-2 text-left">${entry.email}</div>
+                <div class="col-2 text-left">${entry.orderId}</div>
+                <div class="col-2 text-left">${entry.orderDate.toString()}</div>
+                <div class="col-2 text-left">${entry.productName}</div>
+                <div class="col-1 text-left">${entry.productQuantity}</div>
+                <div class="col-1 text-left">${entry.price}</div>
+              </div>
+            `).join('')}
 
-          // Use html2pdf to generate and download the PDF
-          html2pdf(pdfElement, {
-            margin: 10,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-          });
-        }
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="4" class="text-right">
+          <h5>Subtotal: ${subTotal}</h5>
+        </td>
+      </tr>
+    </table>`;
+
+  // Generate and download the PDF using html2pdf
+  const pdfElement = document.createElement('div');
+  pdfElement.innerHTML = pdfContent;
+  html2pdf(pdfElement, {
+  margin: 10,
+  image: { type: 'jpeg', quality: 0.98 },
+  html2canvas: { scale: 2 },
+  jsPDF: { unit: 'mm', format: [400, 297], orientation: 'portrait' },
+}).from(0).outputPdf();
+
+
+
+}
+
+
 
       });
     </script>

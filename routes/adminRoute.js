@@ -10,6 +10,7 @@ const bannerController = require("../controllers/bannerController");
 const adminOderController = require("../controllers/oderControllers");
 const dashBoardController = require("../controllers/adminDashboard");
 const adminOfferController = require("../controllers/adminOfferController");
+const couponController = require("../controllers/couponController");
 const path = require("path");
 const multer = require("multer");
 // Define storage for product images
@@ -127,7 +128,18 @@ adminRoute.post('/banners/edit/:id',uploadBannerImage.single('image'),bannerCont
 
 //admin oder mangment
 adminRoute.get('/oders',adminOderController.loadOderManagment);
-adminRoute.patch('/oders/change-oder-status/:status/:id',adminOderController.adminChangeOderStatus)
+adminRoute.patch('/oders/change-oder-status/:status/:id',adminOderController.adminChangeOderStatus);
+adminRoute.get('/oders/return-view/:id',adminOderController.viewReturnedOrder);
+adminRoute.get('/oders/return/approve/:returnId',adminOderController.approveReturnedProduct);
+
+
+
+//admin coupon managment;
+adminRoute.get('/coupon',adminAuth.is_Login,couponController.loadCouponPage);
+adminRoute.post('/coupon/add',adminAuth.is_Login,couponController.addCoupon);
+adminRoute.get('/coupon/edit/:id',adminAuth.is_Login,couponController.editCouponLoad);
+adminRoute.post('/coupon/edit/:id',adminAuth.is_Login,couponController.editCoupon);
+adminRoute.get('/coupon/delete/:id',adminAuth.is_Login,couponController.deleteCoupon);
 
 
 //admin dashboard statictics
@@ -137,6 +149,7 @@ adminRoute.get('/dashboard/statistics',dashBoardController.getProductStatistics)
 
 //admin sales report downlode
 adminRoute.get('/sales-report',dashBoardController.downlodeSalesReport);
+adminRoute.get('/sales-report-pdf',dashBoardController.downlodeSalesReportPdf);
 
 //admin offer route
 

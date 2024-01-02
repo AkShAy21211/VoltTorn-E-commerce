@@ -1,7 +1,9 @@
 const { CartModel } = require("../models/cart&WishlistModel");
 const { generateOrderID } = require("../helpers/oderIdHelper");
+const couponModal = require("../models/couponModal");
 const userModel = require("../models/userModel");
 const Razorpay = require("razorpay");
+const { ObjectId } = require("bson");
 const productModal = require("../models/productModel");
 const {createRazorpayOrder,verifyPayment} = require("../helpers/razorPayHelper");
 var instance = new Razorpay({
@@ -11,17 +13,34 @@ var instance = new Razorpay({
 const verfyUserPaymentOption = async (req, res) => {
   try {
     const id = req.params.id;
-    const { selectedAddressId, paymentMethod } = req.body;
+    const { selectedAddressId, paymentMethod,couponCodeValue } = req.body;
     const user = await userModel.findById(id);
     const userCart = await CartModel.findById(id).populate("cart.product_id");
     const address = await userModel.findOne(
       { _id: id, "addresses._id": selectedAddressId },
       { "addresses.$": 1 }
     );
+    const coupon = await couponModal.findOne({code:couponCodeValue});
+
+    if(coupon !== null){
+    const updateCoupon = await couponModal.findByIdAndUpdate(
+      { 
+        _id: coupon._id, 
+        'usedUsers.user_id': { $ne: new ObjectId(id) } // Ensure the user is not already in the array
+      },
+      { 
+        $addToSet: { 'usedUsers': { user_id: new ObjectId(id) } } 
+      },
+      { new: true }
+    );
+    }
+    
     const selectedAddress = address.addresses[0];
     const referredUser = await userModel.findById(user.referredBy).populate('referredBy');
     const previousPurchaseCount = user.referredPurchases;
-    if (referredUser && !referredUser.referredBy) {
+    await userModel.findByIdAndUpdate({_id:id},{$inc:{referredPurchases:-1}});
+
+    if (referredUser && !referredUser.referredBy && user.referredPurchases <=5 ) {
       referredUser.referredPurchases += 1;
       await referredUser.save();
     }
@@ -34,6 +53,7 @@ const verfyUserPaymentOption = async (req, res) => {
         userCart
       );
       await decrementProductStock(userCart);
+
 
       await userCart.deleteOne({ _id: id });
       delete req.session.user.cart;
@@ -55,6 +75,8 @@ const verfyUserPaymentOption = async (req, res) => {
           console.log(err);
         }
       });
+
+      
     }else if(paymentMethod && paymentMethod=== 'wallet'){
 
       const balance = user.wallet.balance;
@@ -86,6 +108,8 @@ const verfyUserPaymentOption = async (req, res) => {
         },
         { new: true } // Return the updated document
       );
+
+      
       res.status(200).json({})
       }else{
         res.status(400).json({error:"Insufficent amount in your wallet"});
@@ -205,6 +229,8 @@ const userAddFundWallet = async(req,res)=>{
 
   try{
 
+    console.log("called add fund");
+
     const userId = req.session.user?req.session.user.userId:undefined;
     const amount = req.body;
     console.log(userId,"",amount.amount);
@@ -224,6 +250,8 @@ const userAddFundWallet = async(req,res)=>{
 
     createRazorpayOrder(instance, options, async (err, order) => {
       if (order) {
+
+        console.log(order);
         res.status(201).json({ order });
       } else {
         console.log(err);
@@ -235,6 +263,7 @@ const userAddFundWallet = async(req,res)=>{
     console.error(error);
   }
 }
+
 const userAddFundWalletVerify = async(req,res)=>{
 
   try {

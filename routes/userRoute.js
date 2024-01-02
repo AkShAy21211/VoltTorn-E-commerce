@@ -63,21 +63,29 @@ userRoute.get('/home/products/:cat_name/search',auth.isUserBlocked,homeControlle
 
 
 //user wishlists page route
-userRoute.get('/home/products/wishlist/:product_id',auth.isUserBlocked,userSettingController.userWishlistLoadProductAdd);
-userRoute.get('/home/settings/wishlist',auth.isUserBlocked,userSettingController.userWishlistLoad);
-userRoute.get('/home/settings/wishlist/remove/:index',auth.isUserBlocked,userSettingController.removeWishlistsItems);
+userRoute.get('/home/products/wishlist/:product_id',auth.isUserBlocked,auth.is_Login,userSettingController.userWishlistLoadProductAdd);
+userRoute.get('/home/settings/wishlist',auth.isUserBlocked,auth.is_Login,userSettingController.userWishlistLoad);
+userRoute.get('/home/settings/wishlist/remove/:index',auth.isUserBlocked,auth.is_Login,userSettingController.removeWishlistsItems);
 
 
 //USER shoppingCart
-userRoute.get('/home/cart',auth.isUserBlocked,userCartController.userShoppingCartPageLoad);
+userRoute.get('/home/cart',auth.isUserBlocked,auth.is_Login,userCartController.userShoppingCartPageLoad);
 userRoute.post('/home/products/cart/:product_id',auth.isUserBlocked,auth.is_Login,userCartController.userAddToCartButton);
 userRoute.post('/home/products/buy-now/:product_id',auth.isUserBlocked,auth.is_Login,userCartController.userBuyNowButton);
 userRoute.patch('/home/products/cart/updateQuantity/:product_id/:product',auth.isUserBlocked,userCartController.updateQuantity)
 userRoute.delete('/home/cart/:product_id',auth.isUserBlocked,userCartController.deleteCartItem);
 
-userRoute.get('/home/cart/checkout',auth.isUserBlocked,auth.in_cart, userCartController.loadCheckOutPage);
+
+//checkout
+userRoute.get('/home/cart/checkout',auth.isUserBlocked,auth.is_Login,auth.in_cart, userCartController.loadCheckOutPage);
+//offer
 userRoute.get('/home/cart/applay-referral-offer/:id',auth.isUserBlocked,auth.in_cart, userCartController.applayReferralOffer);
 userRoute.get('/home/cart/cancel-referral-offer/:id',auth.isUserBlocked,auth.in_cart, userCartController.cancelReferralOffer);
+//coupons
+userRoute.get('/home/cart/avaliable-coupons/:id',auth.isUserBlocked,auth.is_Login,userCartController.loadAvaliableCoupons);
+userRoute.get('/home/cart/coupon-applay/:id',auth.isUserBlocked,auth.is_Login,userCartController.applayCouponCode)
+userRoute.get('/home/cart/coupon-remove/:id',auth.isUserBlocked,auth.is_Login,userCartController.removeCouponCode)
+
 userRoute.post('/home/cart/checkout',auth.isUserBlocked,userCartController.stateCityLoad);
 
 
@@ -88,19 +96,20 @@ userRoute.post('/home/cart/edit-address/:id',auth.isUserBlocked,userCartControll
 
 
 //user profile page route
-userRoute.get('/home/settings/profile',auth.isUserBlocked,userSettingController.loadUserSettings);
+userRoute.get('/home/settings/profile',auth.isUserBlocked,auth.is_Login,userSettingController.loadUserSettings);
 userRoute.post('/home/setting/edit-profile/:id',uploadUserImage.single('image'),auth.isUserBlocked,userSettingController.editUserProfile);
 userRoute.get('/home/setting/edit-profile/delete-address/:address_id',auth.isUserBlocked,userSettingController.deleteUserAddress);
 
 
-//user oder page eroutes
-userRoute.get('/home/settings/oders',auth.isUserBlocked,userSettingController.loadUserOdersPage);
+//user oder page routes
+userRoute.get('/home/settings/oders',auth.isUserBlocked,auth.is_Login,userSettingController.loadUserOdersPage);
 userRoute.get('/home/settings/cancel-oders/:oder_id/:product_id/:oder_index/:product_index',auth.isUserBlocked,userSettingController.forCancelUserOders);
+userRoute.get('/home/settings/return-oders/:oder_id/:product_id/:oder_index/:product_index/:reason/:quantity',auth.isUserBlocked,userSettingController.forReturnOders);
 
 //user post product review
-userRoute.get('/home/settings/reviews',auth.isUserBlocked,userSettingController.loadUserReviews)
+userRoute.get('/home/settings/reviews',auth.isUserBlocked,auth.is_Login,userSettingController.loadUserReviews)
 userRoute.post('/home/settings/oders/add-review',auth.isUserBlocked,userSettingController.addProductReview)
-userRoute.get('/home/settings/reviews/remove/:id',auth.isUserBlocked,userSettingController.deleteUserReviews)
+userRoute.get('/home/settings/reviews/remove/:id',auth.isUserBlocked,auth.is_Login,userSettingController.deleteUserReviews)
 
 
 
@@ -110,8 +119,7 @@ userRoute.post('/home/cart/checkout/verify-payment/:id',auth.isUserBlocked,payme
 userRoute.post('/home/cart/checkout/verify',auth.isUserBlocked,paymentController.verifyOnlinePayment);
 
 //user wallet
-
-userRoute.get('/home/settings/wallet',auth.isUserBlocked,userSettingController.loadUserWallet)
+userRoute.get('/home/settings/wallet',auth.isUserBlocked,auth.is_Login,userSettingController.loadUserWallet)
 userRoute.post('/home/settings/wallet/add-fund',auth.isUserBlocked,paymentController.userAddFundWallet)
 userRoute.post('/home/settings/wallet/add-fund/verify',auth.isUserBlocked,paymentController.userAddFundWalletVerify)
 
@@ -121,9 +129,9 @@ userRoute.get('/home/frequently-asked-questions',homeController.loadFaqPage)
 userRoute.get('/home/about-us',homeController.loadAboutUs)
 
 //user downlode invoice
-userRoute.get('/home/settings/oders/download-invoice/:order_id',auth.isUserBlocked,paymentController.downloadInvoice)
+userRoute.get('/home/settings/oders/download-invoice/:order_id',auth.isUserBlocked,auth.is_Login,paymentController.downloadInvoice)
 
-//user checkout page complete transcation online  payment
+//user forget password
 userRoute.get('/forget-password',userController.loadForgetPasswordPage);
 userRoute.post('/forget-password',userController.resetPasswordByEmail);
 userRoute.get('/reset-password',userController.resetPasswordGet);

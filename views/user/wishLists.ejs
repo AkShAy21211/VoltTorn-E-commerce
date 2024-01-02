@@ -101,9 +101,27 @@
                     <td class="align-middle text-wrap ">
                       <%= product.name.length > 50 ? product.name.slice(0, 50) + '...' : product.name %>
                     </td>
+                    <%if(product.stock < 1){%>
+                 
+                      <td class="align-middle text-wrap ">
+
+                        <h6 class="text-warning m-3">Out of stock</h6>
+
+                      </td>
+                    <%}else if(product.stock >1 ){%>
+                      <td class="align-middle text-wrap ">
+                        <button style="font-size: 25px;" class=" btn addToCartButton bi bi-cart4 text-primary"
+                        data-product-id="<%= product._id %>"
+                        data-product-price="<%= Number(product.price - (product.price * (product.discount / 100))) %>">
+                      </button>
+                      </td>
+                    <%}%>
+                     
+                      
                     <td class="align-middle text-wrap ">
                       <a  class="text-danger text-decoration-none" href="/home/settings/wishlist/remove/<%=index%>">remove</a>
                     </td>
+                   
                   </tr>
                 <% }); %>
               </tbody>
@@ -116,6 +134,7 @@
       </div>
     </div>
   </main>
+  <script src="/js/addTOcart.js"></script>
 
 
 

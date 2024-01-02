@@ -5,6 +5,10 @@ const { calculateTotalDiscount } = require("../helpers/totalDiscountHelper");
 const { generateOrderID } = require("../helpers/oderIdHelper");
 const userModel = require("../models/userModel");
 const offerModel = require("../models/offerModal");
+const couponModal = require("../models/couponModal");
+const { ObjectId } = require("bson");
+const { ref } = require("pdfkit");
+
 const userShoppingCartPageLoad = async (req, res) => {
   try {
     // Check if the user is logged in
@@ -370,6 +374,7 @@ const loadCheckOutPage = async (req, res) => {
     const user = await userModel.findById(id);
     const dataState = req.body.dataState;
     const states = countryState.State.getStatesOfCountry("IN");
+    const coupon = await couponModal.find({isActive:true,expiry:{ $gt: new Date() }});
     const cart = await CartModel.findById(req.session.user.userId).populate(
       "cart.product_id"
     );
@@ -378,6 +383,7 @@ const loadCheckOutPage = async (req, res) => {
       isActive: true,
       endDate: { $gt: new Date() },
     });
+
     const categoryOffer = await offerModel.find({
       offerType: "Category",
       isActive: true,
@@ -389,7 +395,7 @@ const loadCheckOutPage = async (req, res) => {
       endDate: { $gt: new Date() },
     });
 
-    if (referralOffer) {
+    if (referralOffer !== null) {
       purchaseCount = user.referredPurchases > 0 ? user.referredPurchases : null;
     }
 
@@ -402,13 +408,11 @@ const loadCheckOutPage = async (req, res) => {
       (product) => categoryOffer.some((offer) => offer.offer === product.product_id.category)
     );
 
-    console.log(matchedCategoryProducts);
 
     const matchedOfferProducts = cart.cart.filter(
       (product) => productOffer.some((offer) => offer.offer === product.name)
     );
     
-    console.log(matchedOfferProducts);
 let categoryDiscount;
     if(matchedCategoryProducts.length>0){
        categoryDiscount = categoryOffer.map((offer) => offer.percentage / 100);
@@ -465,6 +469,8 @@ let productDiscount;
       total_discount,
       purchaseCount,
       referralOffer,
+      referralOffer,
+      coupon,
     });
   } catch (error) {
     console.error(error);
@@ -490,8 +496,7 @@ const applayReferralOffer = async (req, res) => {
       const previousPurchaseCount = user.referredPurchases;
 
       if (
-        user.referredPurchases <= 5 &&
-        user.referredPurchases >= previousPurchaseCount
+        user.referredPurchases <= 5 && user.referredPurchases >= previousPurchaseCount
       ) {
         const updatedCart = await CartModel.findOneAndUpdate(
           { _id: id },
@@ -509,6 +514,8 @@ const applayReferralOffer = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+
 const cancelReferralOffer = async (req, res) => {
   try {
     let { id } = req.params;
@@ -549,6 +556,131 @@ const cancelReferralOffer = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+
+const loadAvaliableCoupons = async(req,res)=>{
+
+  try{
+    const {total} = req.query;
+    const {id} = req.params;
+
+    console.log(id);
+    const coupons = await couponModal.find({
+      isActive: true,
+      expiry: { $gt: new Date() },
+    });
+
+    const availableCoupons = coupons.filter((coupon) => {
+      // Check if the user with the given id has used the coupon
+      const userUsedCoupon = coupon.usedUsers.some((usedUser) => usedUser.user_id.equals(id));
+    
+      // Include the coupon in the availableCoupons array only if the user hasn't used it
+      return !userUsedCoupon;
+    });
+    console.log(availableCoupons);
+    if(availableCoupons){
+      res.status(200).json({availableCoupons})
+
+    }
+
+
+
+  }catch(error){
+    console.error(error);
+  }
+}
+
+
+
+const applayCouponCode = async (req, res) => {
+  try {
+    const { code } = req.query;
+    const { id } = req.params;
+    const cart = await CartModel.findById(id);
+    const userData = await userModel.findById(id);
+    const coupon = await couponModal.findOne({ code: code });
+
+    const isCouponUsed = coupon.usedUsers.includes(id);
+
+    if (isCouponUsed || !coupon) {
+      return res.status(400).json({ message: "Coupon already used or invalid" });
+    }
+
+    if (coupon) {
+      if (coupon.minOrderAmount <= cart.total_price) {
+        const couponDiscount = (coupon.discountPercentage / 100) * cart.total_price;
+        const updatedCart = await CartModel.findOneAndUpdate(
+          { _id: id },
+          { $inc: { total_price: -couponDiscount } },
+          { new: true }
+        );
+        return res.status(200).json({ updatedCart, message: "Coupon applied" });
+      } else {
+        return res.status(400).json({ message: "Minimum purchase requirement has not been met" });
+      }
+    } else {
+      return res.status(400).json({ message: "Invalid Coupon" });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+
+const removeCouponCode = async(req,res)=>{
+
+  try{
+    const { id } = req.params;
+    const { code } = req.query;
+
+    console.log(id,code);
+
+    const cart = await CartModel.findById(id);
+
+    const userData = await userModel.findById(id);
+
+    if (userData) {
+      
+      const coupon = await couponModal.findOne({code:code,isActive:true,expiry:{$gt: new Date()}});
+
+      const total_price = cart.cart.reduce(
+        (total, item) => total + item.price,
+        0
+      );
+      const couponDiscount = (coupon.discountPercentage / 100) * total_price;
+
+
+
+      if(coupon && couponDiscount){
+
+        const updatedCart = await CartModel.findOneAndUpdate(
+          { _id: id },
+          { $inc: { total_price: couponDiscount } },
+          { new: true }
+        );
+
+
+
+        return res.status(200).json({ updatedCart});
+      }else{
+
+        return res.status(400).json({  message: "Invail Coupon " });
+
+      }
+    
+    } else {
+      console.log("User not found.");
+      return res.status(404).json({ message: "User not found" });
+    }
+
+  }catch(error){
+    console.error(error);
+    res.status(500).json({message:"internal server error"})
+  }
+}
+
+
 
 const stateCityLoad = async (req, res) => {
   try {
@@ -631,4 +763,7 @@ module.exports = {
   editUserBillingAddress,
   applayReferralOffer,
   cancelReferralOffer,
+  loadAvaliableCoupons,
+  applayCouponCode,
+  removeCouponCode
 };

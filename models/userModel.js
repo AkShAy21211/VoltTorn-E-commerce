@@ -77,10 +77,19 @@ const orderSchema = new mongoose.Schema({
   date: Date,
   quantity: Number,
   totalAmount: Number,
-  is_cancelled: {
-    type: Boolean,
-    default: false,
+  // is_cancelled: {
+  //   type: Boolean,
+  //   default: false,
+  // },
+  return:{
+    type:Date,
+    default: () => new Date(Date.now() + 10 * 24 * 60 * 60 * 1000) // 10 days from now
+
   },
+  pickDate:{
+    type:Date,
+    required:false,
+}
 });
 
 

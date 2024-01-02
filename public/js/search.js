@@ -43,6 +43,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Render each product card and append to the container
     products.forEach((product, index) => {
+
+      
+      const stock = product.stock < 1 ? `
+      <div class="d-flex justify-content-between">
+    <h6 class="text-warning mt-4 p-3">Out of stock</h6>
+    <button data-product-id="${product._id}" style="font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart bg-white border-0"></button>
+
+    </div>` : ` <div class="d-flex justify-content-between">
+      <button style="font-size: 25px;" class="btn addToCartButton bi bi-cart4 text-primary" data-product-id="${product._id}"
+        data-product-price="${Number(product.price - (product.price * (product.discount / 100)))}">
+      </button>
+      <button data-product-id="${product._id}" style="font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart bg-white border-0"></button>
+
+    </div>`;
+    
       const productCard = `
       <div class="col-lg-4 col-md-6 col-sm-6 mt-xl-0 mt-lg-2 mt-md-3 mb-4 mt-sm-4 mt-4 p-3">
           <!-- Use col-lg-4 to include three cards in one row -->
@@ -86,18 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
               </div>
           </a>
 
-          <div class="d-flex justify-content-between">
-            <button style="font-size: 25px;" class=" btn addToCartButton bi bi-cart4 text-primary" data-product-id="${
-              product._id
-            }"
-              data-product-price="${Number(
-                product.price - product.price * (product.discount / 100)
-              )}">
-            </button>
-            <button data-product-id="${
-              product._id
-            }" style=" font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart btn"></button>
-          </div>
+         ${stock}
         </div>`;
 
       productContainer.append(productCard);

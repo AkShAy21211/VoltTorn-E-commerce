@@ -101,7 +101,7 @@
             <article class="filter-group">
               <header class="card-header">
                 <div class="d-flex justify-content-between">
-                  <a href="#"  data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
+                  <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
                     <h6 class="title">Sub Category</h6>
                   </a>
 
@@ -160,7 +160,8 @@
             </article> <!-- filter-group .// -->
 
 
-            <a href="#" id="applyFilterBtn" data-offer="<%=offers  %>" data-category="<%=cat_name  %>" class="btn me-2 ml-2 btn-primary mt-3">Apply
+            <a href="#" id="applyFilterBtn" data-offer="<%=offers  %>" data-category="<%=cat_name  %>"
+              class="btn me-2 ml-2 btn-primary mt-3">Apply
               Filter</a>
 
           </div>
@@ -208,7 +209,7 @@
                                   <span
                                     style="position: relative; z-index: 10px; border-radius: 20px; font-size: 13px; color: white; box-shadow: 1px 1px 10px rgb(77, 145, 240);"
                                     class="badge  bg-primary float-right"><span>
-                                     extra <%=offer.percentage %>% off
+                                      extra <%=offer.percentage %>% off
                                     </span></span>
 
                                   <%} %>
@@ -221,7 +222,7 @@
 
                           </div>
 
-                          <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px"
+                          <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="250px"
                             class="card-img-top" src="/images/productImages/<%=product.images[0]  %>"
                             alt="Product Image " />
 
@@ -255,17 +256,29 @@
 
                       <!-- Inside the loop where you render product details -->
 
-                      <div class="d-flex justify-content-between">
-                        <button style="font-size: 25px;" class=" btn addToCartButton bi bi-cart4 text-primary"
-                          data-product-id="<%= product._id %>"
-                          data-product-price="<%= Number(product.price - (product.price * (product.discount / 100))) %>">
-                        </button>
-                        <button data-product-id="<%=product._id%>"
-                          style=" font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);"
-                          class="bi bi-suit-heart-fill heart btn"></button>
+                      <%if(product.stock < 1){%>
+                        <div class="d-flex justify-content-between">
+
+                          <h6 class="text-warning mt-4 p-3">Out of stock</h6>
+                          <button data-product-id="<%=product._id%>"
+                            style=" font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);"
+                            class="bi bi-suit-heart-fill heart bg-white border-0"></button>
+                        </div>
+
+                        <%} else{%>
+                          <div class="d-flex justify-content-between">
+                            <button style="font-size: 25px;" class=" btn addToCartButton bi bi-cart4 text-primary"
+                              data-product-id="<%= product._id %>"
+                              data-product-price="<%= Number(product.price - (product.price * (product.discount / 100))) %>">
+                            </button>
+                            <button data-product-id="<%=product._id%>"
+                              style=" font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);"
+                              class="bi bi-suit-heart-fill heart btn"></button>
+                          </div>
 
 
-                      </div>
+                          <%} %>
+
 
 
 
@@ -343,8 +356,25 @@
         // Clear existing product container content
         productContainer.empty();
 
+
+
         // Render each product card and append to the container
         products.forEach((product, index) => {
+
+
+          const stock = product.stock < 1 ? `
+      <div class="d-flex justify-content-between">
+    <h6 class="text-warning mt-4 p-3">Out of stock</h6>
+    <button data-product-id="${product._id}" style="font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart bg-white border-0"></button>
+
+    </div>` : ` <div class="d-flex justify-content-between">
+      <button style="font-size: 25px;" class="btn addToCartButton bi bi-cart4 text-primary" data-product-id="${product._id}"
+        data-product-price="${Number(product.price - (product.price * (product.discount / 100)))}">
+      </button>
+      <button data-product-id="${product._id}" style="font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart bg-white border-0"></button>
+
+    </div>`;
+
           const productCard = `
         <div class="col-lg-4 col-md-6 col-sm-6 mt-xl-0 mt-lg-2 mt-md-3 mb-4 mt-sm-4 mt-4 p-3">
           <!-- Use col-lg-4 to include three cards in one row -->
@@ -380,12 +410,11 @@
               </div>
           </a>
 
-          <div class="d-flex justify-content-between">
-            <button style="font-size: 25px;" class=" btn addToCartButton bi bi-cart4 text-primary" data-product-id="${product._id}"
-              data-product-price="${Number(product.price - (product.price * (product.discount / 100)))}">
-            </button>
-            <button data-product-id="${product._id}" style=" font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart btn"></button>
-          </div>
+          
+         ${stock}
+
+
+
         </div>`;
 
           productContainer.append(productCard);
@@ -447,7 +476,7 @@
               Product = response.data.ProductData;
               offer = response.data.offer;
               if (response.data.ProductData) {
-                renderProducts(Product,offer);
+                renderProducts(Product, offer);
 
                 $("#filterCount").html(`${response.data.productCount} Items found`)
 
@@ -461,12 +490,25 @@
         }
 
 
-        function renderProducts(Product,offer) {
+        function renderProducts(Product, offer) {
 
           // Clear existing product container content
           productContainer.empty();
           // Render each product card and append to the container
           Product.forEach((product, index) => {
+            const stock = product.stock < 1 ? `
+      <div class="d-flex justify-content-between">
+    <h6 class="text-warning mt-4 p-3">Out of stock</h6>
+    <button data-product-id="${product._id}" style="font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart bg-white border-0"></button>
+
+    </div>` : ` <div class="d-flex justify-content-between">
+      <button style="font-size: 25px;" class="btn addToCartButton bi bi-cart4 text-primary" data-product-id="${product._id}"
+        data-product-price="${Number(product.price - (product.price * (product.discount / 100)))}">
+      </button>
+      <button data-product-id="${product._id}" style="font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart bg-white border-0"></button>
+
+    </div>`;
+
             const productCard = `
             <div class="col-lg-4 col-md-6 col-sm-6 mt-xl-0 mt-lg-2 mt-md-3 mb-4 mt-sm-4 mt-4 p-3">
           <!-- Use col-lg-4 to include three cards in one row -->
@@ -502,12 +544,7 @@
               </div>
           </a>
 
-          <div class="d-flex justify-content-between">
-            <button style="font-size: 25px;" class=" btn addToCartButton bi bi-cart4 text-primary" data-product-id="${product._id}"
-              data-product-price="${Number(product.price - (product.price * (product.discount / 100)))}">
-            </button>
-            <button data-product-id="${product._id}" style=" font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart btn"></button>
-          </div>
+          ${stock}
         </div>`;
             productContainer.append(productCard);
           });

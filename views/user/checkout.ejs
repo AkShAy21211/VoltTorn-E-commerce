@@ -234,45 +234,68 @@
                   </h6>
 
 
+                  <!-- coupon  -->
                   <hr>
-                  <%if(purchaseCount !=='undefined' && purchaseCount>0){%>
-                    <div class="">
-                      <h6 class="mb-2">Avaliable offers</h6>
-                      <a href="#" style="text-decoration: none; color: white;" class=" rounded badge bg-success"
-                        id="offerAvailButton">
-                        <%=purchaseCount%>x Referral offer
+                  <%if(coupon !=='undefined' && coupon.length>0){%>
+                    <div class=" w-75 rounded p-2 border  border-info">
+                      <i style=" color:  rgb(11, 110, 159);"  class="bi bi-tags me-1 ml-1"></i>
+                      <a href="#" style="text-decoration: none; color:  rgb(11, 110, 159); " class=" " data-user-id="<%=cart._id%>"
+                        id="couponView" data-total="<%=cart.total_price %>">Avaliable Coupons
                       </a>
-                      <a data-user-id="<%=cart._id%>" id="referalOffer" style="color: rgb(67, 155, 223);" class="btn"
-                        href="#">Apply</a>
-                      <a data-user-id="<%=cart._id%>" id="cancelOffer" style="color: rgb(67, 155, 223); display: none;"
-                        class="btn" href="#">Cancel</a>
-
+                    </div>
+                    <div class="d-flex ">
+                      <input type="text" class="form-control mt-2" id="couponCode">
+                      <a data-user-id="<%=cart._id%>" id="couponAvail" style="color: rgb(67, 155, 223);"
+                        class="btn mt-2" href="#">Apply</a>
+                      <a data-user-id="<%=cart._id%>" id="removeCoupon" style="color: rgb(67, 155, 223); display: none;"
+                        class="btn mt-2" href="#">Cancel</a>
                     </div>
 
-                    <hr>
+
+
                     <%} %>
 
 
+                      <!-- //offers -->
+                      <hr>
+                      <%if(typeof referralOffer !== 'null' && typeof purchaseCount !=='undefined' && purchaseCount>0 ){%>
+                        <div class="">
+                          <h6 class="mb-2">Avaliable offers</h6>
+                          <a href="#" style="text-decoration: none; color: white;" class=" rounded badge bg-success"
+                            id="offerAvailButton">
+                            <%=purchaseCount%>x Referral offer
+                          </a>
+                          <a data-user-id="<%=cart._id%>" id="referalOffer" style="color: rgb(67, 155, 223);"
+                            class="btn" href="#">Apply</a>
+                          <a data-user-id="<%=cart._id%>" id="cancelOffer"
+                            style="color: rgb(67, 155, 223); display: none;" class="btn" href="#">Cancel</a>
+
+                        </div>
+
+                        <hr>
+                        <%} %>
 
 
-                      <div class="d-flex justify-content-start">
-                        <p class="mb-2 text-success">You can save Rs:<b class="text-success">
-                            <%=total_discount %>
-                          </b> on this order</p>
-                      </div>
-
-                      <div class="d-flex justify-content-between">
-                        <p class="mb-2">Total price:</p>
-
-                        <p id="total-price" class="mb-2 fw-bold">RS:<%=cart.total_price %>
-                        </p>
-                      </div>
 
 
+                          <div class="d-flex justify-content-start">
+                            <p class="mb-2 text-success">You can save Rs:<b class="text-success">
+                                <%=total_discount %>
+                              </b> on this order</p>
+                          </div>
+
+                          <div class="d-flex justify-content-between">
+                            <p class="mb-2">Total price:</p>
+
+                            <p id="total-price" class="mb-2 fw-bold">RS:<%=cart.total_price %>
+                            </p>
+                          </div>
 
 
 
-                      <!-- <div class="input-group mt-3 mb-4">
+
+
+                          <!-- <div class="input-group mt-3 mb-4">
                       <input type="text" class="form-control border" name="" placeholder="Promo code" />
                       <button class="btn btn-light text-primary border">Apply</button>
                     </div> -->
@@ -280,46 +303,46 @@
 
 
 
-                      <hr />
+                          <hr />
 
 
-                      <form action="" class="form" method="">
+                          <form action="" class="form" method="">
 
 
-                        <legend>Payment Method</legend>
+                            <legend>Payment Method</legend>
 
-                        <div class="form__radios">
+                            <div class="form__radios">
 
-                          <div class="form__radio">
-                            <label for="wallet"><svg class="icon">
-                                <use xlink:href="#icon-sales" />
-                              </svg>Wallet</label>
-                            <input id="wallet" name="paymentMethod" type="radio" value="wallet" />
-                          </div>
-                          <div class="form__radio">
-                            <label for="paypal"><svg class="icon">
-                              </svg>Razorpay</label>
-                            <input id="razorpay" name="paymentMethod" value="online" type="radio" />
-                          </div>
-                          <div class="form__radio">
-                            <label for="cash"><svg class="icon">
-                                <use xlink:href="#icon-sales" />
-                              </svg>Cash On Delivery</label>
-                            <input id="cash" name="paymentMethod" type="radio" value="COD" />
-                          </div>
+                              <div class="form__radio">
+                                <label for="wallet"><svg class="icon">
+                                    <use xlink:href="#icon-sales" />
+                                  </svg>Wallet</label>
+                                <input id="wallet" name="paymentMethod" type="radio" value="wallet" />
+                              </div>
+                              <div class="form__radio">
+                                <label for="paypal"><svg class="icon">
+                                  </svg>Razorpay</label>
+                                <input id="razorpay" name="paymentMethod" value="online" type="radio" />
+                              </div>
+                              <div class="form__radio">
+                                <label for="cash"><svg class="icon">
+                                    <use xlink:href="#icon-sales" />
+                                  </svg>Cash On Delivery</label>
+                                <input id="cash" name="paymentMethod" type="radio" value="COD" />
+                              </div>
 
-                        </div>
+                            </div>
 
 
-                        <div>
-                          <button data-email="<%user.email  %>" data-mobile="<%user.mobile  %>"
-                            data-name="<%user.name  %>" data-oder-Id="<%=user._id  %>"
-                            data-total-amount="<%=cart.total_price  %>" class="button button--full" type="button"
-                            id="buyNowBtn">Buy
-                            Now</button>
+                            <div>
+                              <button data-email="<%user.email  %>" data-mobile="<%user.mobile  %>"
+                                data-name="<%user.name  %>" data-oder-Id="<%=user._id  %>"
+                                data-total-amount="<%=cart.total_price  %>" class="button button--full" type="button"
+                                id="buyNowBtn">Buy
+                                Now</button>
 
-                        </div>
-                      </form>
+                            </div>
+                          </form>
 
             </div>
 
@@ -358,6 +381,201 @@
       </div>
     </div>
   </section>
+
+
+  <script>
+    const couponBtn = document.getElementById('couponAvail');
+    const cancelCoupon = document.getElementById('removeCoupon');
+    const couponView = document.getElementById('couponView');
+    const user = couponView.dataset.userId;
+    const total = document.getElementById('total-price');
+    const couponCode = document.getElementById('couponCode');
+
+
+
+    couponView.addEventListener('click', async (e) => {
+      const total = couponView.dataset.total;
+      e.preventDefault();
+
+      try {
+        $.confirm({
+          columnClass: 'col-md-4 col-md-offset-3',
+          title: 'Available Coupons',
+          content: function () {
+            var self = this;
+
+            return $.ajax({
+              url: `/home/cart/avaliable-coupons/${user}?total=${total}`,
+              dataType: 'json',
+              method: 'get'
+            }).done(function (response) {
+
+
+              if (response.availableCoupons.length>0) {
+
+                console.log(response.availableCoupons);
+                let contentHTML = '<div class="coupon-details">';
+
+                response.availableCoupons.forEach((coupon, index) => {
+                  contentHTML += `
+                  
+          <div class="coupon-info">
+            <strong>Coupon ${index + 1}:</strong><br>
+            Code: <b>${coupon.code}</b><br>
+            <span class="text-dark">You will get <b class="text-info">${coupon.discountPercentage}% off</b>  on order above <b>Rs:${coupon.minOrderAmount}</b></span>
+          </div>
+          <hr>`;
+                });
+
+                contentHTML += '</div>';
+                self.setContent(contentHTML);
+              } else {
+
+                let contentHTML = '<div class="coupon-details">';
+
+                  contentHTML += `
+<div class="coupon-info">
+<strong>No coupons found</strong><br>
+</div>
+<hr>`;
+
+                contentHTML += '</div>';
+                self.setContent(contentHTML);
+              }
+            }).fail(function () {
+              self.setContent('Something went wrong.');
+            });
+          },
+          buttons: {
+            close: {
+              text: 'Close',
+              btnClass: 'btn-default',
+              action: function () {
+                // Action to be performed when the "Close" button is clicked
+              }
+            }
+          },
+        });
+
+      } catch (error) {
+        console.error(error);
+      }
+
+    });
+
+
+    // view coupon end
+    couponBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+        const response = await toggleAndApplyCoupon(`/home/cart/coupon-applay/${user}?code=${couponCode.value}`);
+        if (response.status === 200) {
+          handleCouponResponse(response);
+
+          couponBtn.style.display = couponBtn.style.display === 'none' ? 'inline' : 'none';
+          cancelCoupon.style.display = cancelCoupon.style.display === 'none' ? 'inline' : 'none';
+
+        }
+    });
+
+
+
+    cancelCoupon.addEventListener('click', async (e) => {
+      e.preventDefault();
+         const response = await toggleAndApplyCoupon(`/home/cart/coupon-remove/${user}?code=${couponCode.value}`);
+         if (response.status === 200) {
+          
+      couponBtn.style.display = couponBtn.style.display === 'none' ? 'inline' : 'none';
+      cancelCoupon.style.display = cancelCoupon.style.display === 'none' ? 'inline' : 'none';
+          total.innerHTML = response.data.updatedCart.total_price;
+
+        }     
+    });
+
+
+
+
+    async function toggleAndApplyCoupon(url) {
+
+      try {
+        return await axios.get(url);
+      } catch (error) {
+        if (error.response.data.message) {
+          Toastify({
+            text: error.response.data.message,
+            duration: 4000,
+            newWindow: true,
+            close: true,
+            gravity: 'top',
+            position: 'right',
+            stopOnFocus: true,
+            style: {
+              background: 'linear-gradient(to right, #ff6666, #ff9999)',
+              marginTop: '60px',
+            },
+            onClick: function () { },
+          }).showToast();
+        }
+
+      }
+    }
+
+    function handleCouponResponse(response) {
+      console.log(response.data.updatedCart);
+      if (response.data.updatedCart) {
+        total.innerText = response.data.updatedCart.total_price;
+        Toastify({
+          text: response.data.message,
+          duration: 4000,
+          newWindow: true,
+          close: true,
+          gravity: 'top',
+          position: 'right',
+          stopOnFocus: true,
+          style: {
+            background: 'linear-gradient(to right, #0074cc, #0076cc)',
+            marginTop: '60px',
+          },
+          onClick: function () { },
+        }).showToast();
+      }
+    }
+
+    function handleCouponResponseError(error) {
+        Toastify({
+          text: error.response.data.message,
+          duration: 4000,
+          newWindow: true,
+          close: true,
+          gravity: 'top',
+          position: 'right',
+          stopOnFocus: true,
+          style: {
+            background: 'linear-gradient(to right, #0074cc, #0076cc)',
+            marginTop: '60px',
+          },
+          onClick: function () { },
+        }).showToast();
+      
+    }
+
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   <script>
@@ -420,6 +638,8 @@
       const paymentMethodRadioButtons = document.querySelectorAll('input[name="paymentMethod"]');
       const addressRadioButtons = document.querySelectorAll('.address-radio');
       const orderSuccessModal = new bootstrap.Modal(document.getElementById('orderSuccessModal'));
+      const couponCode = document.getElementById('couponCode');
+
 
       buyNowBtn.addEventListener('click', async function () {
         // Check if the selected payment method is "Cash on Delivery"
@@ -429,6 +649,7 @@
         const email = buyNowBtn.dataset.email;
         const mobile = buyNowBtn.dataset.mobile;
         const oderId = buyNowBtn.dataset.oderId;
+        const couponCodeValue = couponCode.value;
 
         const selectedAddressRadioButton = document.querySelector('input[name="flexRadioDefault"]:checked');
         if (!selectedAddressRadioButton) {
@@ -439,12 +660,13 @@
         const selectedAddressId = selectedAddressRadioButton.dataset.addressId;
         const paymentMethod = selectedPaymentMethod.value;
 
+
         console.log(paymentMethod);
 
         //cash on deliverry
         let response;
         if (selectedPaymentMethod && selectedPaymentMethod.value === 'COD') {
-          response = await axios.post(`/home/cart/checkout/verify-payment/${oderId}`, { selectedAddressId, paymentMethod });
+          response = await axios.post(`/home/cart/checkout/verify-payment/${oderId}`, { selectedAddressId, paymentMethod,couponCodeValue });
           // Show the success modal
           orderSuccessModal.show();
           viewOrderBtn.addEventListener('click', function () {
@@ -452,17 +674,17 @@
           });
 
         } else if (selectedPaymentMethod && selectedPaymentMethod.value === 'online') {
-          response = await axios.post(`/home/cart/checkout/verify-payment/${oderId}`, { selectedAddressId, paymentMethod });
+          response = await axios.post(`/home/cart/checkout/verify-payment/${oderId}`, { selectedAddressId, paymentMethod,couponCodeValue });
           const order = response.data.order;
 
-          initializeRazorpayPayment(order, selectedAddressId, paymentMethod)
+          await initializeRazorpayPayment(order, selectedAddressId, paymentMethod)
 
 
 
         } else if (selectedPaymentMethod && selectedPaymentMethod.value === 'wallet') {
 
           try {
-            response = await axios.post(`/home/cart/checkout/verify-payment/${oderId}`, { selectedAddressId, paymentMethod });
+            response = await axios.post(`/home/cart/checkout/verify-payment/${oderId}`, { selectedAddressId, paymentMethod,couponCodeValue });
 
             orderSuccessModal.show();
             viewOrderBtn.addEventListener('click', function () {
@@ -474,7 +696,7 @@
           } catch (error) {
 
             console.error(error);
-            if ( error.response) {
+            if (error.response) {
               Toastify({
                 text: error.response.data.error,
                 duration: 6000,
@@ -584,10 +806,8 @@
         alert(response.error.metadata.order_id);
         alert(response.error.metadata.payment_id);
       });
-      document.getElementById('buyNowBtn').onclick = function (e) {
-        rzp1.open();
-        e.preventDefault();
-      }
+      rzp1.open();
+      e.preventDefault();
     }
 
 

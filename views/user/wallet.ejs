@@ -209,10 +209,10 @@
 
                         const order = response.data.order;
 
-                        console.log(order);
-                        initializeRazopay(order,amount)
+                        if(order){
+                        await initializeRazopay(order,amount);
 
-
+                        }
 
 
                     } catch (error) {
@@ -279,10 +279,7 @@
                 alert(response.error.metadata.order_id);
                 alert(response.error.metadata.payment_id);
               });
-            document.getElementById('addFund').onclick = function (e) {
                 rzp1.open();
-                e.preventDefault();
-            }
         }
 
 

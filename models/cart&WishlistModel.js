@@ -37,9 +37,16 @@ const CartSchema = new mongoose.Schema({
             cancelled:{
                 type:Boolean,
                 default:false,
-            }
+            },
+            returned:{
+                type: String,
+                default: "",
+            },
+
+
+   
             
-        }
+        },
     ],
     total_price: {
         type: Number,
@@ -58,10 +65,14 @@ const WishListSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    product:[]
+    product:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Product"
+    }]
 });
 
-// Exporting each model with a distinct name
+
+
 const CartModel = mongoose.model('Cart', CartSchema);
 const WishListModel = mongoose.model('Wishlist', WishListSchema);
 
