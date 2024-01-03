@@ -1,8 +1,8 @@
 <%- include('../layout/adminHeader.ejs') %>
 
 <div class="container mt-5">
-  <h2>Edit Coupon</h2>
-  <form method="post" action="/admin/coupon/edit/<%=coupon._id  %>">
+  <div class="d-flex justify-content-between">  <h2>Edit Coupons</h2>
+    <a href="/admin/coupon"><i class="bi bi-arrow-left fs-3"></i></a></div>  <form method="post" action="/admin/coupon/edit/<%=coupon._id  %>">
     <div class="mb-3">
       <label for="name" class="form-label">Code</label>
       <input type="text" class="form-control" id="code" name="code" value="<%=coupon.code  %>" required>

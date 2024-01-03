@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
     <button data-product-id="${product._id}" style="font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart bg-white border-0"></button>
 
     </div>` : ` <div class="d-flex justify-content-between">
-      <button style="font-size: 25px;" class="btn addToCartButton bi bi-cart4 text-primary" data-product-id="${product._id}"
+      <button style="font-size: 25px;" class=" addToCartButton bi bi-cart4 text-primary  bg-white border-0"  data-product-id="${product._id}"
         data-product-price="${Number(product.price - (product.price * (product.discount / 100)))}">
       </button>
       <button data-product-id="${product._id}" style="font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart bg-white border-0"></button>
@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (matchingOffer) {
         const offerBadge = `
 <span style="position: relative; z-index: 10px; border-radius: 20px; font-size: 13px; color: white; box-shadow: 1px 1px 10px rgb(77, 145, 240);" class="badge bg-primary float-right">
-  <span>${matchingOffer.percentage}% off</span>
+  <span>Special ${matchingOffer.percentage}% off</span>
 </span>`;
 
         productContainer.find(`#offer-container-${i}`).append(offerBadge);

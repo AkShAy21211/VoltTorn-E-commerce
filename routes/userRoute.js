@@ -28,7 +28,7 @@ const userImageStorage = multer.diskStorage({
 
   const uploadUserImage = multer({ storage: userImageStorage })
 
-
+userRoute.use(auth.cartCount);
 
 userRoute.use(express.static('public'))
 //REGISTER USER ROUTE

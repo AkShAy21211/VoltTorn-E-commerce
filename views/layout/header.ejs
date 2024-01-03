@@ -77,8 +77,8 @@
           <div class="text-end position-relative">
             <a class="text-black" href="/home/cart" id="cart-icon">
               <span style="font-size: 20px;" class="bi bi-cart"></span>
-              <%if(typeof locals.userSessionData != 'undefined') {%>
-              <span id="cart-item-count" class="badge" id="cart-count"><%=locals.userSessionData.cartCount%></span>
+              <%if(typeof locals.cartCount != 'undefined') {%>
+              <span id="cart-item-count" class="badge" id="cart-count"><%=cartCount %></span>
 
              <% } %>
             </a>
