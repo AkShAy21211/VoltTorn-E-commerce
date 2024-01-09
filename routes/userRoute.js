@@ -79,8 +79,8 @@ userRoute.delete('/home/cart/:product_id',auth.isUserBlocked,userCartController.
 //checkout
 userRoute.get('/home/cart/checkout',auth.isUserBlocked,auth.is_Login,auth.in_cart, userCartController.loadCheckOutPage);
 //offer
-userRoute.get('/home/cart/applay-referral-offer/:id',auth.isUserBlocked,auth.in_cart, userCartController.applayReferralOffer);
-userRoute.get('/home/cart/cancel-referral-offer/:id',auth.isUserBlocked,auth.in_cart, userCartController.cancelReferralOffer);
+// userRoute.get('/home/cart/applay-referral-offer/:id',auth.isUserBlocked,auth.in_cart, userCartController.applayReferralOffer);
+// userRoute.get('/home/cart/cancel-referral-offer/:id',auth.isUserBlocked,auth.in_cart, userCartController.cancelReferralOffer);
 //coupons
 userRoute.get('/home/cart/avaliable-coupons/:id',auth.isUserBlocked,auth.is_Login,userCartController.loadAvaliableCoupons);
 userRoute.get('/home/cart/coupon-applay/:id',auth.isUserBlocked,auth.is_Login,userCartController.applayCouponCode)

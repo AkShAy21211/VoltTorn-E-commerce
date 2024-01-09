@@ -8,6 +8,10 @@
         "info": true, // Shows information about the table
         "searching": true, // Enables searching
         "responsive": true, // Enables responsive design for mobile devices
+        // "bPaginate": false,
+        info: false,
+        ordering: false,
+
         "columnDefs": [
             {
                 "targets": 'no-sort', // Add the class "no-sort" to th elements you don't want to be sortable

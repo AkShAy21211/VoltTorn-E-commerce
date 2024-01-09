@@ -40,11 +40,13 @@ document.addEventListener("click", async (event) => {
           },
           onClick: function () {}, // Callback after click
         }).showToast();
+      }else{
+        displayLoginModal();
+
       }
     } catch (error) {
-        if(error.response.data.error){
-          displayLoginModal();
-        }
+        
+      console.error(error);
     }
   }
 });

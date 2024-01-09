@@ -14,6 +14,11 @@ document.addEventListener("click", async (event) => {
       );
 
       if (response.data.success) {
+
+
+
+        $('#cart-item-count').load(document.URL + ' #cart-item-count');
+
         // Display toast message
         if (response.data.message && response.data.message !== "undefined") {
           const blueGradients = [
@@ -231,6 +236,9 @@ deleteCartItemButtons.forEach((deleteButton) => {
             checkoutItmesId.remove();
             totalPriceElement.textContent = totalPrice.toFixed(2);
           }, 1000);
+
+          $('#cart-item-count').load(document.URL + ' #cart-item-count');
+
         }
         console.log("Response:", response);
       } catch (error) {

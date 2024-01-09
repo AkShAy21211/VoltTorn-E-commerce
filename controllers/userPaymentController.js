@@ -5,6 +5,7 @@ const userModel = require("../models/userModel");
 const Razorpay = require("razorpay");
 const { ObjectId } = require("bson");
 const productModal = require("../models/productModel");
+const offerModel = require("../models/offerModal");
 const {createRazorpayOrder,verifyPayment} = require("../helpers/razorPayHelper");
 var instance = new Razorpay({
   key_id: process.env.RAZORPAY_ID_KEY,
@@ -37,12 +38,29 @@ const verfyUserPaymentOption = async (req, res) => {
     
     const selectedAddress = address.addresses[0];
     const referredUser = await userModel.findById(user.referredBy).populate('referredBy');
-    const previousPurchaseCount = user.referredPurchases;
-    await userModel.findByIdAndUpdate({_id:id},{$inc:{referredPurchases:-1}});
+    const referralOffer = await offerModel.findOne({
+      offerType: "Referral",
+      isActive: true,
+      endDate: { $gt: new Date() },
+    });   
 
-    if (referredUser && !referredUser.referredBy && user.referredPurchases <=5 ) {
-      referredUser.referredPurchases += 1;
-      await referredUser.save();
+    const referralAmount =  (referralOffer.percentage/ 100) * userCart.total_price;
+
+
+    if (referredUser && !referredUser.referredBy ) {
+
+      await userModel.findOneAndUpdate({_id:referredUser._id},{
+        $inc: { 'wallet.balance': referralAmount}, // Subtract totalAmount from the balance
+        $push: {
+          'wallet.transactions': {
+            type: 'credit',
+            amount: referralAmount,
+            timestamp: Date.now().toString(),
+            description: 'Referral amunt credited successfully',
+          },
+        },
+      },
+      { new: true } )
     }
     if (paymentMethod && paymentMethod === "COD") {
       const order = createOder(
@@ -160,7 +178,7 @@ async function createOder(id, selectedAddress, user, paymentMethod, userCart) {
   const userOder = {
     order_id: generateOrderID(),
     customerName: user.first_name + " " + user.last_name,
-    payment: paymentMethod === 'COD' ? false : paymentMethod === 'wallet' ? false : true,
+    payment: paymentMethod === 'COD' ? false : paymentMethod === 'wallet' ? true : true,
     payment_mode: paymentMethod,
     address: {
       address: selectedAddress.address,

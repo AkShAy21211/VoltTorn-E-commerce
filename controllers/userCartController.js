@@ -43,6 +43,7 @@ const userAddToCartButton = async (req, res) => {
 
     const user_id = req.session.user.userId;
 
+
     if (user_id) {
       const existingCart = await CartModel.findOne({ _id: user_id });
 
@@ -59,6 +60,7 @@ const userAddToCartButton = async (req, res) => {
             success: true,
             redirectTo: "/home/cart",
             message: "Product already added to cart",
+            cartCount:existingCart.cart.length,
           });
         } else {
           //when new item added in existing cart
@@ -96,6 +98,7 @@ const userAddToCartButton = async (req, res) => {
             total_price,
             message: "Product added to cart",
             redirectTo: "/home/cart",
+            cartCount:updatedCart.cart.length,
           });
         }
       } else {
@@ -124,6 +127,7 @@ const userAddToCartButton = async (req, res) => {
           success: true,
           message: "Product added to cart",
           redirectTo: "/home/cart",
+          cartCount:newCart.cart.length,
         });
       }
     } else {
@@ -132,6 +136,7 @@ const userAddToCartButton = async (req, res) => {
         success: false,
         message: "User not authenticated",
         redirectTo: "/login",
+
       });
     }
   } catch (error) {
@@ -378,11 +383,11 @@ const loadCheckOutPage = async (req, res) => {
     const cart = await CartModel.findById(req.session.user.userId).populate(
       "cart.product_id"
     );
-    const referralOffer = await offerModel.findOne({
-      offerType: "Referral",
-      isActive: true,
-      endDate: { $gt: new Date() },
-    });
+    // const referralOffer = await offerModel.findOne({
+    //   offerType: "Referral",
+    //   isActive: true,
+    //   endDate: { $gt: new Date() },
+    // });
 
     const categoryOffer = await offerModel.find({
       offerType: "Category",
@@ -395,9 +400,9 @@ const loadCheckOutPage = async (req, res) => {
       endDate: { $gt: new Date() },
     });
 
-    if (referralOffer !== null) {
-      purchaseCount = user.referredPurchases > 0 ? user.referredPurchases : null;
-    }
+    // if (referralOffer !== null) {
+    //   purchaseCount = user.referredPurchases > 0 ? user.referredPurchases : null;
+    // }
 
     if (!categoryOffer || !productOffer) {
       console.log("Category or product offer not found");
@@ -468,8 +473,7 @@ let productDiscount;
       cart,
       total_discount,
       purchaseCount,
-      referralOffer,
-      referralOffer,
+      // referralOffer,
       coupon,
     });
   } catch (error) {
@@ -478,84 +482,73 @@ let productDiscount;
 };
 
 
-const applayReferralOffer = async (req, res) => {
-  try {
-    let { id } = req.params;
+// const applayReferralOffer = async (req, res) => {
+//   try {
+//     let { id } = req.params;
 
-    const cart = await CartModel.findById(id);
+//     const cart = await CartModel.findById(id);
 
-    const user = await userModel.findById(id);
+//     const user = await userModel.findById(id);
 
-    if (user) {
-      const offer = await offerModel.findOne({
-        offerType: "Referral",
-        isActive: true,
-        endDate: { $gt: new Date() },
-      });
-      const offerDiscount = (offer.percentage / 100) * cart.total_price;
-      const previousPurchaseCount = user.referredPurchases;
-
-      if (
-        user.referredPurchases <= 5 && user.referredPurchases >= previousPurchaseCount
-      ) {
-        const updatedCart = await CartModel.findOneAndUpdate(
-          { _id: id },
-          { $inc: { total_price: -offerDiscount } },
-          { new: true }
-        );
-        res.status(200).json({ updatedCart, message: "Offer applied" });
-      }
-    } else {
-      console.log("User not found.");
-      res.status(404).json({ message: "User not found" });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
+//     if (user) {
+//       const offer = await offerModel.findOne({
+//         offerType: "Referral",
+//         isActive: true,
+//         endDate: { $gt: new Date() },
+//       });
 
 
-const cancelReferralOffer = async (req, res) => {
-  try {
-    let { id } = req.params;
+//     } else {
+//       console.log("User not found.");
+//       res.status(404).json({ message: "User not found" });
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// };
 
-    const cart = await CartModel.findById(id);
 
-    const user = await userModel.findById(id);
-    const total_price = cart.cart.reduce(
-      (total, item) => total + item.price,
-      0
-    );
-    if (user) {
-      const offer = await offerModel.findOne({
-        offerType: "Referral",
-        isActive: true,
-        endDate: { $gt: new Date() },
-      });
-      const offerDiscount = (offer.percentage / 100) * cart.total_price;
-      const previousPurchaseCount = user.referredPurchases;
+// const cancelReferralOffer = async (req, res) => {
+//   try {
+//     let { id } = req.params;
 
-      if (
-        user.referredPurchases <= 5 &&
-        user.referredPurchases >= previousPurchaseCount
-      ) {
-        const updatedCart = await CartModel.findOneAndUpdate(
-          { _id: id },
-          { $set: { total_price: total_price } },
-          { new: true }
-        );
-        res.status(200).json({ updatedCart });
-      }
-    } else {
-      console.log("User not found.");
-      res.status(404).json({ message: "User not found" });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
+//     const cart = await CartModel.findById(id);
+
+//     const user = await userModel.findById(id);
+//     const total_price = cart.cart.reduce(
+//       (total, item) => total + item.price,
+//       0
+//     );
+//     if (user) {
+//       const offer = await offerModel.findOne({
+//         offerType: "Referral",
+//         isActive: true,
+//         endDate: { $gt: new Date() },
+//       });
+//       const offerDiscount = (offer.percentage / 100) * cart.total_price;
+//       const previousPurchaseCount = user.referredPurchases;
+
+//       if (
+//         user.referredPurchases <= 5 &&
+//         user.referredPurchases >= previousPurchaseCount
+//       ) {
+//         const updatedCart = await CartModel.findOneAndUpdate(
+//           { _id: id },
+//           { $set: { total_price: total_price } },
+//           { new: true }
+//         );
+//         res.status(200).json({ updatedCart });
+//       }
+//     } else {
+//       console.log("User not found.");
+//       res.status(404).json({ message: "User not found" });
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// };
 
 
 const loadAvaliableCoupons = async(req,res)=>{
@@ -600,10 +593,15 @@ const applayCouponCode = async (req, res) => {
     const userData = await userModel.findById(id);
     const coupon = await couponModal.findOne({ code: code });
 
-    const isCouponUsed = coupon.usedUsers.includes(id);
 
-    if (isCouponUsed || !coupon) {
+    if (coupon) {
+      const isCouponUsed = coupon.usedUsers.includes(id);
+      if(isCouponUsed){
       return res.status(400).json({ message: "Coupon already used or invalid" });
+    }
+    }else{
+      return res.status(400).json({ message: "Invalid coupon code" });
+
     }
 
     if (coupon) {
@@ -761,8 +759,8 @@ module.exports = {
   addUserBellingAddress,
   stateCityLoad,
   editUserBillingAddress,
-  applayReferralOffer,
-  cancelReferralOffer,
+  // applayReferralOffer,
+  // cancelReferralOffer,
   loadAvaliableCoupons,
   applayCouponCode,
   removeCouponCode

@@ -158,6 +158,34 @@
               </div>
 
             </article> <!-- filter-group .// -->
+            <article class="filter-group">
+              <header class="card-header">
+                <a href="#" data-toggle="collapse" data-target="#collapse_2" aria-expanded="true" class="">
+                  <h6 class="title">Sort By </h6>
+                </a>
+              </header>
+
+              <div class="filter-content collapse show" id="collapse_2">
+                <div class="card-body">
+                  <ul class="list-menu">
+                    <li>
+                      <label>
+                        <input type="radio" name="sortOrder" id="highToLow" value="High to Low"> High to Low
+                      </label>
+                    </li>
+                    <li>
+                      <label>
+                        <input type="radio" name="sortOrder" id="lowToHigh" value="Low to High"> Low to High
+                      </label>
+                    </li>
+
+                  </ul>
+
+                </div>
+              </div>
+
+            </article> <!-- filter-group .// -->
+
 
 
             <a href="#" id="applyFilterBtn" data-offer="<%=offers  %>" data-category="<%=cat_name  %>"
@@ -267,7 +295,8 @@
 
                         <%} else{%>
                           <div class="d-flex justify-content-between">
-                            <button style="font-size: 25px;" class=" addToCartButton bi bi-cart4 text-primary  bg-white border-0"
+                            <button style="font-size: 25px;"
+                              class=" addToCartButton bi bi-cart4 text-primary  bg-white border-0"
                               data-product-id="<%= product._id %>"
                               data-product-price="<%= Number(product.price - (product.price * (product.discount / 100))) %>">
                             </button>
@@ -299,6 +328,36 @@
       </div>
     </div>
     </div>
+
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <li class="page-item <%=currentPage === 1 ? 'disabled' : ''%>">
+          <a class="page-link" href="/home/products/<%=cat_name%>/?page=<%=currentPage - 1%>" tabindex="-1">Previous</a>
+        </li>
+
+        <% for(let i=1; i<=pages; i++){ %>
+          <% if(i==currentPage){ %>
+            <li class="page-item active">
+              <a class="page-link" href="/home/products/<%=cat_name%>/?page=<%=i%>">
+                <%=i%>
+              </a>
+            </li>
+            <% } else { %>
+              <li class="page-item">
+                <a class="page-link" href="/home/products/<%=cat_name%>/?page=<%=i%>">
+                  <%=i%>
+                </a>
+              </li>
+              <% } %>
+                <% } %>
+
+                  <li class="page-item <%=currentPage === pages ? 'disabled' : ''%>">
+                    <a class="page-link" href="/home/products/<%=cat_name%>/?page=<%=currentPage + 1%>">Next</a>
+                  </li>
+      </ul>
+    </nav>
+
+
   </main>
 
 
@@ -461,7 +520,13 @@
           return $(this).val();
         }).get();
 
+        var sortOrder ;
 
+        $('input[name="sortOrder"]:checked').each(function () {
+          sortOrder = $(this).val();
+        });
+
+        console.log(sortOrder);
 
         let Product;
         let offer = $(this).data('offer');
@@ -470,20 +535,23 @@
         try {
 
 
+          if (selectedSubCategories.length > 0 || selectedBrands.length > 0 || sortOrder !=='') {
 
-          const response = await axios.get(`/home/products/${category}/filter?subCategory=${selectedSubCategories}&brand=${selectedBrands}`)
-            .then((response) => {
-              Product = response.data.ProductData;
-              offer = response.data.offer;
-              if (response.data.ProductData) {
-                renderProducts(Product, offer);
 
-                $("#filterCount").html(`${response.data.productCount} Items found`)
 
-              }
+            const response = await axios.get(`/home/products/${category}/filter?subCategory=${selectedSubCategories}&brand=${selectedBrands}&sort=${sortOrder}`)
+              .then((response) => {
+                Product = response.data.ProductData;
+                offer = response.data.offer;
+                if (response.data.ProductData) {
+                  renderProducts(Product, offer);
 
-            })
-            .catch(err => console.error(err));
+                  $("#filterCount").html(`${response.data.productCount} Items found`)
+
+                }
+
+              })
+          }
 
         } catch (error) {
           console.error(error);

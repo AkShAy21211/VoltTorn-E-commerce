@@ -81,8 +81,8 @@ const in_cart = async(req,res,next)=>{
 const cartCount = async (req, res, next) => {
     if (req.session && req.session.user) {
         try {
-            const cart = await CartModel.findById(req.session.user.userId);
-            res.locals.cartCount = cart.cart.length;
+            const cart = await CartModel.findById(req.session.user.userId)||{};
+            res.locals.cartCount = cart.cart?cart.cart.length:0;
         } catch (error) {
             console.error('Error fetching cart count:', error);
         }

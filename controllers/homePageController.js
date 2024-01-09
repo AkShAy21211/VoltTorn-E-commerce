@@ -12,7 +12,7 @@ const loadHome = async (req, res) => {
     const offers = await offerModal.find({isActive:true,offerType:{$ne:'Referral'},endDate: { $gt: new Date()}})
     const currentDate = new Date();
     console.log(currentDate);
-    const ProductData = await productModel.find({}).limit(4);
+    const ProductData = await productModel.find({status:true}).limit(4);
     const banner = await bannerModel.find({ endDate: { $gt: currentDate } });
     res.render("home", { category,banner,ProductData,offers});
   
@@ -26,14 +26,30 @@ const loaadProductListsByCategory = async(req,res)=>{
   try{
 
     const  {cat_name} = req.params;
-    const ProductData = await productModel.find({category:cat_name});
+    const page = req.query.page;
+    const perPage = 6;
+    let proCount;
+    const ProductData = await productModel.find({category:cat_name,status:true})
+    .countDocuments()
+    .then(products=>{
+
+      proCount = products;
+
+      return productModel.find({category:cat_name,status:true})
+      .skip((page - 1)* perPage)
+      .limit(perPage);
+
+    })
+   
+    
     const offers = await offerModal.find({isActive:true,offerType:{$ne:'Referral'},endDate: { $gt: new Date()}})
-    const ProductCount = await productModel.find({category:cat_name}).countDocuments();
+    const ProductCount = await productModel.find({category:cat_name,status:true}).countDocuments();
     const category = await categoryModel.find({category:cat_name});
     const result = await productModel.aggregate([
   {
     $match: {
       category: cat_name,
+      status:true,
     },
   },
   {
@@ -46,7 +62,15 @@ const loaadProductListsByCategory = async(req,res)=>{
 const brands = result.map((entry) => entry._id);
 
 
-    res.render("productLists",{ProductData,ProductCount,category,cat_name,brands,offers});
+    res.render("productLists",{ProductData,
+      ProductCount,
+      category,
+      cat_name,
+      brands,
+      offers,
+      currentPage:page,
+      totalProducts:proCount,
+      pages:Math.ceil(proCount/perPage)});
 
   }catch(error){
     console.error(error);
@@ -92,10 +116,11 @@ const sortProductByUserPreference = async (req, res) => {
 
 const filterProductsByUser = async (req, res) => {
   try {
-const {subCategory,brand} = req.query;
+const {subCategory,brand,sort} = req.query;
 const selectedSubCategories = subCategory ? subCategory.split(',') : [];
 const selectedBrands = brand ? brand.split(',') : [];
 const category = req.params.cat_name;
+const sortOption = sort === 'High to Low' ? -1 : 1 ;
 
 const offer = await offerModal.find({
   $or: [
@@ -109,7 +134,7 @@ const ProductData = await productModel.find({
     { brand: { $in: selectedBrands } },
   ],
 
-});
+}).sort({price:sortOption});
 
 
 const productCount = ProductData.length;

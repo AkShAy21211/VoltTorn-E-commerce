@@ -211,6 +211,9 @@
               <a href="/home/product/details/<%=product._id%>" class="text-decoration-none text-dark ">
                 
                 <div class="card border-0 h-100 p-2 " id="product-card">
+
+                  <div id="offer-container">
+
                   <%if(offers !=='undefined' ) {%>
                     <%offers.forEach(offer=>{%>
 
@@ -231,6 +234,7 @@
 
                           <%} %>
 
+                        </div>
 
 
 

@@ -232,6 +232,12 @@
                 <% }) %>
                   <h6 class="mb-5">Delivery Charges: <p class="text-success " style="float: right;">Free</p>
                   </h6>
+                  <div class="d-flex justify-content-between">
+                    <p class="mb-2 fw-bold">Total price:</p>
+
+                    <p id="total-price" class="mb-2 fw-bold">RS:<%=cart.total_price %>
+                    </p>
+                  </div>
 
 
                   <!-- coupon  -->
@@ -257,7 +263,7 @@
 
 
                       <!-- //offers -->
-                      <hr>
+                      <!-- <hr>
                       <%if(typeof referralOffer !== 'null' && typeof purchaseCount !=='undefined' && purchaseCount>0 ){%>
                         <div class="">
                           <h6 class="mb-2">Avaliable offers</h6>
@@ -273,24 +279,18 @@
                         </div>
 
                         <hr>
-                        <%} %>
+                        <%} %> -->
 
 
 
 
-                          <div class="d-flex justify-content-start">
+                          <!-- <div class="d-flex justify-content-start">
                             <p class="mb-2 text-success">You can save Rs:<b class="text-success">
                                 <%=total_discount %>
                               </b> on this order</p>
-                          </div>
+                          </div> -->
 
-                          <div class="d-flex justify-content-between">
-                            <p class="mb-2">Total price:</p>
-
-                            <p id="total-price" class="mb-2 fw-bold">RS:<%=cart.total_price %>
-                            </p>
-                          </div>
-
+                   
 
 
 
@@ -487,6 +487,7 @@
       couponBtn.style.display = couponBtn.style.display === 'none' ? 'inline' : 'none';
       cancelCoupon.style.display = cancelCoupon.style.display === 'none' ? 'inline' : 'none';
           total.innerHTML = response.data.updatedCart.total_price;
+          couponCode.value="";
 
         }     
     });
@@ -577,7 +578,7 @@
 
 
 
-
+<!-- 
   <script>
     const offerBtn = document.getElementById('referalOffer');
     const cancelBtn = document.getElementById('cancelOffer');
@@ -628,7 +629,7 @@
       }
     }
   </script>
-
+ -->
 
 
   <script>

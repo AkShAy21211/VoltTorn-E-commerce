@@ -124,35 +124,46 @@
                                     </td>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <!-- Iterate through each product in the order -->
-                                <% userData.wallet.transactions.forEach(transaction=>{%>
+                            <%if(userData.wallet.transactions.length>0){%>
+                                <tbody>
+                                    <!-- Iterate through each product in the order -->
+                                    <% userData.wallet.transactions.forEach(transaction=>{%>
+                                        <tr>
+                                            <td class="align-middle text-wrap text-success">
+                                                <%if(transaction.type ==='credit'){%>
+                                                    <p><%=transaction.type %></p>
+    
+                                            </td>
+                                                <%}else{%>
+                                                    <p class="text-danger"><%=transaction.type %></p>
+    
+                                                <%}%>
+                                            </td>
+                                            <td class="align-middle text-wrap ">
+                                                <%=transaction.amount %>
+    
+                                            </td>
+                                            <td class="align-middle text-wrap ">
+                                                <%=transaction.timestamp.toLocaleString() %>
+    
+                                            </td>
+                                            <td class="align-middle text-wrap ">
+                                                <%=transaction.description %>
+    
+                                            </td>
+                                        </tr>
+                                        <%}) %>
+                                </tbody>
+                            <%}else{%>
+                                <tbody>
                                     <tr>
-                                        <td class="align-middle text-wrap text-success">
-                                            <%if(transaction.type ==='credit'){%>
-                                                <p><%=transaction.type %></p>
-
-                                        </td>
-                                            <%}else{%>
-                                                <p class="text-danger"><%=transaction.type %></p>
-
-                                            <%}%>
-                                        </td>
-                                        <td class="align-middle text-wrap ">
-                                            <%=transaction.amount %>
-
-                                        </td>
-                                        <td class="align-middle text-wrap ">
-                                            <%=transaction.timestamp.toLocaleString() %>
-
-                                        </td>
-                                        <td class="align-middle text-wrap ">
-                                            <%=transaction.description %>
-
+                                        <td class="align-middle text-wrap " >
+                                            <p class="p-2">No transactions found</p>
                                         </td>
                                     </tr>
-                                    <%}) %>
-                            </tbody>
+                                </tbody>
+                            <%}  %>
+                            
                         </table>
                         <% } %>
 
@@ -175,15 +186,35 @@
                         <div class="mb-3">
                             <label for="fundAmount" class="form-label">Enter Amount</label>
                             <input type="number" class="form-control" id="fundAmount" min="1" placeholder="Enter amount"
-                                required>
+                                >
+                                <div class="text-danger" id="walletError"></div>
                         </div>
 
-                        <button type="submit" id="addFund" class="btn btn-primary w-100">Add</button>
+                        <button type="submit" id="addFund" onclick="return validateAmout()" class="btn btn-primary w-100">Add</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function validateAmout(){
+            const fundAmount = document.getElementById('fundAmount');
+        const value = fundAmount.value;
+        if(value == ""){
+
+            document.getElementById('walletError').innerHTML='Please enter an amount';
+            return false;
+
+
+        }
+        document.getElementById('walletError').innerHTML='';
+        return true;
+
+        }
+  
+    </script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Get the modal element

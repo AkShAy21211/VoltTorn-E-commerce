@@ -44,6 +44,7 @@
                 <th>Image</th>
                 <th>Name</th>
                 <th>Description</th>
+                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -61,6 +62,15 @@
                   </td>
                   <td>
                     <span class="small-text" data-toggle="tooltip" data-placement="top" title="<%= product.description.substring(0,100, product.description.length / 2) %>" data-container="body" class="custom-tooltip"><%= product.description %></span>
+                  </td>
+                  <td>
+                    <%if(product.status){%>
+                      <span class="small-text badge bg-success" data-toggle="tooltip" data-placement="top"  data-container="body" class="custom-tooltip">Active</span>
+
+                    <%}else{%>
+                     <span class="small-text badge bg-danger" data-toggle="tooltip" data-placement="top"  data-container="body" class="custom-tooltip">Inactive</span>
+
+                      <%}  %>
                   </td>
                   <td >
                     <a href="/admin/products/view/<%= product._id %>" class="bi bi-eye-fill text-info p-1" type="button"></a>
