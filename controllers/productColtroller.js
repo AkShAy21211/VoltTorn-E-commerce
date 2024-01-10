@@ -1,5 +1,6 @@
 const categoryModel = require("../models/categoryModel");
 const productModel = require("../models/productModel");
+const brandModel = require('../models/brandModel');
 const fs = require("fs");
 const path = require("path");
 const {cropAndSaveImage} = require("../helpers/imageCrope");
@@ -33,8 +34,8 @@ const addProductLoad = async (req, res) => {
 
 
     const category = await categoryModel.find({});
-
-    res.render("addProducts", { category });
+    const brands = await brandModel.find({status:true});
+    res.render("addProducts", { category,brands });
   } catch (error) {
     console.error(error.meesage);
   }
@@ -104,7 +105,7 @@ const addProduct = async (req, res) => {
       return res.redirect('/admin/products/add');
     } else {
       req.flash('error', 'Product Name Already Exists');
-      return res.status(403).redirect('/admin/products/add');
+      return res.status(400).redirect('/admin/products/add');
     }
   } catch (error) {
     console.error(error);

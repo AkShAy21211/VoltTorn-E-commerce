@@ -96,6 +96,11 @@
                 <i class="bi bi-person"></i> Profile
               </li>
             </a>
+            <a class="options" href="/home/settings/address">
+              <li class="list-group-item  inactive list-item">
+                <i class="bi bi-building"></i> Address Mangment         
+                </li>
+            </a>
             <a class="options" href="/home/settings/oders">
               <li class="list-group-item inactive list-item">
                 <i class="bi bi-box"></i> Orders
@@ -193,46 +198,6 @@
                   </div>
                   <a type="button" href="#" class="btn btn-secondary btn-sm" onclick="copyReferralCode()">Copy</a>
                 </div>
-              </div>
-
-              <h5 class="p-1 fw-bold">Billing Address</h5>
-              <div class="row mb-3">
-
-                <% user.addresses.forEach((address, i)=> { %>
-
-                  <%if(!user.addresses){%>
-                    <h6 class="p-1 text-info">No Address Found Please Add Your Belling Address At The Time Of Checkout.
-                    </h6>
-
-                    <%} else{%>
-
-
-                      <div class="col-md-6">
-                        <div class="form-floating mb-3">
-                          <div data-index="<%= i %>" class="mb-3">
-                            <!-- Example addresses, you can replace these with dynamic data -->
-                            <div class="form-check mt-4 border rounded bg-light"
-                              style="height: 100px; display: flex; justify-content: space-between; align-items: center;">
-                              <input class="form-check-input ml-1" type="radio" name="flexRadioDefault"
-                                id="flexRadioDefault1">
-                              <label class="ml-4 form-check-label" for="address1">
-                                <div>
-                                  <strong>Address:</strong>
-                                  <%= address.address %><br>
-
-                                </div>
-                              </label>
-                              <a style="cursor: pointer; float: right;" class="me-3 text-primary editAddressBtn"
-                                href="/home/setting/edit-profile/delete-address/<%=address._id  %>">Delete</a>
-                            </div>
-                          </div>
-
-                        </div>
-                      </div>
-
-                      <%}%>
-
-                        <%}) %>
               </div>
 
               <!-- Submit Button -->

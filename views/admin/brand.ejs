@@ -32,14 +32,14 @@ include('../layout/adminSideBar.ejs') %>
               font-family: Arial, Helvetica, sans-serif;
             "
           >
-            Category List
+            Brand List
           </h1>
           <button
             class="btn btn-success mb-2"
             data-toggle="modal"
-            data-target="#addCategoryModal"
+            data-target="#addBrandModal"
           >
-            Add Category
+            Add Brand
           </button>
         </div>
 
@@ -50,30 +50,37 @@ include('../layout/adminSideBar.ejs') %>
           <table class="table" id="myTable">
             <thead class="text-center">
               <tr>
-                <th>Category</th>
-                <th>Sub Category</th>
+                <th>Brand</th>
+                <th>Logo</th>
+                <th>Status</th>
                 <th>Description</th>
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody id="category-table" class="align-center">
-              <% CategoryData.forEach(function(category,i) { %>
+            <tbody id="brand-table" class="align-center">
+                <% BrandData.forEach(function(Brand,i) { %>
+
               <tr class="text-center">
-                <td><%= category.category %></td>
-                <td class="description-column w-25 wrap">
-                  <%= category.sub_Category %>
+                <td> <%=Brand.name  %></td>
+                
                 </td>
-                <td class="description-column"><%= category.description %></td>
+                <td class="logo-column "><img width="60" height="60" class="img-thumbnail rounded border-0" src="/images/brandImages/<%=Brand.logo  %>" alt=""></td>
+
+                <td class="status-column"><%=Brand.status  %></td>
+
+                <td class="description-column"><%=Brand.description  %></td>
+
 
                 <td>
                   <a
-                    href="/admin/category/edit/<%= category._id %>"
+                    href="/admin/brand/edit/<%=Brand._id  %>"
                     class="bi bi-pencil-fill text-warning p-1"
+                   
                     ></a
                   >
                   <a
                     href="javascript:void(0);"
-                    onclick="confirmDelete('<%= category._id %>','/admin/category/delete/','You will not be able to recover this category!')"
+                    onclick="confirmDelete(' <%=Brand._id%>  ','/admin/brand/delete/','You will not be able to recover this brand!')"
                     class="bi bi-trash3-fill text-danger p-1"
                     ></a
                   >
@@ -91,16 +98,16 @@ include('../layout/adminSideBar.ejs') %>
 
   <div
     class="modal fade"
-    id="addCategoryModal"
+    id="addBrandModal"
     tabindex="-1"
     role="dialog"
-    aria-labelledby="addCategoryModalLabel"
+    aria-labelledby="addBrandModalLabel"
     aria-hidden="true"
   >
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
+          <h5 class="modal-title" id="addBrandModalLabel">Add Brand</h5>
           <button
             type="button"
             class="close"
@@ -113,25 +120,34 @@ include('../layout/adminSideBar.ejs') %>
         <div class="modal-body">
           <form
             method="POST"
-            action="/admin/category/add"
-            onsubmit="return validateCategoryForm()"
+            action="/admin/brand/add"
+            onsubmit="return validateBrandForm()"
             enctype="multipart/form-data"
           >
             <div class="form-group">
-              <label for="name">Category Name</label>
+              <label for="name">Brand Name</label>
              <input type="text" class="select form-control" id="name" name="name">
               <div id="nameWarning" class="text-danger"></div>
             </div>
-            <div class="form-group">
-              <label for="SubCategory">Sub-Category Name</label>
-             <input type="text"  class="select form-control" id="SubCategory" name="SubCategory">
-              <div id="SubCategoryWarning" class="text-danger"></div>
-            </div>
+           
             <div class="form-group">
               <label for="image">Image</label>
               <input type="file" class="form-control" id="image" name="image" />
               <div id="imageWarning" class="text-danger"></div>
             </div>
+
+
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select class="select form-control" id="status" name="status">
+                    <option value="">Select</option>
+                      <option value="true">true</option>
+                      <option value="false">false</option>
+                  </select>
+                  <div id="statusWarning" class="text-danger"></div>
+
+              </div>
+           
             <div class="form-group">
               <label for="description">Description</label>
               <textarea
@@ -141,59 +157,66 @@ include('../layout/adminSideBar.ejs') %>
               ></textarea>
               <div id="descriptionWarning" class="text-danger"></div>
             </div>
-            <button type="submit" class="btn btn-success">Add Category</button>
+            <button type="submit" class="btn btn-success">Add Brand</button>
           </form>
         </div>
       </div>
     </div>
   </div>
+
+
+
+
+
+
+
+
 </main>
-
 <script>
-  function validateCategoryForm() {
-    var name = document.getElementById("name").value;
-    var description = document.getElementById("description").value;
-    var sub_Category = document.getElementById("SubCategory").value;
-    var image = document.getElementById("image").value;
-
-    // Reset all warnings
-    document.getElementById("nameWarning").innerText = "";
-    document.getElementById("descriptionWarning").innerText = "";
-    document.getElementById("SubCategoryWarning").innerText = "";
-    document.getElementById("imageWarning").innerText = "";
-
-    // Validate name with no white spaces
-    if (!name.trim()) {
-      document.getElementById("nameWarning").innerText =
-        "Name should not be empty.";
-      return false;
+    function validateBrandForm() {
+      var name = document.getElementById("name").value;
+      var description = document.getElementById("description").value;
+      var status = document.getElementById("status").value; // Corrected variable name
+      var image = document.getElementById("image").value;
+  
+      // Reset all warnings
+      document.getElementById("nameWarning").innerText = "";
+      document.getElementById("descriptionWarning").innerText = "";
+      document.getElementById("imageWarning").innerText = "";
+      document.getElementById('statusWarning').innerHTML ="";
+  
+      // Validate name with no white spaces
+      if (!name.trim()) {
+        document.getElementById("nameWarning").innerText =
+          "Name should not be empty.";
+        return false;
+      }
+  
+      if (!image.trim()) {
+        document.getElementById("imageWarning").innerText =
+          "Please select at least one image.";
+      }
+  
+      if (!status.trim()) {
+        document.getElementById("statusWarning").innerText =
+          "Status should not be empty.";
+        return false;
+      }
+  
+      // Validate description with more than 10 words
+      var wordCount = description.trim().split(/\s+/).length;
+      if (wordCount < 10) {
+        document.getElementById("descriptionWarning").innerText =
+          "Description should contain at least 10 words.";
+        return false;
+      }
+  
+      // Form is valid
+      return true;
     }
-
-    // Validate sub_Category with no white spaces
-    if (!sub_Category.trim()) {
-      document.getElementById("SubCategoryWarning").innerText =
-        "Sub Category should not be empty.";
-      return false;
-    }
-    if (!image.trim()) {
-      document.getElementById("imageWarning").innerText =
-        "Please select at least one image.";
-    }
-
-    // Validate description with more than 10 words
-    var wordCount = description.trim().split(/\s+/).length;
-    if (wordCount < 10) {
-      document.getElementById("descriptionWarning").innerText =
-        "Description should contain at least 10 words.";
-      return false;
-    }
-
-    // Form is valid
-    return true;
-  }
-</script>
+  </script>
+  
 <script src="/js/DataTable.js"></script>
-
 <script src="/js/alertPopUp.js"></script>
 <%- include('../layout/adminFooter.ejs') %>
 

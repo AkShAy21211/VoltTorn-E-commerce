@@ -18,25 +18,34 @@ const addCoupon = async(req,res)=>{
     try{
 
         const {code,percentage,endDate,minAmount,status}= req.body;
+        const couponEndDate = new Date(endDate);
+        const currentDate = new Date();
 
-        console.log(code,percentage,endDate,minAmount,status);
-
-        const coupon = new couponModal({
-
-            code:code,
-            discountPercentage:parseInt(percentage),
-            expiry:endDate,
-            minOrderAmount:parseInt(minAmount),
-            isActive:status,
+        if(couponEndDate < currentDate){
+            console.log("error date");
+            req.flash('error', 'Please select a valid date');
+            return res.status(400).redirect('/admin/coupon');      
+          }else{
 
 
-        });
+            const coupon = new couponModal({
 
-
-        await coupon.save();
-
-
-        res.redirect('/admin/coupon')
+                code:code,
+                discountPercentage:parseInt(percentage),
+                expiry:endDate,
+                minOrderAmount:parseInt(minAmount),
+                isActive:status,
+    
+    
+            });
+    
+    
+            await coupon.save();
+    
+    
+            res.redirect('/admin/coupon')
+    
+          }
 
 
     }catch(error){

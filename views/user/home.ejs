@@ -181,15 +181,13 @@
         <div class="row">
           <h3 class="col-12 text-center mt-5 fs-3 text-start">Featured Brands</h3>
           <div class="col-sm-12 col-md-12 col-lg-12 d-flex flex-wrap justify-content-evenly mt-5">
-            <img class="mb-3" style="width: 40px; height: 40px; -webkit-user-drag: none; " src="/images/apple.png"
+            <%brands.forEach(brands=>{%>
+           
+              <img class="mb-3 img-thumbnail border-0" style="height: 40px; width: 50px; -webkit-user-drag: none; " src="/images/brandImages/<%=brands.logo  %>"
               alt="">
-            <img class="mb-3" style="width: 40px; height: 40px; -webkit-user-drag: none; " src="/images/hp.png" alt="">
-            <img class="mb-3" style="width: 40px; height: 40px; -webkit-user-drag: none; " src="/images/dell.png"
-              alt="">
-            <img class="mb-3" style="width: 80px; height: 30px; margin-top: 10px; -webkit-user-drag: none; "
-              src="/images/lenovo.png" alt="">
-            <img class="mb-3" style="width: 100px; height: 30px; margin-top: 10px; -webkit-user-drag: none; "
-              src="/images/samsung.png" alt="">
+            <%})  %>
+            
+          
           </div>
         </div>
       </div>

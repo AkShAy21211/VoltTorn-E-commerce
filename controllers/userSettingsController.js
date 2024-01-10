@@ -4,6 +4,7 @@ const { WishListModel } = require("../models/cart&WishlistModel");
 const offerModal = require("../models/offerModal");
 const reviewModal = require("../models/reviewModel");
 const returnModal = require("../models/returnModel");
+const countryState = require("country-state-city");
 
 //USER SETTINGS PAGE
 
@@ -59,10 +60,94 @@ const editUserProfile = async (req, res) => {
   }
 };
 
+
+
+const loadUserAddress = async (req, res) => {
+  try {
+    const id = req.session.user.userId;
+    const states = countryState.State.getStatesOfCountry("IN");
+
+    if (id ) {
+    const user  = await userModel.findById(id);
+    
+    res.render("address",{user,states});
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+const stateCityLoad = async (req, res) => {
+  try {
+    const dataState = req.body.dataState;
+    const states = countryState.State.getStatesOfCountry("IN");
+    const city = countryState.City.getCitiesOfState("IN", dataState).map(
+      (City) => City.name
+    );
+
+    res.status(200).json({
+      success: true,
+      city,
+    });
+    console.log(city);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
+const addUserBellingAddress = async (req, res) => {
+  try {
+    const { address, country, state, city, postalCode } = req.body;
+
+    const userAddress = {
+      address: address,
+      country: country,
+      state: state,
+      city: city,
+      zip: postalCode,
+    };
+    await userModel.findOneAndUpdate(
+      { _id: req.session.user.userId },
+      { $push: { addresses: userAddress } }
+    );
+
+    res.redirect("/home/settings/address");
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const editUserBillingAddress = async (req, res) => {
+  try {
+    const { address, country, state, city, postalCode } = req.body;
+    const addressId = req.params.id;
+
+    const result = await userModel.findOneAndUpdate(
+      { "addresses._id": addressId },
+      {
+        $set: {
+          "addresses.$.address": address,
+          "addresses.$.country": country,
+          "addresses.$.state": state,
+          "addresses.$.city": city,
+          "addresses.$.zip": postalCode,
+        },
+      },
+      { new: true }
+    );
+
+    res.redirect("/home/settings/address");
+  } catch (error) {
+    console.error(error);
+    // Handle the error appropriately, e.g., send an error response to the client
+    res.status(500).send("Internal Server Error");
+  }
+};
+
 const deleteUserAddress = async (req, res) => {
   try {
     const id = req.session.user.userId;
-    const address_id = req.params.address_id;
+    const address_id = req.params.id;
     console.log(id, " ", address_id);
 
     if (id && address_id) {
@@ -71,7 +156,7 @@ const deleteUserAddress = async (req, res) => {
         { $pull: { addresses: { _id: address_id } } }
       );
     }
-    res.redirect("/home/settings/profile");
+    res.redirect("/home/settings/address");
   } catch (error) {
     console.error(error);
   }
@@ -99,10 +184,10 @@ const loadUserOdersPage = async (req, res) => {
       req.session.user && req.session.user.userId
         ? req.session.user.userId
         : undefined;
-    const oders = (await userModel.find({ _id: id }, { oders: 1 })).flatMap(
+    let oders = (await userModel.find({ _id: id }, { oders: 1 })).flatMap(
       (oders) => oders.oders
     );
-
+     oders = oders.sort((a, b) => b.date - a.date);
 
     res.render("oders", { oders, returnData });
   } catch (error) {
@@ -411,6 +496,10 @@ module.exports = {
   loadUserSettings,
   editUserProfile,
   // loadOderManagment,
+  stateCityLoad,
+  addUserBellingAddress,
+  editUserBillingAddress,
+  loadUserAddress,
   loadUserOdersPage,
   forCancelUserOders,
   forReturnOders,

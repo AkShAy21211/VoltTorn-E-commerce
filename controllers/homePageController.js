@@ -4,22 +4,49 @@ const categoryModel = require("../models/categoryModel");
 const offerModal = require("../models/offerModal");
 const mailchimp = require("@mailchimp/mailchimp_marketing");
 const reviewModal = require("../models/reviewModel");
+const brandModal = require('../models/brandModel');
 
 
 const loadHome = async (req, res) => {
   try {
     const category = await categoryModel.find({});
+    const brands = await brandModal.find({status:true}).limit(5);
     const offers = await offerModal.find({isActive:true,offerType:{$ne:'Referral'},endDate: { $gt: new Date()}})
     const currentDate = new Date();
     console.log(currentDate);
     const ProductData = await productModel.find({status:true}).limit(4);
     const banner = await bannerModel.find({ endDate: { $gt: currentDate } });
-    res.render("home", { category,banner,ProductData,offers});
+    res.render("home", { category,banner,ProductData,offers,brands});
   
   } catch (error) {
     console.log(error.message);
   }
 };
+
+
+
+const searchProductsHome = async(req,res)=>{
+
+  try{
+    const {value} = req.query;
+    const brands = await brandModal.find({status:true,name: { $regex: value, $options: 'i' }});
+    console.log(value);
+    const ProductData = await productModel.find({ name: { $regex: value, $options: 'i' } }).limit(6);
+    const ProductCount = await productModel.find({ name: { $regex: value, $options: 'i' } }).limit(6).countDocuments();
+    const offers = await offerModal.find({
+     $or: [
+       { offerType: 'Product' },
+       {offerType:"Category"},
+     ],
+   });  
+   return res.render('searchProducts',{ProductData,offers,ProductCount,brands});
+ 
+   }catch(error){
+     console.error(error);
+   }
+
+
+}
 
 
 const loaadProductListsByCategory = async(req,res)=>{
@@ -212,6 +239,7 @@ module.exports = {
   filterProductsByUser,
   searchProducts,
   loadFaqPage,
-  loadAboutUs
+  loadAboutUs,
+  searchProductsHome,
 
 };

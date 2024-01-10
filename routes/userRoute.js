@@ -52,6 +52,10 @@ userRoute.get('/home',auth.isUserBlocked,homeController.loadHome);
 //user single product detail route
 userRoute.get('/home/product/details/:id',auth.isUserBlocked,homeController.productDetail);
 
+
+//user search products
+userRoute.get('/home/search',auth.isUserBlocked,homeController.searchProductsHome);
+
 //product listts page route 
 
 userRoute.get('/home/products/:cat_name',auth.isUserBlocked,homeController.loaadProductListsByCategory);
@@ -86,19 +90,18 @@ userRoute.get('/home/cart/avaliable-coupons/:id',auth.isUserBlocked,auth.is_Logi
 userRoute.get('/home/cart/coupon-applay/:id',auth.isUserBlocked,auth.is_Login,userCartController.applayCouponCode)
 userRoute.get('/home/cart/coupon-remove/:id',auth.isUserBlocked,auth.is_Login,userCartController.removeCouponCode)
 
-userRoute.post('/home/cart/checkout',auth.isUserBlocked,userCartController.stateCityLoad);
 
 
 //user address add
 userRoute.post('/home/cart/add-address',auth.isUserBlocked,userCartController.addUserBellingAddress)
 userRoute.post('/home/cart/edit-address/:id',auth.isUserBlocked,userCartController.editUserBillingAddress);
+userRoute.post('/home/cart/checkout',auth.isUserBlocked,userCartController.stateCityLoad);
 
 
 
 //user profile page route
 userRoute.get('/home/settings/profile',auth.isUserBlocked,auth.is_Login,userSettingController.loadUserSettings);
 userRoute.post('/home/setting/edit-profile/:id',uploadUserImage.single('image'),auth.isUserBlocked,userSettingController.editUserProfile);
-userRoute.get('/home/setting/edit-profile/delete-address/:address_id',auth.isUserBlocked,userSettingController.deleteUserAddress);
 
 
 //user oder page routes
@@ -122,6 +125,14 @@ userRoute.post('/home/cart/checkout/verify',auth.isUserBlocked,paymentController
 userRoute.get('/home/settings/wallet',auth.isUserBlocked,auth.is_Login,userSettingController.loadUserWallet)
 userRoute.post('/home/settings/wallet/add-fund',auth.isUserBlocked,paymentController.userAddFundWallet)
 userRoute.post('/home/settings/wallet/add-fund/verify',auth.isUserBlocked,paymentController.userAddFundWalletVerify)
+
+// user address managment
+userRoute.get('/home/settings/address',auth.isUserBlocked,auth.is_Login,userSettingController.loadUserAddress)
+userRoute.post('/home/settings/address/add',auth.isUserBlocked,userSettingController.addUserBellingAddress)
+userRoute.post('/home/settings/address/edit/:id',auth.isUserBlocked,auth.is_Login,userSettingController.editUserBillingAddress)
+userRoute.get('/home/settings/address/delete/:id',auth.isUserBlocked,auth.is_Login,userSettingController.deleteUserAddress)
+userRoute.post('/home/settings/address',auth.isUserBlocked,userSettingController.stateCityLoad);
+
 
 
 //user faq and about and contact route

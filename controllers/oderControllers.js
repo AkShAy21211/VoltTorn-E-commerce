@@ -40,6 +40,19 @@ const adminChangeOderStatus = async (req, res) => {
   }
 };
 
+
+const viewUserOrder = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await userModel
+      .find({ 'oders._id': id });
+  
+    res.status(200).json({ user });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const viewReturnedOrder = async (req, res) => {
   try {
     const { id } = req.params;
@@ -113,6 +126,7 @@ const approveReturnedProduct = async (req, res) => {
 
 module.exports = {
   loadOderManagment,
+  viewUserOrder,
   adminChangeOderStatus,
   viewReturnedOrder,
   approveReturnedProduct,

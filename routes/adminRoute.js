@@ -5,6 +5,7 @@ const userController = require("../controllers/userController");
 const adminController = require("../controllers/adminController");
 const customerController = require("../controllers/customerController");
 const categoryController = require("../controllers/categoryController");
+const brandController = require("../controllers/brandController");
 const productController = require("../controllers/productColtroller");
 const bannerController = require("../controllers/bannerController");
 const adminOderController = require("../controllers/oderControllers");
@@ -44,12 +45,22 @@ const categoryImageStorage = multer.diskStorage({
     cb(null, name);
   },
 });
+const brandImageStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "../public/images/brandImages"));
+  },
+  filename: function (req, file, cb) {
+    const name = Date.now() + "-" + file.originalname;
+    cb(null, name);
+  },
+});
 
 
 // Set up multer instances with the corresponding storage
 const uploadProductImage = multer({ storage: productImageStorage })
 const uploadBannerImage = multer({ storage: bannerImageStorage })
 const uploadCategoryImage = multer({storage:categoryImageStorage})
+const uploadBrandImage = multer({storage:brandImageStorage})
 
 const userModel = require("../models/userModel");
 
@@ -77,12 +88,24 @@ adminRoute.get( "/customers", adminAuth.is_Login,customerController.loadCustomer
 adminRoute.get("/delete-user",adminAuth.is_Login, customerController.deleteUser);
 adminRoute.get("/block-unblock-user",adminAuth.is_Login, customerController.blockUnblockUser);
 
+
+
 //ADMIN CATEGORY ROUTE
 adminRoute.get("/category",adminAuth.is_Login, categoryController.loadCategory);
 adminRoute.post("/category/add",uploadCategoryImage.single('image'), categoryController.addNewCategory); //ADMIN ADD CATEGORY ROUTE
 adminRoute.get("/category/edit/:id",adminAuth.is_Login, categoryController.editCategoryLoad);
 adminRoute.post("/category/edit/:id",uploadCategoryImage.single('image'), categoryController.editCategory); //ADMIN EDIT CATEGORY ROUTE
 adminRoute.get("/category/delete/:id", adminAuth.is_Login,categoryController.deleteCategory); //ADMIN DELETE CATEGORY ROUTE
+
+
+
+//ADMIN BRAND ROUTE
+adminRoute.get("/brand",adminAuth.is_Login, brandController.loadBrand);
+adminRoute.post("/brand/add",uploadBrandImage.single('image'), brandController.addNewBrand); //ADMIN ADD CATEGORY ROUTE
+adminRoute.get("/brand/edit/:id",adminAuth.is_Login, brandController.editBrandLoad);
+adminRoute.post("/brand/edit/:id",uploadBrandImage.single('image'), brandController.editBrand); //ADMIN EDIT CATEGORY ROUTE
+adminRoute.get("/brand/delete/:id", adminAuth.is_Login,brandController.deleteBrand); //ADMIN DELETE CATEGORY ROUTE
+
 
 //ADMIN PRODUCT ROUTE
 adminRoute.get("/products",adminAuth.is_Login, productController.loadProduct);
@@ -128,6 +151,7 @@ adminRoute.post('/banners/edit/:id',uploadBannerImage.single('image'),bannerCont
 
 //admin oder mangment
 adminRoute.get('/oders',adminOderController.loadOderManagment);
+adminRoute.get('/oders/view/:id',adminOderController.viewUserOrder);
 adminRoute.patch('/oders/change-oder-status/:status/:id',adminOderController.adminChangeOderStatus);
 adminRoute.get('/oders/return-view/:id',adminOderController.viewReturnedOrder);
 adminRoute.get('/oders/return/approve/:returnId',adminOderController.approveReturnedProduct);

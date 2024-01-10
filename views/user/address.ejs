@@ -1,0 +1,337 @@
+<%- include('../layout/header.ejs') %>
+  <style>
+    .container {
+      margin-top: 80px;
+    }
+
+    .min-height-div1 {
+      min-height: 200px;
+      /* Adjust the height as needed */
+    }
+
+    .min-height-div2 {
+      min-height: 500px;
+      /* Adjust the height as needed */
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .list-item {
+      padding: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+
+    .list-item i {
+      font-size: 24px;
+      /* Adjust the icon size */
+      margin-right: 10px;
+      /* Add space between icon and text */
+    }
+
+    .options {
+      text-decoration: none;
+    }
+
+    .options:hover {
+      text-decoration: none;
+    }
+
+    .active {
+      background-color: #3498db;
+      color: #fff;
+    }
+
+    .inactive {
+      background-color: #fff;
+      color: #333;
+    }
+  </style>
+
+  <title>Settings | Wishlists</title>
+  <main>
+    <div class="container">
+      <div class="row d-flex justify-content-arround">
+        <div class="setting-options  col-md-4 col-lg-4 col-xl-3 col-xxl-3  mb-2 min-height-div1 mb-md-4">
+          <ul class="list-group shadow-sm bg-body " id="myList">
+            <a class="options" href="/home/settings/profile">
+              <li class="list-group-item inactive list-item">
+                <i class="bi bi-person"></i> Profile
+              </li>
+            </a>
+            <a class="options" href="/home/settings/address">
+                <li class="list-group-item  inactive list-item">
+                    <i class="bi bi-building"></i>Address Mangment         
+                  </li>
+              </a>
+            <a class="options" href="/home/settings/oders">
+              <li class="list-group-item inactive list-item">
+                <i class="bi bi-box"></i> Orders
+              </li>
+            </a>
+            <a class="options" href="/home/settings/wishlist">
+              <li class="list-group-item  inactive list-item">
+                <i class="bi bi-heart"></i> Wishlist
+              </li>
+            </a>
+            <a class="options" href="/home/settings/reviews">
+              <li class="list-group-item  inactive list-item">
+                <i class="bi bi-star"></i>Ratings
+              </li>
+            </a>
+            <a class="options" href="/home/settings/wallet">
+              <li class="list-group-item  inactive list-item">
+                <i class="bi bi-wallet2"></i> Wallet         
+                </li>
+            </a>
+
+          </ul>
+        </div>
+        <div class="view-settings col-md-8 col-lg-8 col-xl-9 col-xxl-8 min-height-div1 mb-md-4">
+          <!-- Iterate through each order -->
+          <div class="card shadow-0 border bg-light">
+            <div class="p-4">
+
+              <!-- Add a button to toggle the collapse -->
+              <button class="btn btn-outline-primary mb-3" type="button" data-toggle="collapse"
+                data-target="#addressCollapse" aria-expanded="false" aria-controls="addressCollapse">
+                Add New Address
+              </button>
+
+              <form class="collapse" id="addressCollapse" method="POST" action="/home/settings/address/add">
+
+                <div class="row">
+
+                  <div class="col-sm-8 mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <div class="form-outline">
+                      <input type="text" id="address" name="address" placeholder="Type here" class="form-control" />
+                    </div>
+                  </div>
+
+                  <div class="col-sm-4 mb-3">
+                    <label for="country" class="form-label">Country</label>
+                    <div class="form-outline">
+                      <select id="country" name="country" class="form-select">
+                        <option class="text-black" value="India">India</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-4 mb-3">
+                    <label for="state" class="form-label">State</label>
+                    <div class="form-outline">
+                      <select id="state" name="state" class="form-select">
+                        <option value="">select</option>
+                        <%states.forEach(states=> {%>
+                          <option class="text-black" data-state="<%=states.isoCode%>" value="<%=states.name%>">
+                            <%=states.name%>
+                          </option>
+                          <%}); %>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-4 mb-3">
+                    <label for="city" class="form-label">City</label>
+                    <div class="form-outline">
+
+                      <select id="city" name="city" class="form-select">
+                        <option value="">select</option>
+                        <option class="text-black" value=""></option>
+
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-4 col-6 mb-3">
+                    <label for="postalCode" class="form-label">Postal code</label>
+                    <div class="form-outline">
+                      <input type="text" id="postalCode" name="postalCode" class="form-control" />
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Submit button -->
+                <div class="d-grid gap-2">
+                  <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+
+              </form>
+
+            </div>
+          </div>
+          <% if (user && typeof user.addresses !== 'undefined' && user.addresses.length > 0) { %>
+            <table class="table shadow-sm bg-body">
+              <tbody>
+                  <!-- Iterate through each product in the order -->
+        
+                  <tr>
+                    <td>
+                      <% user.addresses.forEach((address, i)=> { %>
+
+                        <div data-index="<%= i %>" class="mb-3">
+                          <!-- Example addresses, you can replace these with dynamic data -->
+                          <div class="form-check mt-4 border rounded bg-light"
+                            style="height: 100px; display: flex; justify-content: start; align-items: center;">
+                            <input class="form-check-input ml-1 address-radio" type="radio" name="flexRadioDefault"
+                              id="flexRadioDefault<%= i + 1 %>" data-address-id="<%=address._id  %>">
+                            <label class="ml-4 form-check-label" for="address1">
+                              <div>
+                                <strong>Address:</strong>
+                                <%= address.address %><br>
+            
+                              </div>
+                            </label>
+                            <a style="cursor: pointer;" class="ml-4 text-primary editAddressBtn"><i class="bi bi-pencil-square"></i></a>
+                            <a style="cursor: pointer;" href="/home/settings/address/delete/<%=address._id  %>" class="ml-2 text-primary "><i class="bi bi-trash text-danger"></i></a>
+                          </div>
+                        </div>
+            
+            
+            
+                        <form data-index="<%= i %>" class="mt-4" style="display: none;" method="POST"
+                          action="/home/cart/edit-address/<%=address._id %>">
+                          <!-- Form fields for editing address -->
+                          <div class="row mb-3">
+                            <div class="col-md-6">
+                              <div class="input-group">
+                                <span class="input-group-text">Address</span>
+                                <input type="text" class="form-control" id="address" name="address" value="<%= address.address %>"
+                                  required>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="input-group">
+                                <span class="input-group-text">Country</span>
+                                <input type="text" class="form-control" id="country" name="country" value="<%= address.country %>"
+                                  required>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row mb-3">
+                            <div class="col-md-4">
+                              <div class="input-group">
+                                <span class="input-group-text">State</span>
+                                <input type="text" class="form-control" id="state" name="state" value="<%= address.state %>"
+                                  required>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="input-group">
+                                <span class="input-group-text">City</span>
+                                <input type="text" class="form-control" id="city" name="city" value="<%= address.city %>" required>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="input-group">
+                                <span class="input-group-text">Postal Code</span>
+                                <input type="text" class="form-control" id="postalCode" name="postalCode" value="<%= address.zip %>"
+                                  required>
+                              </div>
+                            </div>
+                          </div>
+                          <button type="submit" class="btn btn-success">Save</button>
+                          <button type="button" class="btn btn-secondary ml-2 cancelEditBtn">Cancel</button>
+                        </form>
+            
+                        <%}) %>
+            
+                    </td>
+                
+                  </tr>
+
+              
+              </tbody>
+            </table>
+          <% }  else{%>
+            
+            <table class="table">
+              <tbody>
+                <tr>
+                  <h5 class="text-dark text-center">Your Wishlist is Empty: No Wishlist Added</h5>
+                </tr>
+              </tbody>
+            </table>
+            <%}%>
+           
+   
+          
+
+      </div>
+    </div>
+  </main>
+  <script src="/js/addTOcart.js"></script>
+
+  <script>
+    document.getElementById('state').addEventListener('change', async function () {
+      // Fetch cities for the selected state
+      const selectedState = this.value;
+
+      // Get the data-state attribute value
+      const dataState = this.options[this.selectedIndex].getAttribute('data-state');
+
+      try {
+        const response = await axios.post(`/home/settings/address`, { dataState });
+        const cities = response.data.city;
+
+
+        console.log(cities);
+        // Clear existing options
+        const cityDropdown = document.getElementById('city');
+        cityDropdown.innerHTML = '';
+
+        // Add new options
+        cities.forEach(city => {
+          const option = document.createElement('option');
+          option.value = city;
+          option.text = city;
+          cityDropdown.add(option);
+        });
+      } catch (error) {
+        console.error('Error fetching cities:', error);
+      }
+    });
+
+  </script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Get all elements with the class 'editAddressBtn' and 'cancelEditBtn'
+    const editAddressBtns = document.querySelectorAll('.editAddressBtn');
+    const cancelEditBtns = document.querySelectorAll('.cancelEditBtn');
+
+    // Add click event listeners to handle the display toggling
+    editAddressBtns.forEach(function (editAddressBtn) {
+      editAddressBtn.addEventListener('click', function () {
+        const index = this.closest('[data-index]').dataset.index;
+        toggleDisplay(index);
+      });
+    });
+
+    cancelEditBtns.forEach(function (cancelEditBtn) {
+      cancelEditBtn.addEventListener('click', function () {
+        const index = this.closest('[data-index]').dataset.index;
+        toggleDisplay(index);
+      });
+    });
+
+    // Function to toggle display based on the index
+    function toggleDisplay(index) {
+      const addressDetails = document.querySelector(`[data-index="${index}"]`);
+      const addressForm = document.querySelector(`form[data-index="${index}"]`);
+
+      if (addressDetails && addressForm) {
+        addressDetails.style.display = addressDetails.style.display === 'none' ? 'block' : 'none';
+        addressForm.style.display = addressForm.style.display === 'none' ? 'block' : 'none';
+      }
+    }
+  });
+
+</script>
+
+  <%- include('../layout/footer.ejs') %>

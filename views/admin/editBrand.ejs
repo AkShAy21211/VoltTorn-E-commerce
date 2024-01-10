@@ -1,0 +1,105 @@
+<%- include('../layout/adminHeader.ejs') %>
+
+<%- include('../layout/adminSideBar.ejs') %>
+
+
+<title>Edit Brand</title>
+<main>
+  <div class="container mt-4">
+    <div class="row d-flex justify-content-end  ">
+      <div class=" col-md-10 col-lg-10 ">
+        <div class="d-flex justify-content-between">
+          <h2>Edit Brand</h2>
+        </div>
+        <form method="post" action="/admin/brand/edit/<%=brandData._id %>" onsubmit="return validateBrandForm()" enctype="multipart/form-data">
+          <!-- Name input -->
+
+         
+          <div class="form-outline mb-4">
+            <label class="form-label" for="form4Example1">Brand</label>
+            
+            <select class="select form-control"  id="name" name="name" required >
+
+              <option value="<%=brandData.name%>"><%=brandData.name%></option>
+              
+            </select>   
+            <div id="nameWarning" class="text-danger"></div>
+          </div>
+
+
+        
+            <label for="form4Example1">Previous Image</label>
+            <img width="100" height="100"  src="/images/brandImages/<%=brandData.logo %>" id="" name="previousImage" class="" />
+            <div id="SubCategoryWarning" class="text-danger"></div>
+          <div class="form-outline mb-4">
+              <label for="image">Image</label>
+              <input type="file" class="form-control" id="image" name="image" >
+              <div id="imageWarning" class="text-danger"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select class="select form-control" id="status" name="status">
+                  <option value="true">true</option>
+                  <option value="false">false</option>
+
+              </select>
+              <div id="statusWarning" class="text-danger"></div>
+          </div>
+  
+          <!-- Message input -->
+          <div class="form-outline mb-4">
+            <label class="form-label" for="form4Example3">Description</label>
+            <textarea class="form-control" name="description" id="form4Example5" rows="4"><%=brandData.description %></textarea>
+            <div id="descriptionWarning" class="text-danger"></div>
+          </div>
+  
+          <!-- Submit button -->
+          <button type="submit" class="btn btn-primary shadow mb-5 rounded mb-4">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+</main>
+
+<script>
+    function validateBrandForm() {
+      var name = document.getElementById("name").value;
+      var description = document.getElementById("description").value;
+      var status = document.getElementById("status").value; // Corrected variable name
+  
+      // Reset all warnings
+      document.getElementById("nameWarning").innerText = "";
+      document.getElementById("descriptionWarning").innerText = "";
+      document.getElementById('statusWarning').innerHTML ="";
+  
+      // Validate name with no white spaces
+      if (!name.trim()) {
+        document.getElementById("nameWarning").innerText =
+          "Name should not be empty.";
+        return false;
+      }
+  
+
+  
+      if (!status.trim()) {
+        document.getElementById("statusWarning").innerText =
+          "Status should not be empty.";
+        return false;
+      }
+  
+      // Validate description with more than 10 words
+      var wordCount = description.trim().split(/\s+/).length;
+      if (wordCount < 10) {
+        document.getElementById("descriptionWarning").innerText =
+          "Description should contain at least 10 words.";
+        return false;
+      }
+  
+      // Form is valid
+      return true;
+    }
+  </script>
+
+<%- include('../layout/adminFooter.ejs') %>

@@ -2,7 +2,8 @@
 
 <%- include('../layout/adminHeader.ejs') %>
 <link rel="stylesheet" href="/css/dataTable.css">
-<title>Banners</title>
+<title>Coupon</title>
+
 <div class="d-flex mt-4 justify-content-between"> 
   <a href="/admin"><i class="bi p-5  bi-arrow-left fs-3"></i></a>
 </div>
@@ -10,6 +11,11 @@
   <div class="row">
     <div class="col-md-3">
       <h2>Add Coupon</h2>
+      <% if (messages.error) { %>
+        <div class="alert alert-danger" role="alert">
+          <%= messages.error %>
+        </div>
+      <% }%>
       <form action="/admin/coupon/add" method="post" >
         <div class="form-group">
           <label for="name">Code</label>
@@ -41,6 +47,7 @@
 
     <div class="col-md-9">
         <h2>Coupon List</h2>
+        
           <table class="table col-12" id="myTable">
             <thead>
               <tr>
@@ -72,11 +79,13 @@
                    <% });  %>
 
                    
-                <%}  %>
+                <%} else{%>
+                  <p>No coupon available.</p>
+
+                <%} %>
                
             </tbody>
           </table>
-          <p>No banners available.</p>
       </div>
       
   </div>

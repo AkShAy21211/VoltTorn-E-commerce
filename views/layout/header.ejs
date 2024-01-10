@@ -61,15 +61,18 @@
         <!-- Example split primary button -->
 
 
-        <form class="col-5 col-lg-4 mb-3 mb-lg-0 me-lg-0" role="search">
+        <form class="col-5 col-lg-4 mb-3 mb-lg-0 me-lg-0" action="/home/search" method="get" role="search">
           <div class="input-group position-relative">
             <input type="search" id="search-bar" style="border: 1px solid black; border-radius: 20px; padding-right: 40px;"
-            name="search" class="form-control" placeholder="Search..." aria-label="Search">
+              name="value" class="form-control" placeholder="Search..." aria-label="Search">
             <div class="position-absolute top-50 end-10 translate-middle-y" style="right: 15px;">
-              <a href=""> <i class="bi bi-search text-primary"></i></a>
+              <button type="submit" class="btn" style="background-color: transparent; border: none;">
+                <i class="bi bi-search text-primary searchIcon"></i>
+              </button>
             </div>
           </div>
         </form>
+        
 
 
 
