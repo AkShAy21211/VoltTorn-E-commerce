@@ -55,18 +55,7 @@ const addProduct = async (req, res) => {
       subCategory,
     } = req.body;
 
-    console.log(
-      name,
-      description,
-      price,
-      brand,
-      discount,
-      status,
-      colors,
-      stock,
-      category,
-      subCategory
-    );
+   
     // Extract filenames from images1 and images2
     const images1 = req.files ? req.files['images1'].map((file) => file.filename) : [];
     const images2 = req.files ? req.files['images2'].map((file) => file.filename) : [];
@@ -80,6 +69,7 @@ const addProduct = async (req, res) => {
         variants: { color: colors, },
         description: description,
         price: parseFloat(price),
+        priceDiscount:parseInt(price - (price * (discount / 100))),
         category: category,
         sub_Category: subCategory,
         brand: brand,
@@ -88,6 +78,7 @@ const addProduct = async (req, res) => {
         stock: parseInt(stock),
       });
 
+      
       // Crop and store images1
       for (const image of images1) {
         const croppedImage = await cropAndSaveImage(image);

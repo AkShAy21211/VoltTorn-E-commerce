@@ -7,7 +7,7 @@ const cropAndSaveImage = async (filename) => {
     const inputPath = `public/images/productImages/${filename}`;
   
     const buffer = await sharp(inputPath)
-      .resize(800, 800, {
+      .resize(900, 900, {
         fit: sharp.fit.cover,
         withoutEnlargement: true,
       })

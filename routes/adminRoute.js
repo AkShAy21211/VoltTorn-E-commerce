@@ -172,9 +172,14 @@ adminRoute.get('/dashboard/statistics',dashBoardController.getProductStatistics)
 
 
 //admin sales report downlode
-adminRoute.get('/sales-report',dashBoardController.downlodeSalesReport);
-adminRoute.get('/sales-report-pdf',dashBoardController.downlodeSalesReportPdf);
 
+ adminRoute.get('/sales-report',dashBoardController.loadSalesReportPage);
+ adminRoute.get('/sales-report/filter/downlode-excel',dashBoardController.downlodeSalesReportByDateExcel );
+ adminRoute.get('/sales-report/filter/downlode-pdf',dashBoardController.downlodeSalesReportPdf );
+
+
+// adminRoute.get('/sales-report',dashBoardController.downlodeSalesReport);
+// adminRoute.get('/sales-report-pdf',dashBoardController.downlodeSalesReportPdf);
 //admin offer route
 
 adminRoute.get("/offer",adminOfferController.loadOfferPage);

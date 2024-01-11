@@ -95,25 +95,16 @@
   <main>
     <div class="container-fluid">
       <div class="row">
-        <aside class="col-md-3 ">
-
+        <aside class="col-md-3">
           <div class="card mt-5 pb-2">
-           
-
-
             <article class="filter-group">
               <header class="card-header">
-                <a href="#" data-toggle="collapse" data-target="#collapse_2" aria-expanded="true" class="">
+                <a href="#" data-toggle="collapse" data-target="#collapseBrands" class="toggle-collapse" aria-expanded="true" id="toggle-collapse1">
                   <h6 class="title">Brands </h6>
-
-                  <ul>
-                    
-                  </ul>
-
+                  <i style="margin-top: -20px;" class="fas fa-chevron-up float-right"></i>
                 </a>
               </header>
-
-              <div class="filter-content collapse show" id="collapse_2">
+              <div class="filter-content collapse show" id="collapseBrands">
                 <div class="card-body">
                   <ul class="list-menu">
                     <% brands.forEach((brand, index)=> { %>
@@ -123,22 +114,43 @@
                           <%= brand.name %>
                         </label>
                       </li>
-                      <% }) %>
+                    <% }) %>
                   </ul>
-
                 </div>
               </div>
-
-
-            </article> 
+            </article>
+        
             <article class="filter-group">
               <header class="card-header">
-                <a href="#" data-toggle="collapse" data-target="#collapse_2" aria-expanded="true" class="">
-                  <h6 class="title">Sort By </h6>
+                <a href="#" data-toggle="collapse"  class="toggle-collapse"  data-target="#collapseCategory" aria-expanded="true" id="toggle-collapse2">
+                  <h6 class="title">Category </h6>
+                  <i style="margin-top: -20px;" class="fas fa-chevron-up float-end"></i>
                 </a>
               </header>
-
-              <div class="filter-content collapse show" id="collapse_2">
+              <div class="filter-content collapse show" id="collapseCategory">
+                <div class="card-body">
+                  <ul class="list-menu">
+                    <% categorys.forEach((category, index)=> { %>
+                      <li>
+                        <label>
+                          <input type="checkbox" name="selectedCategories" value="<%= category.category %>">
+                          <%= category.category %>
+                        </label>
+                      </li>
+                    <% }) %>
+                  </ul>
+                </div>
+              </div>
+            </article>
+        
+            <article class="filter-group">
+              <header class="card-header">
+                <a href="#" data-toggle="collapse"  class="toggle-collapse" data-target="#collapseSortBy" aria-expanded="true" id="toggle-collapse3">
+                  <h6 class="title">Sort By </h6>
+                  <i style="margin-top: -20px;" class="fas fa-chevron-up float-end"></i>
+                </a>
+              </header>
+              <div class="filter-content collapse show" id="collapseSortBy">
                 <div class="card-body">
                   <ul class="list-menu">
                     <li>
@@ -151,28 +163,20 @@
                         <input type="radio" name="sortOrder" id="lowToHigh" value="Low to High"> Low to High
                       </label>
                     </li>
-
                   </ul>
-
                 </div>
               </div>
-
             </article>
-
-
-
-            <a href="#" id="applyFilterBtn" 
-              class="btn me-2 ml-2 btn-primary mt-3">Apply
-              Filter</a>
-
+        
+            <a href="#" id="applyFilterBtn" class="btn me-2 ml-2 btn-primary mt-3">Apply Filter</a>
           </div>
-
         </aside>
-
+        
+        
 
         <div class="col-md-9">
 
-          <header class="border-bottom mb-4 pb-3">
+          <!-- <header class="border-bottom mb-4 pb-3">
             <div class="form-inline">
               <span style="padding-top: 10px;" id="filterCount" class="mr-md-auto">
                 <%=ProductCount%> Items found
@@ -184,7 +188,7 @@
                 <option value="Low to High">Low to High</option>
               </select>
             </div>
-          </header>
+          </header> -->
 
 
           <div class="row">
@@ -304,6 +308,34 @@
 
   
 
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <li class="page-item <%=currentPage === 1 ? 'disabled' : ''%>">
+          <a class="page-link" href="/home/search/?value=<%=value  %>&page=<%=currentPage - 1%>" tabindex="-1">Previous</a>
+        </li>
+
+        <% for(let i=1; i<=pages; i++){ %>
+          <% if(i==currentPage){ %>
+            <li class="page-item active">
+              <a class="page-link" href="/home/search/?value=<%=value  %>&page=<%=i%>">
+                <%=i%>
+              </a>
+            </li>
+            <% } else { %>
+              <li class="page-item">
+                <a class="page-link" href="/home/search/?value=<%=value  %>&page=<%=i%>">
+                  <%=i%>
+                </a>
+              </li>
+              <% } %>
+                <% } %>
+
+                  <li class="page-item <%=currentPage === pages ? 'disabled' : ''%>">
+                    <a class="page-link" href="/home/search/?value=<%=value  %>&page=<%=currentPage + 1%>">Next</a>
+                  </li>
+      </ul>
+    </nav>
+
 
   </main>
 
@@ -328,5 +360,157 @@
 
   <script src="/js/addTOcart.js"></script>
   <script src="/js/wishlists.js"></script>
-  
+  <script>
+    $(document).ready(function () {
+      // Add a click event handler for the toggle-collapse class
+      $(".toggle-collapse").click(function () {
+        // Toggle the chevron icon when the collapse state changes
+        $(this).find("i").toggleClass("fa-chevron-up fa-chevron-down");
+
+        // Optionally, you can also animate the arrow rotation for smoother transitions
+        // $(this).find("i").toggleClass("rotate-180");
+        
+      });
+      
+    });
+  </script>
+
+<script>
+  $(document).ready(function () {
+    let category;
+    const productContainer = $('#product-container');
+
+    $('#applyFilterBtn').on('click', async function () {
+      category = $(this).data("category");
+      var selectedCategories = $('input[name="selectedCategories"]:checked').map(function () {
+        return $(this).val();
+      }).get();
+
+      var selectedBrands = $('input[name="selectedBrands"]:checked').map(function () {
+        return $(this).val();
+      }).get();
+
+      var sortOrder ;
+
+      $('input[name="sortOrder"]:checked').each(function () {
+        sortOrder = $(this).val();
+      });
+
+      console.log(sortOrder,selectedCategories,selectedBrands);
+
+      let Product;
+      let offer = $(this).data('offer');
+
+
+      try {
+
+
+        if (selectedCategories.length > 0 || selectedBrands.length > 0 || sortOrder !=='') {
+
+
+
+          const response = await axios.get(`/home/search/filter?category=${selectedCategories}&brand=${selectedBrands}&sort=${sortOrder}`)
+            .then((response) => {
+
+              console.log(response.data);
+              Product = response.data.ProductData;
+              offer = response.data.offer;
+              if (response.data.ProductData) {
+                renderProducts(Product, offer);
+
+                $("#filterCount").html(`${response.data.productCount} Items found`)
+
+              }
+
+            })
+        }
+
+      } catch (error) {
+        console.error(error);
+      }
+
+
+      function renderProducts(Product, offer) {
+
+        // Clear existing product container content
+        productContainer.empty();
+        // Render each product card and append to the container
+        Product.forEach((product, index) => {
+          const stock = product.stock < 1 ? `
+    <div class="d-flex justify-content-between">
+  <h6 class="text-warning mt-4 p-3">Out of stock</h6>
+  <button data-product-id="${product._id}" style="font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart bg-white border-0"></button>
+
+  </div>` : ` <div class="d-flex justify-content-between">
+    <button style="font-size: 25px;" class=" addToCartButton bi bi-cart4 text-primary  bg-white border-0" data-product-id="${product._id}"
+      data-product-price="${Number(product.price - (product.price * (product.discount / 100)))}">
+    </button>
+    <button data-product-id="${product._id}" style="font-size: 25px; text-decoration: none; color: rgb(243, 58, 58);" class="bi bi-suit-heart-fill heart bg-white border-0"></button>
+
+  </div>`;
+
+          const productCard = `
+          <div class="col-lg-4 col-md-6 col-sm-6 mt-xl-0 mt-lg-2 mt-md-3 mb-4 mt-sm-4 mt-4 p-3">
+        <!-- Use col-lg-4 to include three cards in one row -->
+
+        <a href="/home/product/details/${product._id}" class="text-decoration-none text-dark ">
+
+          <div class="card border-0 h-100 p-2 " id="product-card-${index}">
+
+            <div class="offer-container" id="offer-container-${index}"></div>
+
+            <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px"
+              class="card-img-top" src="/images/productImages/${product.images[0]}" alt="Product Image " />
+            <div class="card-body" style="height: 130px;">
+              <div style="display: flex; justify-content: start; margin-bottom: 10px; text-align: start;">
+
+                <h6>
+                  ${product.name.substring(0, 40, product.name.length / 2)}
+                </h6>
+              </div>
+              <div style="display: flex; justify-content: start; margin-bottom: 10px;">
+                <p class="card-text "
+                  data-price="${Number(product.price - (product.price * (product.discount / 100)))}">Price:
+                  <b>Rs:${Number(product.price - (product.price * (product.discount / 100))).toLocaleString()}
+                  </b>
+                </p>
+              </div>
+              <div class="d-flex justify-content-between">
+                <p class="card-text text-success">
+                  ${product.discount}% off
+                </p>
+                <p class="small text-danger"><s>Rs${product.price}</s></p>
+              </div>
+            </div>
+        </a>
+
+        ${stock}
+      </div>`;
+          productContainer.append(productCard);
+        });
+
+
+        Product.forEach((product, i) => {
+
+          const Offer = offer.filter(offer => offer.offerType === 'Category' && offer.offer === product.category || offer.offer === product.name);
+
+          const [matchingOffer] = Offer;
+
+          console.log(matchingOffer);
+
+          if (matchingOffer) {
+            const offerBadge = `
+<span style="position: relative; z-index: 10px; border-radius: 20px; font-size: 13px; color: white; box-shadow: 1px 1px 10px rgb(77, 145, 240);" class="badge bg-primary float-right">
+<span>Special ${matchingOffer.percentage}% off</span>
+</span>`;
+
+            productContainer.find(`#offer-container-${i}`).append(offerBadge);
+          }
+        })
+      }
+
+    });
+  });
+
+</script>
   <%- include('../layout/footer.ejs') %>

@@ -10,12 +10,18 @@ const brandModal = require('../models/brandModel');
 const loadHome = async (req, res) => {
   try {
     const category = await categoryModel.find({});
-    const brands = await brandModal.find({status:true}).limit(5);
+const brands = await brandModal.aggregate([
+  { $match: { status: true } },
+  { $sample: { size: 5 } }
+]);
     const offers = await offerModal.find({isActive:true,offerType:{$ne:'Referral'},endDate: { $gt: new Date()}})
     const currentDate = new Date();
     console.log(currentDate);
-    const ProductData = await productModel.find({status:true}).limit(4);
-    const banner = await bannerModel.find({ endDate: { $gt: currentDate } });
+    const ProductData = await productModel.aggregate([
+      { $match: { status: true } },
+      { $sample: { size: 4 } }
+    ]);
+        const banner = await bannerModel.find({ endDate: { $gt: currentDate } });
     res.render("home", { category,banner,ProductData,offers,brands});
   
   } catch (error) {
@@ -29,9 +35,21 @@ const searchProductsHome = async(req,res)=>{
 
   try{
     const {value} = req.query;
-    const brands = await brandModal.find({status:true,name: { $regex: value, $options: 'i' }});
-    console.log(value);
-    const ProductData = await productModel.find({ name: { $regex: value, $options: 'i' } }).limit(6);
+    const brands = await brandModal.find({status:true});
+    const categorys = await categoryModel.find({});
+    const page = req.query.page;
+    const perPage = 6;
+    let proCount;
+    const ProductData = await productModel.find({ name: { $regex: value, $options: 'i' } }).countDocuments()
+    .then(products=>{
+
+      proCount = products;
+
+      return productModel.find({status:true})
+      .skip((page - 1)* perPage)
+      .limit(perPage);
+
+    });
     const ProductCount = await productModel.find({ name: { $regex: value, $options: 'i' } }).limit(6).countDocuments();
     const offers = await offerModal.find({
      $or: [
@@ -39,7 +57,7 @@ const searchProductsHome = async(req,res)=>{
        {offerType:"Category"},
      ],
    });  
-   return res.render('searchProducts',{ProductData,offers,ProductCount,brands});
+   return res.render('searchProducts',{ProductData,offers,ProductCount,brands,categorys, value,currentPage:page,totalProducts:proCount,pages:Math.ceil(proCount/perPage)});
  
    }catch(error){
      console.error(error);
@@ -47,6 +65,47 @@ const searchProductsHome = async(req,res)=>{
 
 
 }
+
+const filterSearchedProducts = async(req,res)=>{
+  try {
+    const {category,brand,sort} = req.query;
+    const selectedCategories = category ? category.split(',') : [];
+    const selectedBrands = brand ? brand.split(',') : [];
+    const sortOption = sort === 'High to Low' ? -1 : 1 ;
+
+    console.log(selectedCategories,selectedBrands,sortOption);
+    const offer = await offerModal.find({
+      $or: [
+        { offerType: 'Product' },
+        { offerType: 'Category' },
+
+      ],
+    });     
+    const ProductData = await productModel.find({
+      $or: [
+        { category: { $in: selectedCategories } },
+        { brand: { $in: selectedBrands } },
+      ],
+    
+    }).sort({price:sortOption});
+    
+    
+    const productCount = ProductData.length;
+    
+    
+        res.status(200).json({ProductData,productCount,offer});
+      } catch (error) {
+        console.error(error);
+        // Handle errors and send an error response if necessary
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+  
+}
+
+
+
+
+
 
 
 const loaadProductListsByCategory = async(req,res)=>{
@@ -131,8 +190,8 @@ const sortProductByUserPreference = async (req, res) => {
 
       const products = await productModel
       .find({ category: category })
-      .sort({ price: priceDirection }); 
-
+      .sort({ priceDiscount: priceDirection }).limit(6);
+  
       res.status(200).json({ products,offer });
   } catch (error) {
       console.error(error);
@@ -241,5 +300,6 @@ module.exports = {
   loadFaqPage,
   loadAboutUs,
   searchProductsHome,
+  filterSearchedProducts,
 
 };

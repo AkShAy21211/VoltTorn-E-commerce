@@ -26,8 +26,8 @@
 
           <div class="content-header d-flex justify-content-between">
             <div>
-              <span for="reportType" class="form-label">Select Report Type:</span>
-              <div style="display: inline-flex; gap: 10px;">
+              <!-- <span for="reportType" class="form-label">Select Report Type:</span> -->
+              <!-- <div style="display: inline-flex; gap: 10px;">
                 <select style="width: 100px; height: 40px; " class="form-select" id="reportType">
                   <option value="weekly">Weekly</option>
                   <option value="monthly">Monthly</option>
@@ -41,7 +41,9 @@
                   style="width: 100px; height: 30px; text-align: center; padding: 10px; line-height: 10px;"
                   class="btn btn-primary">Download</button>
 
-              </div>
+
+              </div> -->
+              <a   href="/admin/sales-report" class="btn btn-primary">Sales Report</a>
 
 
             </div>
@@ -520,9 +522,8 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.js"></script>
 
-    <script>
+    <!-- <script>
       document.addEventListener("DOMContentLoaded", async (e) => {
         const reportTypeElement = document.getElementById('reportType');
 
@@ -576,73 +577,8 @@
 
 
 
-        function downloadPdfReport(data) {
-  // Calculate subtotal
-  const amountArray = data.map((entry) => entry.Amount);
-  const subTotal = amountArray.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-
-  // Create HTML structure
-  const pdfContent = `
-    <table class="table">
-      <tr>
-        <td colspan="4" class="text-center">
-          <h4>Sales Report</h4>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="4">
-          <div class="table-responsive">
-            <!-- Header row with dark background -->
-            <div class="row bg-dark text-white">
-              <div class="col-2 text-left">CustomerName</div>
-              <div class="col-2 text-left">Email</div>
-              <div class="col-2 text-left">Order ID</div>
-              <div class="col-2 text-left">Order Date</div>
-              <div class="col-2 text-left">Product Name</div>
-              <div class="col-1 text-left">Quantity</div>
-              <div class="col-1 text-left">Total</div>
-            </div>
-
-            <!-- Loop through each entry in the data -->
-            ${data.map((entry) => `
-              <div class="row mb-4">
-                <div class="col-2 text-left">${entry.username}</div>
-                <div class="col-2 text-left">${entry.email}</div>
-                <div class="col-2 text-left">${entry.orderId}</div>
-                <div class="col-2 text-left">${entry.orderDate.toString()}</div>
-                <div class="col-2 text-left">${entry.productName}</div>
-                <div class="col-1 text-left">${entry.productQuantity}</div>
-                <div class="col-1 text-left">${entry.price}</div>
-              </div>
-            `).join('')}
-
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="4" class="text-right">
-          <h5>Subtotal: ${subTotal}</h5>
-        </td>
-      </tr>
-    </table>`;
-
-  // Generate and download the PDF using html2pdf
-  const pdfElement = document.createElement('div');
-  pdfElement.innerHTML = pdfContent;
-  html2pdf(pdfElement, {
-  margin: 10,
-  image: { type: 'jpeg', quality: 0.98 },
-  html2canvas: { scale: 2 },
-  jsPDF: { unit: 'mm', format: [400, 297], orientation: 'portrait' },
-}).from(0).outputPdf();
-
-
-
-}
-
-
 
       });
-    </script>
+    </script> -->
 
     <%- include('../layout/adminFooter.ejs') %>

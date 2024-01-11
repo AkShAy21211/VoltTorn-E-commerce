@@ -1,0 +1,236 @@
+<%- include('../layout/adminHeader.ejs') %>
+    <%- include('../layout/adminSideBar.ejs') %>
+        <title>Sales report</title>
+
+        <main>
+
+            <div class="container mt-4">
+                <div class="row">
+
+                    <div class="col-md-12">
+
+                        <div class="d-flex justify-content-between">
+                            <h1 class="rounded"
+                                style="font-size: 30px; text-align: center; font-family: Arial, Helvetica, sans-serif;">
+                                Sales Report</h1>
+
+                            <button class="btn btn-primary btn-sm mb-2" data-toggle="modal"
+                                data-target="#downloadModal">
+                                Download Sales Report
+                            </button>
+                        </div>
+                        <div class="table-responsive">
+                        </div>
+                        <!-- Download Modal -->
+                        <div class="modal mt-5" id="downloadModal" tabindex="-1" role="dialog"
+                            aria-labelledby="downloadModalLabel" aria-hidden="true" data-backdrop="false">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="downloadModalLabel">Download Sales Report</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="downloadForm">
+                                            <div class="form-group">
+                                                <label for="startDate">Start Date:</label>
+                                                <input type="date" class="form-control" id="startDate" name="startDate"
+                                                    required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="endDate">End Date:</label>
+                                                <input type="date" class="form-control" id="endDate" name="endDate"
+                                                    required>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="button" class="btn btn-success"
+                                                    onclick="downloadReportExcel('excel')">Download Excel</button>
+                                                <button type="button" class="btn btn-danger"
+                                                    onclick="downloadReportPDF('pdf')">Download PDF</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover" id="salesTable">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Order Id</th>
+                                        <th>Coustomer</th>
+                                        <th>Phone</th>
+                                        <th>Product</th>
+                                        <th>Quantity Sold</th>
+                                        <th>Date Range</th>
+                                        <th>Total Revenue</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sales-report">
+                                    <%users.forEach(user=>{%>
+
+                                        <%user.oders.forEach((order,i)=>{%>
+                                            <% order.products.forEach((product)=> {%>
+                                                <tr>
+                                                    <td>
+                                                        <%=i+1 %>
+                                                    </td>
+                                                    <td>#<%=order.order_id %>
+                                                    </td>
+                                                    <td>
+                                                        <%=user.first_name +" "+ user.last_name %></td>
+                                                    <td><%=user.mobile %></td>
+                                                    <td><a style=" text-decoration: none; color: black;"
+                                                            href="/admin/products/view/<%=product.product_id  %>">
+                                                            <%=product.name.substring(0, 40); %></a>
+                                                    </td>
+                                                    <td>
+                                                        <%=product.quantity %>
+                                                    </td>
+                                                    <td>
+                                                        <%=order.date.toLocaleString() %>
+                                                    </td>
+                                                    <td><b>RS: </b>
+                                                        <%=order.totalAmount %>
+                                                    </td>
+
+                                                </tr>
+
+                                                <% }) %>
+
+                                                    <%}) %>
+
+                                                        <%}) %>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.js"></script>
+
+        <script>
+            async function downloadReportExcel(format) {
+                var startDate = document.getElementById('startDate').value;
+                var endDate = document.getElementById('endDate').value;
+                try {
+                    if(startDate!==''){
+
+                        const response = await axios.get(`/admin/sales-report/filter/downlode-excel?start=${startDate}&end=${endDate}`, {
+                        responseType: 'blob',
+                    });
+                    
+
+
+                    if (response.status === 200) {
+                        const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                        const link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'sales_report.xlsx';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                }
+                } catch (error) {
+                    console.error(error);
+                }
+             
+            }
+
+            async function downloadReportPDF() {
+                var startDate = document.getElementById('startDate').value;
+                var endDate = document.getElementById('endDate').value;
+
+                try {
+                    if(startDate!==''){
+                    const response = await axios.get(`/admin/sales-report/filter/downlode-pdf?start=${startDate}&end=${endDate}`);
+                    
+
+
+                    const salesReport = response.data.salesReport;
+
+                    console.log(salesReport);
+                    downloadPdfReport(salesReport);
+                    }
+
+                } catch (error) {
+                    console.error(error);
+                }
+
+
+            }
+
+
+            function downloadPdfReport(data) {
+                // Calculate subtotal
+                const amountArray = data.map((entry) => entry.Amount);
+                const subTotal = amountArray.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
+                // Create HTML structure
+                const pdfContent = `
+    <table class="table">
+      <tr>
+        <td colspan="4" class="text-center">
+          <h4>Sales Report</h4>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="4">
+          <div class="table-responsive">
+            <!-- Header row with dark background -->
+            <div class="row bg-dark text-white">
+              <div class="col-2 text-left">CustomerName</div>
+              <div class="col-2 text-left">Mobile</div>
+              <div class="col-2 text-left">Order ID</div>
+              <div class="col-2 text-left">Order Date</div>
+              <div class="col-2 text-left">Product Name</div>
+              <div class="col-1 text-left">Quantity</div>
+              <div class="col-1 text-left">Total</div>
+            </div>
+
+            <!-- Loop through each entry in the data -->
+            ${data.map((entry) => `
+              <div class="row mb-4">
+                <div class="col-2 text-left">${entry.username}</div>
+                <div class="col-2 text-left">${entry.mobile}</div>
+                <div class="col-2 text-left">#${entry.orderId}</div>
+                <div class="col-2 text-left">${entry.orderDate.toLocaleString()}</div>
+                <div class="col-2 text-left">${entry.productName.substring(0, 40)}</div>
+                <div class="col-1 text-left">${entry.productQuantity}</div>
+                <div class="col-1 text-left">${entry.price}</div>
+              </div>
+            `).join('')}
+
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="4" class="text-right">
+          <h5>Subtotal: ${subTotal}</h5>
+        </td>
+      </tr>
+    </table>`;
+
+                // Generate and download the PDF using html2pdf
+                const pdfElement = document.createElement('div');
+                pdfElement.innerHTML = pdfContent;
+                html2pdf(pdfElement, {
+                    margin: 10,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'mm', format: [400, 297], orientation: 'portrait' },
+                }).from(0).outputPdf();
+
+
+
+            }
+        </script>
+
+        <%- include('../layout/adminFooter.ejs') %>

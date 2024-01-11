@@ -55,6 +55,8 @@ userRoute.get('/home/product/details/:id',auth.isUserBlocked,homeController.prod
 
 //user search products
 userRoute.get('/home/search',auth.isUserBlocked,homeController.searchProductsHome);
+userRoute.get('/home/search/filter',auth.isUserBlocked,homeController.filterSearchedProducts);
+
 
 //product listts page route 
 
