@@ -266,13 +266,16 @@ const forReturnOders = async (req, res) => {
       const user = await userModel.find(id);
     const product = await productModel.findById(product_id);
     const userOrder = await userModel.findById(id);
-    const order = userOrder.oders[oder_index];
+
+    let order = userOrder.oders.sort((a, b) => b.date - a.date);
+    order = userOrder.oders[oder_index];
+  
     const orderProduct = order.products[product_index];
     const productPrice = orderProduct.price;
     const returnData = await returnModal.findOne({orderId:order._id,productId:product_id});
 
 
-    console.log( oder_id, product_id, oder_index, product_index, reason, quantity);
+    console.log( order);
 
     if (product_id && order && reason && quantity) {
       const returnData = new returnModal({

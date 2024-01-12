@@ -612,7 +612,7 @@ const applayCouponCode = async (req, res) => {
           { $inc: { total_price: -couponDiscount } },
           { new: true }
         );
-        return res.status(200).json({ updatedCart, message: "Coupon applied" });
+        return res.status(200).json({ updatedCart, message: "Coupon applied",couponDiscount });
       } else {
         return res.status(400).json({ message: "Minimum purchase requirement has not been met" });
       }

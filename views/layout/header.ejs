@@ -61,7 +61,7 @@
         <!-- Example split primary button -->
 
 
-        <form class="col-5 col-lg-4 mb-3 mb-lg-0 me-lg-0" action="/home/search" method="get" role="search">
+        <form class="col-10 col-lg-3 col-md-3 col-xl-4 mb-3 mb-lg-0 me-lg-0" action="/home/search" method="get" role="search">
           <div class="input-group position-relative">
             <input type="search" id="search-bar" style="border: 1px solid black; border-radius: 20px; padding-right: 40px;"
               name="value" class="form-control" placeholder="Search..." aria-label="Search">
@@ -80,7 +80,7 @@
           <div class="text-end position-relative">
             <a class="text-black" href="/home/cart" id="cart-icon">
               <span style="font-size: 20px;" class="bi bi-cart"></span>
-              <%if(typeof locals.cartCount != 'undefined') {%>
+              <%if(typeof locals.cartCount != 'undefined' &&  locals.cartCount>0) {%>
               <span id="cart-item-count" class="badge" ><%=cartCount %></span>
              <% } %>
             </a>
@@ -106,3 +106,5 @@
       </div>
     </div>
   </header>
+
+  

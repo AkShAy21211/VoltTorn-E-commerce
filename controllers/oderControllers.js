@@ -1,6 +1,7 @@
 const userModel = require("../models/userModel");
 const returnModel = require("../models/returnModel");
 const productModel = require("../models/productModel");
+const { parseConnectionUrl } = require("nodemailer/lib/shared");
 
 const loadOderManagment = async (req, res) => {
   try {
@@ -72,7 +73,7 @@ const approveReturnedProduct = async (req, res) => {
     const returnData = await returnModel.findById(returnId);
     const product = await productModel.findById(returnData.productId);
     let currentDate = new Date();
-    const returnAmount = parseFloat(product.product * returnData.quantity) ;
+    const returnAmount = parseFloat(product.price * returnData.quantity) ;
 
     console.log(returnAmount);
 
@@ -102,21 +103,26 @@ const approveReturnedProduct = async (req, res) => {
       { new: true }
     );
 
-    //  await userModel.findByIdAndUpdate(
-    //   user._id,
-    //   {
-    //     $inc: { "wallet.balance": parseInt(returnAmount) }, // Subtract totalAmount from the balance
-    //     $push: {
-    //       "wallet.transactions": {
-    //         type: "credit",
-    //         amount: parseInt(returnAmount),
-    //         timestamp: Date.now().toString(),
-    //         description: "Amount for cancelled order credited successfully",
-    //       },
-    //     },
-    //   },
-    //   { new: true } // Return the updated document
-    // );
+
+      await userModel.findByIdAndUpdate(
+        user._id,
+        {
+          $inc: { "wallet.balance": parseInt(returnAmount) }, // Subtract totalAmount from the balance
+          $push: {
+            "wallet.transactions": {
+              type: "credit",
+              amount: parseInt(returnAmount),
+              timestamp: Date.now().toString(),
+              description: "Amount for returned order credited successfully",
+            },
+          },
+        },
+        { new: true } // Return the updated document
+      );
+
+    
+
+ 
 
     res.status(200).json({ updateReturnStatus });
   } catch (error) {

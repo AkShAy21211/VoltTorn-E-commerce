@@ -240,6 +240,12 @@
                     <p id="total-price" class="mb-2 fw-bold">RS:<%=cart.total_price %>
                     </p>
                   </div>
+                  <div  class="d-flex justify-content-between">
+                    <p   id="discountText" style="display: none;" class="mb-2 fw-bold text-success ">Discount applied:</p>
+
+                    <p style="display: none;" id="discountAmount" class="mb-2 fw-bold text-success "><b>-300</b>
+                    </p>
+                  </div>
 
 
                   <!-- coupon  -->
@@ -392,7 +398,10 @@
     const user = couponView.dataset.userId;
     const total = document.getElementById('total-price');
     const couponCode = document.getElementById('couponCode');
+    const discountText = document.getElementById('discountText');
+    const discountAmount = document.getElementById('discountAmount');
 
+  
 
 
     couponView.addEventListener('click', async (e) => {
@@ -468,6 +477,7 @@
 
     // view coupon end
     couponBtn.addEventListener('click', async (e) => {
+
       e.preventDefault();
         const response = await toggleAndApplyCoupon(`/home/cart/coupon-applay/${user}?code=${couponCode.value}`);
         if (response.status === 200) {
@@ -475,6 +485,12 @@
 
           couponBtn.style.display = couponBtn.style.display === 'none' ? 'inline' : 'none';
           cancelCoupon.style.display = cancelCoupon.style.display === 'none' ? 'inline' : 'none';
+
+          discountText.style.display= discountText.style.display === 'none' ? 'inline' : 'none';
+          discountAmount.style.display = discountAmount.style.display === 'none' ? 'inline' : 'none';
+          discountAmount.innerHTML ="-" + response.data.couponDiscount
+        
+      
 
         }
     });
@@ -490,6 +506,11 @@
       cancelCoupon.style.display = cancelCoupon.style.display === 'none' ? 'inline' : 'none';
           total.innerHTML = response.data.updatedCart.total_price;
           couponCode.value="";
+
+          
+          discountText.style.display= discountText.style.display === 'none' ? 'inline' : 'none';
+          discountAmount.style.display = discountAmount.style.display === 'none' ? 'inline' : 'none';
+          discountAmount.innerHTML ="";
 
         }     
     });

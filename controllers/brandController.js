@@ -19,7 +19,7 @@ const loadBrand = async (req, res) => {
 const addNewBrand = async (req, res) => {
   try {
     const {name,description,status} = req.body;
-    const image = req.file.filename;
+    const image = req.file.filename?req.file.filename:"";
 
     console.log(name,description,status,image);
     // Check if the category with the given name already exists
