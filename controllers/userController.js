@@ -30,13 +30,9 @@ const sendEmail = async (email, otpCode) => {
     secure: false,
     requireTLS: true,
     auth: {
-<<<<<<< HEAD
       user: process.env.USER_EMAIL,
       pass: process.env.USER_PASS,
-=======
-      user: "",
-      pass: "",
->>>>>>> 17b5ebacaeb0a5774ba8553437009f6da0711173
+   
     },
   });
 
