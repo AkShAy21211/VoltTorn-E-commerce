@@ -1,11 +1,11 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://127.0.0.1:27017/VOLTTRON");
+mongoose.connect(process.env.MONGO_URL);
 const express = require("express");
 const app = express();
 const flash = require('express-flash');
-require("dotenv").config();
 const nocache = require('nocache');
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const morgan = require("morgan");
 app.use(morgan("dev"));
 app.use(nocache())

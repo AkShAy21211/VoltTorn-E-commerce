@@ -154,7 +154,7 @@
       <div class="row">
         <h3 class="mt-5 fs-4 text-start">Top Categories</h3>
         <% category.forEach(category=> { %>
-          <div class="col-md-5  col-lg-4 col-xl-3 col-xxl-3 mb-lg mb-md-5 col-sm-6 col-12  ">
+          <div class="col-md-6  col-lg-4 col-xl-3 col-xxl-3 mb-lg mb-md-5 col-sm-12 col-12  ">
             <div style="border-radius: 5%; background-color: #18ACFE; width: 100%; min-width: 250px; height: 250px;"
               class="zoom-out-effect card border shadow p-2  mt-sm-5  mt-md-5 mt-lg-3 mt-xl-0 mt-xxl-0 mt-4">
               <a style="-webkit-user-drag: none;" href="/home/products/<%=category.category%>">
@@ -203,7 +203,7 @@
           <h3 class="mt-5 fs-5 text-start">Top Products</h3>
           <% ProductData.forEach(product=> { %>
 
-            <div class="col-md-5 col-lg-4 col-xl-3 col-xxl-3 mb-lg mb-md-6 col-sm-6 col-12  ">
+            <div class="col-md-6 col-lg-4 col-xl-3 col-xxl-3 mb-lg mb-md-6 col-sm-6 col-12  ">
               <!-- Use col-lg-4 to include three cards in one row -->
 
               <a href="/home/product/details/<%=product._id%>" class="text-decoration-none text-dark ">

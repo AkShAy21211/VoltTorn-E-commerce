@@ -47,7 +47,7 @@ const verfyUserPaymentOption = async (req, res) => {
     const referralAmount =  (referralOffer.percentage/ 100) * userCart.total_price;
 
 
-    if (referredUser && !referredUser.referredBy ) {
+    if (referredUser && !referredUser.referredBy && user.referredPurchases>=0 && user.referredPurchases<2 ) {
 
       await userModel.findOneAndUpdate({_id:referredUser._id},{
         $inc: { 'wallet.balance': referralAmount}, // Subtract totalAmount from the balance
@@ -61,6 +61,8 @@ const verfyUserPaymentOption = async (req, res) => {
         },
       },
       { new: true } )
+
+      await userModel.findByIdAndUpdate(id,{$inc:{referredPurchases:1}});
     }
     if (paymentMethod && paymentMethod === "COD") {
       const order = createOder(

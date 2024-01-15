@@ -1,0 +1,131 @@
+<%- include('../layout/header.ejs') %>
+    <title>VoltTron | Contact Us</title>
+    <style>
+        .container {
+
+            margin-top: 100px;
+            width: 50%;
+
+
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input,
+        textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #f5f5f5;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            background-color: #e0e0e0;
+        }
+
+        button {
+            background-color: #3077e2;
+            color: white;
+            padding: 12px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #629aed;
+        }
+    </style>
+    <main>
+
+        <div class="container">
+            <h1>Contact Us </h1>
+
+            <% if (messages.success) { %>
+                <div class="alert alert-success d-flex justify-content-center">
+                    <%= messages.success %>
+                </div>
+                <% } %>
+                    <form action="" method="post" onsubmit="return validateForm()">
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" id="name" name="name">
+                            <span id="nameError" class="error text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email">
+                            <span id="emailError" class="error text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message:</label>
+                            <textarea id="message" name="message"></textarea>
+                            <span id="messageError" class="error text-danger"></span>
+                        </div>
+                        <div class="form-group d-flex justify-content-center">
+                            <button type="submit">Submit</button>
+                        </div>
+                    </form>
+        </div>
+
+    </main>
+    <script>
+        function validateForm() {
+            var name = document.getElementById("name").value;
+            var email = document.getElementById("email").value;
+            var message = document.getElementById("message").value;
+
+            var nameError = document.getElementById("nameError");
+            var emailError = document.getElementById("emailError");
+            var messageError = document.getElementById("messageError");
+
+            // Reset error messages
+            nameError.innerHTML = "";
+            emailError.innerHTML = "";
+            messageError.innerHTML = "";
+
+            // Validate Name
+            if (name.trim() === "") {
+                nameError.innerHTML = "Name is required";
+                return false;
+            }
+
+            // Validate Email
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                emailError.innerHTML = "Enter a valid email address";
+                return false;
+            }
+
+            // Validate Message
+            if (message.trim() === "") {
+                messageError.innerHTML = "Message is required";
+                return false;
+            }
+
+            // Form is valid
+            return true;
+        }
+    </script>
+    <%- include('../layout/footer.ejs') %>

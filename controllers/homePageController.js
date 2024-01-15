@@ -5,6 +5,7 @@ const offerModal = require("../models/offerModal");
 const mailchimp = require("@mailchimp/mailchimp_marketing");
 const reviewModal = require("../models/reviewModel");
 const brandModal = require('../models/brandModel');
+const nodemailer = require("nodemailer");
 
 
 const loadHome = async (req, res) => {
@@ -40,12 +41,12 @@ const searchProductsHome = async(req,res)=>{
     const page = req.query.page;
     const perPage = 6;
     let proCount;
-    const ProductData = await productModel.find({ name: { $regex: value, $options: 'i' } }).countDocuments()
+    const ProductData = await productModel.find({})
     .then(products=>{
 
       proCount = products;
 
-      return productModel.find({status:true})
+      return productModel.find({status:true, name: { $regex: value, $options: 'i' } })
       .skip((page - 1)* perPage)
       .limit(perPage);
 
@@ -289,6 +290,59 @@ const loadAboutUs = async(req,res)=>{
     console.error(error);
   }
 }
+
+const contactUS = async(req,res)=>{
+
+  try{
+
+    res.render('contactus');
+
+  }catch(error){
+
+    console.error(error);
+    res.status(500).json({error:"INternal server error"});
+  }
+}
+
+const contactUSSend = async(req,res)=>{
+
+  try{
+    const {name,email,message} = req.body;
+    const sendEmail = async (name,email,message) => {
+      const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false,
+        requireTLS: true,
+        auth: {
+          user: process.env.USER_EMAIL,
+          pass: process.env.USER_PASS,
+        },
+      });
+    
+      const mailOptions = {
+        from: email,
+        to: process.env.USER_EMAIL,
+        subject: `New contact form enquiry`, 
+        html: `<p>name: ${name}</p><br><p>${message}</p>`, 
+      };
+    
+      await transporter.sendMail(mailOptions);
+    };
+
+    sendEmail(name,email,message)
+    
+    console.log(name,email,message);
+    req.flash("success","Message send successfully");
+    res.redirect('/contact-us');
+
+  }catch(error){
+
+    console.error(error);
+    res.status(500).json({error:"INternal server error"});
+  }
+}
+
 module.exports = { 
   loadHome,
   productDetail,
@@ -301,5 +355,7 @@ module.exports = {
   loadAboutUs,
   searchProductsHome,
   filterSearchedProducts,
+  contactUS,
+  contactUSSend
 
 };

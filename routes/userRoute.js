@@ -78,8 +78,8 @@ userRoute.get('/home/settings/wishlist/remove/:index',auth.isUserBlocked,auth.is
 userRoute.get('/home/cart',auth.isUserBlocked,auth.is_Login,userCartController.userShoppingCartPageLoad);
 userRoute.post('/home/products/cart/:product_id',auth.isUserBlocked,auth.is_Login,userCartController.userAddToCartButton);
 userRoute.post('/home/products/buy-now/:product_id',auth.isUserBlocked,auth.is_Login,userCartController.userBuyNowButton);
-userRoute.patch('/home/products/cart/updateQuantity/:product_id/:product',auth.isUserBlocked,userCartController.updateQuantity)
-userRoute.delete('/home/cart/:product_id',auth.isUserBlocked,userCartController.deleteCartItem);
+userRoute.patch('/home/products/cart/updateQuantity/:product_id/:product',auth.isUserBlocked,auth.is_Login,userCartController.updateQuantity)
+userRoute.delete('/home/cart/:product_id',auth.isUserBlocked,auth.is_Login,userCartController.deleteCartItem);
 
 
 //checkout
@@ -108,8 +108,8 @@ userRoute.post('/home/setting/edit-profile/:id',uploadUserImage.single('image'),
 
 //user oder page routes
 userRoute.get('/home/settings/oders',auth.isUserBlocked,auth.is_Login,userSettingController.loadUserOdersPage);
-userRoute.get('/home/settings/cancel-oders/:oder_id/:product_id/:oder_index/:product_index',auth.isUserBlocked,userSettingController.forCancelUserOders);
-userRoute.get('/home/settings/return-oders/:oder_id/:product_id/:oder_index/:product_index/:reason/:quantity',auth.isUserBlocked,userSettingController.forReturnOders);
+userRoute.get('/home/settings/cancel-oders/:oder_id/:product_id/:oder_index/:product_index',auth.isUserBlocked,auth.is_Login,userSettingController.forCancelUserOders);
+userRoute.get('/home/settings/return-oders/:oder_id/:product_id/:oder_index/:product_index/:reason/:quantity',auth.isUserBlocked,auth.is_Login,userSettingController.forReturnOders);
 
 //user post product review
 userRoute.get('/home/settings/reviews',auth.isUserBlocked,auth.is_Login,userSettingController.loadUserReviews)
@@ -138,8 +138,8 @@ userRoute.post('/home/settings/address',auth.isUserBlocked,userSettingController
 
 
 //user faq and about and contact route
-userRoute.get('/home/frequently-asked-questions',homeController.loadFaqPage)
-userRoute.get('/home/about-us',homeController.loadAboutUs)
+userRoute.get('/frequently-asked-questions',homeController.loadFaqPage)
+userRoute.get('/about-us',homeController.loadAboutUs)
 
 //user downlode invoice
 userRoute.get('/home/settings/oders/download-invoice/:order_id',auth.isUserBlocked,auth.is_Login,paymentController.downloadInvoice)
@@ -151,7 +151,8 @@ userRoute.get('/reset-password',userController.resetPasswordGet);
 userRoute.post('/reset-password/:token',userController.resetPasswordPost);
 
 userRoute.post('/send-newsletter',homeController.sendEmailNewsLetter);
-
+userRoute.get('/contact-us',homeController.contactUS)
+userRoute.post('/contact-us',homeController.contactUSSend)
 
 userRoute.get('/logout',auth.is_Login,userController.userLogout)
 

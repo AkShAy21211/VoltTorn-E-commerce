@@ -143,49 +143,49 @@ adminRoute.get("/products/delete/:id",adminAuth.is_Login, productController.dele
 adminRoute.get('/banners',adminAuth.is_Login,bannerController.loadBannerPage)
 adminRoute.post('/banners/add', uploadBannerImage.single('image'),bannerController.addNewBannerByAdmin)
 
-adminRoute.get('/banners/delete/:id',bannerController.deleteBannerByAdmin)
-adminRoute.get('/banners/edit/:id',bannerController.editeBannerByAdminGet)
+adminRoute.get('/banners/delete/:id',adminAuth.is_Login,bannerController.deleteBannerByAdmin)
+adminRoute.get('/banners/edit/:id',adminAuth.is_Login,bannerController.editeBannerByAdminGet)
 adminRoute.post('/banners/edit/:id',uploadBannerImage.single('image'),bannerController.editBannerByAdminPost)
 
 
 
 //admin oder mangment
-adminRoute.get('/oders',adminOderController.loadOderManagment);
-adminRoute.get('/oders/view/:id',adminOderController.viewUserOrder);
+adminRoute.get('/oders',adminAuth.is_Login,adminOderController.loadOderManagment);
+adminRoute.get('/oders/view/:id',adminAuth.is_Login,adminOderController.viewUserOrder);
 adminRoute.patch('/oders/change-oder-status/:status/:id',adminOderController.adminChangeOderStatus);
-adminRoute.get('/oders/return-view/:id',adminOderController.viewReturnedOrder);
-adminRoute.get('/oders/return/approve/:returnId',adminOderController.approveReturnedProduct);
+adminRoute.get('/oders/return-view/:id',adminAuth.is_Login,adminOderController.viewReturnedOrder);
+adminRoute.get('/oders/return/approve/:returnId',adminAuth.is_Login,adminOderController.approveReturnedProduct);
 
 
 
 //admin coupon managment;
 adminRoute.get('/coupon',adminAuth.is_Login,couponController.loadCouponPage);
-adminRoute.post('/coupon/add',adminAuth.is_Login,couponController.addCoupon);
+adminRoute.post('/coupon/add',couponController.addCoupon);
 adminRoute.get('/coupon/edit/:id',adminAuth.is_Login,couponController.editCouponLoad);
-adminRoute.post('/coupon/edit/:id',adminAuth.is_Login,couponController.editCoupon);
+adminRoute.post('/coupon/edit/:id',couponController.editCoupon);
 adminRoute.get('/coupon/delete/:id',adminAuth.is_Login,couponController.deleteCoupon);
 
 
 //admin dashboard statictics
-adminRoute.get('/dashboard/statistics',dashBoardController.getProductStatistics);
+adminRoute.get('/dashboard/statistics',adminAuth.is_Login,dashBoardController.getProductStatistics);
 // adminRoute.get('/search',dashBoardController.searchItem);
 
 
 //admin sales report downlode
 
- adminRoute.get('/sales-report',dashBoardController.loadSalesReportPage);
- adminRoute.get('/sales-report/filter/downlode-excel',dashBoardController.downlodeSalesReportByDateExcel );
- adminRoute.get('/sales-report/filter/downlode-pdf',dashBoardController.downlodeSalesReportPdf );
+ adminRoute.get('/sales-report',adminAuth.is_Login,dashBoardController.loadSalesReportPage);
+ adminRoute.get('/sales-report/filter/downlode-excel',adminAuth.is_Login,dashBoardController.downlodeSalesReportByDateExcel );
+ adminRoute.get('/sales-report/filter/downlode-pdf',adminAuth.is_Login,dashBoardController.downlodeSalesReportPdf );
 
 
 // adminRoute.get('/sales-report',dashBoardController.downlodeSalesReport);
 // adminRoute.get('/sales-report-pdf',dashBoardController.downlodeSalesReportPdf);
 //admin offer route
 
-adminRoute.get("/offer",adminOfferController.loadOfferPage);
+adminRoute.get("/offer",adminAuth.is_Login,adminOfferController.loadOfferPage);
 adminRoute.post("/offer/add",adminOfferController.addNewOffer);
-adminRoute.get("/offer/delete",adminOfferController.deleteOffer);
-adminRoute.get("/offer/edit/:id",adminOfferController.loadOfferEdit);
+adminRoute.get("/offer/delete",adminAuth.is_Login,adminOfferController.deleteOffer);
+adminRoute.get("/offer/edit/:id",adminAuth.is_Login,adminOfferController.loadOfferEdit);
 adminRoute.post("/offer/edit/:id",adminOfferController.editOffer);
 
 //send newsLetter for subscribed User

@@ -54,9 +54,12 @@
           <td><%= customer.email %></td>
           <td><%= customer.mobile %></td>
           <td><img src="/images/userImages/<%=customer.image %>" class="border rounded-circle" alt="Customer Image" width="50"></td>
-          <td style="font-weight:bold;"><%= customer.status %>
-                  </td>
-                  <td style="text-align: center; ">
+          <td style="font-weight:bold;">
+            <span class="badge <%= customer.status ? 'badge-success' : 'badge-danger' %>">
+              <%= customer.status ? 'Active' : 'Inactive' %>
+            </span>
+          </td>
+                            <td style="text-align: center; ">
                     <a href="javascript:void(0);" 
    class="btn <%= customer.status.toString() === 'true' ? 'bi bi-ban text-danger' : 'bi bi-arrow-counterclockwise text-success' %>"
    onclick="confirmBlockUnblock('<%= customer._id %>', '<%= customer.status.toString() %>')">

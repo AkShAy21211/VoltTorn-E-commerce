@@ -76,21 +76,20 @@
 
 
 
-        <div class="col-3 col-lg-3 mb-3 mb-lg-0 " role="search">
+        <div class="col-3 col-lg-3  mb-lg-0 " role="search">
           <div class="text-end position-relative">
             <a class="text-black" href="/home/cart" id="cart-icon">
-              <span style="font-size: 20px;" class="bi bi-cart"></span>
+              <span style="font-size: 20px; color: #0d6efd;" class="bi bi-cart"></span>
               <%if(typeof locals.cartCount != 'undefined' &&  locals.cartCount>0) {%>
               <span id="cart-item-count" class="badge" ><%=cartCount %></span>
              <% } %>
             </a>
           </div>
         </div>
-        <div class="text-end ml-2">
-          <button class="btn dropdown-toggle " type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Account
-          </button>
-          <ul class="dropdown-menu">
+        <div class="text-end ml- ">
+          <button style="color: #0d6efd;" class="btn dropdown-toggle " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i style="font-size: 20px; color: #0d6efd;" class="bi bi-person-circle"></i>          </button>
+          <ul  class="dropdown-menu">
             <% if (locals.userSessionData && locals.userSessionData.isUserAuthenticated) { %>
               <li><a class="dropdown-item" href=""></a></li>
               <% }else{%>
@@ -98,13 +97,15 @@
                 <li><a class="dropdown-item" href="/register">Sign Up</a></li>
                 <%} %>
                   <% if (locals.userSessionData && locals.userSessionData.isUserAuthenticated) { %>
-                    <li><a class="dropdown-item" href="/home/settings/profile">Settings</a></li>
-                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                    <li><a class="dropdown-item" href="/home/settings/profile">Account</a></li>
+                    <li><a class="dropdown-item" href="/about-us">About Us</a></li>
+                    <li><a class="dropdown-item text-danger"  href="/logout">Logout</a></li>
                     <% } %>
           </ul>
         </div>
       </div>
     </div>
   </header>
+
 
   
