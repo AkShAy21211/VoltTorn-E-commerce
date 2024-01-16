@@ -59,7 +59,7 @@ const userAddToCartButton = async (req, res) => {
           return res.status(200).json({
             success: true,
             redirectTo: "/home/cart",
-            message: "Product already added to cart",
+            message: "Product already added ",
             cartCount:existingCart.cart.length,
           });
         } else {

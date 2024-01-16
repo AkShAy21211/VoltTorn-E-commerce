@@ -54,14 +54,14 @@
                 <div class="row">
 
                   <div class="col-sm-8 mb-3">
-                    <label for="address" class="form-label">Address</label>
+                    <label  for="address" class="form-label text-dark">Address</label>
                     <div class="form-outline">
                       <input type="text" id="address" name="address" placeholder="Type here" class="form-control" />
                     </div>
                   </div>
 
                   <div class="col-sm-4 mb-3">
-                    <label for="country" class="form-label">Country</label>
+                    <label for="country" class="form-label text-dark">Country</label>
                     <div class="form-outline">
                       <select id="country" name="country" class="form-select">
                         <option class="text-black" value="India">India</option>
@@ -70,7 +70,7 @@
                   </div>
 
                   <div class="col-sm-4 mb-3">
-                    <label for="state" class="form-label">State</label>
+                    <label for="state" class="form-label text-dark">State</label>
                     <div class="form-outline">
                       <select id="state" name="state" class="form-select">
                         <option value="">select</option>
@@ -84,7 +84,7 @@
                   </div>
 
                   <div class="col-sm-4 mb-3">
-                    <label for="city" class="form-label">City</label>
+                    <label for="city" class="form-label text-dark">City</label>
                     <div class="form-outline">
 
                       <select id="city" name="city" class="form-select">
@@ -96,7 +96,7 @@
                   </div>
 
                   <div class="col-sm-4 col-6 mb-3">
-                    <label for="postalCode" class="form-label">Postal code</label>
+                    <label for="postalCode" class="form-label text-dark">Postal code</label>
                     <div class="form-outline">
                       <input type="text" id="postalCode" name="postalCode" class="form-control" />
                     </div>
@@ -123,12 +123,12 @@
               <!-- Example addresses, you can replace these with dynamic data -->
               <div class="form-check mt-4 border rounded bg-light"
                 style="height: 100px; display: flex; justify-content: start; align-items: center;">
-                <input class="form-check-input ml-1 address-radio" type="radio" name="flexRadioDefault"
+                <input class="form-check-input ml-0  address-radio" type="radio" name="flexRadioDefault"
                   id="flexRadioDefault<%= i + 1 %>" data-address-id="<%=address._id  %>">
-                <label class="ml-4 form-check-label" for="address1">
-                  <div>
+                <label class="ml-3 me-2  form-check-label" for="address1">
+                  <div class="">
                     <strong>Address:</strong>
-                    <%= address.address %><br>
+                    <%= address.address.substring(0,30) %><br>
 
                   </div>
                 </label>
@@ -195,13 +195,14 @@
                         <div class="row mt-4">
                           <div class="col-md-5 text-left" style="">
                             <img src="/images/productImages/<%= item.image %>" height="150" width="150" alt=""
-                              class=" d-none d-md-block rounded mb-2 shadow">
+                              class=" img-responsive d-md-block rounded mb-2 shadow">
                           </div>
                           <div class="col-md-3 text-left mt-sm-2">
                             <h6 style="height: 50px; width: 50px; "></h6>
                           </div>
                         </div>
                       </td>
+                      
                       <% }); %>
                   </tr>
                 </tbody>
@@ -215,8 +216,8 @@
               <!-- Checkout -->
         </div>
 
-        <div class="col-lg-6 d-flex justify-content-end">
-          <div class="ms-lg-5 mt-lg-0 ">
+        <div class="col-lg-6 d-flex justify-content-end ">
+          <div class="ms-lg-5 mt-lg-0 container-fluid">
             <div class="ms-lg-4 mt-lg-0  rounded p-4 bg-light" style="max-width: 320px;">
               <h6 class="mb-3">Summary</h6>
               <%cart.cart.forEach((cart,i)=>{%>
@@ -270,48 +271,10 @@
                     <%} %>
 
 
-                      <!-- //offers -->
-                      <!-- <hr>
-                      <%if(typeof referralOffer !== 'null' && typeof purchaseCount !=='undefined' && purchaseCount>0 ){%>
-                        <div class="">
-                          <h6 class="mb-2">Avaliable offers</h6>
-                          <a href="#" style="text-decoration: none; color: white;" class=" rounded badge bg-success"
-                            id="offerAvailButton">
-                            <%=purchaseCount%>x Referral offer
-                          </a>
-                          <a data-user-id="<%=cart._id%>" id="referalOffer" style="color: rgb(67, 155, 223);"
-                            class="btn" href="#">Apply</a>
-                          <a data-user-id="<%=cart._id%>" id="cancelOffer"
-                            style="color: rgb(67, 155, 223); display: none;" class="btn" href="#">Cancel</a>
-
-                        </div>
-
-                        <hr>
-                        <%} %> -->
 
 
 
 
-                          <!-- <div class="d-flex justify-content-start">
-                            <p class="mb-2 text-success">You can save Rs:<b class="text-success">
-                                <%=total_discount %>
-                              </b> on this order</p>
-                          </div> -->
-
-                   
-
-
-
-
-                          <!-- <div class="input-group mt-3 mb-4">
-                      <input type="text" class="form-control border" name="" placeholder="Promo code" />
-                      <button class="btn btn-light text-primary border">Apply</button>
-                    </div> -->
-
-
-
-
-                          <hr />
 
 
                           <form action="" class="form" method="">

@@ -34,14 +34,17 @@ document.addEventListener("click", async (event) => {
           Toastify({
             text: response.data.message,
             duration: 3000,
-            newWindow: true,
             close: true,
             gravity: "top",
+            width:"100%",
             position: "right",
             stopOnFocus: true,
             style: {
               background: randomGradient,
               marginTop: "60px",
+              width: "300px",  // Adjust the width as needed
+
+
             },
             onClick: function () {},
           }).showToast();
