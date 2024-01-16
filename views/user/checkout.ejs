@@ -673,7 +673,11 @@
         const email = buyNowBtn.dataset.email;
         const mobile = buyNowBtn.dataset.mobile;
         const oderId = buyNowBtn.dataset.oderId;
-        const couponCodeValue = couponCode.value;
+        let couponCodeValue;
+        if(couponCode){
+          couponCodeValue = couponCode.value || "";
+
+        }
 
         const selectedAddressRadioButton = document.querySelector('input[name="flexRadioDefault"]:checked');
         if (!selectedAddressRadioButton) {

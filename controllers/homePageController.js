@@ -257,6 +257,8 @@ const sendEmailNewsLetter = async(req,res)=>{
 
   try{
       const {email} = req.body;
+
+      console.log("called .....");
         const response = await mailchimp.lists.addListMember(process.env.LIST_ID, {
         email_address: email,
         status: "subscribed",

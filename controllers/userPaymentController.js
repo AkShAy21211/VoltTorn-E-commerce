@@ -43,8 +43,11 @@ const verfyUserPaymentOption = async (req, res) => {
       isActive: true,
       endDate: { $gt: new Date() },
     });   
+   let referralAmount
+    if(referralOffer){
+       referralAmount =  (referralOffer.percentage/ 100) * userCart.total_price;
 
-    const referralAmount =  (referralOffer.percentage/ 100) * userCart.total_price;
+    }
 
 
     if (referredUser && !referredUser.referredBy && user.referredPurchases>=0 && user.referredPurchases<2 ) {

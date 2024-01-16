@@ -1,27 +1,4 @@
 
-
-.header-outer{
-    display: flex;
-    justify-content: center;
-    background-color: #333;
-    text-align: center;
-    position: sticky;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 1000; /* Set a z-index to ensure the header stays on top of other elements */
-
-}
-
-.header{
-    background-color: white;
-    position: absolute;
-    top: 0;
-    position: static;
-
-}
-
 body {
     background: black;
   }
@@ -41,4 +18,141 @@ body {
     padding: 5px 8px;
     font-size: 12px;
   }
+  .container {
+    width: 100%;
+   
+  }
+
+  /* default css end */
   
+  
+  /* navbar regular css start */
+  .navbar-area {
+    background: white;
+    color: black;
+  }
+  .site-navbar {
+    display: flex;
+    justify-content: space-between;
+    color: black;
+  }
+  a.site-logo {
+
+    
+    font-weight: 800;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .site-navbar ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    gap: 10px;
+    color: black;
+  }
+  .site-navbar ul li a {
+    color: black;
+    padding: 20px;
+    display: block;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .site-navbar ul li a:hover {
+    background: rgba(255,255,255,.1);
+  }
+  /* navbar regular css end */
+  
+  
+  /* nav-toggler css start */
+  .nav-toggler {
+    border: 3px solid #fff;
+    padding: 5px;
+    background-color: transparent;
+    cursor: pointer;
+    height: 39px;
+    display: none;
+    color: black;
+  }
+  .nav-toggler span, 
+  .nav-toggler span:before, 
+  .nav-toggler span:after {
+    width: 28px;
+    height: 3px;
+    background-color: #fff;
+    display: block;
+    transition: .3s;
+  }
+  .nav-toggler span:before {
+    content: '';
+    transform: translateY(-9px);
+  }
+  .nav-toggler span:after {
+    content: '';
+    transform: translateY(6px);
+  }
+  .nav-toggler.toggler-open span {
+    background-color: rgba(255, 255, 255, 0.616);
+    
+  }
+  .nav-toggler.toggler-open span:before {
+    transform: translateY(0px) rotate(45deg);
+  }
+  .nav-toggler.toggler-open span:after {
+    transform: translateY(-3px) rotate(-45deg);
+  }
+  /* nav-toggler css start */
+  
+  
+  
+  /* mobile breakpoint start */
+  @media screen and (max-width: 767px) {
+    .container {
+      max-width: 720px;
+    }
+    /* navbar css for mobile start */
+    .nav-toggler{
+      display: block;
+    }
+    .site-navbar {
+      min-height: 60px;
+    }
+    .site-navbar ul {
+      position: absolute;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);     
+      width: 100%;
+      height: calc(100vh - 80px);
+      left: 0;
+      top: 60px;
+      flex-direction: column;
+      align-items: center;
+      border-top: 1px solid #444;
+      background-color: rgb(255, 255, 255);
+      max-height: 0;
+      overflow: hidden;
+      transition: .3s;
+    }
+    .site-navbar ul li {
+      width: 100%;
+      text-align: center;
+    }
+    .site-navbar ul li a {
+      padding: 25px;
+    }
+    .site-navbar ul li a:hover {
+      background-color: rgba(255,255,255,.1);
+    }
+    .site-navbar ul.open {
+      max-height: 50vh;
+      overflow: visible;
+      position: absolute;
+      z-index: 1000;
+    }
+    .intro-area h2 {
+      font-size: 36px;
+      margin-bottom: 15px;
+      
+    }  
+    /* navbar css for mobile end */
+  }
+  /* mobile breakpoint end */

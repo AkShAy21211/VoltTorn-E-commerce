@@ -43,69 +43,109 @@
 
 <body>
 
-  <header class="p-0 shadow  header-outer">
-    <div class="container-fluid header  ">
-      <div class="d-flex flex-wrap p-2 align-items-center justify-content-center justify-content-lg-start">
-        <a class="navbar-brand" href="#">
-          <!-- <img src="/images/logo.png" style="margin-top: 15px;" alt="..." height="50" width="50px"> -->
-        </a>
-        </img>
-
-        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="/home" style="color: #0d6efd; font-size: 20px;" class="nav-link px-2 ">𝐕𝐨𝐥𝐭𝐓𝐫𝐨𝐧</a></li>
-
-
-
-        </ul>
-
-        <!-- Example split primary button -->
-
-
-        <form class="col-10 col-lg-3 col-md-3 col-xl-4 mb-3 mb-lg-0 me-lg-0" action="/home/search" method="get" role="search">
-          <div class="input-group position-relative">
-            <input type="search" id="search-bar" style="border: 1px solid black; border-radius: 20px; padding-right: 40px;"
-              name="value" class="form-control" placeholder="Search..." aria-label="Search">
-            <div class="position-absolute top-50 end-10 translate-middle-y" style="right: 15px;">
-              <button type="submit" class="btn" style="background-color: transparent; border: none;">
-                <i class="bi bi-search text-primary searchIcon"></i>
-              </button>
-            </div>
-          </div>
-        </form>
-        
-
-
-
-        <div class="col-3 col-lg-3  mb-lg-0 " role="search">
-          <div class="text-end position-relative">
-            <a class="text-black" href="/home/cart" id="cart-icon">
-              <span style="font-size: 20px; color: #0d6efd;" class="bi bi-cart"></span>
-              <%if(typeof locals.cartCount != 'undefined' &&  locals.cartCount>0) {%>
-              <span id="cart-item-count" class="badge" ><%=cartCount %></span>
-             <% } %>
-            </a>
-          </div>
-        </div>
-        <div class="text-end ml- ">
-          <button style="color: #0d6efd;" class="btn dropdown-toggle " type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i style="font-size: 20px; color: #0d6efd;" class="bi bi-person-circle"></i>          </button>
-          <ul  class="dropdown-menu">
+    <!-- site-navbar start -->
+    <div class="navbar-area shadow">
+      <div class="container-fluid">
+        <nav class="site-navbar">
+          <!-- site logo -->
+           <a href="/home"  style="color: #0d6efd; font-size: 25px;" class="nav-link px-2 site-logo mt-3">𝐕𝐨𝐥𝐭𝐓𝐫𝐨𝐧</a>
+  
+  
+  
+          </ul>
+          <!-- site menu/nav -->
+          
+          <ul >
             <% if (locals.userSessionData && locals.userSessionData.isUserAuthenticated) { %>
-              <li><a class="dropdown-item" href=""></a></li>
               <% }else{%>
-                <li><a class="dropdown-item" href="/login">Sign In</a></li>
-                <li><a class="dropdown-item" href="/register">Sign Up</a></li>
+                <li>
+                  <form class="mt-3" action="/home/search" method="get" role="search">
+                    <div class="input-group">
+                        <input type="search" id="search-bar" style="border: 1px solid black; border-radius: 20px; padding-right: 40px; width: 400px;"
+                            name="value" class="form-control" placeholder="Search..." aria-label="Search">
+                        <div class="position-absolute top-50 end-10 translate-middle-y" style="right: 15px;">
+                            <button type="submit" class="btn" style="background-color: transparent; border: none;">
+                                <i class="bi bi-search text-primary searchIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                
+                </li>
+                </li>
+                <li><a class="text-dark"  href="/login">Sign In</a></li>
+                <li><a  class="text-dark" href="/register">Sign Up</a></li>
+               
+                </form>
+                
                 <%} %>
                   <% if (locals.userSessionData && locals.userSessionData.isUserAuthenticated) { %>
-                    <li><a class="dropdown-item" href="/home/settings/profile">Account</a></li>
-                    <li><a class="dropdown-item" href="/about-us">About Us</a></li>
-                    <li><a class="dropdown-item text-danger"  href="/logout">Logout</a></li>
+                  
+                    <li>
+                      <form class="  mt-3" action="/home/search" method="get" role="search">
+                        <div class="input-group ">
+                          <input type="search" id="search-bar" style="border: 1px solid black; border-radius: 20px; padding-right: 40px;"
+                            name="value" class="form-control" placeholder="Search..." aria-label="Search">
+                          <div class="position-absolute top-50 end-10 translate-middle-y" style="right: 15px;">
+                            <button type="submit" class="btn" style="background-color: transparent; border: none;">
+                              <i class="bi bi-search text-primary searchIcon"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </form>
+                    </li><li>
+                          <a class="text-black" href="/home/cart" id="cart-icon">
+                            <span style="font-size: 20px; color: #0d6efd;" class="bi bi-cart"></span>
+                            <%if(typeof locals.cartCount != 'undefined' &&  locals.cartCount>0) {%>
+                            <span id="cart-item-count" style="margin-top:10px; margin-right: 10px;" class="badge" ><%=cartCount %></span>
+                           <% } %>
+                          </a>
+                    </li>
+                    <li><a class="text-dark" href="/home/settings/profile">Account</a></li>
+                    <li><a class="text-dark" href="/about-us">About Us</a></li>
+                    <li><a class=" text-danger"  href="/logout">Logout</a></li>
                     <% } %>
           </ul>
-        </div>
+          </ul>
+  
+          <!-- nav-toggler for mobile version only -->
+          <button class="nav-toggler bi bi-list">
+          </button>
+        </nav>
       </div>
-    </div>
-  </header>
+    </div><!-- navbar-area end -->
+  
+    
 
+  <script>
+    // define all UI variable
+const navToggler = document.querySelector('.nav-toggler');
+const navMenu = document.querySelector('.site-navbar ul');
+const navLinks = document.querySelectorAll('.site-navbar a');
+
+// load all event listners
+allEventListners();
+
+// functions of all event listners
+function allEventListners() {
+  // toggler icon click event
+  navToggler.addEventListener('click', togglerClick);
+  // nav links click event
+  navLinks.forEach( elem => elem.addEventListener('click', navLinkClick));
+}
+
+// togglerClick function
+function togglerClick() {
+  navToggler.classList.toggle('toggler-open');
+  navMenu.classList.toggle('open');
+}
+
+// navLinkClick function
+function navLinkClick() {
+  if(navMenu.classList.contains('open')) {
+    navToggler.click();
+  }
+}
+  </script>
 
   
