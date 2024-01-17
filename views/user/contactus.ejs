@@ -4,11 +4,12 @@
         .container {
 
             margin-top: 100px;
-            width: 50%;
 
 
         }
-
+.form-container{
+    width: 50%;
+}
         h1 {
             color: #333;
             text-align: center;
@@ -57,39 +58,49 @@
             background-color: #629aed;
         }
     </style>
-    <main>
 
-        <div class="container">
-            <h1>Contact Us </h1>
+<title>VoltTron | Contact Us </title>
 
-            <% if (messages.success) { %>
-                <div class="alert alert-success d-flex justify-content-center">
-                    <%= messages.success %>
+<main>
+        
+      
+
+    
+
+    <section class="about-section">
+        <div class="container form-container">
+            <div class="row">        
+                <h1>Contact Us </h1>
+
+                <% if (messages.success) { %>
+                    <div class="alert alert-success d-flex justify-content-center">
+                        <%= messages.success %>
+                    </div>
+                    <% } %>
+                        <form action="" method="post" onsubmit="return validateForm()">
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input type="text" id="name" name="name">
+                                <span id="nameError" class="error text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" id="email" name="email">
+                                <span id="emailError" class="error text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message:</label>
+                                <textarea id="message" name="message"></textarea>
+                                <span id="messageError" class="error text-danger"></span>
+                            </div>
+                            <div class="form-group d-flex justify-content-center">
+                                <button type="submit">Submit</button>
+                            </div>
+                        </form>
                 </div>
-                <% } %>
-                    <form action="" method="post" onsubmit="return validateForm()">
-                        <div class="form-group">
-                            <label for="name">Name:</label>
-                            <input type="text" id="name" name="name">
-                            <span id="nameError" class="error text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email:</label>
-                            <input type="email" id="email" name="email">
-                            <span id="emailError" class="error text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Message:</label>
-                            <textarea id="message" name="message"></textarea>
-                            <span id="messageError" class="error text-danger"></span>
-                        </div>
-                        <div class="form-group d-flex justify-content-center">
-                            <button type="submit">Submit</button>
-                        </div>
-                    </form>
         </div>
-
-    </main>
+    </section>
+</main>
     <script>
         function validateForm() {
             var name = document.getElementById("name").value;

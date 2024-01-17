@@ -27,7 +27,7 @@
     }
 
     .zoom-out-effect:hover {
-      transform: scale(0.9);
+      transform: scale(.90);
       /* Adjust the scale value to control the zoom-out effect */
       transition: transform 2s ease;
       /* Add a smooth transition effect */
@@ -135,17 +135,15 @@
       <div class="carousel-inner">
         <% banner.forEach((banner, index)=> { %>
           <div class="<%= index === 0 ? 'carousel-item active' : 'carousel-item' %> d-flex justify-content-center">
-            <a href="/home/products/<%=banner.name%>"><img style="-webkit-user-drag: none; height: 450px; width: 100%;" data-ride="1000" data-slide="carousel"
-              class="mt-4 " src="/images/bannerImages/<%= banner.image %>" alt="Banner <%= index + 1 %>"></a>
+            <a href="/home/products/<%=banner.name%>"><img style="-webkit-user-drag: none; height: 450px;" data-ride="1000" data-slide="carousel"
+              class="mt-4 img-fluid" src="/images/bannerImages/<%= banner.image %>" alt="Banner <%= index + 1 %>"></a>
           </div>
           <% }); %>
       </div>
       <a class="carousel-control-prev " href="#carouselExampleFade" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon " aria-hidden="true"></span>
         <span class="sr-only">Previous</span>
       </a>
       <a class="carousel-control-next" href="#carouselExampleFade" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="sr-only">Next</span>
       </a>
     </div>
@@ -155,7 +153,7 @@
         <h3 class="mt-5 fs-4 text-start">Top Categories</h3>
         <% category.forEach(category=> { %>
           <div class="col-md-6  col-lg-4 col-xl-3 col-xxl-3 mb-lg mb-md-5 col-sm-12 col-12  ">
-            <div style="border-radius: 5%; background-color: #18ACFE; width: 100%; min-width: 250px; height: 250px;"
+            <div style="border-radius: 3%; background-color: #18ACFE; width: 100%; min-width: 250px; height: 250px;"
               class="zoom-out-effect card border shadow p-2  mt-sm-5  mt-md-5 mt-lg-3 mt-xl-0 mt-xxl-0 mt-4">
               <a style="-webkit-user-drag: none;" href="/home/products/<%=category.category%>">
                 <!-- Add your actual link in the href attribute -->
@@ -236,8 +234,8 @@
 
 
 
-                  <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px"
-                    class="card-img-top" src="/images/productImages/<%=product.images[0]  %>" alt="Product Image " />
+                  <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="270px"
+                    class="card-img-top img-responsive" src="/images/productImages/<%=product.images[0]  %>" alt="Product Image " />
                     
                   <div class="card-body" style="height: 130px;">
                     <div style="display: flex; justify-content: start; margin-bottom: 10px; text-align: start;">
@@ -302,7 +300,7 @@
 
 
 
-        <section class="bg-img text-center">
+        <section class="bg-img text-center container">
           <div class="container" style="background-color: #18ACFE; height: 300px; border-radius: 20px;">
             <h2 class="pt-4">
               NEWSLETTER
@@ -328,8 +326,8 @@
       <span class="close" onclick="closeLoginModal()">&times;</span>
       <p>You need to login to proceed.</p>
       <div class="button-container">
-        <button class="btn btn-outline-primary" onclick="redirectLogin()">Login</button>
-        <button class="btn btn-outline-danger" onclick="closeLoginModal()">Cancel</button>
+        <a class="btn btn-outline-primary" href="/login">Login</a>
+        <a class="btn btn-outline-danger" href="/home">Cancel</a>
       </div>
     </div>
   </div>

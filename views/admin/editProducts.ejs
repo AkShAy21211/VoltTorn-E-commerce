@@ -1,4 +1,6 @@
-<%- include('../layout/adminHeader.ejs') %>
+<%- include('../layout/adminHeader.ejs') %> 
+
+<%- include('../layout/adminSideBar.ejs') %>
 
 <style>
   .form-box {
@@ -6,24 +8,13 @@
     margin-top: 30px;
   }
 </style>
-<title>Add Product</title>
-<aside>
-  <a
-    href="/admin/products"
-    style="
-      color: rgb(45, 81, 172);
-      position: absolute;
-      left: 50px;
-      top: 80px;
-      font-size: 15px;
-      font-weight: bold;
-    "
-    class="btn"
-  >
-    <-Back</a
-  >
-</aside>
-<main>
+<title>Edit Product</title>
+
+<div id="content" class="p-4 p-md-5">
+  <div class="d-flex justify-content-between">  <h2>Edit Product</h2>
+    <a href="/admin/products"><i class="bi bi-arrow-left fs-3"></i></a></div>
+  <div class="row d-flex justify-content-end">
+    
   <div class="container form-box mt-5">
     <div class="row d-flex justify-content-end">
       <div class="col-md-10 col-lg-12 col-xl-12">
@@ -279,8 +270,7 @@
       </div>
     </div>
   </div>
-</main>
-
+</div>
 <script src="/js/productFormVaildation.js"></script>
 <script>
   const toogle = document.addEventListener("DOMContentLoaded", function (e) {

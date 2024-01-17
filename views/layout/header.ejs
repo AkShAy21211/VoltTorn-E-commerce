@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="/images/logo.png" type="image/x-icon">
   <link rel="stylesheet" href="/css/footer.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -93,17 +94,28 @@
                           </div>
                         </div>
                       </form>
-                    </li><li>
-                          <a class="text-black" href="/home/cart" id="cart-icon">
-                            <span style="font-size: 20px; color: #0d6efd;" class="bi bi-cart"></span>
-                            <%if(typeof locals.cartCount != 'undefined' &&  locals.cartCount>0) {%>
-                            <span id="cart-item-count" style="margin-top:10px; margin-right: 10px;" class="badge" ><%=cartCount %></span>
-                           <% } %>
-                          </a>
                     </li>
-                    <li><a class="text-dark" href="/home/settings/profile">Account</a></li>
-                    <li><a class="text-dark" href="/about-us">About Us</a></li>
-                    <li><a class=" text-danger"  href="/logout">Logout</a></li>
+                    <li>
+                      <a  class="text-black" href="/home/cart" id="" style="position: relative; display: inline-block;">
+                        <span  style="font-size: 20px; color: #0d6efd;" class="bi bi-cart"></span>
+                        <% if (typeof locals.cartCount !== 'undefined' && locals.cartCount > 0) { %>
+                            <b id="cart-item-count"  style="position: absolute; top: 12px; right: 10; background-color: red; color: white; border-radius: 50%; padding: 3px 6px;" class="badge"><%= cartCount %></b>
+                        <% } %>
+                    </a>
+                    
+                    </li>
+                    <li>
+                      <a  class="text-black" href="/home/settings/wishlist" id="" style="position: relative; display: inline-block;">
+                        <span  style="font-size: 20px; color: #0d6efd;" class="bi bi-heart"></span>
+                        <% if (typeof locals.wishCount !== 'undefined' && locals.wishCount > 0) { %>
+                            <b id="wish-item-count"  style="position: absolute; top: 12px; right: 10; background-color: red; color: white; border-radius: 50%; padding: 3px 6px;" class="badge"><%= wishCount %></b>
+                        <% } %>
+                    </a>
+                    
+                    </li>
+                    <li class="mt-1"><a class="text-dark " href="/home/settings/profile">Account</a></li>
+                    <li><a class="text-dark mt-1" href="/about-us">About Us</a></li>
+                    <li><a class=" text-danger mt-1"  href="/logout">Logout</a></li>
                     <% } %>
           </ul>
           </ul>

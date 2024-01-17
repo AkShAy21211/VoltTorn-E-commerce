@@ -11,7 +11,7 @@ function validateForm() {
     var discount = document.getElementById('discount').value;
     var status = document.getElementById('status').value;
     var stockQuantity = document.getElementById('stockQuantity').value;
-    var checkboxes = document.querySelectorAll('input[name="colors[]"]');
+    var color = document.querySelectorAll('color').value;
     var images1 = document.getElementById('images1').value;
     var images2 = document.getElementById('images2').value;
     // Reset all warnings
@@ -27,7 +27,6 @@ function validateForm() {
     document.getElementById('colorWarning').innerHTML = '';
 
 
-    var atLeastOneChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
 
     // Validate all fields at once
     if (!name.trim()) {
@@ -64,7 +63,7 @@ function validateForm() {
     } else if (stockQuantity < 0) {
         document.getElementById('stockWarning').innerText = 'StockQuantity must be greater than 0';
     }
-    if (!atLeastOneChecked) {
+    if (!color) {
         // Display a warning message
         document.getElementById('colorWarning').innerHTML = 'Please select at least one color';
       } 

@@ -60,7 +60,7 @@ const userAddToCartButton = async (req, res) => {
             success: true,
             redirectTo: "/home/cart",
             message: "Product already added ",
-            cartCount:existingCart.cart.length,
+            cartCount: existingCart.cart.length,
           });
         } else {
           //when new item added in existing cart
@@ -98,7 +98,7 @@ const userAddToCartButton = async (req, res) => {
             total_price,
             message: "Product added to cart",
             redirectTo: "/home/cart",
-            cartCount:updatedCart.cart.length,
+            cartCount: updatedCart.cart.length,
           });
         }
       } else {
@@ -127,7 +127,7 @@ const userAddToCartButton = async (req, res) => {
           success: true,
           message: "Product added to cart",
           redirectTo: "/home/cart",
-          cartCount:newCart.cart.length,
+          cartCount: newCart.cart.length,
         });
       }
     } else {
@@ -277,7 +277,7 @@ const updateQuantity = async (req, res) => {
     const newProductPrice =
       parseFloat(
         productDetails.price -
-          productDetails.price * (productDetails.discount / 100)
+        productDetails.price * (productDetails.discount / 100)
       ) * newQuantity;
 
     const cart = await CartModel.findOneAndUpdate(
@@ -379,16 +379,22 @@ const loadCheckOutPage = async (req, res) => {
     const user = await userModel.findById(id);
     const dataState = req.body.dataState;
     const states = countryState.State.getStatesOfCountry("IN");
-    const coupon = await couponModal.find({isActive:true,expiry:{ $gt: new Date() }});
+    const coupon = await couponModal.find({ isActive: true, expiry: { $gt: new Date() } });
     const cart = await CartModel.findById(req.session.user.userId).populate(
       "cart.product_id"
     );
-    // const referralOffer = await offerModel.findOne({
-    //   offerType: "Referral",
-    //   isActive: true,
-    //   endDate: { $gt: new Date() },
-    // });
 
+    const productIds = cart.cart.map(item => item.product_id._id);
+
+    // Assuming your productModel has a schema like { _id: ObjectId, status: Boolean, ...otherFields }
+    const productsWithFalseStatus = await productModel.find({ _id: { $in: productIds }, status: false });
+
+    if(productsWithFalseStatus.length>0){
+
+      return res.status(400).json({error:"Product no longer avaliable",productsWithFalseStatus});
+    }
+
+    
     const categoryOffer = await offerModel.find({
       offerType: "Category",
       isActive: true,
@@ -417,26 +423,26 @@ const loadCheckOutPage = async (req, res) => {
     const matchedOfferProducts = cart.cart.filter(
       (product) => productOffer.some((offer) => offer.offer === product.name)
     );
-    
-let categoryDiscount;
-    if(matchedCategoryProducts.length>0){
-       categoryDiscount = categoryOffer.map((offer) => offer.percentage / 100);
+
+    let categoryDiscount;
+    if (matchedCategoryProducts.length > 0) {
+      categoryDiscount = categoryOffer.map((offer) => offer.percentage / 100);
       console.log(categoryDiscount);
-      
+
     }
 
-let productDiscount;
-    if(matchedOfferProducts.length>0){
-     productDiscount = productOffer.map((offer) => offer.percentage / 100);
-    console.log(productDiscount);
+    let productDiscount;
+    if (matchedOfferProducts.length > 0) {
+      productDiscount = productOffer.map((offer) => offer.percentage / 100);
+      console.log(productDiscount);
     }
-    
+
 
     const isDiscountApplied = (product) => product.discountApplied === true;
 
     if (matchedCategoryProducts.length > 0) {
       console.log("category offer");
-    
+
       // Update prices for products in matchedCategoryProducts
       matchedCategoryProducts.forEach((product, index) => {
         if (!isDiscountApplied(product)) {
@@ -447,7 +453,7 @@ let productDiscount;
         }
       });
     }
-    
+
     if (matchedOfferProducts.length > 0) {
       console.log("product offer");
       // Update prices for products in matchedOfferProducts
@@ -476,6 +482,7 @@ let productDiscount;
       // referralOffer,
       coupon,
     });
+  
   } catch (error) {
     console.error(error);
   }
@@ -551,11 +558,11 @@ let productDiscount;
 // };
 
 
-const loadAvaliableCoupons = async(req,res)=>{
+const loadAvaliableCoupons = async (req, res) => {
 
-  try{
-    const {total} = req.query;
-    const {id} = req.params;
+  try {
+    const { total } = req.query;
+    const { id } = req.params;
 
     console.log(id);
     const coupons = await couponModal.find({
@@ -566,19 +573,19 @@ const loadAvaliableCoupons = async(req,res)=>{
     const availableCoupons = coupons.filter((coupon) => {
       // Check if the user with the given id has used the coupon
       const userUsedCoupon = coupon.usedUsers.some((usedUser) => usedUser.user_id.equals(id));
-    
+
       // Include the coupon in the availableCoupons array only if the user hasn't used it
       return !userUsedCoupon;
     });
     console.log(availableCoupons);
-    if(availableCoupons){
-      res.status(200).json({availableCoupons})
+    if (availableCoupons) {
+      res.status(200).json({ availableCoupons })
 
     }
 
 
 
-  }catch(error){
+  } catch (error) {
     console.error(error);
   }
 }
@@ -596,10 +603,10 @@ const applayCouponCode = async (req, res) => {
 
     if (coupon) {
       const isCouponUsed = coupon.usedUsers.includes(id);
-      if(isCouponUsed){
-      return res.status(400).json({ message: "Coupon already used or invalid" });
-    }
-    }else{
+      if (isCouponUsed) {
+        return res.status(400).json({ message: "Coupon already used or invalid" });
+      }
+    } else {
       return res.status(400).json({ message: "Invalid coupon code" });
 
     }
@@ -612,7 +619,7 @@ const applayCouponCode = async (req, res) => {
           { $inc: { total_price: -couponDiscount } },
           { new: true }
         );
-        return res.status(200).json({ updatedCart, message: "Coupon applied",couponDiscount });
+        return res.status(200).json({ updatedCart, message: "Coupon applied", couponDiscount });
       } else {
         return res.status(400).json({ message: "Minimum purchase requirement has not been met" });
       }
@@ -626,21 +633,21 @@ const applayCouponCode = async (req, res) => {
 };
 
 
-const removeCouponCode = async(req,res)=>{
+const removeCouponCode = async (req, res) => {
 
-  try{
+  try {
     const { id } = req.params;
     const { code } = req.query;
 
-    console.log(id,code);
+    console.log(id, code);
 
     const cart = await CartModel.findById(id);
 
     const userData = await userModel.findById(id);
 
     if (userData) {
-      
-      const coupon = await couponModal.findOne({code:code,isActive:true,expiry:{$gt: new Date()}});
+
+      const coupon = await couponModal.findOne({ code: code, isActive: true, expiry: { $gt: new Date() } });
 
       const total_price = cart.cart.reduce(
         (total, item) => total + item.price,
@@ -650,7 +657,7 @@ const removeCouponCode = async(req,res)=>{
 
 
 
-      if(coupon && couponDiscount){
+      if (coupon && couponDiscount) {
 
         const updatedCart = await CartModel.findOneAndUpdate(
           { _id: id },
@@ -660,21 +667,21 @@ const removeCouponCode = async(req,res)=>{
 
 
 
-        return res.status(200).json({ updatedCart});
-      }else{
+        return res.status(200).json({ updatedCart });
+      } else {
 
-        return res.status(400).json({  message: "Invail Coupon " });
+        return res.status(400).json({ message: "Invail Coupon " });
 
       }
-    
+
     } else {
       console.log("User not found.");
       return res.status(404).json({ message: "User not found" });
     }
 
-  }catch(error){
+  } catch (error) {
     console.error(error);
-    res.status(500).json({message:"internal server error"})
+    res.status(500).json({ message: "internal server error" })
   }
 }
 

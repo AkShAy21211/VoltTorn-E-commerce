@@ -34,10 +34,10 @@
 
 
   <title>Checkout</title>
-  <section class="py-5">
+  <main class="py-5">
     <div class="container">
-      <div class="row ">
-        <div class="col-lg-6 mb-4 ">
+      <div class="row d-flex justify-content-between">
+        <div class="col-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6 mb-4">
 
           <!-- Checkout -->
           <div class="card shadow-0 border bg-light">
@@ -54,7 +54,7 @@
                 <div class="row">
 
                   <div class="col-sm-8 mb-3">
-                    <label  for="address" class="form-label text-dark">Address</label>
+                    <label for="address" class="form-label text-dark">Address</label>
                     <div class="form-outline">
                       <input type="text" id="address" name="address" placeholder="Type here" class="form-control" />
                     </div>
@@ -116,23 +116,24 @@
             </div>
           </div>
 
-          
+
           <% user.addresses.forEach((address, i)=> { %>
 
             <div data-index="<%= i %>" class="mb-3">
               <!-- Example addresses, you can replace these with dynamic data -->
-              <div class="form-check mt-4 border rounded bg-light"
+              <div class="form-check mt-4 border rounded bg-light "
                 style="height: 100px; display: flex; justify-content: start; align-items: center;">
                 <input class="form-check-input ml-0  address-radio" type="radio" name="flexRadioDefault"
                   id="flexRadioDefault<%= i + 1 %>" data-address-id="<%=address._id  %>">
                 <label class="ml-3 me-2  form-check-label" for="address1">
-                  <div class="">
+                  <div style="margin-left: 10px;" class="">
                     <strong>Address:</strong>
                     <%= address.address.substring(0,30) %><br>
 
                   </div>
                 </label>
-                <a style="cursor: pointer;" class="ml-4 text-primary editAddressBtn"><i class="bi bi-pencil-square"></i></a>
+                <a style="cursor: pointer;margin-right: 10px;" class="ml-4 text-primary editAddressBtn"><i
+                    class="bi bi-pencil-square"></i></a>
               </div>
             </div>
 
@@ -202,7 +203,7 @@
                           </div>
                         </div>
                       </td>
-                      
+
                       <% }); %>
                   </tr>
                 </tbody>
@@ -210,15 +211,15 @@
 
 
 
-              <!-- checkout modal if  paymentMethod is cash on delevry -->
 
 
-              <!-- Checkout -->
         </div>
 
-        <div class="col-lg-6 d-flex justify-content-end ">
-          <div class="ms-lg-5 mt-lg-0 container-fluid">
-            <div class="ms-lg-4 mt-lg-0  rounded p-4 bg-light" style="max-width: 320px;">
+
+        <!-- second column -->
+        <div class="col-12 col-md-6 col-lg-6 col-xl-5 col-xxl-5 mb-4">
+          <div class="ms-lg-5 mt-lg-0 ">
+            <div class="ms-lg-4 mt-lg-0 rounded p-4 bg-light">
               <h6 class="mb-3">Summary</h6>
               <%cart.cart.forEach((cart,i)=>{%>
 
@@ -241,8 +242,8 @@
                     <p id="total-price" class="mb-2 fw-bold">RS:<%=cart.total_price %>
                     </p>
                   </div>
-                  <div  class="d-flex justify-content-between">
-                    <p   id="discountText" style="display: none;" class="mb-2 fw-bold text-success ">Discount applied:</p>
+                  <div class="d-flex justify-content-between">
+                    <p id="discountText" style="display: none;" class="mb-2 fw-bold text-success ">Discount applied:</p>
 
                     <p style="display: none;" id="discountAmount" class="mb-2 fw-bold text-success "><b>-300</b>
                     </p>
@@ -253,9 +254,10 @@
                   <hr>
                   <%if(coupon !=='undefined' && coupon.length>0){%>
                     <div class=" w-75 rounded p-2 border  border-info">
-                      <i style=" color:  rgb(11, 110, 159);"  class="bi bi-tags me-1 ml-1"></i>
-                      <a href="#" style="text-decoration: none; color:  rgb(11, 110, 159); " class=" " data-user-id="<%=cart._id%>"
-                        id="couponView" data-total="<%=cart.total_price %>">Avaliable Coupons
+                      <i style=" color:  rgb(11, 110, 159);" class="bi bi-tags me-1 ml-1"></i>
+                      <a href="#" style="text-decoration: none; color:  rgb(11, 110, 159); " class=" "
+                        data-user-id="<%=cart._id%>" id="couponView" data-total="<%=cart.total_price %>">Avaliable
+                        Coupons
                       </a>
                     </div>
                     <div class="d-flex ">
@@ -277,43 +279,43 @@
 
 
 
-                          <form action="" class="form" method="">
+                      <form action="" class="form" method="">
 
 
-                            <legend>Payment Method</legend>
+                        <legend>Payment Method</legend>
 
-                            <div class="form__radios">
+                        <div class="form__radios">
 
-                              <div class="form__radio">
-                                <label for="wallet"><svg class="icon">
-                                    <use xlink:href="#icon-sales" />
-                                  </svg>Wallet</label>
-                                <input id="wallet" name="paymentMethod" type="radio" value="wallet" />
-                              </div>
-                              <div class="form__radio">
-                                <label for="paypal"><svg class="icon">
-                                  </svg>Razorpay</label>
-                                <input id="razorpay" name="paymentMethod" value="online" type="radio" />
-                              </div>
-                              <div class="form__radio">
-                                <label for="cash"><svg class="icon">
-                                    <use xlink:href="#icon-sales" />
-                                  </svg>Cash On Delivery</label>
-                                <input id="cash" name="paymentMethod" type="radio" value="COD" />
-                              </div>
+                          <div class="form__radio">
+                            <label for="wallet"><svg class="icon">
+                                <use xlink:href="#icon-sales" />
+                              </svg>Wallet</label>
+                            <input id="wallet" name="paymentMethod" type="radio" value="wallet" />
+                          </div>
+                          <div class="form__radio">
+                            <label for="paypal"><svg class="icon">
+                              </svg>Razorpay</label>
+                            <input id="razorpay" name="paymentMethod" value="online" type="radio" />
+                          </div>
+                          <div class="form__radio">
+                            <label for="cash"><svg class="icon">
+                                <use xlink:href="#icon-sales" />
+                              </svg>Cash On Delivery</label>
+                            <input id="cash" name="paymentMethod" type="radio" value="COD" />
+                          </div>
 
-                            </div>
+                        </div>
 
 
-                            <div>
-                              <button data-email="<%user.email  %>" data-mobile="<%user.mobile  %>"
-                                data-name="<%user.name  %>" data-oder-Id="<%=user._id  %>"
-                                data-total-amount="<%=cart.total_price  %>" class="button button--full" type="button"
-                                id="buyNowBtn">Buy
-                                Now</button>
+                        <div>
+                          <button data-email="<%user.email  %>" data-mobile="<%user.mobile  %>"
+                            data-name="<%user.name  %>" data-oder-Id="<%=user._id  %>"
+                            data-total-amount="<%=cart.total_price  %>" class="button button--full" type="button"
+                            id="buyNowBtn">Buy
+                            Now</button>
 
-                            </div>
-                          </form>
+                        </div>
+                      </form>
 
             </div>
 
@@ -325,35 +327,35 @@
       </div>
 
     </div>
+  </main>
 
 
 
 
-    <!-- Bootstrap Modal -->
-    <div class="modal fade" id="orderSuccessModal" tabindex="-1" aria-labelledby="orderSuccessModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="orderSuccessModalLabel">Order Completed Successfully</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  <!-- Bootstrap Modal -->
+  <div class="modal fade" id="orderSuccessModal" tabindex="-1" aria-labelledby="orderSuccessModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="orderSuccessModalLabel">Order Completed Successfully</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="tick-icon-container">
+            <div class="tick-icon">&#10003;</div>
           </div>
-          <div class="modal-body">
-            <div class="tick-icon-container">
-              <div class="tick-icon">&#10003;</div>
-            </div>
-            Your order has been successfully placed. Click the button below to view your order.
-          </div>
-          <div class="modal-footer">
-            <a href="/home/settings/oders" type="button" class="btn btn-primary" id="viewOrderBtn"
-              data-bs-dismiss="modal">View Order</a>
-          </div>
+          Your order has been successfully placed. Click the button below to view your order.
+        </div>
+        <div class="modal-footer">
+          <a href="/home/settings/oders" type="button" class="btn btn-primary" id="viewOrderBtn"
+            data-bs-dismiss="modal">View Order</a>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-
+  
   <script>
     const couponBtn = document.getElementById('couponAvail');
     const cancelCoupon = document.getElementById('removeCoupon');
@@ -364,7 +366,7 @@
     const discountText = document.getElementById('discountText');
     const discountAmount = document.getElementById('discountAmount');
 
-  
+
 
 
     couponView.addEventListener('click', async (e) => {
@@ -385,7 +387,7 @@
             }).done(function (response) {
 
 
-              if (response.availableCoupons.length>0) {
+              if (response.availableCoupons.length > 0) {
 
                 console.log(response.availableCoupons);
                 let contentHTML = '<div class="coupon-details">';
@@ -407,7 +409,7 @@
 
                 let contentHTML = '<div class="coupon-details">';
 
-                  contentHTML += `
+                contentHTML += `
 <div class="coupon-info">
 <strong>No coupons found</strong><br>
 </div>
@@ -442,40 +444,40 @@
     couponBtn.addEventListener('click', async (e) => {
 
       e.preventDefault();
-        const response = await toggleAndApplyCoupon(`/home/cart/coupon-applay/${user}?code=${couponCode.value}`);
-        if (response.status === 200) {
-          handleCouponResponse(response);
+      const response = await toggleAndApplyCoupon(`/home/cart/coupon-applay/${user}?code=${couponCode.value}`);
+      if (response.status === 200) {
+        handleCouponResponse(response);
 
-          couponBtn.style.display = couponBtn.style.display === 'none' ? 'inline' : 'none';
-          cancelCoupon.style.display = cancelCoupon.style.display === 'none' ? 'inline' : 'none';
+        couponBtn.style.display = couponBtn.style.display === 'none' ? 'inline' : 'none';
+        cancelCoupon.style.display = cancelCoupon.style.display === 'none' ? 'inline' : 'none';
 
-          discountText.style.display= discountText.style.display === 'none' ? 'inline' : 'none';
-          discountAmount.style.display = discountAmount.style.display === 'none' ? 'inline' : 'none';
-          discountAmount.innerHTML ="-" + response.data.couponDiscount
-        
-      
+        discountText.style.display = discountText.style.display === 'none' ? 'inline' : 'none';
+        discountAmount.style.display = discountAmount.style.display === 'none' ? 'inline' : 'none';
+        discountAmount.innerHTML = "-" + response.data.couponDiscount
 
-        }
+
+
+      }
     });
 
 
 
     cancelCoupon.addEventListener('click', async (e) => {
       e.preventDefault();
-         const response = await toggleAndApplyCoupon(`/home/cart/coupon-remove/${user}?code=${couponCode.value}`);
-         if (response.status === 200) {
-          
-      couponBtn.style.display = couponBtn.style.display === 'none' ? 'inline' : 'none';
-      cancelCoupon.style.display = cancelCoupon.style.display === 'none' ? 'inline' : 'none';
-          total.innerHTML = response.data.updatedCart.total_price;
-          couponCode.value="";
+      const response = await toggleAndApplyCoupon(`/home/cart/coupon-remove/${user}?code=${couponCode.value}`);
+      if (response.status === 200) {
 
-          
-          discountText.style.display= discountText.style.display === 'none' ? 'inline' : 'none';
-          discountAmount.style.display = discountAmount.style.display === 'none' ? 'inline' : 'none';
-          discountAmount.innerHTML ="";
+        couponBtn.style.display = couponBtn.style.display === 'none' ? 'inline' : 'none';
+        cancelCoupon.style.display = cancelCoupon.style.display === 'none' ? 'inline' : 'none';
+        total.innerHTML = response.data.updatedCart.total_price;
+        couponCode.value = "";
 
-        }     
+
+        discountText.style.display = discountText.style.display === 'none' ? 'inline' : 'none';
+        discountAmount.style.display = discountAmount.style.display === 'none' ? 'inline' : 'none';
+        discountAmount.innerHTML = "";
+
+      }
     });
 
 
@@ -528,21 +530,21 @@
     }
 
     function handleCouponResponseError(error) {
-        Toastify({
-          text: error.response.data.message,
-          duration: 4000,
-          newWindow: true,
-          close: true,
-          gravity: 'top',
-          position: 'right',
-          stopOnFocus: true,
-          style: {
-            background: 'linear-gradient(to right, #0074cc, #0076cc)',
-            marginTop: '60px',
-          },
-          onClick: function () { },
-        }).showToast();
-      
+      Toastify({
+        text: error.response.data.message,
+        duration: 4000,
+        newWindow: true,
+        close: true,
+        gravity: 'top',
+        position: 'right',
+        stopOnFocus: true,
+        style: {
+          background: 'linear-gradient(to right, #0074cc, #0076cc)',
+          marginTop: '60px',
+        },
+        onClick: function () { },
+      }).showToast();
+
     }
 
   </script>
@@ -564,7 +566,7 @@
 
 
 
-<!-- 
+  <!-- 
   <script>
     const offerBtn = document.getElementById('referalOffer');
     const cancelBtn = document.getElementById('cancelOffer');
@@ -637,14 +639,22 @@
         const mobile = buyNowBtn.dataset.mobile;
         const oderId = buyNowBtn.dataset.oderId;
         let couponCodeValue;
-        if(couponCode){
+        if (couponCode) {
           couponCodeValue = couponCode.value || "";
 
         }
 
         const selectedAddressRadioButton = document.querySelector('input[name="flexRadioDefault"]:checked');
         if (!selectedAddressRadioButton) {
-          alert('Please select an address.');
+          $.alert({
+            title: '<i class="bi bi-exclamation-triangle-fill text-warning me-2"></i> Alert!',
+            content: 'Please choose a delivery address.',
+            icon: 'none', // Disable default icon
+            type: 'orange', // Set a custom class for styling
+            backgroundDismiss: true, // Allow dismissing by clicking outside the alert
+            closeIcon: true, // Display the close icon
+          });
+
           return;
         }
 
@@ -657,7 +667,7 @@
         //cash on deliverry
         let response;
         if (selectedPaymentMethod && selectedPaymentMethod.value === 'COD') {
-          response = await axios.post(`/home/cart/checkout/verify-payment/${oderId}`, { selectedAddressId, paymentMethod,couponCodeValue });
+          response = await axios.post(`/home/cart/checkout/verify-payment/${oderId}`, { selectedAddressId, paymentMethod, couponCodeValue });
           // Show the success modal
           orderSuccessModal.show();
           viewOrderBtn.addEventListener('click', function () {
@@ -665,7 +675,7 @@
           });
 
         } else if (selectedPaymentMethod && selectedPaymentMethod.value === 'online') {
-          response = await axios.post(`/home/cart/checkout/verify-payment/${oderId}`, { selectedAddressId, paymentMethod,couponCodeValue });
+          response = await axios.post(`/home/cart/checkout/verify-payment/${oderId}`, { selectedAddressId, paymentMethod, couponCodeValue });
           const order = response.data.order;
 
           await initializeRazorpayPayment(order, selectedAddressId, paymentMethod)
@@ -675,7 +685,7 @@
         } else if (selectedPaymentMethod && selectedPaymentMethod.value === 'wallet') {
 
           try {
-            response = await axios.post(`/home/cart/checkout/verify-payment/${oderId}`, { selectedAddressId, paymentMethod,couponCodeValue });
+            response = await axios.post(`/home/cart/checkout/verify-payment/${oderId}`, { selectedAddressId, paymentMethod, couponCodeValue });
 
             orderSuccessModal.show();
             viewOrderBtn.addEventListener('click', function () {

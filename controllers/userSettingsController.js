@@ -382,11 +382,11 @@ const userWishlistLoadProductAdd = async (req, res) => {
         if (existingProduct) {
           res
             .status(200)
-            .json({ success: "Product already added to wishlist" });
+            .json({ success: "Product already added to wishlist",wishCount:existingWishlist.product.length });
         } else {
           existingWishlist.product.push(product);
           await existingWishlist.save();
-          res.status(200).json({ success: "Product added to wishlist" });
+          res.status(200).json({ success: "Product added to wishlist" ,wishCount:existingWishlist.product.length});
         }
       } else {
         const wishlist = new WishListModel({
@@ -395,7 +395,7 @@ const userWishlistLoadProductAdd = async (req, res) => {
         });
 
         await wishlist.save();
-        res.status(200).json({ success: "Product added to wishlist" });
+        res.status(200).json({ success: "Product added to wishlist" ,wishCount:wishlist.product.length});
       }
     } else {
       res.status(400).json({ error: "You need to login to proceed" });

@@ -10,6 +10,8 @@ document.addEventListener("click", async (event) => {
       // You can now use the productId in your request or perform any other action
       const response = await axios.get(`/home/products/wishlist/${productId}`);
 
+    
+
       if (response.data.success) {
         // Array of blue gradient color combinations
         const blueGradients = [
@@ -20,7 +22,10 @@ document.addEventListener("click", async (event) => {
           "linear-gradient(to right, #005080, #0070cc)",
           // Add more color combinations as needed
         ];
+        const wish  = document.getElementById('wish-item-count');
+        wish.innerText = response.data.wishCount;
 
+        console.log(response.data);
         // Select a random gradient from the array
         const randomGradient =
           blueGradients[Math.floor(Math.random() * blueGradients.length)];

@@ -1,6 +1,6 @@
 const session = require("express-session");
 const userModel = require("../models/userModel");
-const {CartModel} = require("../models/cart&WishlistModel");
+const {CartModel, WishListModel} = require("../models/cart&WishlistModel");
 
 const is_Login = async (req, res, next) => {
     try {
@@ -93,11 +93,27 @@ const cartCount = async (req, res, next) => {
 };
 
 
+const wishCount = async (req, res, next) => {
+    if (req.session && req.session.user) {
+        try {
+            const wishlist = await WishListModel.findById(req.session.user.userId)||{};
+            res.locals.wishCount = wishlist.product?wishlist.product.length:0;
+
+            
+        } catch (error) {
+            console.error('Error fetching cart count:', error);
+        }
+    } else {
+        res.locals.wishlist = 0;
+    }
+    next();
+};
 module.exports = {
     is_Login,
     is_Logout,
     isUserBlocked,
     in_cart,
-    cartCount
+    cartCount,
+    wishCount
     
 };

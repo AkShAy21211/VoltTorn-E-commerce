@@ -19,7 +19,7 @@
       height: auto;
     }
 
-    .magnifier-lens {
+    /* .magnifier-lens {
       position: absolute;
       top: 0;
       left: 0;
@@ -42,7 +42,6 @@
     .magnified-image {
       position: absolute;
       z-index: 2;
-      /* or any value higher than other elements */
       top: 0;
       left: 0;
       width: 100%;
@@ -57,7 +56,7 @@
       transform: scale(1);
       image-rendering: crisp-edges;
       z-index: 3;
-    }
+    } */
 
     .modal {
       display: none;
@@ -145,36 +144,65 @@
   <main class="py-0">
     <div class="container mt-md-4 mt-sm-5 pt-sm-5 pt-5 mt-4 pt-md-4">
       <div class="row">
+<style>
+  
+figure{
+	width: 100%;
+	height: 500px;
+  cursor: zoom-in;
+	overflow:hidden;
+	border:3px solid #fff;
+	position: relative;
+}
+figure img{
+	max-width: 100%;
+	min-width: 100%;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%,-50%);
+	z-index: 10;
+	pointer-events: none;
+}
 
-        <aside class="col-lg-6 position-relative">
-          <img id="largeImage img-responsive" style="
+
+</style>
+        <aside class="col-lg-6 img-container position-relative" >
+          <figure id="magnifying_area" class="border" class="">
+            <img id="magnifying_img" style="
             width: 100%;
             height: 550px;
             max-height: 70vh;
             margin: auto;
             background-size: cover;
             -webkit-background-size: cover;
-          " class="rounded-4 fit border product-image" src="/images/productImages/<%=ProductData.images[0] %>"
-            data-image="/images/productImages/<%=ProductData.images[0] %>"
-            data-color="<%=ProductData.variants.color %>" />
+        " class=" fit  product-image largeImage" src="/images/productImages/<%=ProductData.images[0] %>"
+              data-image="/images/productImages/<%=ProductData.images[0] %>"
+              data-color="<%=ProductData.variants.color %>" />
+  
+          </figure>
+         
 
 
-          <div class="magnifier-lens"></div>
 
-          <div class="d-flex justify-content-evenly mt-3 mb-3 h-50 flex-nowrap">
-            <img width="150" height="100" class="rounded-2 border "
+          <div class="d-flex justify-content-evenly   mt-3 mb-3 flex-nowrap">
+            <img width="150" height="100" class=" border "
               src="/images/productImages/<%=ProductData.images[1] %>"
               data-image="/images/productImages/<%=ProductData.images[1] %>" />
-            <img width="150" height="100" class="rounded-2 border"
+            <img width="150" height="100" class=" border"
               src="/images/productImages/<%=ProductData.images[2] %>"
               data-image="/images/productImages/<%=ProductData.images[2] %>" />
-            <img width="150" height="100" class="rounded-2 border"
+            <img width="150" height="100" class=" border"
               src="/images/productImages/<%=ProductData.images[3] %>"
               data-image="/images/productImages/<%=ProductData.images[3] %>" />
 
 
 
-              <%if( reviews !== 'undefined'&& reviews.length >0){%>
+
+
+          </div>
+
+          <%if( reviews !=='undefined' && reviews.length>0){%>
             <div
               class="container review-container position-relative mt-5 mt-lg-5 d-xl-block d-lg-block d-md-none d-none ">
               <div class="row mt-5">
@@ -184,8 +212,8 @@
                   <%reviews.forEach(review=> {%>
 
                     <div class="reviews-members pt-4 pb-4">
-                      <div class="media"> <a href="#"><img alt="Generic placeholder image"
-                        src="/images/userImages/<%=review.user.image%>" class="mr-3 rounded-pill"></a>
+                      <div class="media"> <a href="#"><img alt="user" src="/images/userImages/<%=review.user.image%>"
+                            class="mr-3 rounded-pill"></a>
                         <div class="media-body">
                           <div class="reviews-members-header">
                             <span class="star-rating float-right">
@@ -220,11 +248,7 @@
                 </div>
               </div>
             </div>
-       <%}  %>
-
-          </div>
-
-
+            <%} %>
         </aside>
 
 
@@ -290,8 +314,9 @@
                 data-product-price="<%= Number(ProductData.price - (ProductData.price * (ProductData.discount / 100))) %>"
                 class="btn btn-primary d-flex align-items-center justify-content-center me-2 mb-2 addToCartButton">Add
                 To Cart</a>
-              <a style="width: 500px; height: 60px"
-              data-product-id="<%= ProductData._id %>" data-product-price="<%= Number(ProductData.price - (ProductData.price * (ProductData.discount / 100))) %>"  class="btn btn-warning  d-flex align-items-center justify-content-center mb-2 buyNowButton">Buy Now</a>
+              <a style="width: 500px; height: 60px" data-product-id="<%= ProductData._id %>"
+                data-product-price="<%= Number(ProductData.price - (ProductData.price * (ProductData.discount / 100))) %>"
+                class="btn btn-warning  d-flex align-items-center justify-content-center mb-2 buyNowButton">Buy Now</a>
             </div>
           </div>
 
@@ -322,32 +347,32 @@
               </li>
               <% }); %>
           </ul>
-          <%if(reviews !== 'undefined'&& reviews.length >0){%>
+          <%if(reviews !=='undefined' && reviews.length>0){%>
 
 
-          <div
-            class="container review-container position-relative mt-4 mt-lg-0 d-xl-none d-lg-none d-md-block d-block ">
-            <div class="row">
-              <div class="bg-white rounded  p-4 mb-4 product-detaled-rating"> 
-                <h5 class="mb-1">All Ratings and Reviews</h5>
-                <%reviews.forEach(review=> {%>
+            <div
+              class="container review-container position-relative mt-4 mt-lg-0 d-xl-none d-lg-none d-md-block d-block ">
+              <div class="row">
+                <div class="bg-white rounded  p-4 mb-4 product-detaled-rating">
+                  <h5 class="mb-1">All Ratings and Reviews</h5>
+                  <%reviews.forEach(review=> {%>
 
-                  <div class="reviews-members pt-4 pb-4">
-                    <div class="media"> <a href="#"><img alt="Generic placeholder image"
-                          src="/images/userImages/<%=review.user.image%>" class="mr-3 rounded-pill"></a>
-                      <div class="media-body">
-                        <div class="reviews-members-header">
-                          <span class="star-rating float-right">
-                            <% for (let i=0; i < 5; i++) { %>
-                              <% if (i < review.rating) { %>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <% } else { %>
-                                  <i class="bi bi-star"></i>
-                                  <% } %>
+                    <div class="reviews-members pt-4 pb-4">
+                      <div class="media"> <a href="#"><img alt="user" src="/images/userImages/<%=review.user.image%>"
+                            class="mr-3 rounded-pill"></a>
+                        <div class="media-body">
+                          <div class="reviews-members-header">
+                            <span class="star-rating float-right">
+                              <% for (let i=0; i < 5; i++) { %>
+                                <% if (i < review.rating) { %>
+                                  <i class="bi bi-star-fill text-warning"></i>
+                                  <% } else { %>
+                                    <i class="bi bi-star"></i>
                                     <% } %>
+                                      <% } %>
 
-                          </span>
-                          <h6 class="mb-1">
+                            </span>
+                            <h6 class="mb-1">
                               <%=review.user.first_name%></a>
                                 <p class="text-gray">
                                   <%=review.created_at.toLocaleString() %>
@@ -359,12 +384,12 @@
                             </p>
                           </div>
 
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <%})%>
-                   </div>
+                    <%})%>
+                </div>
 
 
               </div>
@@ -372,11 +397,11 @@
             <%}%>
 
 
-          </div>
-
         </div>
 
       </div>
+
+    </div>
 
   </main>
 
@@ -400,7 +425,7 @@
       <span class="close" onclick="closeLoginModal()">&times;</span>
       <p>You need to login to proceed.</p>
       <div class="button-container">
-        <button class="btn btn-outline-primary" onclick="redirectLogin()">Login</button>
+        <a class="btn btn-outline-primary" href="/login">Login</a>
         <button class="btn btn-outline-danger" onclick="closeLoginModal()">Cancel</button>
       </div>
     </div>
@@ -409,13 +434,15 @@
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       // Get references to the large and smaller images
-      const largeImage = document.getElementById("largeImage");
-      const smallerImages = document.querySelectorAll(".rounded-2.border");
+      const largeImage = document.querySelector(".largeImage");
+      const smallerImages = document.querySelectorAll(".border");
 
       // Add click event listener to each smaller image
       smallerImages.forEach(function (smallerImage) {
         smallerImage.addEventListener("click", function () {
           // Store the current large image source
+
+          console.log("clicked");
           const originalLargeImageSrc = largeImage.src;
 
           // Store the current data-image attribute of the large image
@@ -437,26 +464,28 @@
         });
       });
     });
-    document.addEventListener("DOMContentLoaded", function () {
-      const largeImage = document.getElementById("largeImage");
-      const colorSelectors = document.querySelectorAll(".color-selector");
 
-      colorSelectors.forEach(function (colorSelector) {
-        colorSelector.addEventListener("mouseover", function () {
-          const color = colorSelector.getAttribute("data-color");
-          const imageSrc = colorSelector.getAttribute("data-image");
-          updateImage(imageSrc, color);
-        });
-      });
-
-      function updateImage(newImageSrc, color) {
-        largeImage.src = newImageSrc;
-        largeImage.setAttribute("data-image", newImageSrc);
-        largeImage.setAttribute("data-color", color);
-      }
-    });
   </script>
-  <script src="/js/imageZoom.js"></script>
   <script src="/js/addTOcart.js"></script>
+<script>
+  var magnifying_area =  document.getElementById("magnifying_area");
+var magnifying_img =  document.getElementById("magnifying_img");
 
+magnifying_area.addEventListener("mousemove",function(event){
+	clientX = event.clientX - magnifying_area.offsetLeft
+	clientY = event.clientY - magnifying_area.offsetTop
+	 
+	var mWidth = magnifying_area.offsetWidth
+	var mHeight = magnifying_area.offsetHeight
+	clientX = clientX / mWidth * 100
+	clientY = clientY / mHeight * 100
+
+	//magnifying_img.style.transform = 'translate(-50%,-50%) scale(2)'
+	magnifying_img.style.transform = 'translate(-'+clientX+'%, -'+clientY+'%) scale(2)'
+})
+
+magnifying_area.addEventListener("mouseleave",function(){
+	magnifying_img.style.transform = 'translate(-50%,-50%) scale(1)'
+})
+  </script>
   <%- include('../layout/footer.ejs') %>

@@ -70,8 +70,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
               <div class="offer-container" id="offer-container-${index}"></div>
 
-              <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px"
-                class="card-img-top" src="/images/productImages/${
+              <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="270px"
+                class="card-img-top img-responsive" src="/images/productImages/${
                   product.images[0]
                 }" alt="Product Image " />
               <div class="card-body" style="height: 130px;">

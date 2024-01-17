@@ -12,12 +12,14 @@ document.addEventListener("click", async (event) => {
         `/home/products/cart/${productId}`,
         { productPrice }
       );
-
+     
+   
       if (response.data.success) {
 
 
+        const cart = document.getElementById('cart-item-count');
 
-        $('#cart-item-count').load(document.URL + ' #cart-item-count');
+        cart.innerHTML = response.data.cartCount
 
         // Display toast message
         if (response.data.message && response.data.message !== "undefined") {
@@ -48,6 +50,8 @@ document.addEventListener("click", async (event) => {
             },
             onClick: function () {},
           }).showToast();
+
+     
         }
       } else {
         // Display login modal if the user is not logged in while trying to add to cart
@@ -111,11 +115,8 @@ function closeLoginModal() {
   document.getElementById("loginModal").style.display = "none";
 }
 
-function redirectLogin() {
-  window.location.href = "/login";
-}
 
-//display popup modal if user try to add to cart without login
+
 function displayLoginModal() {
   // Get the modal element
   const modal = document.getElementById("loginModal");
@@ -240,8 +241,10 @@ deleteCartItemButtons.forEach((deleteButton) => {
             totalPriceElement.textContent = totalPrice.toFixed(2);
           }, 1000);
 
-          $('#cart-item-count').load(document.URL + ' #cart-item-count');
 
+          const cart = document.getElementById('cart-item-count');
+
+          cart.innerHTML = response.data.userCartCount;
         }
         console.log("Response:", response);
       } catch (error) {

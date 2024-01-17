@@ -250,8 +250,8 @@
 
                           </div>
 
-                          <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="250px"
-                            class="card-img-top border-0" src="/images/productImages/<%=product.images[0]  %>"
+                          <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="270px"
+                            class="card-img-top border-0 img-responsive" src="/images/productImages/<%=product.images[0]  %>"
                             alt="Product Image " />
 
                           <div class="card-body" style="height: 130px;">
@@ -366,17 +366,17 @@
 
   <!-- Updated HTML structure for a centered modal with login and cancel buttons -->
 
+
   <div id="loginModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeLoginModal()">&times;</span>
       <p>You need to login to proceed.</p>
       <div class="button-container">
-        <button class="btn btn-outline-primary" onclick="redirectLogin()">Login</button>
+        <a class="btn btn-outline-primary" href="/login">Login</a>
         <button class="btn btn-outline-danger" onclick="closeLoginModal()">Cancel</button>
       </div>
     </div>
   </div>
-
 
   <script src="/js/addTOcart.js"></script>
   <script src="/js/search.js"></script>
@@ -444,8 +444,8 @@
 
               <div class="offer-container" id="offer-container-${index}"></div>
 
-              <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px"
-                class="card-img-top" src="/images/productImages/${product.images[0]}" alt="Product Image " />
+              <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="270px"
+                class="card-img-top img-responsive" src="/images/productImages/${product.images[0]}" alt="Product Image " />
               <div class="card-body" style="height: 130px;">
                 <div style="display: flex; justify-content: start; margin-bottom: 10px; text-align: start;">
 
@@ -535,7 +535,7 @@
         try {
 
 
-          if (selectedSubCategories.length > 0 || selectedBrands.length > 0 || sortOrder !=='') {
+          if (selectedSubCategories.length > 0 || selectedBrands.length > 0) {
 
 
 
@@ -587,8 +587,8 @@
 
               <div class="offer-container" id="offer-container-${index}"></div>
 
-              <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="230px"
-                class="card-img-top" src="/images/productImages/${product.images[0]}" alt="Product Image " />
+              <img style="margin-bottom: 5px; background-size: cover;" width="50px" height="270px"
+                class="card-img-top img-responsive" src="/images/productImages/${product.images[0]}" alt="Product Image " />
               <div class="card-body" style="height: 130px;">
                 <div style="display: flex; justify-content: start; margin-bottom: 10px; text-align: start;">
 
