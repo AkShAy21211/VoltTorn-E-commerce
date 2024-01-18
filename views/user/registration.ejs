@@ -144,7 +144,7 @@
     var password2 = document.getElementById("password2").value;
     var isValid = true;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (firstName === "") {
+    if (!firstName.trim()) {
       document.getElementById("firstNameError").innerText =
         "First Name is required";
       isValid = false;
@@ -152,7 +152,7 @@
       document.getElementById("firstNameError").innerText = "";
     }
 
-    if (lastName === "") {
+    if (lastName.trim()) {
       document.getElementById("lastNameError").innerText =
         "Last Name is (Optional)";
       isValid = false;
@@ -174,7 +174,7 @@
       document.getElementById("emailError").innerText = "";
     }
 
-    if (mobile === "") {
+    if (!mobile.trim()) {
       document.getElementById("mobileError").innerText =
         "Mobile Number is required";
       isValid = false;
