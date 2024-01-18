@@ -61,7 +61,7 @@
             name="last_name"
           />
           <label for="lastName">Last Name</label>
-          <span id="lastNameError" class="text-danger"></span>
+          <span id="lastNameError" class="text-dark"></span>
         </div>
         <div class="form-floating mb-1">
           <input
@@ -152,7 +152,7 @@
       document.getElementById("firstNameError").innerText = "";
     }
 
-    if (lastName.trim()) {
+    if (lastName==="") {
       document.getElementById("lastNameError").innerText =
         "Last Name is (Optional)";
       isValid = false;
