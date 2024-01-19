@@ -31,26 +31,19 @@ document.addEventListener("click", async (event) => {
           ];
 
           const randomGradient = blueGradients[Math.floor(Math.random() * blueGradients.length)];
-          var toastText = response.data.message;
 
-          // Calculate the width based on the length of the text
-          var textWidth = toastText.length * 10; // You can adjust the multiplier as needed
-          
-          // Ensure the width is not less than a minimum value
-          var minWidth = 100; // Adjust the minimum width as needed
-          var toastWidth = Math.max(textWidth, minWidth);
           Toastify({
             text: response.data.message,
             duration: 3000,
             close: true,
-            width: toastWidth + "px",
             gravity: "top",
+            width:"100%",
             position: "right",
             stopOnFocus: true,
             style: {
               background: randomGradient,
               marginTop: "60px",
-              whiteSpace: "nowrap", // Prevent text wrapping
+              width: "400px",  // Adjust the width as needed
 
 
             },
