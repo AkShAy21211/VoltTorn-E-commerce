@@ -44,7 +44,6 @@ document.addEventListener("click", async (event) => {
             marginTop: "60px",
             width: "300px",  // Adjust the width as needed
             whiteSpace: "nowrap", // Prevent text wrapping
-            textOverflow: "ellipsis", // Display ellipsis (...) for overflowed text
           },
           onClick: function () {}, // Callback after click
         }).showToast();
