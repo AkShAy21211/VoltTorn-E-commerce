@@ -37,15 +37,16 @@ document.addEventListener("click", async (event) => {
             duration: 3000,
             close: true,
             gravity: "top",
-            width:"100%",
+            width:"90%",
             position: "right",
             stopOnFocus: true,
             style: {
               background: randomGradient,
               marginTop: "60px",
-              width: "400px", 
+              width: "auto", // Allow the width to adjust based on content
               whiteSpace: "nowrap", // Prevent text from wrapping
-              // Adjust the width as needed
+              overflow: "hidden", // Hide content that overflows the width
+              textOverflow: "ellipsis", // Display an ellipsis (...) for overflowed text
 
 
             },

@@ -36,15 +36,17 @@ document.addEventListener("click", async (event) => {
           duration: 3000,
           newWindow: true,
           close: true,
+          width:"90%",
           gravity: "top", // `top` or `bottom`
           position: "right", // `left`, `center`, or `right`
           stopOnFocus: true, // Prevents dismissing of toast on hover
           style: {
             background: randomGradient,
             marginTop: "60px",
-            width: "400px", 
+            width: "auto", // Allow the width to adjust based on content
             whiteSpace: "nowrap", // Prevent text from wrapping
-            // Adjust the width as needed
+            overflow: "hidden", // Hide content that overflows the width
+            textOverflow: "ellipsis", // Display an ellipsis (...) for overflowed text
 
           },
           onClick: function () {}, // Callback after click
