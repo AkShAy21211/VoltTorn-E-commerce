@@ -29,7 +29,7 @@ document.addEventListener("click", async (event) => {
         // Select a random gradient from the array
         const randomGradient =
           blueGradients[Math.floor(Math.random() * blueGradients.length)];
-          var toastText = response.data.message;
+          var toastText = response.data.success;
 
           // Calculate the width based on the length of the text
           var textWidth = toastText.length * 10; // You can adjust the multiplier as needed
