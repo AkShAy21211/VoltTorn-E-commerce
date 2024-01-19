@@ -98,8 +98,8 @@
                     <li>
                       <a  class="text-black" href="/home/cart" id="" style="position: relative; display: inline-block;">
                         <span  style="font-size: 20px; color: #0d6efd;" class="bi bi-cart"></span>
-                        <% if (typeof locals.cartCount !== 'undefined' && locals.cartCount > 0) { %>
-                            <b id="cart-item-count"  style="position: absolute; top: 12px; right: 10; background-color: red; color: white; border-radius: 50%; padding: 3px 6px;" class="badge"><%= cartCount %></b>
+                        <% if (typeof locals.cartCount !== 'undefined' ) { %>
+                            <div id="cart-item-count"  style="position: absolute; top: 12px; right: 10; background-color: red; color: white; border-radius: 50%; padding: 3px 6px;" class="badge"><%= cartCount?cartCount:0 %></div>
                         <% } %>
                     </a>
                     
@@ -107,8 +107,8 @@
                     <li>
                       <a  class="text-black" href="/home/settings/wishlist" id="" style="position: relative; display: inline-block;">
                         <span  style="font-size: 20px; color: #0d6efd;" class="bi bi-heart"></span>
-                        <% if (typeof locals.wishCount !== 'undefined' && locals.wishCount > 0) { %>
-                            <b id="wish-item-count"  style="position: absolute; top: 12px; right: 10; background-color: red; color: white; border-radius: 50%; padding: 3px 6px;" class="badge"><%= wishCount %></b>
+                        <% if (typeof locals.wishCount !== 'undefined' ) { %>
+                            <div id="wish-item-count"  style="position: absolute; top: 12px; right: 10; background-color: red; color: white; border-radius: 50%; padding: 3px 6px;" class="badge"><%= wishCount?wishCount:0 %></div>
                         <% } %>
                     </a>
                     

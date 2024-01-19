@@ -1,4 +1,6 @@
-// Add an event listener to the common ancestor (e.g., document or a specific container)
+
+document.addEventListener("DOMContentLoaded",()=>{
+
 document.addEventListener("click", async (event) => {
   // Check if the clicked element is an "Add to Cart" button
   if (event.target.classList.contains("addToCartButton")) {
@@ -17,10 +19,7 @@ document.addEventListener("click", async (event) => {
       if (response.data.success) {
 
 
-        const cart = document.getElementById('cart-item-count');
-
-        cart.innerHTML = response.data.cartCount
-
+      
         // Display toast message
         if (response.data.message && response.data.message !== "undefined") {
           const blueGradients = [
@@ -51,7 +50,11 @@ document.addEventListener("click", async (event) => {
             onClick: function () {},
           }).showToast();
 
-     
+          const cart = document.getElementById('cart-item-count');
+          cart.innerText = response.data.cartCount
+
+          console.log(cart.innerHTML);
+  
         }
       } else {
         // Display login modal if the user is not logged in while trying to add to cart
@@ -110,6 +113,7 @@ document.addEventListener("click", async (event) => {
     }
   }
 });
+})
 
 function closeLoginModal() {
   document.getElementById("loginModal").style.display = "none";
@@ -209,7 +213,7 @@ quantityInputs.forEach((input) => {
 const deleteCartItemButtons = document.querySelectorAll(".delete-item");
 
 deleteCartItemButtons.forEach((deleteButton) => {
-  deleteButton.addEventListener("click", async () => {
+    deleteButton.addEventListener("click", async () => {
     const deleteItemId = deleteButton.dataset.deleteItem;
     const cartItemRow = document.querySelector(`tr[data-cart-item-id="${deleteItemId}"]`);
     const totalPriceElement = document.querySelector('[data-total-price="total-price"]');
@@ -243,10 +247,8 @@ deleteCartItemButtons.forEach((deleteButton) => {
 
 
           const cart = document.getElementById('cart-item-count');
-
-          cart.innerHTML = response.data.userCartCount;
+          cart.innerText = response.data.userCartCount;
         }
-        console.log("Response:", response);
       } catch (error) {
         console.error("Error:", error);
       }
