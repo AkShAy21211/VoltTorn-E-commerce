@@ -29,12 +29,20 @@ document.addEventListener("click", async (event) => {
         // Select a random gradient from the array
         const randomGradient =
           blueGradients[Math.floor(Math.random() * blueGradients.length)];
+          var toastText = response.data.message;
 
+          // Calculate the width based on the length of the text
+          var textWidth = toastText.length * 10; // You can adjust the multiplier as needed
+          
+          // Ensure the width is not less than a minimum value
+          var minWidth = 100; // Adjust the minimum width as needed
+          var toastWidth = Math.max(textWidth, minWidth);
         // Use the selected gradient for the toast
         Toastify({
           text: response.data.success,
           duration: 3000,
           newWindow: true,
+          width: toastWidth + "px",
           close: true,
           gravity: "top", // `top` or `bottom`
           position: "right", // `left`, `center`, or `right`
