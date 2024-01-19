@@ -142,7 +142,7 @@
                     <%oder.products.forEach((product,i)=>{%>
 
                       <!-- Replace 'statusSelect' ID with 'statusDropdown' class -->
-                      <% if (oder.status !=='Delivered' && product.returned==="" ) { %>
+                      <% if (oder.status !=='Delivered' && product.returned==="" && !product.cancelled ) { %>
                         <select class="statusDropdown form-select form-select-sm" data-order-id="<%= oder._id %>">
                           <option value="<%= oder.status %>">
                             <%= oder.status %>
