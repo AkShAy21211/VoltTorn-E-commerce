@@ -44,7 +44,10 @@ document.addEventListener("click", async (event) => {
               background: randomGradient,
               marginTop: "60px",
               width: "300px",  // Adjust the width as needed
-
+              overflow: "hidden", // Prevent text overflow
+              whiteSpace: "nowrap", // Prevent text wrapping
+              textOverflow: "ellipsis", // Display ellipsis (...) for overflowed text
+            
 
             },
             onClick: function () {},
