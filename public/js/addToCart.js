@@ -45,7 +45,6 @@ document.addEventListener("click", async (event) => {
               marginTop: "60px",
               width: "auto", // Allow the width to adjust based on content
               whiteSpace: "nowrap", // Prevent text from wrapping
-              overflow: "hidden", // Hide content that overflows the width
 
 
             },
