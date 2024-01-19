@@ -43,7 +43,9 @@ document.addEventListener("click", async (event) => {
             style: {
               background: randomGradient,
               marginTop: "60px",
-              width: "400px",  // Adjust the width as needed
+              width: "400px", 
+              whiteSpace: "nowrap", // Prevent text from wrapping
+              // Adjust the width as needed
 
 
             },
