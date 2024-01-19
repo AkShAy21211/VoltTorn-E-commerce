@@ -46,7 +46,6 @@ document.addEventListener("click", async (event) => {
             width: "auto", // Allow the width to adjust based on content
             whiteSpace: "nowrap", // Prevent text from wrapping
             overflow: "hidden", // Hide content that overflows the width
-            textOverflow: "ellipsis", // Display an ellipsis (...) for overflowed text
 
           },
           onClick: function () {}, // Callback after click
