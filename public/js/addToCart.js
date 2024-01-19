@@ -37,14 +37,13 @@ document.addEventListener("click", async (event) => {
             duration: 3000,
             close: true,
             gravity: "top",
-            width:"90%",
+            width:"auto",
             position: "right",
             stopOnFocus: true,
             style: {
               background: randomGradient,
               marginTop: "60px",
-              width: "auto", // Allow the width to adjust based on content
-              whiteSpace: "nowrap", // Prevent text from wrapping
+              maxWidth: "400px", // Set the maximum width if needed
 
 
             },

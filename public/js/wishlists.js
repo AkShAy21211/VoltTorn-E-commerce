@@ -36,15 +36,14 @@ document.addEventListener("click", async (event) => {
           duration: 3000,
           newWindow: true,
           close: true,
-          width:"90%",
+          width:"auto",
           gravity: "top", // `top` or `bottom`
           position: "right", // `left`, `center`, or `right`
           stopOnFocus: true, // Prevents dismissing of toast on hover
           style: {
             background: randomGradient,
             marginTop: "60px",
-            width: "auto", // Allow the width to adjust based on content
-            whiteSpace: "nowrap", // Prevent text from wrapping
+            maxWidth: "400px", // Set the maximum width if needed
 
           },
           onClick: function () {}, // Callback after click
