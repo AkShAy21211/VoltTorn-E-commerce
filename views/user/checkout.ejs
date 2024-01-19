@@ -494,12 +494,14 @@
             duration: 4000,
             newWindow: true,
             close: true,
+            width:"auto",
             gravity: 'top',
             position: 'right',
             stopOnFocus: true,
             style: {
               background: 'linear-gradient(to right, #ff6666, #ff9999)',
               marginTop: '60px',
+              maxWidth: "400px", // Set the maximum width if needed
             },
             onClick: function () { },
           }).showToast();
@@ -517,12 +519,14 @@
           duration: 4000,
           newWindow: true,
           close: true,
+          width:"auto",
           gravity: 'top',
           position: 'right',
           stopOnFocus: true,
           style: {
             background: 'linear-gradient(to right, #0074cc, #0076cc)',
             marginTop: '60px',
+            maxWidth: "400px", // Set the maximum width if needed
           },
           onClick: function () { },
         }).showToast();
@@ -536,11 +540,13 @@
         newWindow: true,
         close: true,
         gravity: 'top',
+        width:"auto",
         position: 'right',
         stopOnFocus: true,
         style: {
           background: 'linear-gradient(to right, #0074cc, #0076cc)',
           marginTop: '60px',
+          maxWidth: "400px", // Set the maximum width if needed
         },
         onClick: function () { },
       }).showToast();
@@ -648,6 +654,18 @@
         if (!selectedAddressRadioButton) {
           $.alert({
             title: '<i class="bi bi-exclamation-triangle-fill text-warning me-2"></i> Alert!',
+            content: 'Please choose a payment methood.',
+            icon: 'none', // Disable default icon
+            type: 'orange', // Set a custom class for styling
+            backgroundDismiss: true, // Allow dismissing by clicking outside the alert
+            closeIcon: true, // Display the close icon
+          });
+
+          return;
+        }
+        if (!selectedPaymentMethod) {
+          $.alert({
+            title: '<i class="bi bi-exclamation-triangle-fill text-warning me-2"></i> Alert!',
             content: 'Please choose a delivery address.',
             icon: 'none', // Disable default icon
             type: 'orange', // Set a custom class for styling
@@ -657,7 +675,6 @@
 
           return;
         }
-
         const selectedAddressId = selectedAddressRadioButton.dataset.addressId;
         const paymentMethod = selectedPaymentMethod.value;
 
@@ -703,12 +720,14 @@
                 duration: 6000,
                 newWindow: true,
                 close: true,
+                width:"auto",
                 gravity: 'top',
                 position: 'right',
                 stopOnFocus: true,
                 style: {
                   background: 'linear-gradient(to right, #0074cc, #0076cc)',
                   marginTop: '60px',
+                  maxWidth: "400px", // Set the maximum width if needed
                 },
                 onClick: function () { },
               }).showToast();
