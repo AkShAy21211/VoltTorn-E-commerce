@@ -261,13 +261,6 @@ figure img{
               <%=ProductData.name %>
             </h5>
 
-            <div class="d-flex flex-row my-3">
-              <% if(ProductData.stock !==0) { %>
-                <span class="text-success fw-bold ms-2"> In Stock </span>
-                <% } else { %>
-                  <span class="text-danger fw-bold ms-2"> Out Of Stock </span>
-                  <% } %>
-            </div>
 
             <div class="mb-3 d-flex">
               <span class="h4 me-3">
@@ -306,6 +299,7 @@ figure img{
             </div>
           </div>
 
+          <% if(ProductData.stock !==0) { %>
 
           <div class="row mb-4 mt-1 justify-content-center ml-1">
             <div
@@ -319,6 +313,13 @@ figure img{
                 class="btn btn-warning  d-flex align-items-center justify-content-center mb-2 buyNowButton">Buy Now</a>
             </div>
           </div>
+
+          <%}else{%>
+            
+                  <span class="text-danger fw-bold ms-2"> Out Of Stock </span>
+            </div>
+            
+          <%}%>
 
           <p class="font-weight-bold justify-content-between"> Color:</p>
 
