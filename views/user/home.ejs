@@ -135,7 +135,7 @@
       <div class="carousel-inner">
         <% banner.forEach((banner, index)=> { %>
           <div class="<%= index === 0 ? 'carousel-item active' : 'carousel-item' %> d-flex justify-content-center">
-            <a href="/home/products/<%=banner.name%>"><img style="-webkit-user-drag: none; height: 430px;" data-ride="1000" data-slide="carousel"
+            <a href="/home/products/<%=banner.name%>"><img style="-webkit-user-drag: none;" data-ride="1000" data-slide="carousel"
               class="mt-4 img-responsive" src="/images/bannerImages/<%= banner.image %>" alt="Banner <%= index + 1 %>"></a>
           </div>
           <% }); %>
