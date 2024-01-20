@@ -18,11 +18,9 @@
           <div class="form-outline mb-4">
             <label class="form-label" for="form4Example1">Brand</label>
             
-            <select class="select form-control"  id="name" name="name" required >
+            <input class="select form-control"  id="name" name="name" value="<%=brandData.name%>" required >
 
-              <option value="<%=brandData.name%>"><%=brandData.name%></option>
               
-            </select>   
             <div id="nameWarning" class="text-danger"></div>
           </div>
 
