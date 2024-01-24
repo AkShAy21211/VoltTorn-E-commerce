@@ -288,7 +288,6 @@
 
           const oder = oders.find(oder=> oder._id === Id);
 
-          console.log(oder.address);
           
           let { products } = oder;
 
@@ -304,6 +303,7 @@
             <p><strong>Quantity:</strong> ${product.quantity}</p>
             <p><strong>Price:</strong> ${product.price}</p>
             <p><strong>Discount Applied:</strong> ${product.discountApplied ? 'Yes' : 'No'}</p>
+            <p><strong>Addresses:</strong> ${oder.address}</p>
             <!-- Add more product details as needed -->
             <hr>
           `);
