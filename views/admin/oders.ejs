@@ -284,9 +284,12 @@
           let [user] = response.data.user;
           let { oders } = user;
 
+          
+
           const oder = oders.find(oder=> oder._id === Id);
 
-
+          console.log(oder.address);
+          
           let { products } = oder;
 
 
