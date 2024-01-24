@@ -239,7 +239,6 @@ const deleteProduct = async (req, res) => {
     // Now, delete the associated images from the directory
     product.images.forEach(image => {
     const imagePath = path.join(__dirname, '../public/images/productImages', image);
-      
       // Use fs.unlinkSync to synchronously delete the file
       if (fs.existsSync(imagePath)) {
         fs.unlinkSync(imagePath);

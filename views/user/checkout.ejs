@@ -749,10 +749,7 @@
     function initializeRazorpayPayment(order, selectedAddressId, paymentMethod) {
       const orderSuccessModal = new bootstrap.Modal(document.getElementById('orderSuccessModal'));
       const viewOrderBtn = document.getElementById('viewOrderBtn');
-
       const amount = order.amount;
-
-
 
       var options = {
         "key": "rzp_test_IqLBbBfcC14Mtr", // Enter the Key ID generated from the Dashboard

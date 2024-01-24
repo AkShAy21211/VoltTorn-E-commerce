@@ -331,9 +331,9 @@
 
     <nav aria-label="Page navigation example">
       <ul class="pagination justify-content-center">
-        <li class="page-item <%=currentPage === 1 ? 'disabled' : ''%>">
+        <!-- <li class="page-item <%=currentPage === 1 ? 'disabled' : ''%>">
           <a class="page-link" href="/home/products/<%=cat_name%>/?page=<%=currentPage - 1%>" tabindex="-1">Previous</a>
-        </li>
+        </li> -->
 
         <% for(let i=1; i<=pages; i++){ %>
           <% if(i==currentPage){ %>
@@ -350,10 +350,10 @@
               </li>
               <% } %>
                 <% } %>
-
+<!-- 
                   <li class="page-item <%=currentPage === pages ? 'disabled' : ''%>">
                     <a class="page-link" href="/home/products/<%=cat_name%>/?page=<%=currentPage + 1%>">Next</a>
-                  </li>
+                  </li> -->
       </ul>
     </nav>
 
