@@ -121,7 +121,7 @@ passport.use(
         // options for google strategy
         clientID:process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: 'https://vottron.shop/auth/google/home'
+        callbackURL: 'https://volttron.shop/auth/google/home'
     }, (accessToken, refreshToken, profile, done) => {
         // check if user already exists in our own db
         userModel.findOne({googleId: profile.id}).then((currentUser) => {
