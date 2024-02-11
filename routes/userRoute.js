@@ -53,13 +53,13 @@ userRoute.get('/home',auth.isUserBlocked,homeController.loadHome);
 
 //goole auth 
 // auth with google+
-userRoute.get('/auth/google', passport.authenticate('google', {
+userRoute.get('https://vottron.shop/auth/google', passport.authenticate('google', {
   scope: ['profile','email']
 }));
 
 // callback route for google to redirect to
 // hand control to passport to use code to grab profile info
-userRoute.get('/auth/google/home', passport.authenticate('google'),auth.rediretAuth);
+userRoute.get('https://vottron.shop/auth/google/home', passport.authenticate('google'),auth.rediretAuth);
 
 //user single product detail route
 userRoute.get('/home/product/details/:id',auth.isUserBlocked,homeController.productDetail);
