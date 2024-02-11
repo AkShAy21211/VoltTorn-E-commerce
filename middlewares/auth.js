@@ -1,7 +1,8 @@
 const session = require("express-session");
 const userModel = require("../models/userModel");
 const {CartModel} = require("../models/cart&WishlistModel");
-
+const passport = require('passport');
+const GoogleStrategy = require("passport-google-oauth2").Strategy;
 const is_Login = async (req, res, next) => {
     try {
         if (req.session.user && req.session.user.isUserAuthenticated) {
@@ -91,13 +92,83 @@ const cartCount = async (req, res, next) => {
     }
     next();
 };
+function generateReferralCode() {
+    const characters = '0123456789';
+    const codeLength = 6;
+  
+    let referralCode = '';
+  
+    for (let i = 0; i < codeLength; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      referralCode += characters.charAt(randomIndex);
+    }
+  
+    return referralCode;
+  }
 
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+    userModel.findById(id).then((user) => {
+        done(null, user);
+    });
+});
+
+passport.use(
+    new GoogleStrategy({
+        // options for google strategy
+        clientID:process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: '/auth/google/home'
+    }, (accessToken, refreshToken, profile, done) => {
+        // check if user already exists in our own db
+        userModel.findOne({googleId: profile.id}).then((currentUser) => {
+            if(currentUser){
+                // already have this user
+                console.log('user is: ', currentUser);
+                done(null, currentUser);
+            } else {
+                // if not, create user in our db
+                new userModel({
+                    first_name: profile.given_name,
+                    last_name: profile.family_name,
+                    email: profile.email,
+                    mobile: undefined,
+                    password: "google",
+                    is_verified: true,
+                    is_admin: 0,
+                    status: true,
+                    isDelete: false,
+                    referralCode:generateReferralCode(),
+                }).save().then((newUser) => {
+                    console.log('created new user: ', newUser);
+                    done(null, newUser);
+                });
+            }
+        });
+    })
+);
+
+const rediretAuth = async(req, res) => {
+        // res.send(req.user);
+        const userData = req.user;
+        req.session.user = {
+            isUserAuthenticated: true,
+            userId: userData._id,
+            email:userData.email,
+            username: userData.first_name + " " + userData.last_name,
+          };
+        res.redirect('/home');
+    }
 
 module.exports = {
     is_Login,
     is_Logout,
     isUserBlocked,
     in_cart,
-    cartCount
+    cartCount,
+    rediretAuth
     
 };

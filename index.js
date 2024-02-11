@@ -5,6 +5,8 @@ const express = require("express");
 const app = express();
 const flash = require('express-flash');
 const nocache = require('nocache');
+const passport = require('passport');
+
 const PORT = process.env.PORT || 3000;
 const morgan = require("morgan");
 app.use(morgan("dev"));
@@ -44,6 +46,10 @@ const adminSession = session({
 
 app.use(userSession);
 app.use(adminSession);
+
+// initialize passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use((req, res, next) => {
   if (req.url.startsWith("/admin")) {

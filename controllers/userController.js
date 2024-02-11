@@ -3,9 +3,12 @@ const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const { sendResetEmail } = require("../helpers/resetPasswordHelper");
 const userOTPVeryModel = require("../models/userVerifyOTPModel");
+const passport = require("passport");
 const RandomString = require("randomstring");
-
+const { Strategy } = require("passport-local");
+const GoogleStrategy = require("passport-google-oauth2");
 //user otp verification configure
+
 const generateOTP = () => {
   // Generate a random 6-digit OTP
   return Math.floor(100000 + Math.random() * 900000).toString();
@@ -297,8 +300,11 @@ const loadLoginVerify = async (req, res) => {
 
 const userLogout = async (req, res) => {
   try {
-    delete req.session.user;
-    res.redirect("/login");
+    req.logout((err)=>{
+      delete req.session.user;
+      res.redirect("/login");
+    });
+   
   } catch (error) {
     console.log(error.message);
   }
@@ -403,6 +409,9 @@ const resetPasswordPost = async (req, res) => {
 };
 
 
+
+
+
 module.exports = {
   loadRegister,
   insertUser,
@@ -415,5 +424,6 @@ module.exports = {
   loadForgetPasswordPage,
   resetPasswordByEmail,
   resetPasswordGet,
-  resetPasswordPost
+  resetPasswordPost,
+
 };

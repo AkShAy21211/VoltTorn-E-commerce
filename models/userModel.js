@@ -106,22 +106,24 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    default: null,
   },
   mobile: {
     type: String,
-    required: true,
+    default: null
   },
   image: {
     type: String,
-    required: false,
+    default: null,
   },
   password: {
     type: String,
-    required: true,
+    default: null,
   },
   is_admin: {
     type: Number,
     required: true,
+    default: null,
   },
   status: {
     type: Boolean,

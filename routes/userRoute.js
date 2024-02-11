@@ -8,6 +8,7 @@ const paymentController = require("../controllers/userPaymentController");
 const auth = require("../middlewares/auth");
 userRoute.set('view engine','ejs');
 userRoute.set('views','./views/user')
+const passport = require('passport');
 
 const bodyParser = require("body-parser");
 userRoute.use(bodyParser.json())
@@ -48,6 +49,16 @@ userRoute.post('/login',userController.loadLoginVerify);
 
 userRoute.get('/',auth.isUserBlocked,homeController.loadHome);
 userRoute.get('/home',auth.isUserBlocked,homeController.loadHome);
+
+//goole auth 
+// auth with google+
+userRoute.get('/auth/google', passport.authenticate('google', {
+  scope: ['profile','email']
+}));
+
+// callback route for google to redirect to
+// hand control to passport to use code to grab profile info
+userRoute.get('/auth/google/home', passport.authenticate('google'),auth.rediretAuth);
 
 //user single product detail route
 userRoute.get('/home/product/details/:id',auth.isUserBlocked,homeController.productDetail);

@@ -7,11 +7,10 @@ const reviewModal = require("../models/reviewModel");
 const brandModal = require('../models/brandModel');
 const nodemailer = require("nodemailer");
 
-
 const loadHome = async (req, res) => {
   try {
-    const category = await categoryModel.find({});
-const brands = await brandModal.aggregate([
+  const category = await categoryModel.find({});
+  const brands = await brandModal.aggregate([
   { $match: { status: true } },
   { $sample: { size: 5 } }
 ]);
