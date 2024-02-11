@@ -131,8 +131,8 @@
             </a>
             <a class="options" href="/home/settings/address">
               <li class="list-group-item  inactive list-item">
-                <i class="bi bi-building"></i> Address Mangment         
-                </li>
+                <i class="bi bi-building"></i> Address Mangment
+              </li>
             </a>
             <a class="options" href="/home/settings/oders">
               <li class="list-group-item inactive list-item">
@@ -181,7 +181,7 @@
                   <tbody class="">
                     <!-- Iterate through each product in the order -->
 
-                    <tr>
+                    <tr class="flex-wrap d-flex">
                       <td>
                         <img src="/images/productImages/<%= product.image %>"
                           class="d-none d-md-none d-lg-block d-xl-block" alt="Product Image"
@@ -259,12 +259,14 @@
                                             <%} else if(product.returned==='Approved' ){%>
                                               <td class="align-middle text-center">
                                                 <span class="badge badge-success">Return Approved</span>
-                                                <span class="badge text-info">Pick-up date <%= oder.pickDate.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' }) %></span>
+                                                <span class="badge text-info">Pick-up date <%=
+                                                    oder.pickDate.toLocaleDateString(undefined, { day: 'numeric' ,
+                                                    month: 'long' , year: 'numeric' }) %></span>
 
                                               </td>
                                               <%}%>
 
-                    </tr>
+                                   </tr>
 
 
 
@@ -273,14 +275,14 @@
               </table>
               <% }); %>
 
-                    <% } else { %>
-                      <table class="table">
-                        <tbody>
-                          <tr>
-                            <h5 class="text-dark text-center">No Orders Available</h5>
-                          </tr>
-                        </tbody>
-                      </table>
+                <% } else { %>
+                  <table class="table">
+                    <tbody>
+                      <tr>
+                        <h5 class="text-dark text-center">No Orders Available</h5>
+                      </tr>
+                    </tbody>
+                  </table>
         </div>
         <% } %>
 

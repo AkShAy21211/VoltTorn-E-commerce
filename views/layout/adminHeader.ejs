@@ -2,19 +2,6 @@
 <html lang="en">
 <head>
   
-<style>
-  header {
-    background-color: white;
-    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.371);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-  }
-  .imageToCrop{
-    
-    background-size: cover;
-  }
-</style>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css">
 <!-- Include Axios and Toastr JS in your HTML -->
@@ -30,7 +17,6 @@
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-<link rel="stylesheet" href="/css/adminContent.css">
 <!-- Add this to the head of your HTML file -->
 <!-- Cropper CSS -->
 
@@ -38,37 +24,17 @@
 <!------ Include the above in your HEAD tag ---------->
 <!-- Include Bootstrap Icons via CDN -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.16.0/font/bootstrap-icons.css" rel="stylesheet">
-<link rel="stylesheet" href="/css/SideBar.css">
   
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />  
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+
+<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/style.css">
+
+
 </head>
 <body>
- 
-  <header  class="p-3 mb-0 border-bottom  bg-primary">
-    <div class="container text-white">
-      <div class="d-flex justify-content-between">
-        <h4> <a style="color: white; text-decoration: none;" href="/admin/dashboard">VoltTron</a> </h4>
-       
+  <div class="wrapper d-flex align-items-stretch">
 
-
-        <div class="dropdown text-end">
-          <a href="#" class="d-flex justify-content-arround  text-white text-decoration-none " data-bs-toggle="dropdown">
-            <i class="bi bi-gear" style="font-size: 20px;"></i>   
-                </a>
-          <ul class="dropdown-menu text-small">
-            <% if (locals.adminSessionData && locals.adminSessionData.isAdminAuthenticated) { %>
-            <li><a class="dropdown-item" href=""></a></li>
-            <% } else { %>
-            <li><a class="dropdown-item" href="/register">Sign In</a></li>
-            <% } %>
-            <!-- <li><a class="dropdown-item" href="#">Settings</a></li>
-            <li><a class="dropdown-item" href="#">Profile</a></li> -->
-            <% if (locals.adminSessionData && locals.adminSessionData.isAdminAuthenticated) { %>
-            <li><a class="dropdown-item" href="/admin/logout">Logout</a></li>
-            <% } %>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </header>
   

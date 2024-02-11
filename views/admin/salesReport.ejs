@@ -1,8 +1,37 @@
 <%- include('../layout/adminHeader.ejs') %>
     <%- include('../layout/adminSideBar.ejs') %>
         <title>Sales report</title>
-
-        <main>
+        <div id="content" class="p-4 p-md-5">
+          <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+        
+              <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                <i class="fa fa-bars"></i>
+                <span class="sr-only">Toggle Menu</span>
+              </button>
+              <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <i class="fa fa-bars"></i>
+              </button>
+        
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="nav navbar-nav ml-auto">
+                  <li class="nav-item active">
+                      <a class="nav-link" href="#">Home</a>
+                  </li>
+                  <% if (locals.adminSessionData && locals.adminSessionData.isAdminAuthenticated) { %>
+                    <li><a class="dropdown-item" href=""></a></li>
+                    <% } else { %>
+                    <li><a class="dropdown-item" href="/register">Sign In</a></li>
+                    <% } %>
+                    <!-- <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li><a class="dropdown-item" href="#">Profile</a></li> -->
+                    <% if (locals.adminSessionData && locals.adminSessionData.isAdminAuthenticated) { %>
+                    <li><a class="dropdown-item text-danger" href="/admin/logout">Logout</a></li>
+                    <% } %>
+                </ul>
+              </div>
+            </div>
+          </nav>
 
             <div class="container mt-4">
                 <div class="row">
@@ -112,8 +141,9 @@
                 </div>
             </div>
 
-        </main>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.js"></script>
+</div>    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.js"></script>
+
 
         <script>
             async function downloadReportExcel(format) {

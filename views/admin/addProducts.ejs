@@ -1,5 +1,6 @@
 <%- include('../layout/adminHeader.ejs') %> 
 
+<%- include('../layout/adminSideBar.ejs') %>
 
 
 <style>
@@ -10,13 +11,10 @@
 
 </style>
 <title>Add Product</title>
-<aside>
-  <a href="/admin/products" style="color: rgb(45, 81, 172); position: absolute; left: 50px; top: 80px; font-size: 15px; font-weight: bold; " class="btn"> <-Back</a>
-</aside>
-<main>
-  <div class="container form-box mt-5">
-    <h1 class=" rounded" style="font-size: 30px; width: 230px; text-align: center; font-family: Arial, Helvetica, sans-serif;">Add Product</h1>
+<div id="content" class="p-4 p-md-5">
 
+  <div class="d-flex justify-content-between">  <h2>Add Product</h2>
+    <a href="/admin/products/add"><i class="bi bi-arrow-left fs-3"></i></a></div>
   <div class="row d-flex justify-content-end">
     
     <div class="col-md-10 col-lg-12 col-xl-12">
@@ -170,6 +168,8 @@
                       id="color"
                       name="colors"
                     />
+                    <div id="colorWarning" class="text-danger"></div>
+
               </div>
             </div>
           </div>
@@ -239,8 +239,6 @@
     </div>
   </div>
 </div>
-</main>
-
 
 <script src="/js/productFormVaildation.js"></script>
 <script>

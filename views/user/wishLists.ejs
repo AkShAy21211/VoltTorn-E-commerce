@@ -115,7 +115,7 @@
                       </td>
                     <%}else if(product.stock >1 ){%>
                       <td class="align-middle text-wrap ">
-                        <button style="font-size: 25px;" class=" btn addToCartButton bi bi-cart4 text-primary"
+                        <button style="font-size: 25px;" class="  addToCartButton bg-white border-0 bi bi-cart4 text-primary"
                         data-product-id="<%= product._id %>"
                         data-product-price="<%= Number(product.price - (product.price * (product.discount / 100))) %>">
                       </button>
@@ -148,7 +148,7 @@
       </div>
     </div>
   </main>
-  <script src="/js/addTOcart.js"></script>
+  <script src="/js/addToCart.js"></script>
 
 
 

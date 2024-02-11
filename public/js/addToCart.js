@@ -1,4 +1,6 @@
-// Add an event listener to the common ancestor (e.g., document or a specific container)
+
+document.addEventListener("DOMContentLoaded",()=>{
+
 document.addEventListener("click", async (event) => {
   // Check if the clicked element is an "Add to Cart" button
   if (event.target.classList.contains("addToCartButton")) {
@@ -12,13 +14,12 @@ document.addEventListener("click", async (event) => {
         `/home/products/cart/${productId}`,
         { productPrice }
       );
-
+     
+   
       if (response.data.success) {
 
 
-
-        $('#cart-item-count').load(document.URL + ' #cart-item-count');
-
+      
         // Display toast message
         if (response.data.message && response.data.message !== "undefined") {
           const blueGradients = [
@@ -36,18 +37,24 @@ document.addEventListener("click", async (event) => {
             duration: 3000,
             close: true,
             gravity: "top",
-            width:"100%",
+            width:"auto",
             position: "right",
             stopOnFocus: true,
             style: {
               background: randomGradient,
               marginTop: "60px",
-              width: "300px",  // Adjust the width as needed
+              maxWidth: "400px", // Set the maximum width if needed
 
 
             },
             onClick: function () {},
           }).showToast();
+
+          const cart = document.getElementById('cart-item-count');
+          cart.innerText = response.data.cartCount
+
+          console.log(cart.innerHTML);
+  
         }
       } else {
         // Display login modal if the user is not logged in while trying to add to cart
@@ -106,16 +113,14 @@ document.addEventListener("click", async (event) => {
     }
   }
 });
+})
 
 function closeLoginModal() {
   document.getElementById("loginModal").style.display = "none";
 }
 
-function redirectLogin() {
-  window.location.href = "/login";
-}
 
-//display popup modal if user try to add to cart without login
+
 function displayLoginModal() {
   // Get the modal element
   const modal = document.getElementById("loginModal");
@@ -208,7 +213,7 @@ quantityInputs.forEach((input) => {
 const deleteCartItemButtons = document.querySelectorAll(".delete-item");
 
 deleteCartItemButtons.forEach((deleteButton) => {
-  deleteButton.addEventListener("click", async () => {
+    deleteButton.addEventListener("click", async () => {
     const deleteItemId = deleteButton.dataset.deleteItem;
     const cartItemRow = document.querySelector(`tr[data-cart-item-id="${deleteItemId}"]`);
     const totalPriceElement = document.querySelector('[data-total-price="total-price"]');
@@ -240,10 +245,10 @@ deleteCartItemButtons.forEach((deleteButton) => {
             totalPriceElement.textContent = totalPrice.toFixed(2);
           }, 1000);
 
-          $('#cart-item-count').load(document.URL + ' #cart-item-count');
 
+          const cart = document.getElementById('cart-item-count');
+          cart.innerText = response.data.userCartCount;
         }
-        console.log("Response:", response);
       } catch (error) {
         console.error("Error:", error);
       }

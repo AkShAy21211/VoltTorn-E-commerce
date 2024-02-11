@@ -8,16 +8,7 @@ body {
     display: inline-block;
   }
   
-  #cart-item-count {
-    position: absolute;
-    top: -5px;
-    right: -8px;
-    background-color: red; /* Choose a background color for the badge */
-    color: white; /* Choose a text color for the badge */
-    border-radius: 50%;
-    padding: 5px 8px;
-    font-size: 12px;
-  }
+
   .container {
     width: 100%;
    
@@ -108,51 +99,59 @@ body {
   /* mobile breakpoint start */
   @media screen and (max-width: 767px) {
     .container {
-      max-width: 720px;
+        max-width: 720px;
     }
+
     /* navbar css for mobile start */
-    .nav-toggler{
-      display: block;
+    .nav-toggler {
+        display: block;
     }
+
     .site-navbar {
-      min-height: 60px;
+        min-height: 60px;
     }
+
     .site-navbar ul {
-      position: absolute;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);     
-      width: 100%;
-      height: calc(100vh - 80px);
-      left: 0;
-      top: 60px;
-      flex-direction: column;
-      align-items: center;
-      border-top: 1px solid #444;
-      background-color: rgb(255, 255, 255);
-      max-height: 0;
-      overflow: hidden;
-      transition: .3s;
+        position: absolute;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        left: 0;
+        top: 60px;
+        flex-direction: column;
+        align-items: center;
+        border-top: 1px solid white;
+        background-color: rgb(255, 255, 255);
+        max-height: 0;
+        overflow: hidden;
+        transition: .3s;
+        height: auto; /* Add this line to allow dynamic height */
     }
+
     .site-navbar ul li {
-      width: 100%;
-      text-align: center;
+        width: 100%;
+        text-align: center;
     }
+
     .site-navbar ul li a {
-      padding: 25px;
+        padding: 15px; /* Adjust the padding value as needed */
     }
+
     .site-navbar ul li a:hover {
-      background-color: rgba(255,255,255,.1);
+        background-color: rgba(255, 255, 255, .1);
     }
+
     .site-navbar ul.open {
-      max-height: 50vh;
-      overflow: visible;
-      position: absolute;
-      z-index: 1000;
+        max-height: 80vh; /* Set a maximum height for large lists */
+        overflow: visible;
+        position: absolute;
+        z-index: 1000;
     }
+
     .intro-area h2 {
-      font-size: 36px;
-      margin-bottom: 15px;
-      
-    }  
+        font-size: 36px;
+        margin-bottom: 15px;
+    }
     /* navbar css for mobile end */
-  }
+}
+
   /* mobile breakpoint end */

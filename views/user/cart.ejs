@@ -13,12 +13,7 @@
         justify-content: space-between;
     }
 
-    /* Style for the left column */
-    .left-column {
-        flex-grow: 1;
-        overflow-y: auto; /* Make the left column scrollable */
-        max-height: 600px; /* Set a maximum height for the left column */
-    }
+
 
     .icon-hover-primary:hover {
         border-color: #3b71ca !important;
@@ -51,7 +46,6 @@
 }
 
 .quantity-btn {
-    padding: 5px 10px;
     cursor: pointer;
 }
 
@@ -73,8 +67,8 @@
 <title>Shopping Cart</title>
 
 <main class="pb-5">
-    <div class="container">
-        <div class="row justify-content-between   d-flex">
+    <div class="container ">
+        <div class="row d-flex justify-content-between">
             <% if (userCart && userCart.cart && userCart.cart.length > 0) { %>
                 <h6 class="text-center mt-4"><b style="color: #3bb0ca;" data-item-quantity="userCartCount"><%=userCartCount%> </b> Items in your cart</h6>
                 <!-- Shopping Cart Table -->
@@ -87,7 +81,7 @@
                         <tbody>
       
       
-                            <tr data-cart-item-id="<%=cart._id  %>">
+                            <tr class="d-flex flex-wrap" data-cart-item-id="<%=cart._id  %>">
                                 <td data-th="Product">
                                     <div class="row">
                                         <div class="col-md-3 text-left" style="display: flex; align-items: center; justify-content: center;">
@@ -99,18 +93,21 @@
                                     </div>
                                 </td>
                                 <td data-th="Quantity">
-                                    <div class="quantity-container container-fluid">
+                                    <div class="row">
+                                    <div class="quantity-container">
                                         <button class="quantity-btn minus-btn btn border border-primary text-dark" type="button">-</button>
                                         <input type="number" min="1"  data-error="<%=cart._id  %>" oninput="if(this.value == 0) this.value = 1; this.value = Math.abs(this.value)" data-product-price="<%=parseFloat(cart.product_id.price - (cart.product_id.price * (cart.product_id.discount / 100)))*cart.quantity %>" data-product-id="<%= userCart._id %>" data-product="<%= cart.product_id._id %>" class="form-control text-center quantity-input border border-primary" value="<%= cart.quantity %>">
                                         <button class="quantity-btn plus-btn btn border border-primary text-dark" type="button">+</button>
                                     </div>
+                                </div>
+
                                     <p  class="text-danger badge stock-error" data-product-id="<%= cart._id %>"></p>
                                 </td>
                                 
                                 <td class="actions" data-th="">
                                     <div class="text-right container-fluid">
                                      
-                                        <button data-delete-item="<%= cart._id %>" class="btn btn-white border-secondary bg-white btn-md mb-2 delete-item">
+                                        <button data-delete-item="<%= cart._id %>" class="btn btn-white border-secondary bg-white  mb-2 delete-item">
                                             <i class="fas fa-trash text-danger"></i>
                                         </button>
                                         
@@ -146,7 +143,7 @@
                         <h6 class="mb-5">Sub Total:  <b data-total-price="total-price" style="font-size:  20px;font-weight:500;float: right;">₹<%=userCart.total_price  %></b></h6>
 
                     </div>
-                    <a href="/home/cart/checkout"  style="width: 150px;" class="btn btn-primary mb-1 float-right btn-lg mt-3 ">Checkout</a>
+                    <a  id="goToCheckOut" style="width: 150px;" class="btn btn-primary mb-1 float-right btn-lg mt-3 text-white">Checkout</a>
 
                 </div>
             <% }else{%>
@@ -190,10 +187,56 @@
 
 </script>
 
-<script src="/js/addTOcart.js"></script>
+<script src="/js/addToCart.js"></script>
 <!-- Include SweetAlert2 via CDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    const checkout  = document.getElementById('goToCheckOut').addEventListener("click",async()=>{
 
+try{
+    const response = await axios.get('/home/cart/checkout');
+
+    if(response.status === 200){
+
+        window.location.href = '/home/cart/checkout'
+    }
+    
+}catch(error){
+    if (error.response) {
+    const productsWithFalseStatus = error.response.data.productsWithFalseStatus;
+
+    if (productsWithFalseStatus && productsWithFalseStatus.length > 0) {
+        let contentHtml = '<ul>'; // Initialize an unordered list HTML
+
+        // Loop through each product and append its name to the HTML
+        productsWithFalseStatus.forEach(product => {
+            contentHtml += `<li>${product.name}</li>
+                            <li style="    list-style: none;"> <img width='150' heigth='150' src='/images/productImages/${product.images[0]}' ></li>                    `;
+        });
+
+        contentHtml += '</ul>'; // Close the unordered list HTML
+
+        // Display the alert with the product names
+        $.alert({
+            title: 'Products Not Available',
+            content: contentHtml,
+            icon: 'bi bi-exclamation-triangle', // Set the warning icon class here
+            type: 'orange',
+            backgroundDismiss: true,
+            closeIcon: true,
+        });
+    } 
+    console.log(productsWithFalseStatus);
+
+    return;
+}
+
+
+}
+
+
+    })
+</script>
 <%- include('../layout/footer.ejs') %>
 
 

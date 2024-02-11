@@ -17,7 +17,7 @@ const sendResetEmail = async (name,email, token) => {
       from: "pa080633@gmail.com",
       to: email,
       subject: "Reset password Link",
-      html: `<p> HI `+name+`,please copy the link <a href="http://localhost:3000/reset-password?token=`+token+`"> and reset password </a></p>`,
+      html: `<p> HI `+name+`,please copy the link <a href="volttron.shop/reset-password?token=`+token+`"> and reset password </a></p>`,
     };
   
      transporter.sendMail(mailOptions,(err,info)=>{

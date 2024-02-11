@@ -166,10 +166,8 @@
             </div>
           </div>
           <% if (user && typeof user.addresses !== 'undefined' && user.addresses.length > 0) { %>
-            <table class="table shadow-sm bg-body">
+            <table class="table mt-2 shadow-sm bg-body">
               <tbody>
-                  <!-- Iterate through each product in the order -->
-        
                   <tr>
                     <td>
                       <% user.addresses.forEach((address, i)=> { %>
@@ -187,8 +185,8 @@
             
                               </div>
                             </label>
-                            <a style="cursor: pointer;" class="ml-4 text-primary editAddressBtn"><i class="bi bi-pencil-square"></i></a>
-                            <a style="cursor: pointer;" href="/home/settings/address/delete/<%=address._id  %>" class="ml-2 text-primary "><i class="bi bi-trash text-danger"></i></a>
+                            <a style="cursor: pointer;" class="ml-2 text-primary editAddressBtn"><i class=" bi bi-pencil-square"></i></a>
+                            <a style="cursor: pointer;" href="/home/settings/address/delete/<%=address._id  %>" class="ml-3 text-primary "><i class="bi bi-trash text-danger"></i></a>
                           </div>
                         </div>
             
