@@ -184,6 +184,7 @@ module.exports = {
     isUserBlocked,
     in_cart,
     cartCount,
-    wishCount
+    wishCount,
+    rediretAuth
     
 };
