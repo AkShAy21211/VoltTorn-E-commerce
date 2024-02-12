@@ -95,7 +95,7 @@ const cartCount = async (req, res, next) => {
 };
 
 const wishCount = async (req, res, next) => {
-    if (req.session && req.session.user.userId) {
+    if (req.session && req.session.user) {
         try {
             const wishlist = await WishListModel.findById(req.session.user.userId)||{};
             res.locals.wishCount = wishlist.product?wishlist.product.length:0;
