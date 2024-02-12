@@ -1,6 +1,7 @@
 const session = require("express-session");
 const userModel = require("../models/userModel");
 const {CartModel} = require("../models/cart&WishlistModel");
+const {WishListModel} = require("../models/cart&WishlistModel");
 const passport = require('passport');
 const GoogleStrategy = require("passport-google-oauth2").Strategy;
 const is_Login = async (req, res, next) => {
@@ -92,6 +93,22 @@ const cartCount = async (req, res, next) => {
     }
     next();
 };
+
+const wishCount = async (req, res, next) => {
+    if (req.session && req.session.user.userId) {
+        try {
+            const wishlist = await WishListModel.findById(req.session.user.userId)||{};
+            res.locals.wishCount = wishlist.product?wishlist.product.length:0;
+
+            
+        } catch (error) {
+            console.error('Error fetching cart count:', error);
+        }
+    } else {
+        res.locals.wishlist = 0;
+    }
+    next();
+};
 function generateReferralCode() {
     const characters = '0123456789';
     const codeLength = 6;
@@ -163,21 +180,7 @@ const rediretAuth = async(req, res) => {
         res.redirect('/home');
     }
 
-const wishCount = async (req, res, next) => {
-    if (req.session && req.session.user) {
-        try {
-            const wishlist = await WishListModel.findById(req.session.user.userId)||{};
-            res.locals.wishCount = wishlist.product?wishlist.product.length:0;
 
-            
-        } catch (error) {
-            console.error('Error fetching cart count:', error);
-        }
-    } else {
-        res.locals.wishlist = 0;
-    }
-    next();
-};
 module.exports = {
     is_Login,
     is_Logout,
