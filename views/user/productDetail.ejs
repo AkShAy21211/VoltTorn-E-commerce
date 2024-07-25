@@ -212,7 +212,7 @@ figure img{
                   <%reviews.forEach(review=> {%>
 
                     <div class="reviews-members pt-4 pb-4">
-                      <div class="media"> <a href="#"><img alt="user" src="/images/userImages/<%=review.user.image%>"
+                      <div class="media"> <a href="#"><img alt="user" src="/images/userImages/<%= review.user.image ? review.user.image : 'https://cdn.pixabay.com/photo/2021/07/02/04/48/user-6380868_640.png' %>"
                             class="mr-3 rounded-pill"></a>
                         <div class="media-body">
                           <div class="reviews-members-header">
