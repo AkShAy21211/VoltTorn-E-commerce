@@ -11,7 +11,6 @@ const PORT = process.env.PORT || 3000;
 const morgan = require("morgan");
 app.use(morgan("dev"));
 app.use(nocache())
-
 //session
 const config = require("./config/config");
 const session = require("express-session");

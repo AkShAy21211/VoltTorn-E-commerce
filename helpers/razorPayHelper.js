@@ -1,4 +1,4 @@
-const crypto = require("crypto-js");
+
 
 const createRazorpayOrder = (razorpayInstance, options, callback) => {
   razorpayInstance.orders.create(options, function (err, order) {
@@ -28,8 +28,6 @@ const verifyPayment = (details) => {
     // Create an HMAC-SHA256 hash using crypto-js
     const hmac = CryptoJS.HmacSHA256(dataToHash, secret).toString(CryptoJS.enc.Hex);
 
-    console.log("Generated HMAC:", hmac);
-    console.log("Received Signature:", details.response.razorpay_signature);
 
     if (hmac === details.response.razorpay_signature) {
       resolve("Payment successful");
