@@ -51,7 +51,7 @@ jobs:
         run: docker rm volttron-container || true
 
       - name: Run new Docker container
-        run: docker run -d --env-file /home/ubuntu/comingle/.env -p 5000:5000 --name volttron-container achu2002/volttron:latest
+        run: docker run -d --env-file /home/ubuntu/volttron/.env -p 3000:3000 --name volttron-container achu2002/volttron:latest
 
       - name: Restart Nginx
         run: sudo systemctl restart nginx
