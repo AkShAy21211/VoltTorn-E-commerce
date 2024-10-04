@@ -23,7 +23,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t achu2002/volttron ./home/ubuntu/VoltTorn-E-commerce
+        run: docker build -t achu2002/volttron /home/ubuntu/VoltTorn-E-commerce
 
       - name: Push Docker image to Docker Hub
         run: docker push achu2002/volttron:latest
