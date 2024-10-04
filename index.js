@@ -24,6 +24,7 @@ const store = MongoSessionStore({
 });
 app.set("view engine", "ejs");
 app.set("views", "./views/user");
+app.use(express.static(path.join(__dirname, 'public')));
 const userSession = session({
   secret: config.userSessionSecreat,
   resave: false,
