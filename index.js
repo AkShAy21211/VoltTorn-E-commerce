@@ -1,24 +1,27 @@
 require("dotenv").config();
-const mongoose = require("mongoose");
-mongoose.connect(process.env.MONGO_URL);
 const express = require("express");
-const app = express();
-const flash = require('express-flash');
-const nocache = require('nocache');
-const passport = require('passport');
-
-const PORT = process.env.PORT || 3000;
-const morgan = require("morgan");
-app.use(morgan("dev"));
-app.use(nocache())
-//session
+const flash = require("express-flash");
+const nocache = require("nocache");
+const passport = require("passport");
 const config = require("./config/config");
 const session = require("express-session");
+const morgan = require("morgan");
+config.connectMongoose();
+
+
+
+const PORT = process.env.PORT || 3000;
+const app = express();
+app.use(morgan("dev"));
+app.use(nocache());
+
+//session
+
 const MongoSessionStore = require("connect-mongodb-session")(session);
 const store = MongoSessionStore({
-  uri:'mongodb://127.0.0.1:27017/VOLTTRON',
-  collection:'sessions'
-})
+  uri: process.env.MONGO_URL,
+  collection: "sessions",
+});
 app.set("view engine", "ejs");
 app.set("views", "./views/user");
 const userSession = session({
@@ -29,7 +32,7 @@ const userSession = session({
   cookie: {
     maxAge: 24 * 60 * 60 * 1000,
   },
-  name: 'userSession', // Set a unique name for user sessions
+  name: "userSession", // Set a unique name for user sessions
 });
 
 const adminSession = session({
@@ -40,7 +43,7 @@ const adminSession = session({
   cookie: {
     maxAge: 24 * 60 * 60 * 1000,
   },
-  name: 'adminSession', // Set a unique name for admin sessions
+  name: "adminSession", // Set a unique name for admin sessions
 });
 
 app.use(userSession);
