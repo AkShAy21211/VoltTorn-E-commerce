@@ -64,43 +64,6 @@ Detailed sales reports provide insights into product performance and customer be
 - Dashboard:
 An interactive dashboard with graphs and charts for a quick overview of site performance.
 
-## Getting Started:
-
-
-
-```
-1. Clone the repository.
-2. Install dependencies using npm install.
-3. Set up your MongoDB database.
-4. Configure environment variables.
-5. Run the application using PORT=3000 npm start.
-```
-
-
-## Contributing and Licensing
-
-
-We welcome contributions to enhance the VoltTron Ecommerce App and make it even more robust. If you have ideas for new features, bug fixes, or improvements, feel free to fork the repository and submit a pull request.
-
-## Contributing Guide:
-
-1.Fork the repository.
-
-2.Create a new branch for your feature or bug fix: git checkout -b feature/new-feature.
-
-2.Make your changes and commit them with descriptive messages: git commit -m "Add new feature".
-
-4.Push your changes to your fork: git push origin feature/new-feature.
-
-5.Open a pull request against the main repository.
-
-## License:
-
-The VoltTron Ecommerce App is licensed under the MIT License. By contributing to this project, you agree that your contributions will be licensed under this license.
-
-
-## Acknowledgements:
-appreciate the time and effort put into contributing to VoltTron Ecommerce App. Special thanks to all contributors who help make this project better with each update.
 
 Happy coding!
 
